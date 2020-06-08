@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="94.152" height="42.635" viewBox="0 0 94.152 42.635">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#171515"/>
+      <stop offset="1" stop-color="#bcbcbc"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.985" y1="0.341" x2="0.006" y2="0.915" gradientUnits="objectBoundingBox">
+      <stop offset="0"/>
+      <stop offset="1" stop-color="#989898"/>
+    </linearGradient>
+    <filter id="Path_556" x="0" y="0" width="94.152" height="42.635" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.502"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_355" data-name="Group 355" transform="translate(9 6)">
+    <path id="Path_552" data-name="Path 552" d="M0,0,13.042,2.452V18.387L0,23.7Z" transform="translate(0 7.245)" fill="url(#linear-gradient)"/>
+    <g transform="matrix(1, 0, 0, 1, -9, -6)" filter="url(#Path_556)">
+      <path id="Path_556-2" data-name="Path 556" d="M0,0H76.152V24.635H0Z" transform="translate(9 6)" fill="url(#linear-gradient-2)"/>
+    </g>
+    <text id="Upgrade" transform="translate(6.652 16.886)" fill="#fff" font-size="13" font-family="OpenSans-SemiboldItalic, Open Sans" font-weight="600" font-style="italic"><tspan x="0" y="0">Upgrade</tspan></text>
+  </g>
+</svg>

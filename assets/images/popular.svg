@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="81.232" height="42.635" viewBox="0 0 81.232 42.635">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#171515"/>
+      <stop offset="1" stop-color="#bcbcbc"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.985" y1="0.341" x2="0.006" y2="0.915" gradientUnits="objectBoundingBox">
+      <stop offset="0"/>
+      <stop offset="1" stop-color="#989898"/>
+    </linearGradient>
+    <filter id="Path_123" x="0" y="0" width="81.232" height="42.635" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.502"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_352" data-name="Group 352" transform="translate(9 6)">
+    <path id="Path_124" data-name="Path 124" d="M0,0,8.944,1.682V12.61L0,16.257Z" transform="translate(0 16.597)" fill="url(#linear-gradient)"/>
+    <g transform="matrix(1, 0, 0, 1, -9, -6)" filter="url(#Path_123)">
+      <path id="Path_123-2" data-name="Path 123" d="M0,0H63.232V24.635H0Z" transform="translate(9 6)" fill="url(#linear-gradient-2)"/>
+    </g>
+    <text id="Popular" transform="translate(6.756 17.552)" fill="#fff" font-size="13" font-family="OpenSans-SemiboldItalic, Open Sans" font-weight="600" font-style="italic"><tspan x="0" y="0">Popular</tspan></text>
+  </g>
+</svg>
