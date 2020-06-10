@@ -54,9 +54,7 @@ class GroupClassesState extends State<GroupClasses> {
                     Container(
                       height: MediaQuery.of(context).size.height,
                       child: TabBarView(
-                        children: <Widget>[
-                        Image.asset(baseImageAssetsUrl+'couple.png',alignment: Alignment.topLeft,height: 60,)
-                        ],
+                        children: <Widget>[groupClass()],
                       ),
                     )
                   ],
@@ -66,4 +64,61 @@ class GroupClassesState extends State<GroupClasses> {
       ),
     );
   }
+
+  Widget groupClass() => Container(
+        child: Column(
+          children: <Widget>[
+            Image.asset(
+              baseImageAssetsUrl + 'couple.png',
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(30, 20, 30, 5),
+              child: Text(
+                'Body pump, Body Attack, RPM, Grit, Body Combat,The trip, CX Worx etc.',
+                style:
+                    TextStyle(fontFamily: open_semi_bold, fontSize: textSize12),
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: Divider(
+                  height: 1,
+                  color: Colors.grey,
+                )),
+            Padding(
+                padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("sessiion"),
+                        Text("1 sessiion"),
+                        Text("6 sessiion/month"),
+                        Text("12 sessiion/month"),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("price"),
+                        Text("60 AED"),
+                        Text("340 AED"),
+                        Text("660 AED"),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("Select"),
+                        Text("1 "),
+                        Text("6 "),
+                        Text("12"),
+                      ],
+                    ),
+                  ],
+                ))
+          ],
+        ),
+      );
 }
