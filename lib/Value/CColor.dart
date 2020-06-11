@@ -8,4 +8,5 @@ class CColor {
   static Color WHITE = Colors.white;
   static Color DividerCOlor = Colors.grey;
   static Color cardcolor = Color(0xffC1C1C1);
+  static Color LightGrey = Color(0xff707070);
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'package:volt/Bookings/BookingAndCart.dart';
 
 class GroupClasses extends StatefulWidget {
   @override
@@ -87,34 +89,217 @@ class GroupClassesState extends State<GroupClasses> {
                 )),
             Padding(
                 padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("sessiion"),
-                        Text("1 sessiion"),
-                        Text("6 sessiion/month"),
-                        Text("12 sessiion/month"),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 40,
+                          child: Text(
+                            "sessiion",
+                            style: TextStyle(
+                              color: CColor.LightGrey,
+                              fontSize: textSize10,
+                              fontFamily: open_light,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 22,
+                          child: Text("price",
+                              style: TextStyle(
+                                color: CColor.LightGrey,
+                                fontSize: textSize10,
+                                fontFamily: open_light,
+                              )),
+                        ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 18,
+                          child: Text("Select",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: CColor.LightGrey,
+                                fontSize: textSize10,
+                                fontFamily: open_light,
+                              )),
+                        ),
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text("price"),
-                        Text("60 AED"),
-                        Text("340 AED"),
-                        Text("660 AED"),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 40,
+                          child: Text(
+                            "1 sessiion",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: textSize16,
+                              fontFamily: open_light,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 22,
+                          child: Text("60 AED",
+                              style: TextStyle(
+                                color: Color(0xff8B8B8B),
+                                fontSize: textSize12,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: open_semi_bold,
+                              )),
+                        ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 18,
+                          child: Checkbox(
+                            onChanged: (bool value) {},
+                            value: false,
+                          ),
+                        ),
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text("Select"),
-                        Text("1 "),
-                        Text("6 "),
-                        Text("12"),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 40,
+                          child: Text(
+                            "6 sessiions/month",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: textSize16,
+                              fontFamily: open_light,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 22,
+                          child: Text("340 AED",
+                              style: TextStyle(
+                                color: Color(0xff8B8B8B),
+                                fontWeight: FontWeight.w500,
+                                fontSize: textSize12,
+                                fontFamily: open_semi_bold,
+                              )),
+                        ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 18,
+                          child: Checkbox(
+                            onChanged: (bool value) {},
+                            value: false,
+                          ),
+                        ),
                       ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 40,
+                          child: Text(
+                            "12 sessiions/month",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: textSize16,
+                              fontFamily: open_light,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 22,
+                          child: Text("660 AED",
+                              style: TextStyle(
+                                color: Color(0xff8B8B8B),
+                                fontSize: textSize12,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: open_semi_bold,
+                              )),
+                        ),
+                        Container(
+                            width: SizeConfig.blockSizeHorizontal * 18,
+                            child: Checkbox(
+                              onChanged: (bool value) {},
+                              value: false,
+                            )),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: margin20, bottom: 10),
+                      height: 60,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(button_radius)),
+                          color: Color(0xffE6E6E6)),
+                      child: Row(
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    '6 sessions/month',
+                                    style: TextStyle(
+                                        fontSize: textSize10,
+                                        color: Colors.black45),
+                                  )),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    '340 AED',
+                                    style: TextStyle(
+                                        fontSize: textSize16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black45),
+                                  )),
+                            ],
+                          ),
+                          Spacer(),
+                          Container(
+                              height: 60,
+                              padding: EdgeInsets.all(10),
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(button_radius),
+                                      bottomRight:
+                                          Radius.circular(button_radius)),
+                                  color: Colors.black),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              BookingAndCart()));
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                        baseImageAssetsUrl + 'cart.svg'),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Added to cart',
+                                      style: TextStyle(
+                                          fontSize: 5,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                        ],
+                      ),
                     ),
                   ],
                 ))

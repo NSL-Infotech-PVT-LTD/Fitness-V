@@ -9,7 +9,10 @@ const recent = 'Recent';
 const back = 'Back';
 const notifications = 'Notifications';
 const groupClasses = 'Group Classes';
-
+const cart = 'Cart';
+const booking = 'Booking';
+const go_to_dashboard = 'Go to Dashboard';
+const your_booking = 'Your Booking';
 const forgetPassword = 'Forgot Password ?';
 const firstname = 'First Name';
 const lastname = 'Last Name';
