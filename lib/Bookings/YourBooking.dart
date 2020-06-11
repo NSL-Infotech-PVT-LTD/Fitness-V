@@ -58,7 +58,7 @@ class YourBookingState extends State<YourBooking> {
                     top: 0,
                     child: SvgPicture.asset(
                       baseImageAssetsUrl + 'user_card.svg',
-                      fit: BoxFit.0,
+                      fit: BoxFit.fill,
                     ),
                   ),
                   Positioned(
