@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
-import 'package:volt/MemberDashboard/GroupClassses.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
 import 'package:volt/Value/CColor.dart';
@@ -109,12 +108,13 @@ class ProfileState extends State<ProfileScreen> {
             myDivider(),
             Container(
               padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: GestureDetector(
+              child: InkWell(
+
                   onTap: () {
                     Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (context) => GroupClasses()));
+                            builder: (context) => Dashboard()));
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
