@@ -8,6 +8,8 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+import '../Methods.dart';
+
 class ChooseYourWay extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ChooseWayState();
@@ -16,7 +18,6 @@ class ChooseYourWay extends StatefulWidget {
 class ChooseWayState extends State<ChooseYourWay> {
   @override
   Widget build(BuildContext context) {
-
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: CColor.WHITE,
@@ -101,11 +102,8 @@ class ChooseWayState extends State<ChooseYourWay> {
                               children: <Widget>[
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) =>
-                                                  GymMemberPlan()));
+                                      Navigator.push(context,
+                                          SizeRoute(page: GymMemberPlan()));
                                     },
                                     child: _CommonView(
                                         'assets/images/dummy.png',
@@ -116,10 +114,8 @@ class ChooseWayState extends State<ChooseYourWay> {
                                 ),
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) =>
+                                      Navigator.push(context,
+                                          SizeRoute(page:
                                                   GymMemberPlan()));
                                     },
                                     child: _CommonView(
@@ -132,10 +128,8 @@ class ChooseWayState extends State<ChooseYourWay> {
                               children: <Widget>[
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) =>
+                                      Navigator.push(context,
+                                          SizeRoute(page:
                                                   SignupScreen()));
                                     },
                                     child: _CommonView(

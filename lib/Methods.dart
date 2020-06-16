@@ -13,9 +13,12 @@ Widget myDivider() => Divider(
 Widget backWithArrow(context) => Container(
       child: Row(
         children: <Widget>[
-         GestureDetector(child:  Icon(Icons.arrow_back_ios),onTap: (){
-           Navigator.pop(context);
-         },),
+          GestureDetector(
+            child: Icon(Icons.arrow_back_ios),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
           Padding(
             padding: EdgeInsets.only(left: 10),
             child: Text(
@@ -54,8 +57,7 @@ Widget fullWidthButton(context, String title, double setWidth, FontWeight bold,
       width: setWidth,
       child: RaisedButton(
         onPressed: () {
-          Navigator.push(
-              context, new MaterialPageRoute(builder: (context) => whereToGO));
+          Navigator.push(context, ScaleRoute(page: whereToGO));
         },
         color: Colors.black,
         shape: RoundedRectangleBorder(
@@ -66,3 +68,61 @@ Widget fullWidthButton(context, String title, double setWidth, FontWeight bold,
         ),
       ),
     );
+
+class SizeRoute extends PageRouteBuilder {
+  final Widget page;
+
+  SizeRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              Align(
+            child: SizeTransition(
+              sizeFactor: animation,
+              child: child,
+            ),
+          ),
+        );
+}
+
+class ScaleRoute extends PageRouteBuilder {
+  final Widget page;
+
+  ScaleRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.fastOutSlowIn,
+              ),
+            ),
+            child: child,
+          ),
+        );
+}

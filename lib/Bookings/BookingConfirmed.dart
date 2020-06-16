@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:volt/Bookings/BookingConfirmed.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -10,12 +9,12 @@ import 'package:volt/Value/Strings.dart';
 
 import '../Methods.dart';
 
-class YourBooking extends StatefulWidget {
+class BookingConfirmed extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => YourBookingState();
+  State<StatefulWidget> createState() => BookingConfirmedState();
 }
 
-class YourBookingState extends State<YourBooking> {
+class BookingConfirmedState extends State<BookingConfirmed> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -29,65 +28,17 @@ class YourBookingState extends State<YourBooking> {
                 child: Stack(
                   children: <Widget>[
                     Positioned(
-                      bottom: 20,
-                      left: 25,
-                      right: 20,
-                      child: Container(
-                        margin: EdgeInsets.only(top: padding15),
-                        height: button_height,
-                        width: SizeConfig.blockSizeHorizontal * 90,
-                        child: RaisedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) => BookingConfirmed()));
-                            },
-                            color: Colors.black,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(button_radius)),
-                            child: new RichText(
-                                textAlign: TextAlign.start,
-                                text: TextSpan(
-                                    text: "Proceed to Pay",
-                                    style: TextStyle(
-                                        fontSize: textSize12,
-                                        color: Colors.white),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: " 10000 AED",
-                                          style: TextStyle(
-                                              fontSize: textSize12,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white))
-                                    ]))),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 26.5,
-                      right: 26.5,
-                      child: Container(
-                        margin: EdgeInsets.only(top: padding15),
-                        height: 40,
-                        width: 40,
-                        child: RaisedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context, SizeRoute(page: BookingConfirmed()));
-                            },
-                            color: Color(0xff707070),
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(button_radius)),
-                            child: Center(
-                              child: Icon(
-                                Icons.arrow_forward,
-                                color: Colors.white,
-                              ),
-                            )),
-                      ),
-                    ),
+                        bottom: 20,
+                        left: 0,
+                        right: 0,
+                        child: FlatButton(
+                          onPressed: () {},
+                          child: Text(
+                            go_to_dashboard,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        )),
                     Positioned(
                       child: Column(
                         children: <Widget>[
@@ -105,12 +56,13 @@ class YourBookingState extends State<YourBooking> {
                                     },
                                     child: Icon(Icons.arrow_back_ios)),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: EdgeInsets.only(left: 10, right: 10),
                                   child: Text(
-                                    your_booking,
+                                    booking_confirmed,
                                     style: TextStyle(fontSize: textSize20),
                                   ),
                                 ),
+                                Icon(Icons.check_circle)
                               ],
                             ),
                           ),
@@ -208,17 +160,17 @@ class YourBookingState extends State<YourBooking> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: 165,
-                                  left: 55,
+                                    top: 165,
+                                    left: 55,
 
-                                  child: Text(
-                                    '--------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 5,
-                                        fontFamily: fontRegular),
-                                  ),
-                                ),
+                                      child: Text(
+                                        '--------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 5,
+                                            fontFamily: fontRegular),
+                                      ),
+                                    ),
                                 Positioned(
                                   top: 200,
                                   left: 55,
@@ -266,6 +218,22 @@ class YourBookingState extends State<YourBooking> {
                               ],
                             ),
                           ),
+                          SizedBox(height: 20),
+                          SvgPicture.asset(
+                            baseImageAssetsUrl + 'booking_confirmed.svg',
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(height: 30),
+                          Text(
+                            booking_confirmed,
+                            style: TextStyle(
+                                fontSize: 24, color: Color(0xff2e2e2e)),
+                          ),
+                          Text(
+                            'You may check your booking in BOOKINGs.',
+                            style: TextStyle(
+                                fontSize: 10, color: Color(0xff707070)),
+                          )
                         ],
                       ),
                     ),
