@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Methods.dart';
+import 'package:volt/TrainerPackage/TrainerDetail.dart';
 import 'package:volt/Value/Strings.dart';
 
 class Cardio extends StatelessWidget {
   final trainerList = List<RecomendedTrainerClass>.generate(
       10,
-          (index) =>
-          RecomendedTrainerClass(
-              trainerName: 'Neo Faith',
-              trainerExperience: '6.5 Year Experinece',
-              imgLink: baseImageAssetsUrl + 'dummy2.png'));
+      (index) => RecomendedTrainerClass(
+          trainerName: 'Neo Faith',
+          trainerExperience: '6.5 Year Experinece',
+          imgLink: baseImageAssetsUrl + 'dummy2.png'));
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class Cardio extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(left: 15),
                   child: Text(
-                    'Personal Trainer',
+                    personal_trainer,
                     style: TextStyle(fontSize: 24),
                   ))
             ],
@@ -73,10 +73,7 @@ class Cardio extends StatelessWidget {
                     Image.asset(
                       baseImageAssetsUrl + 'dummy2.png',
                       height: 200,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * .43,
+                      width: MediaQuery.of(context).size.width * .43,
                       fit: BoxFit.cover,
                     ),
                     Text(
@@ -85,7 +82,7 @@ class Cardio extends StatelessWidget {
                     ),
                     Text('7 years experineced',
                         style:
-                        TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
+                            TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
                   ],
                 ),
                 SizedBox(
@@ -97,10 +94,7 @@ class Cardio extends StatelessWidget {
                     Image.asset(
                       baseImageAssetsUrl + 'dummy1.png',
                       fit: BoxFit.cover,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * .43,
+                      width: MediaQuery.of(context).size.width * .43,
                       height: 200,
                     ),
                     Text(
@@ -109,7 +103,7 @@ class Cardio extends StatelessWidget {
                     ),
                     Text('6.5 years experineced',
                         style:
-                        TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
+                            TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
                   ],
                 ),
               ],
@@ -130,10 +124,14 @@ class Cardio extends StatelessWidget {
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   return Container(
-
                     child: RecomendedTrainer(
                       trainerClass: trainerList[index],
-
+                      callback: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => TrainerDetail()));
+                      },
                     ),
                   );
                 },
@@ -165,34 +163,37 @@ class RecomendedTrainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: callback,
-      child: Card(
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-        Image.asset(
-        trainerClass.imgLink,
-          fit: BoxFit.cover,
-          width: 100,
-          height: 100,
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 5,top: 5), child: Text(
-          trainerClass.trainerName,
-          style: TextStyle(fontSize: 12),
-        ),),
-        Padding(
-          padding: EdgeInsets.only(left: 5),
-          child: Text(trainerClass.trainerExperience,
-            style: TextStyle(fontSize: 7, color: Color(0xffc1c1c1)),),) ,
-        ],
-      ),
-      semanticContainer: true,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      elevation: 3,
-    ));
+        onTap: callback,
+        child: Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Image.asset(
+                trainerClass.imgLink,
+                fit: BoxFit.cover,
+                width: 110,
+                height: 110,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 5, top: 5),
+                child: Text(
+                  trainerClass.trainerName,
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text(
+                  trainerClass.trainerExperience,
+                  style: TextStyle(fontSize: 7, color: Color(0xffc1c1c1)),
+                ),
+              ),
+            ],
+          ),
+          semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+          elevation: 2,
+        ));
   }
 }

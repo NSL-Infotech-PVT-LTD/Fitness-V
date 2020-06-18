@@ -155,6 +155,7 @@ class DashboardState extends State<Dashboard> {
               height: .5,
               color: CColor.PRIMARYCOLOR,
             ),
+
             _children[_currentIndex],
           ]),
         ));
