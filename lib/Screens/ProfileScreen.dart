@@ -249,7 +249,8 @@ class ProfileState extends State<ProfileScreen> {
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'VOLT FIRNESS @2019 ALL RIGHT RESERVED',
+                    volt_rights
+                    ,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color(0xff8B8B8B),

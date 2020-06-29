@@ -157,6 +157,61 @@ class DashboardState extends State<Dashboard> {
             ),
 
             _children[_currentIndex],
+
+            SizedBox(
+              height: 50,
+            ),
+
+
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 25, bottom: 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Image.asset(
+                      baseImageAssetsUrl + 'logo_black.png',
+                      height: 90,
+                      color: Color(0xff8B8B8B),
+                      width: 120,
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Padding(
+                  padding: EdgeInsets.only(left: 25, bottom: 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SvgPicture.asset(
+                      baseImageAssetsUrl + 'vector_lady.svg',
+                      height: 90,
+                      width: 120,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                )
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 40, bottom: 10),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    volt_rights,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color(0xff8B8B8B),
+                        fontSize: 8,
+                        fontStyle: FontStyle.italic,
+                        fontFamily: open_italic),
+                  )),
+            ),
+
+            SizedBox(
+              height: 50,
+            )
           ]),
         ));
   }

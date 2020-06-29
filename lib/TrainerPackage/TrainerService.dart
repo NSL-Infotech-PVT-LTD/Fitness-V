@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:volt/Bookings/YourBooking.dart';
+import 'package:volt/Methods.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
-
-import '../Methods.dart';
 
 class TrainerService extends StatefulWidget {
   @override
@@ -15,6 +14,13 @@ class TrainerService extends StatefulWidget {
 }
 
 class TrainerServiceState extends State<TrainerService> {
+  bool isBodyBuilding = true;
+  bool isFitnessStr = false;
+  bool isConditioning = false;
+  bool isDiet = false;
+  bool isContest = false;
+  bool isDateSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +79,6 @@ class TrainerServiceState extends State<TrainerService> {
                 ])),
             Container(
                 width: SizeConfig.blockSizeHorizontal * 35,
-                height: SizeConfig.blockSizeVertical * 25,
                 padding: EdgeInsets.only(top: 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,19 +140,382 @@ class TrainerServiceState extends State<TrainerService> {
                       ),
                       padding: EdgeInsets.only(top: 10),
                     ),
-
                   ],
                 )),
             Container(
               color: Color(0xffE1E1E1),
               width: SizeConfig.screenWidth,
               height: 50,
+              margin: EdgeInsets.only(top: 30),
               padding: EdgeInsets.only(left: 20),
-              child: Text('Select Services'),
-            )
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Select Services')),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(40, 15, 40, 0),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text('Body building',
+                          style: TextStyle(
+                            fontFamily: openBold,
+                            fontSize: 14,
+                          )),
+                      Spacer(),
+                      Switch(
+                        value: isBodyBuilding,
+                        onChanged: (value) {
+                          setState(() {
+                            isBodyBuilding = value;
+                          });
+                        },
+                        activeTrackColor: Colors.black26,
+                        activeColor: Colors.black,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text('Fitness Strength',
+                          style: TextStyle(
+                            fontFamily: openBold,
+                            fontSize: 14,
+                          )),
+                      Spacer(),
+                      Switch(
+                        value: isFitnessStr,
+                        onChanged: (value) {
+                          setState(() {
+                            isFitnessStr = value;
+                          });
+                        },
+                        activeTrackColor: Colors.black26,
+                        activeColor: Colors.black,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text('Conditioning',
+                          style: TextStyle(
+                            fontFamily: openBold,
+                            fontSize: 14,
+                          )),
+                      Spacer(),
+                      Switch(
+                        value: isConditioning,
+                        onChanged: (value) {
+                          setState(() {
+                            isConditioning = value;
+                          });
+                        },
+                        activeTrackColor: Colors.black26,
+                        activeColor: Colors.black,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text('Diet and Nutrition',
+                          style: TextStyle(
+                            fontFamily: openBold,
+                            fontSize: 14,
+                          )),
+                      Spacer(),
+                      Switch(
+                        value: isDiet,
+                        onChanged: (value) {
+                          setState(() {
+                            isDiet = value;
+                          });
+                        },
+                        activeTrackColor: Colors.black26,
+                        activeColor: Colors.black,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text('Contest Prep.',
+                          style: TextStyle(
+                            fontFamily: openBold,
+                            fontSize: 14,
+                          )),
+                      Spacer(),
+                      Switch(
+                        value: isContest,
+                        onChanged: (value) {
+                          setState(() {
+                            isContest = value;
+                          });
+                        },
+                        activeTrackColor: Colors.black26,
+                        activeColor: Colors.black,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+                width: SizeConfig.screenWidth * 80,
+                padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                child: Container(
+                  margin: EdgeInsets.only(top: padding15),
+                  height: button_height,
+                  child: RaisedButton(
+                    onPressed: () {
+                      _modalBottomSheetMenu();
+                    },
+                    color: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(button_radius)),
+                    child: Text(
+                      "Proceed to Selelct Date & Time",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16),
+                    ),
+                  ),
+                ))
           ],
         ),
       ),
     );
+  }
+
+  void _modalBottomSheetMenu() {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return new SingleChildScrollView(
+              child: new Container(
+            color: Colors.transparent,
+            //could change this to Color(0xFF737373),
+            //so you don't have to change MaterialApp canvasColor
+            child: new Container(
+                decoration: new BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(50.0),
+                        topRight: const Radius.circular(50.0))),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    backWithArrow(context),
+                    Container(
+                      color: Color(0xffE1E1E1),
+                      width: SizeConfig.screenWidth,
+                      height: 50,
+                      margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.only(left: 20),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Choose Available Date & Time',
+                            style: TextStyle(
+                                color: Color(0xff707070), fontSize: 14),
+                          )),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(40, 15, 40, 5),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    '20 August, 2020',
+                                    style: TextStyle(
+                                        fontFamily: open_light,
+                                        fontSize: 14,
+                                        color: Color(0xff707070)),
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text('12.30 PM',
+                                      style: TextStyle(
+                                          fontFamily: openBold,
+                                          fontSize: 12,
+                                          color: Color(0xff707070))),
+                                ],
+                              ),
+                              Spacer(),
+                              Checkbox(
+                                value: isDateSelected,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    isDateSelected = value;
+
+                                  });
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(40, 10, 40, 5),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    '20 August, 2020',
+                                    style: TextStyle(
+                                        fontFamily: open_light,
+                                        fontSize: 14,
+                                        color: Color(0xff707070)),
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text('12.30 PM',
+                                      style: TextStyle(
+                                          fontFamily: openBold,
+                                          fontSize: 12,
+                                          color: Color(0xff707070))),
+                                ],
+                              ),
+                              Spacer(),
+                              Checkbox(
+                                value: false,
+                                onChanged: (bool value) {
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(40, 10, 40, 5),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    '20 August, 2020',
+                                    style: TextStyle(
+                                        fontFamily: open_light,
+                                        fontSize: 14,
+                                        color: Color(0xff707070)),
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text('12.30 PM',
+                                      style: TextStyle(
+                                          fontFamily: openBold,
+                                          fontSize: 12,
+                                          color: Color(0xff707070))),
+                                ],
+                              ),
+                              Spacer(),
+                              Checkbox(
+                                value: false,
+                                onChanged: (bool value) {
+
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(40, 10, 40, 50),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    '20 August, 2020',
+                                    style: TextStyle(
+                                        fontFamily: open_light,
+                                        fontSize: 14,
+                                        color: Color(0xff707070)),
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text('12.30 PM',
+                                      style: TextStyle(
+                                          fontFamily: openBold,
+                                          fontSize: 12,
+                                          color: Color(0xff707070))),
+                                ],
+                              ),
+                              Spacer(),
+                              Checkbox(
+                                value: false,
+                                onChanged: (bool value) {
+
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    fullWidthButton(
+                        context,
+                        'Proceed',
+                        SizeConfig.screenWidth * .9,
+                        FontWeight.normal,
+                        YourBooking()),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                )),
+          ));
+        });
   }
 }

@@ -18,6 +18,13 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
   bool isSwitched3Months = false;
   bool isSwitched6Months = false;
 
+  void changeState() {
+    isSwitchedAnual = false;
+    isSwitchedMonthly = false;
+    isSwitched3Months = false;
+    isSwitched6Months = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -108,6 +115,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                           value: isSwitchedAnual,
                           onChanged: (value) {
                             setState(() {
+                              changeState();
                               isSwitchedAnual = value;
                             });
                           },
@@ -148,6 +156,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                           value: isSwitched6Months,
                           onChanged: (value) {
                             setState(() {
+                              changeState();
                               isSwitched6Months = value;
                             });
                           },
@@ -188,6 +197,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                           value: isSwitched3Months,
                           onChanged: (value) {
                             setState(() {
+                              changeState();
                               isSwitched3Months = value;
                             });
                           },

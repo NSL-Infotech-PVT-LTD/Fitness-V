@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:volt/Screens/ProfileScreen.dart';
+import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -120,15 +120,14 @@ class LoginState extends State<LoginScreen> {
                                       child: TextFormField(
                                         cursorColor: Colors.black,
                                         keyboardType:
-                                            TextInputType.emailAddress,
+                                        TextInputType.emailAddress,
                                         decoration: new InputDecoration(
                                             border: InputBorder.none,
                                             contentPadding: EdgeInsets.only(
                                                 left: 15, bottom: 10),
-                                            hintText: userName),
-                                      ),
+                                            hintText: userName),),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -200,7 +199,7 @@ class LoginState extends State<LoginScreen> {
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
-                                              ProfileScreen()));
+                                              Dashboard()));
                                 },
                                 color: Color(0xff484848),
                                 padding: EdgeInsets.all(0.0),
@@ -254,7 +253,7 @@ class LoginState extends State<LoginScreen> {
                                 Navigator.push(
                                     context,
                                     new MaterialPageRoute(
-                                        builder: (context) => ProfileScreen()));
+                                        builder: (context) => Dashboard()));
                               },
                             )
                           ],

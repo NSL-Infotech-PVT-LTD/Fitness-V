@@ -1,3 +1,4 @@
+const jugraj = 'jugraj';
 const signup = 'Sign up';
 const login = 'Log in';
 const chooseYourWay = 'Choose your way to Log in';
@@ -50,6 +51,7 @@ const anual = 'Annual';
 const months3 = '3 Months';
 const months6 = '6 Months';
 const monthly = 'Monthly';
+const volt_rights = 'VOLT FIRNESS @2019 ALL RIGHT RESERVED';
 const pleaseCheckInternet =
     "It seems your intenert connection is slow or not connected with the internet \n Please Check You Internet Connection";
 //font area
