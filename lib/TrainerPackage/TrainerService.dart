@@ -19,7 +19,11 @@ class TrainerServiceState extends State<TrainerService> {
   bool isConditioning = false;
   bool isDiet = false;
   bool isContest = false;
-  bool isDateSelected = false;
+  bool isDateSelected1 = false;
+  bool isDateSelected2 = false;
+  bool isDateSelected3 = false;
+  bool isDateSelected4 = false;
+  ValueChanged valueChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -319,203 +323,218 @@ class TrainerServiceState extends State<TrainerService> {
     showModalBottomSheet(
         context: context,
         builder: (builder) {
-          return new SingleChildScrollView(
+          return StatefulBuilder(builder: (context, setState) {
+            return SingleChildScrollView(
+                child: Container(
+              color: Colors.transparent,
+              //could change this to Color(0xFF737373),
+              //so you don't have to change MaterialApp canvasColor
               child: new Container(
-            color: Colors.transparent,
-            //could change this to Color(0xFF737373),
-            //so you don't have to change MaterialApp canvasColor
-            child: new Container(
-                decoration: new BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(50.0),
-                        topRight: const Radius.circular(50.0))),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    backWithArrow(context),
-                    Container(
-                      color: Color(0xffE1E1E1),
-                      width: SizeConfig.screenWidth,
-                      height: 50,
-                      margin: EdgeInsets.only(top: 10),
-                      padding: EdgeInsets.only(left: 20),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Choose Available Date & Time',
-                            style: TextStyle(
-                                color: Color(0xff707070), fontSize: 14),
-                          )),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(40, 15, 40, 5),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    '20 August, 2020',
-                                    style: TextStyle(
-                                        fontFamily: open_light,
-                                        fontSize: 14,
-                                        color: Color(0xff707070)),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text('12.30 PM',
+                  decoration: new BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: new BorderRadius.only(
+                          topLeft: const Radius.circular(50.0),
+                          topRight: const Radius.circular(50.0))),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      backWithArrow(context),
+                      Container(
+                        color: Color(0xffE1E1E1),
+                        width: SizeConfig.screenWidth,
+                        height: 50,
+                        margin: EdgeInsets.only(top: 10),
+                        padding: EdgeInsets.only(left: 20),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Choose Available Date & Time',
+                              style: TextStyle(
+                                  color: Color(0xff707070), fontSize: 14),
+                            )),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(40, 15, 40, 5),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      '20 August, 2020',
                                       style: TextStyle(
-                                          fontFamily: openBold,
-                                          fontSize: 12,
-                                          color: Color(0xff707070))),
-                                ],
-                              ),
-                              Spacer(),
-                              Checkbox(
-                                value: isDateSelected,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    isDateSelected = value;
+                                          fontFamily: open_light,
+                                          fontSize: 14,
+                                          color: Color(0xff707070)),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text('12.30 PM',
+                                        style: TextStyle(
+                                            fontFamily: openBold,
+                                            fontSize: 12,
+                                            color: Color(0xff707070))),
+                                  ],
+                                ),
+                                Spacer(),
+                                Checkbox(
+                                  value: isDateSelected1,
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.black,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      isDateSelected1 = value;
+                                    });
+                                  },
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(40, 10, 40, 5),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      '20 August, 2020',
+                                      style: TextStyle(
+                                          fontFamily: open_light,
+                                          fontSize: 14,
+                                          color: Color(0xff707070)),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text('12.30 PM',
+                                        style: TextStyle(
+                                            fontFamily: openBold,
+                                            fontSize: 12,
+                                            color: Color(0xff707070))),
+                                  ],
+                                ),
+                                Spacer(),
+                                Checkbox(
+                                    value: isDateSelected2,
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.black,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        isDateSelected2 = value;
+                                      });
+                                    })
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(40, 10, 40, 5),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      '20 August, 2020',
+                                      style: TextStyle(
+                                          fontFamily: open_light,
+                                          fontSize: 14,
+                                          color: Color(0xff707070)),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text('12.30 PM',
+                                        style: TextStyle(
+                                            fontFamily: openBold,
+                                            fontSize: 12,
+                                            color: Color(0xff707070))),
+                                  ],
+                                ),
+                                Spacer(),
+                                Checkbox(
+                                    value: isDateSelected3,
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.black,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        isDateSelected3 = value;
+                                      });
+                                    })
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(40, 10, 40, 50),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      '20 August, 2020',
+                                      style: TextStyle(
+                                          fontFamily: open_light,
+                                          fontSize: 14,
+                                          color: Color(0xff707070)),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text('12.30 PM',
+                                        style: TextStyle(
+                                            fontFamily: openBold,
+                                            fontSize: 12,
+                                            color: Color(0xff707070))),
+                                  ],
+                                ),
+                                Spacer(),
+                                Checkbox(
+                                    value: isDateSelected4,
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.black,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        isDateSelected4
 
-                                  });
-                                },
-                              )
-                            ],
-                          )
-                        ],
+                                        = value;
+                                      });
+                                    })
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(40, 10, 40, 5),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    '20 August, 2020',
-                                    style: TextStyle(
-                                        fontFamily: open_light,
-                                        fontSize: 14,
-                                        color: Color(0xff707070)),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text('12.30 PM',
-                                      style: TextStyle(
-                                          fontFamily: openBold,
-                                          fontSize: 12,
-                                          color: Color(0xff707070))),
-                                ],
-                              ),
-                              Spacer(),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value) {
-                                },
-                              )
-                            ],
-                          )
-                        ],
+                      fullWidthButton(
+                          context,
+                          'Proceed',
+                          SizeConfig.screenWidth * .9,
+                          FontWeight.normal,
+                          YourBooking()),
+                      SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(40, 10, 40, 5),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    '20 August, 2020',
-                                    style: TextStyle(
-                                        fontFamily: open_light,
-                                        fontSize: 14,
-                                        color: Color(0xff707070)),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text('12.30 PM',
-                                      style: TextStyle(
-                                          fontFamily: openBold,
-                                          fontSize: 12,
-                                          color: Color(0xff707070))),
-                                ],
-                              ),
-                              Spacer(),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value) {
-
-                                },
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(40, 10, 40, 50),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    '20 August, 2020',
-                                    style: TextStyle(
-                                        fontFamily: open_light,
-                                        fontSize: 14,
-                                        color: Color(0xff707070)),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text('12.30 PM',
-                                      style: TextStyle(
-                                          fontFamily: openBold,
-                                          fontSize: 12,
-                                          color: Color(0xff707070))),
-                                ],
-                              ),
-                              Spacer(),
-                              Checkbox(
-                                value: false,
-                                onChanged: (bool value) {
-
-                                },
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    fullWidthButton(
-                        context,
-                        'Proceed',
-                        SizeConfig.screenWidth * .9,
-                        FontWeight.normal,
-                        YourBooking()),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                )),
-          ));
+                    ],
+                  )),
+            ));
+          });
         });
   }
 }

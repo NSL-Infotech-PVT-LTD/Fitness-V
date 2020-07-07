@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:volt/Bookings/YourBooking.dart';
+import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods.dart';
-import 'package:volt/PlansScreen/ChoosedMemberShip.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -108,7 +107,7 @@ class BookingAndCartState extends State<BookingAndCart> {
                                     go_to_dashboard,
                                     SizeConfig.screenWidth,
                                     FontWeight.bold,
-                                    YourBooking(),
+                                    Dashboard(),
                                   ),
                                 )
                               ],

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Event.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
+import 'package:volt/NotificationsScreens/Notification.dart';
 import 'package:volt/Screens/ProfileScreen.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -147,7 +148,15 @@ class DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Spacer(),
-                  SvgPicture.asset(baseImageAssetsUrl + 'noti_dot.svg')
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => NotificationScreen()));
+                      },
+                      child:
+                          SvgPicture.asset(baseImageAssetsUrl + 'noti_dot.svg'))
                 ],
               ),
             ),
@@ -155,14 +164,10 @@ class DashboardState extends State<Dashboard> {
               height: .5,
               color: CColor.PRIMARYCOLOR,
             ),
-
             _children[_currentIndex],
-
             SizedBox(
               height: 50,
             ),
-
-
             Row(
               children: <Widget>[
                 Padding(
@@ -208,7 +213,6 @@ class DashboardState extends State<Dashboard> {
                         fontFamily: open_italic),
                   )),
             ),
-
             SizedBox(
               height: 50,
             )

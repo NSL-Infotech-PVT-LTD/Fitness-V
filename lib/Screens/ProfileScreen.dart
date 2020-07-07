@@ -8,6 +8,7 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'package:volt/AuthScreens/SignupScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -106,17 +107,16 @@ class ProfileState extends State<ProfileScreen> {
               height: 40,
             ),
             myDivider(),
-            Container(
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => Dashboard()));
+              },
+              child:Container(
               padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: InkWell(
-
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => Dashboard()));
-                  },
-                  child: Row(
+              child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SvgPicture.asset(baseImageAssetsUrl + 'home.svg'),
@@ -150,16 +150,16 @@ class ProfileState extends State<ProfileScreen> {
               ),
             ),
             myDivider(),
-            Container(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => NotificationScreen()));
+              },
+              child:   Container(
               padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => NotificationScreen()));
-                  },
-                  child: Row(
+              child:  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SvgPicture.asset(baseImageAssetsUrl + 'speaker.svg'),
@@ -193,23 +193,27 @@ class ProfileState extends State<ProfileScreen> {
               ),
             ),
             myDivider(),
-            Container(
-              padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SvgPicture.asset(baseImageAssetsUrl + 'invoice.svg'),
-                  Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Instructor Policies',
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: Color(0xff8B8B8B), fontSize: 16),
-                      ))
-                ],
-              ),
-            ),
+            GestureDetector(
+                onTap: () {
+                  termsBottom('Privacy Policy', context);
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(baseImageAssetsUrl + 'invoice.svg'),
+                      Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                            'Instructor Policies',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(0xff8B8B8B), fontSize: 16),
+                          ))
+                    ],
+                  ),
+                )),
             myDivider(),
             Container(
               padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
@@ -227,6 +231,28 @@ class ProfileState extends State<ProfileScreen> {
                       ))
                 ],
               ),
+            ),
+            myDivider(),
+            GestureDetector(
+              onTap: () {
+                termsBottom('Terms & Conditions', context);
+              },
+              child: Container(
+              padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+              child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(baseImageAssetsUrl + 'terms.svg',width: 30,height: 30,),
+                      Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                            'Terms & Conditions',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(0xff8B8B8B), fontSize: 16),
+                          ))
+                    ],
+                  )),
             ),
             myDivider(),
             SizedBox(
@@ -249,8 +275,7 @@ class ProfileState extends State<ProfileScreen> {
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    volt_rights
-                    ,
+                    volt_rights,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color(0xff8B8B8B),

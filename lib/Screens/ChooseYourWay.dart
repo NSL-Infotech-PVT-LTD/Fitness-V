@@ -120,7 +120,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                                     },
                                     child: _CommonView(
                                         'assets/images/dummy.png',
-                                        "Pole & Beaches",
+                                        "Pool & Beaches",
                                         "(Only Gym Members)")),
                               ],
                             ),

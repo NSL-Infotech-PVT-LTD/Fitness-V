@@ -99,7 +99,7 @@ class GroupClassesState extends State<GroupClasses> {
                         Container(
                           width: SizeConfig.blockSizeHorizontal * 40,
                           child: Text(
-                            "sessiion",
+                            "session",
                             style: TextStyle(
                               color: CColor.LightGrey,
                               fontSize: textSize10,
@@ -135,7 +135,7 @@ class GroupClassesState extends State<GroupClasses> {
                         Container(
                           width: SizeConfig.blockSizeHorizontal * 40,
                           child: Text(
-                            "1 sessiion",
+                            "1 session",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: textSize16,
@@ -169,7 +169,7 @@ class GroupClassesState extends State<GroupClasses> {
                         Container(
                           width: SizeConfig.blockSizeHorizontal * 40,
                           child: Text(
-                            "6 sessiions/month",
+                            "6 sessions/month",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: textSize16,
@@ -203,7 +203,7 @@ class GroupClassesState extends State<GroupClasses> {
                         Container(
                           width: SizeConfig.blockSizeHorizontal * 40,
                           child: Text(
-                            "12 sessiions/month",
+                            "12 sessions/month",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: textSize16,
@@ -274,7 +274,7 @@ class GroupClassesState extends State<GroupClasses> {
                                   color: Colors.black),
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
