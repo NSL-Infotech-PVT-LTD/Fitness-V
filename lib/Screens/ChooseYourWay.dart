@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:volt/PlansScreen/GymMemberPlan.dart';
 import 'package:volt/AuthScreens/SignupScreen.dart';
+import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/PlansScreen/GymMemberPlan.dart';
+import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -16,6 +18,17 @@ class ChooseYourWay extends StatefulWidget {
 }
 
 class ChooseWayState extends State<ChooseYourWay> {
+  List gym_list;
+  List pool_and_beach_list;
+  List guest_list;
+  List fairMont_list;
+
+  @override
+  void initState() {
+    getRoleApi(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -102,11 +115,17 @@ class ChooseWayState extends State<ChooseYourWay> {
                               children: <Widget>[
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.push(context,
-                                          SizeRoute(page: GymMemberPlan()));
+                                      gym_list != null
+                                          ? Navigator.push(
+                                              context,
+                                              SizeRoute(
+                                                  page: GymMemberPlan(
+                                                      response: gym_list)))
+                                          : showMyDialog(context, 'Error!',
+                                              "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
-                                        'assets/images/dummy.png',
+                                        'assets/images/dummy2.png',
                                         "Gym Member",
                                         "(Gym, Personal Training, Group Fitness and more)")),
                                 Divider(
@@ -114,9 +133,15 @@ class ChooseWayState extends State<ChooseYourWay> {
                                 ),
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.push(context,
-                                          SizeRoute(page:
-                                                  GymMemberPlan()));
+                                      pool_and_beach_list != null
+                                          ? Navigator.push(
+                                              context,
+                                              SizeRoute(
+                                                  page: GymMemberPlan(
+                                                      response:
+                                                          pool_and_beach_list)))
+                                          : showMyDialog(context, 'Error!',
+                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
                                         'assets/images/dummy.png',
@@ -128,12 +153,17 @@ class ChooseWayState extends State<ChooseYourWay> {
                               children: <Widget>[
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.push(context,
-                                          SizeRoute(page:
-                                                  SignupScreen()));
+                                      guest_list != null
+                                          ? Navigator.push(
+                                              context,
+                                              SizeRoute(
+                                                  page: SignupScreen(
+                                                      response: guest_list,type: 'guest',)))
+                                          : showMyDialog(context, 'Error!',
+                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
-                                        'assets/images/dummy.png',
+                                        'assets/images/dummy1.png',
                                         "Guest",
                                         "")),
                                 Divider(
@@ -141,14 +171,17 @@ class ChooseWayState extends State<ChooseYourWay> {
                                 ),
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SignupScreen()));
+                                      fairMont_list != null
+                                          ? Navigator.push(
+                                              context,
+                                              SizeRoute(
+                                                  page: SignupScreen(
+                                                      response: fairMont_list,type: 'guest',)))
+                                          : showMyDialog(context, 'Error!',
+                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
-                                        'assets/images/dummy.png',
+                                        'assets/images/fairmont.jpg',
                                         "Fairmont Hotel Guest",
                                         "")),
                               ],
@@ -163,6 +196,52 @@ class ChooseWayState extends State<ChooseYourWay> {
         ),
       ),
     );
+  }
+
+  Future<StatusResponse> getRoleApi(context) {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Loading....");
+        getRoles().then((response) {
+          print("CheckBeforSuccess->" + response.toJson().toString());
+          dismissDialog(context);
+          if (response.status) {
+            gym_list = response.data.gym_members;
+            pool_and_beach_list = response.data.pool_and_beach_members;
+            guest_list = response.data.local_guest;
+            fairMont_list = response.data.fairmont_hotel_guest;
+          } else {
+            showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+
+      dismissDialog(context);
+    });
+  }
+
+  void showMyDialog(context, String title, String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context, SizeRoute(page: ChooseYourWay()));
+                },
+              ),
+            ],
+          );
+        });
   }
 }
 

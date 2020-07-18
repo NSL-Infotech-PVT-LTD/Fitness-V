@@ -2,13 +2,19 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/Methods.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/PlansScreen/ChoosedMemberShip.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+// ignore: must_be_immutable
 class GymMemberPlan extends StatefulWidget {
+  List response;
+
+  GymMemberPlan({this.response});
+
   @override
   State<StatefulWidget> createState() => GymMemberState();
 }
@@ -16,6 +22,8 @@ class GymMemberPlan extends StatefulWidget {
 class GymMemberState extends State<GymMemberPlan> {
   CarouselSlider carouselSlider;
   int _current = 0;
+
+  var plansList = [];
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -28,21 +36,44 @@ class GymMemberState extends State<GymMemberPlan> {
   bool signle = false;
   bool couple = false;
   bool family = false;
+  int indexValue = 0;
+
+  @override
+  void initState() {
+    print("CheckResponse " + widget.response.toString());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Container> imgList = [
-      cardView('assets/images/gym.png', 'Single', 'Gym Membership Plan'),
-      cardView('assets/images/couple.png', 'Couples', 'Gym Membership Plan'),
-      cardView('assets/images/family.png', 'Family', 'Gym Membership Plan'),
-    ];
+    int limit = widget.response.length;
+    List<Container> imgList = [];
 
+    var value = [];
+
+    for (var i = 0; i < limit; i++) {
+      value = widget.response[i]['plan_detail'];
+      plansList = List<PlansDetails>.generate(
+          value.length,
+          (j) => PlansDetails(
+              fee_type: value[j]['fee_type'], fee: value[j]['fee'].toString()));
+
+      imgList.add(cardView(
+          widget.response[i]['image'],
+          widget.response[i]['category'],
+          widget.response[i]['name'],
+          plansList,
+          widget.response[i]));
+    }
+
+    indexValue = indexValue + 1;
+    print((indexValue++).toString() + " nfkjsdfkds");
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(top: topMargin40),
+          padding: EdgeInsets.only(top: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
@@ -88,7 +119,9 @@ class GymMemberState extends State<GymMemberPlan> {
                     Positioned(
                       bottom: 0,
                       child: Container(
-                        height: SizeConfig.blockSizeVertical * 40,
+                        height: indexValue % 2 == 0
+                            ? SizeConfig.blockSizeVertical * 40
+                            : SizeConfig.blockSizeVertical * 20,
                         width: SizeConfig.screenWidth,
                         decoration: BoxDecoration(color: Colors.black),
                       ),
@@ -99,7 +132,7 @@ class GymMemberState extends State<GymMemberPlan> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         carouselSlider = CarouselSlider(
-                          height: SizeConfig.screenHeight * .95,
+                          height: SizeConfig.screenHeight * .9,
                           initialPage: 0,
                           enlargeCenterPage: true,
                           autoPlay: true,
@@ -154,30 +187,30 @@ class GymMemberState extends State<GymMemberPlan> {
   Widget checkbox(
       String title, String richTExt, bool boolValue, int planValue) {
     return SizedBox(
-      height: 30,
+      height: 25,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Checkbox(
-            checkColor: Colors.white,
-            activeColor: Colors.black,
-            value: boolValue,
-            onChanged: (bool value) {
-              setState(() {
-                switch (planValue) {
-                  case 0:
-                    signle = value;
-                    break;
-                  case 1:
-                    couple = value;
-                    break;
-                  case 2:
-                    family = value;
-                    break;
-                }
-              });
-            },
-          ),
+//          Checkbox(
+//            checkColor: Colors.white,
+//            activeColor: Colors.black,
+//            value: boolValue,
+//            onChanged: (bool value) {
+//              setState(() {
+//                switch (planValue) {
+//                  case 0:
+//                    signle = value;
+//                    break;
+//                  case 1:
+//                    couple = value;
+//                    break;
+//                  case 2:
+//                    family = value;
+//                    break;
+//                }
+//              });
+//            },
+//          ),
           new RichText(
               text: new TextSpan(
                   text: title,
@@ -195,13 +228,10 @@ class GymMemberState extends State<GymMemberPlan> {
     );
   }
 
-  Widget cardView(
-    String imageLink,
-    String planType,
-    String planDetail,
-  ) {
+  Widget cardView(String imageLink, String planType, String planDetail,
+      List plans, response) {
     return Container(
-        margin: EdgeInsets.fromLTRB(5, 20, 5, 10),
+        margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
         decoration: BoxDecoration(
             color: Colors.white54,
             borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -226,14 +256,19 @@ class GymMemberState extends State<GymMemberPlan> {
                     children: <Widget>[
                       ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          child: Image.asset(
-                            imageLink,
-                            height: 185,
-                            width: SizeConfig.screenWidth,
-                            fit: BoxFit.fill,
-                          )),
+                          child: imageLink != null
+                              ? FadeInImage.assetNetwork(
+                                  placeholder:
+                                      baseImageAssetsUrl + 'logo_white.png',
+                                  image: BASE_URL + IMAGE_URL + imageLink,
+                                  fit: BoxFit.cover,
+                                  height: SizeConfig.screenHeight * .25,
+                                )
+                              : Image.asset(baseImageAssetsUrl + 'gym.png',
+                                  fit: BoxFit.cover,
+                                  height: SizeConfig.screenHeight * .25)),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(15, 20, 15, 15),
+                        padding: EdgeInsets.fromLTRB(10, 12, 10, 10),
                         child: Row(
                           children: <Widget>[
                             Text(
@@ -255,91 +290,26 @@ class GymMemberState extends State<GymMemberPlan> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        'Anual',
-                        style: TextStyle(
-                            fontSize: textSize12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      Spacer(),
-                      Text(
-                        '3600 AED',
-                        style: TextStyle(
-                            fontSize: textSize12, fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    primary: false,
+                    scrollDirection: Axis.vertical,
+                    itemCount: plans.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                          child: CustomPlansDetails(
+                        items: plans[index],
+                      ));
+                    },
                   ),
                 ),
-                myDivider(),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '6 Months',
-                        style: TextStyle(
-                            fontSize: textSize12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      Spacer(),
-                      Text(
-                        '2400 AED',
-                        style: TextStyle(
-                            fontSize: textSize12, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                myDivider(),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '3 Months',
-                        style: TextStyle(
-                            fontSize: textSize12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      Spacer(),
-                      Text(
-                        '1500 AED',
-                        style: TextStyle(
-                            fontSize: textSize12, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                myDivider(),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        'Monthly',
-                        style: TextStyle(
-                            fontSize: textSize12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      Spacer(),
-                      Text(
-                        '700 AED',
-                        style: TextStyle(
-                            fontSize: textSize12, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                myDivider(),
                 SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
                   child: Column(
                     children: <Widget>[
                       checkbox("Free", ' Group Classes', signle, 0),
@@ -348,20 +318,77 @@ class GymMemberState extends State<GymMemberPlan> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
                 Padding(
-                    padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
+                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
                     child: fullWidthButton(
                         context,
                         choosePlan,
                         SizeConfig.screenWidth,
                         FontWeight.bold,
-                        ChooseMemberShip()))
+                        ChooseMemberShip(
+                          response: response,
+                        )))
               ],
             ),
           ),
         ));
+  }
+
+  Widget plans(String fee_type, String fee) {
+    Padding(
+      padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+      child: Row(
+        children: <Widget>[
+          Text(
+            fee_type,
+            style:
+                TextStyle(fontSize: textSize12, fontWeight: FontWeight.normal),
+          ),
+          Spacer(),
+          Text(
+            fee + ' AED',
+            style: TextStyle(fontSize: textSize12, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PlansDetails {
+  final String fee_type;
+  final String fee;
+
+  const PlansDetails({this.fee_type, this.fee});
+}
+
+class CustomPlansDetails extends StatelessWidget {
+  final PlansDetails items;
+
+  const CustomPlansDetails({Key key, @required this.items}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: <Widget>[
+      Padding(
+        padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+        child: Row(
+          children: <Widget>[
+            Text(
+              items.fee_type,
+              style: TextStyle(
+                  fontSize: textSize12, fontWeight: FontWeight.normal),
+            ),
+            Spacer(),
+            Text(
+              items.fee + ' AED',
+              style:
+                  TextStyle(fontSize: textSize12, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+      myDivider()
+    ]);
   }
 }

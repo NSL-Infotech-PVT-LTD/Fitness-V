@@ -95,7 +95,7 @@ void showProgress(context, String msg) {
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       progressWidget: CircularProgressIndicator(
-        backgroundColor: CColor.PRIMARYCOLOR,
+        backgroundColor: CColor.App_Color,
 
       ),
       elevation: 10.0,
@@ -103,7 +103,7 @@ void showProgress(context, String msg) {
       progress: 0.0,
       maxProgress: 100.0,
       progressTextStyle: TextStyle(
-          color: CColor.PRIMARYCOLOR,
+          color: CColor.App_Color,
           fontSize: 10.0,
           fontWeight: FontWeight.w400),
       messageTextStyle: TextStyle(

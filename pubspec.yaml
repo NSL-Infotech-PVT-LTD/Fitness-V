@@ -14,7 +14,7 @@ description: A application for gym
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -29,6 +29,7 @@ dependencies:
   shared_preferences: ^0.5.3+1
   connectivity: ^0.4.3+2
   geolocator: ^4.0.3
+  intl: ^0.15.8
   progress_dialog: ^1.2.2
   http: any
 

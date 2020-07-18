@@ -1,22 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:volt/Methods.dart';
 import 'package:volt/AuthScreens/SignupScreen.dart';
+import 'package:volt/Methods.dart';
+import 'package:volt/Methods/Method.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
 class ChooseMemberShip extends StatefulWidget {
+  var response;
+
+  ChooseMemberShip({this.response});
+
   @override
   State<StatefulWidget> createState() => ChooseMemberShipState();
 }
 
 class ChooseMemberShipState extends State<ChooseMemberShip> {
+  int currentSelectedIndex = -1;
   bool isSwitchedAnual = true;
   bool isSwitchedMonthly = false;
   bool isSwitched3Months = false;
   bool isSwitched6Months = false;
+  int plan_index = 0;
 
   void changeState() {
     isSwitchedAnual = false;
@@ -25,8 +32,22 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
     isSwitched6Months = false;
   }
 
+  List<PlansDetails> plansList;
+  List limit;
+
   @override
   Widget build(BuildContext context) {
+    limit = widget.response['plan_detail'];
+
+    plansList = new List<PlansDetails>();
+
+    for (int i = 0; i < limit.length; i++) {
+      plansList.add(PlansDetails(
+          fee_type: limit[i]['fee_type'],
+          fee: limit[i]['fee'].toString(),
+          choosePlan: false));
+    }
+
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: CColor.WHITE,
@@ -86,179 +107,335 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                       fit: BoxFit.fill,
                     )),
               ),
+
               Container(
-                padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              anual,
-                              style: TextStyle(
-                                  fontFamily: open_light, fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text('3600 AED',
-                                style: TextStyle(
-                                    fontFamily: openBold,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        Spacer(),
-                        Switch(
-                          value: isSwitchedAnual,
-                          onChanged: (value) {
-                            setState(() {
-                              changeState();
-                              isSwitchedAnual = value;
-                            });
-                          },
-                          activeTrackColor: Colors.black26,
-                          activeColor: Colors.black,
-                        ),
-                      ],
-                    )
-                  ],
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  primary: false,
+                  scrollDirection: Axis.vertical,
+                  itemCount: plansList.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                        onTap: () {
+                          plan_index = index;
+
+                          setState(() {
+                            currentSelectedIndex = index;
+//                            plansList.forEach(
+//                                (element) => element.choosePlan = false);
+//                            plansList[index].choosePlan = true;
+                          });
+                        },
+                        child: CustomPlansDetails(
+                          items: plansList,
+                          index: index,
+                          myValue: currentSelectedIndex == index,
+                        ));
+                  },
                 ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              months6,
-                              style: TextStyle(
-                                  fontFamily: open_light, fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text('2400 AED',
-                                style: TextStyle(
-                                    fontFamily: openBold,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        Spacer(),
-                        Switch(
-                          value: isSwitched6Months,
-                          onChanged: (value) {
-                            setState(() {
-                              changeState();
-                              isSwitched6Months = value;
-                            });
-                          },
-                          activeTrackColor: Colors.black26,
-                          activeColor: Colors.black,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              months3,
-                              style: TextStyle(
-                                  fontFamily: open_light, fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text('1500 AED',
-                                style: TextStyle(
-                                    fontFamily: openBold,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        Spacer(),
-                        Switch(
-                          value: isSwitched3Months,
-                          onChanged: (value) {
-                            setState(() {
-                              changeState();
-                              isSwitched3Months = value;
-                            });
-                          },
-                          activeTrackColor: Colors.black26,
-                          activeColor: Colors.black,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(40, 15, 40, 30),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              monthly,
-                              style: TextStyle(
-                                  fontFamily: open_light, fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text('700 AED',
-                                style: TextStyle(
-                                    fontFamily: openBold,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        Spacer(),
-                        Switch(
-                          value: isSwitchedMonthly,
-                          onChanged: (value) {
-                            setState(() {
-                              isSwitchedMonthly = value;
-                            });
-                          },
-                          activeTrackColor: Colors.black26,
-                          activeColor: Colors.black,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+//              Container(
+//                padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
+//                child: Column(
+//                  children: <Widget>[
+//                    Row(
+//                      children: <Widget>[
+//                        Column(
+//                          crossAxisAlignment: CrossAxisAlignment.start,
+//                          children: <Widget>[
+//                            Text(
+//                              anual,
+//                              style: TextStyle(
+//                                  fontFamily: open_light, fontSize: 14),
+//                            ),
+//                            SizedBox(
+//                              height: 3,
+//                            ),
+//                            Text('3600 AED',
+//                                style: TextStyle(
+//                                    fontFamily: openBold,
+//                                    fontSize: 12,
+//                                    fontWeight: FontWeight.bold)),
+//                          ],
+//                        ),
+//                        Spacer(),
+//                        Switch(
+//                          value: isSwitchedAnual,
+//                          onChanged: (value) {
+//                            setState(() {
+//                              changeState();
+//                              isSwitchedAnual = value;
+//                            });
+//                          },
+//                          activeTrackColor: Colors.black26,
+//                          activeColor: Colors.black,
+//                        ),
+//                      ],
+//                    )
+//                  ],
+//                ),
+//              ),
+//              Container(
+//                padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
+//                child: Column(
+//                  children: <Widget>[
+//                    Row(
+//                      children: <Widget>[
+//                        Column(
+//                          crossAxisAlignment: CrossAxisAlignment.start,
+//                          children: <Widget>[
+//                            Text(
+//                              months6,
+//                              style: TextStyle(
+//                                  fontFamily: open_light, fontSize: 14),
+//                            ),
+//                            SizedBox(
+//                              height: 3,
+//                            ),
+//                            Text('2400 AED',
+//                                style: TextStyle(
+//                                    fontFamily: openBold,
+//                                    fontSize: 12,
+//                                    fontWeight: FontWeight.bold)),
+//                          ],
+//                        ),
+//                        Spacer(),
+//                        Switch(
+//                          value: isSwitched6Months,
+//                          onChanged: (value) {
+//                            setState(() {
+//                              changeState();
+//                              isSwitched6Months = value;
+//                            });
+//                          },
+//                          activeTrackColor: Colors.black26,
+//                          activeColor: Colors.black,
+//                        ),
+//                      ],
+//                    )
+//                  ],
+//                ),
+//              ),
+//              Container(
+//                padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
+//                child: Column(
+//                  children: <Widget>[
+//                    Row(
+//                      children: <Widget>[
+//                        Column(
+//                          crossAxisAlignment: CrossAxisAlignment.start,
+//                          children: <Widget>[
+//                            Text(
+//                              months3,
+//                              style: TextStyle(
+//                                  fontFamily: open_light, fontSize: 14),
+//                            ),
+//                            SizedBox(
+//                              height: 3,
+//                            ),
+//                            Text('1500 AED',
+//                                style: TextStyle(
+//                                    fontFamily: openBold,
+//                                    fontSize: 12,
+//                                    fontWeight: FontWeight.bold)),
+//                          ],
+//                        ),
+//                        Spacer(),
+//                        Switch(
+//                          value: isSwitched3Months,
+//                          onChanged: (value) {
+//                            setState(() {
+//                              changeState();
+//                              isSwitched3Months = value;
+//                            });
+//                          },
+//                          activeTrackColor: Colors.black26,
+//                          activeColor: Colors.black,
+//                        ),
+//                      ],
+//                    )
+//                  ],
+//                ),
+//              ),
+//              Container(
+//                padding: EdgeInsets.fromLTRB(40, 15, 40, 30),
+//                child: Column(
+//                  children: <Widget>[
+//                    Row(
+//                      children: <Widget>[
+//                        Column(
+//                          crossAxisAlignment: CrossAxisAlignment.start,
+//                          children: <Widget>[
+//                            Text(
+//                              monthly,
+//                              style: TextStyle(
+//                                  fontFamily: open_light, fontSize: 14),
+//                            ),
+//                            SizedBox(
+//                              height: 3,
+//                            ),
+//                            Text('700 AED',
+//                                style: TextStyle(
+//                                    fontFamily: openBold,
+//                                    fontSize: 12,
+//                                    fontWeight: FontWeight.bold)),
+//                          ],
+//                        ),
+//                        Spacer(),
+//                        Switch(
+//                          value: isSwitchedMonthly,
+//                          onChanged: (value) {
+//                            setState(() {
+//                              changeState();
+//                              isSwitchedMonthly = value;
+//                            });
+//                          },
+//                          activeTrackColor: Colors.black26,
+//                          activeColor: Colors.black,
+//                        ),
+//                      ],
+//                    )
+//                  ],
+//                ),
+//              ),
               Padding(
                   padding: EdgeInsets.only(left: 40, right: 40),
-                  child: fullWidthButton(context, 'Proceed',
-                      SizeConfig.screenWidth, FontWeight.bold, SignupScreen())),
+                  child: Container(
+                    margin: EdgeInsets.only(top: padding15),
+                    height:50,
+                    width: SizeConfig.screenWidth,
+                    child: RaisedButton(
+                      onPressed: () {
+                        currentSelectedIndex == -1
+                            ? showDialogBox(context, "Choose Plan Alert",
+                                'Please choose your plan type')
+                            : Navigator.push(
+                                context,
+                                ScaleRoute(
+                                    page: SignupScreen(
+                                  response: widget.response['plan_detail'],
+                                  plan_index: plan_index,
+                                  type: "member",
+                                )));
+                      },
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(button_radius)),
+                      child: Text(
+                        'Proceed',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                    ),
+                  )
+
+//                fullWidthButton(
+//                context,
+//                'Proceed',
+//                SizeConfig.screenWidth,
+//                FontWeight.bold,
+//              )
+
+                  ),
               SizedBox(
                 height: 20,
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class PlansDetails {
+  final String fee_type;
+  final String fee;
+  bool choosePlan;
+
+  PlansDetails({this.fee_type, this.fee, this.choosePlan});
+}
+
+class CustomPlansDetails extends StatefulWidget {
+  final List items;
+  final int index;
+  bool myValue;
+
+  CustomPlansDetails({Key key, @required this.items, this.index, this.myValue})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => PlansState();
+}
+
+class PlansState extends State<CustomPlansDetails> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(40, 5, 40, 25),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    widget.items[widget.index].fee_type,
+                    style: TextStyle(fontFamily: open_light, fontSize: 14),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text(widget.items[widget.index].fee + ' AED',
+                      style: TextStyle(
+                          fontFamily: openBold,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold)),
+                ],
+              ),
+              Spacer(),
+
+              Container(
+                height: 20.0,
+                width: 20.0,
+
+                decoration: new BoxDecoration(
+                  color: widget.myValue
+                      ? Colors.black
+                      : Colors.transparent,
+                  border: new Border.all(
+                      width: 1.0,
+                      color:widget.myValue
+                          ? Colors.black
+                          : Colors.grey),
+                  borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                ),
+              ),
+//              Switch(
+//                value: widget.myValue,
+//                activeTrackColor: Colors.black26,
+//                activeColor: Colors.black,
+//                onChanged: (bool value) {
+//                  setState(() {
+//
+//
+////                    for (int i = 0; i < widget.items.length; i++) {
+////                      if (widget.index == i) {
+////                        widget.items[widget.index].choosePlan = value;
+////                      } else {
+////                        widget.items[i].choosePlan = false;
+////                      }
+////                    }
+//                  });
+//                },
+//              ),
+            ],
+          )
+        ],
       ),
     );
   }

@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:volt/MemberDashboard/Dashboard.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
-import 'package:volt/AuthScreens/SignupScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -87,7 +85,7 @@ class ProfileState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                    height: 30,
+                    height: 32,
                     width: 95,
                     child: FlatButton(
                         onPressed: () {},
@@ -104,19 +102,16 @@ class ProfileState extends State<ProfileScreen> {
               ],
             ),
             SizedBox(
-              height: 40,
+              height: 30,
             ),
             myDivider(),
             InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => Dashboard()));
+                Navigator.pop(context);
               },
-              child:Container(
-              padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: Row(
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SvgPicture.asset(baseImageAssetsUrl + 'home.svg'),
@@ -157,9 +152,9 @@ class ProfileState extends State<ProfileScreen> {
                     new MaterialPageRoute(
                         builder: (context) => NotificationScreen()));
               },
-              child:   Container(
-              padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child:  Row(
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SvgPicture.asset(baseImageAssetsUrl + 'speaker.svg'),
@@ -238,11 +233,15 @@ class ProfileState extends State<ProfileScreen> {
                 termsBottom('Terms & Conditions', context);
               },
               child: Container(
-              padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: Row(
+                  padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      SvgPicture.asset(baseImageAssetsUrl + 'terms.svg',width: 30,height: 30,),
+                      SvgPicture.asset(
+                        baseImageAssetsUrl + 'terms.svg',
+                        width: 30,
+                        height: 30,
+                      ),
                       Padding(
                           padding: EdgeInsets.only(left: 20),
                           child: Text(

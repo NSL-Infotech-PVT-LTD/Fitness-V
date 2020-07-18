@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:volt/Screens/SplashScreen.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class SplashScreenWithLady extends StatefulWidget {
   @override
@@ -14,13 +14,17 @@ class SplashScreenWithLady extends StatefulWidget {
 
 class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Timer(
         Duration(seconds: 3),
         () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SplashScreen())));
     SizeConfig().init(context);
-
 
     return Scaffold(
       backgroundColor: CColor.WHITE,

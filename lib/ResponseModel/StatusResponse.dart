@@ -11,8 +11,13 @@ class StatusResponse {
   StatusResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     code = json['code'];
+
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-    error = json['error'] ;
+    print("ChechData" + json.toString());
+    print("ChechData dgfjh" + data.toString());
+    print("ChechData jsonDara" +  json['data'].toString());
+
+    error = json['error'];
   }
 
   Map<String, dynamic> toJson() {

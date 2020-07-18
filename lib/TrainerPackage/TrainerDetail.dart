@@ -328,7 +328,7 @@ class TrainerDetailState extends State<TrainerDetail> {
                                     padding:
                                         EdgeInsets.only(left: 20, right: 0),
                                     child: Container(
-                                      height: 150,
+                                      height: 160,
                                       child: ListView.builder(
                                         itemBuilder: (context, index) {
                                           return Container(

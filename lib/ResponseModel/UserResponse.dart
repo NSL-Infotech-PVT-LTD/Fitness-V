@@ -1,77 +1,61 @@
+import 'package:volt/ResponseModel/PleanDetail.dart';
 
 class UserResponse {
   int id;
-  String first_name;
-  String last_name;
-  String gender;
-  String email;
-  String email_verified_at;
+  String name;
+  String label;
+  String type;
+  String category;
   String image;
-  String address;
-  String mobile;
-  String national_id;
+  String params;
   String status;
-  String password_decrypt;
-  String fullname;
+  String deleted_at;
   String created_at;
   String updated_at;
-
-
-
+  List<PlanDetail> plan_detail;
   UserResponse(
-      this.id,
-      this.first_name,
-      this.last_name,
-      this.gender,
-      this.email,
-      this.email_verified_at,
-      this.image,
-      this.address,
-      this.mobile,
-      this.national_id,
-      this.status,
-      this.password_decrypt,
-      this.fullname,
-      this.created_at,
-      this.updated_at,
-      );
+    this.id,
+    this.name,
+    this.label,
+    this.type,
+    this.category,
+    this.image,
+    this.params,
+    this.status,
+    this.deleted_at,
+    this.created_at,
+    this.updated_at,
+    this.plan_detail,
+  );
 
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    first_name = json['first_name'];
-    last_name = json['last_name'];
-    gender = json['gender'];
-    email = json['email'];
-    email_verified_at = json['email_verified_at'];
+    name = json['name'];
+    label = json['label'];
+    type = json['type'];
+    category = json['category'];
     image = json['image'];
-    address = json['address'];
-    mobile = json['mobile'];
-    national_id = json['national_id'];
+    params = json['params'];
     status = json['status'];
-    password_decrypt = json['password_decrypt'];
-    fullname = json['fullname'];
+    deleted_at = json['deleted_at'];
     created_at = json['created_at'];
     updated_at = json['updated_at'];
-
+    plan_detail = json['plan_detail'];
   }
 
-  Map<String,dynamic> toJson(){
-    final Map<String,dynamic> data = new Map<String,dynamic>() ;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['first_name'] = this.first_name;
-    data['last_name'] = this.last_name;
-    data['gender'] = this.gender;
-    data['email'] = this.email;
-    data['email_verified_at'] = this.email_verified_at;
+    data['name'] = this.name;
+    data['label'] = this.label;
+    data['type'] = this.type;
+    data['category'] = this.category;
     data['image'] = this.image;
-    data['address'] = this.address;
-    data['mobile'] = this.mobile;
-    data['national_id'] = this.national_id;
+    data['params'] = this.params;
     data['status'] = this.status;
-    data['password_decrypt'] = this.password_decrypt;
-    data['fullname'] = this.fullname;
+    data['deleted_at'] = this.deleted_at;
     data['created_at'] = this.created_at;
     data['updated_at'] = this.updated_at;
-
+    data['plan_detail'] = this.plan_detail;
   }
 }
