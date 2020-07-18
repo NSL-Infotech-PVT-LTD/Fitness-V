@@ -236,7 +236,7 @@ class SignupState extends State<SignupScreen> {
                           radiobutton('2'),
                           radiobutton('None'),
                         ],
-                      ),
+                      ),        
                       Padding(
                         padding: EdgeInsets.only(top: 12),
                         child: TextFormField(
