@@ -303,7 +303,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                   padding: EdgeInsets.only(left: 40, right: 40),
                   child: Container(
                     margin: EdgeInsets.only(top: padding15),
-                    height:50,
+                    height: 50,
                     width: SizeConfig.screenWidth,
                     child: RaisedButton(
                       onPressed: () {
@@ -402,17 +402,20 @@ class PlansState extends State<CustomPlansDetails> {
               Container(
                 height: 20.0,
                 width: 20.0,
-
                 decoration: new BoxDecoration(
-                  color: widget.myValue
-                      ? Colors.black
-                      : Colors.transparent,
+//                  color: widget.myValue ? Colors.black : Colors.transparent,
+                  image: DecorationImage(
+                      image: widget.myValue
+                          ? AssetImage(
+                              baseImageAssetsUrl + 'tick.png',
+                            )
+                          : AssetImage(baseImageAssetsUrl + '')),
+
                   border: new Border.all(
                       width: 1.0,
-                      color:widget.myValue
-                          ? Colors.black
-                          : Colors.grey),
-                  borderRadius: const BorderRadius.all(const Radius.circular(2.0)),
+                      color: widget.myValue ? Colors.transparent : Colors.grey),
+                  borderRadius:
+                      const BorderRadius.all(const Radius.circular(2.0)),
                 ),
               ),
 //              Switch(

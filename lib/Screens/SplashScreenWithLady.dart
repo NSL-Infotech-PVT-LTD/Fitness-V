@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:volt/Screens/SplashScreen.dart';
+import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 
@@ -23,7 +23,7 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
     Timer(
         Duration(seconds: 3),
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => SplashScreen())));
+            context, MaterialPageRoute(builder: (context) => ChooseYourWay())));
     SizeConfig().init(context);
 
     return Scaffold(

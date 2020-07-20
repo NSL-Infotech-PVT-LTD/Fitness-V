@@ -192,7 +192,7 @@ class SignupState extends State<SignupScreen> {
                           },
                           controller: firstNameController,
                           decoration: InputDecoration(
-                              hintText: firstname+'*',
+                              hintText: firstname + '*',
                               hintStyle: TextStyle(fontSize: textSize12)),
                         ),
                       ),
@@ -218,25 +218,23 @@ class SignupState extends State<SignupScreen> {
                           },
                           controller: lastNameController,
                           decoration: InputDecoration(
-                              hintText: lastname+'*',
+                              hintText: lastname + '*',
                               hintStyle: TextStyle(fontSize: textSize12)),
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            child+'*',
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                          radiobutton('1'),
-                          radiobutton('2'),
-                          radiobutton('None'),
-                        ],
-                      ),        
+
+//                      Row(
+//                        mainAxisAlignment: MainAxisAlignment.start,
+//                        children: <Widget>[
+//                          Text(
+//                            child + '*',
+//                            style: TextStyle(color: Colors.black54),
+//                          ),
+//                          radiobutton('1'),
+//                          radiobutton('2'),
+//                          radiobutton('None'),
+//                        ],
+//                      ),
                       Padding(
                         padding: EdgeInsets.only(top: 12),
                         child: TextFormField(
@@ -287,7 +285,7 @@ class SignupState extends State<SignupScreen> {
                           },
                           controller: emailController,
                           decoration: InputDecoration(
-                              hintText: email+'*',
+                              hintText: email + '*',
                               hintStyle: TextStyle(fontSize: textSize12)),
                         ),
                       ),
@@ -306,7 +304,7 @@ class SignupState extends State<SignupScreen> {
                           controller: passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
-                              hintText: password+'*',
+                              hintText: password + '*',
                               hintStyle: TextStyle(fontSize: textSize12)),
                         ),
                       ),
@@ -356,7 +354,7 @@ class SignupState extends State<SignupScreen> {
 //                        ],
 //                      ),
                       Padding(
-                        padding: EdgeInsets.only(top: 12),
+                        padding: EdgeInsets.only(top: 0),
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: designationController,
@@ -404,25 +402,26 @@ class SignupState extends State<SignupScreen> {
                         width: SizeConfig.screenWidth,
                         child: RaisedButton(
                           onPressed: () {
-
                             if (formKey.currentState.validate()) {
-                              if (radioItem.isEmpty) {
-                                showDialogBox(context, 'Child',
-                                    'Please select you child(s)');
-                              } else if (fromDate == null) {
+//                              if (radioItem.isEmpty) {
+//                                showDialogBox(context, 'Child',
+//                                    'Please select you child(s)');
+//                              } else
+
+                              if (fromDate == null) {
                                 showDialogBox(context, 'Date of Birth',
                                     'Please fill your date of birth');
                               } else if (!acceptTerms) {
                                 showDialogBox(context, termsofService,
                                     'Please read & accept our terms of services');
                               } else {
-                                if (radioItem == '1') {
-                                  radioItem = '1_child';
-                                } else if (radioItem == '2') {
-                                  radioItem = '2_child';
-                                } else {
-                                  radioItem = 'none';
-                                }
+//                                if (radioItem == '1') {
+//                                  radioItem = '1_child';
+//                                } else if (radioItem == '2') {
+//                                  radioItem = '2_child';
+//                                } else {
+//                                  radioItem = 'none';
+//                                }
                                 Map<String, String> parms = {
                                   FIRSTNAME: firstNameController.text
                                       .toString()
@@ -624,7 +623,19 @@ class SignupState extends State<SignupScreen> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 50,
+                        height: 30,
+                      ),
+                      InkWell(
+                        child: Padding(
+                          child: Align(
+                            child: Icon(Icons.close),
+                            alignment: Alignment.topRight,
+                          ),
+                          padding: EdgeInsets.all(15),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                       ),
                       Text(title,
                           style: TextStyle(

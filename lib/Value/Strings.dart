@@ -1,6 +1,6 @@
 const signup = 'Sign up';
 const login = 'Log in';
-const chooseYourWay = 'Choose your way to Log in';
+const chooseYourWay = 'Choose your way to Register';
 const memeber = 'Member';
 const guest = 'Guest';
 const choosePlan = 'Choose Plan';
