@@ -162,7 +162,7 @@ class DashboardState extends State<Dashboard> {
             ),
             Divider(
               height: .5,
-              color: CColor.PRIMARYCOLOR,
+             // color: CColor.PRIMARYCOLOR,
             ),
             _children[_currentIndex],
             SizedBox(

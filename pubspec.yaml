@@ -32,6 +32,7 @@ dependencies:
   intl: ^0.15.8
   progress_dialog: ^1.2.2
   http: any
+  cached_network_image: ^2.2.0+1
 
 dev_dependencies:
   flutter_test:

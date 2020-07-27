@@ -63,13 +63,16 @@ class GymMemberState extends State<GymMemberPlan> {
           widget.response[i]['category'],
           widget.response[i]['name'],
           plansList,
+
           widget.response[i]));
     }
 
     indexValue = indexValue + 1;
-    print((indexValue++).toString() + " nfkjsdfkds");
+    print(indexValue);
+    //  print((indexValue++).toString() + " nfkjsdfkds");
     SizeConfig().init(context);
     return Scaffold(
+      resizeToAvoidBottomPadding: true,
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(
         child: Container(
@@ -241,7 +244,9 @@ class GymMemberState extends State<GymMemberPlan> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Container(
+            child: SingleChildScrollView(
             child: Column(
+
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -331,7 +336,7 @@ class GymMemberState extends State<GymMemberPlan> {
               ],
             ),
           ),
-        ));
+        )));
   }
 
   Widget plans(String fee_type, String fee) {
