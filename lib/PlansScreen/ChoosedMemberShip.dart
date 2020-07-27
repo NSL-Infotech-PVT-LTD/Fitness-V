@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:volt/AuthScreens/SignupScreen.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
+import 'package:volt/PlansScreen/familywithtwo.dart';
+import 'package:volt/PlansScreen/spousetype.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -39,6 +41,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
   Widget build(BuildContext context) {
     limit = widget.response['plan_detail'];
 
+//    print("jugraj------>"+widget.response.toString());
     plansList = new List<PlansDetails>();
 
     for (int i = 0; i < limit.length; i++) {
@@ -93,7 +96,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
               Padding(
                 padding: EdgeInsets.only(top: 10, left: 60, right: 60),
                 child: Text(
-                    'Selection of one plan Atleast is importantto proceed in Gym Membership.',
+                    'Selection of one plan Atleast is important to proceed in Gym Membership.',
                     style: TextStyle(fontSize: textSize10, color: Colors.grey)),
               ),
               Padding(
@@ -307,17 +310,15 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                     width: SizeConfig.screenWidth,
                     child: RaisedButton(
                       onPressed: () {
+//                        Navigator.pushReplacement(
+//                            context,
+//                            new MaterialPageRoute(builder: (context) =>FamilyWithTwo()));     //SpouseType()));
+
+
                         currentSelectedIndex == -1
                             ? showDialogBox(context, "Choose Plan Alert",
                                 'Please choose your plan type')
-                            : Navigator.push(
-                                context,
-                                ScaleRoute(
-                                    page: SignupScreen(
-                                  response: widget.response['plan_detail'],
-                                  plan_index: plan_index,
-                                  type: "member",
-                                )));
+                            : checkRoll();
                       },
                       color: Colors.black,
                       shape: RoundedRectangleBorder(
@@ -348,6 +349,33 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
         ),
       ),
     );
+  }
+
+  checkRoll(){
+    if (widget.response['category'].toString() ==
+        'Couple') {
+      Navigator.pushReplacement(
+                            context,
+                            new MaterialPageRoute(builder: (context) =>SpouseType()));
+
+      print('this is couples');
+    }else if (widget.response['category'].toString() ==
+        'Family with 2') {
+      Navigator.pushReplacement(
+          context,
+          new MaterialPageRoute(builder: (context) =>FamilyWithTwo()));
+
+      print('this is Family with 2');
+    }else{
+      Navigator.push(
+          context,
+          ScaleRoute(
+              page: SignupScreen(
+                response: widget.response['plan_detail'],
+                plan_index: plan_index,
+                type: "member",
+              )));
+    }
   }
 }
 

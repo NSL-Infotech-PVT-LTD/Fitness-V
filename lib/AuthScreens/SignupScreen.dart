@@ -49,6 +49,7 @@ class SignupState extends State<SignupScreen> {
   bool _isIos;
   String deviceType = '';
   String role_id = "";
+  String device_token = "";
 
   String role_plan_id = "";
   var fromDate, toDate;
@@ -457,10 +458,9 @@ class SignupState extends State<SignupScreen> {
                                 print(parms.toString() + "------Parameters");
                                 isConnectedToInternet().then((internet) {
                                   if (internet != null && internet) {
-                                    showProgress(context, "Please wait.....");
                                     signUpToServer(parms).then((response) {
-                                      print("CheckBeforSuccess->" +
-                                          response.toJson().toString());
+                                      showProgress(context, "Please wait.....");
+
                                       dismissDialog(context);
                                       if (response.status) {
                                         Navigator.pushAndRemoveUntil(
@@ -470,8 +470,8 @@ class SignupState extends State<SignupScreen> {
                                         );
                                       } else {
                                         print(response.toString());
-                                        showDialogBox(
-                                            context, "Error!", response.error);
+                                        showDialogBox(context, "Error!",
+                                            response.error);
                                       }
                                     });
                                   } else {

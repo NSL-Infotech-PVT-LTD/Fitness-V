@@ -55,6 +55,18 @@ const loremIpsum =
 const volt_rights = 'VOLT FIRNESS @2019 ALL RIGHT RESERVED';
 const pleaseCheckInternet =
     "It seems your intenert connection is slow or not connected with the internet \n Please Check You Internet Connection";
+const upcoming = 'Upcoming';
+const recent1  = 'Recent';
+const events  = 'Events';
+const fantastic  = ' We have a fantastic range of special events. Here are some of our current and recent'
+    '  activities. designed to help you enjoy your Volt membership to the max!';
+const fitness  = 'Functional Fitness workout';
+const group ='Group Class. 3-4 Hrs. Healthy lifestyle concept';
+
+const fill ='Fill Up Details';
+const couple ='Couple/Monthly';
+const aed ='AED 5800';
+
 //font area
 
 const fontRegular = 'regular.ttf';
@@ -67,6 +79,7 @@ const open_semi_bold = 'open_semi_bold.ttf';
 const open_semi_bold_italic = 'open_semi_bold_italic.ttf';
 const open_xtra_bold = 'open_xtra_bold.ttf';
 const open_xtra_bold_italic = 'open_xtra_bold_italic.ttf';
+
 
 //close font area
 //<---------------------ImageBaseUrl------------------>

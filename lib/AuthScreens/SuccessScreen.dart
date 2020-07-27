@@ -31,43 +31,8 @@ class SuccessState extends State<SuccessScreen> {
         child: Scaffold(
             body: Column(
           children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 25, bottom: 0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Image.asset(
-                            baseImageAssetsUrl + 'logo_black.png',
-                            height: 90,
-                            color: Color(0xff8B8B8B),
-                            width: 120,
-                          ),
-                        ),
-                      ),
-                      Spacer(),
-                      Padding(
-                        padding: EdgeInsets.only(left: 25, bottom: 0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: SvgPicture.asset(
-                            baseImageAssetsUrl + 'vector_lady.svg',
-                            height: 90,
-                            width: 120,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      )
-                    ],
-                  ),
-                ),
+
+
                 Column(
                   children: <Widget>[
                     Image.asset(
@@ -115,8 +80,7 @@ class SuccessState extends State<SuccessScreen> {
                             SizeConfig.screenWidth,
                             FontWeight.bold,
                             LoginScreen()))
-                  ],
-                ),
+
               ],
             ),
           ],
