@@ -1,4 +1,4 @@
-class Constants {
+  class Constants {
   static String baseUrl = "https://dev.netscapelabs.com/volt/public/api/";
   static String registerUrl = "register";
   static String loginUrl = "login";

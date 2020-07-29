@@ -94,9 +94,9 @@ class ChooseWayState extends State<ChooseYourWay> {
                             tabs: [
                               Tab(
                                   icon: Text(
-                                    memeber,
-                                    style: TextStyle(fontSize: textSize16),
-                                  )),
+                                memeber,
+                                style: TextStyle(fontSize: textSize16),
+                              )),
                               Tab(
                                   icon: Text(guest,
                                       style: TextStyle(fontSize: textSize16))),
@@ -118,12 +118,12 @@ class ChooseWayState extends State<ChooseYourWay> {
                                     onTap: () {
                                       gym_list != null
                                           ? Navigator.push(
-                                          context,
-                                          SizeRoute(
-                                              page: GymMemberPlan(
-                                                  response: gym_list)))
+                                              context,
+                                              SizeRoute(
+                                                  page: GymMemberPlan(
+                                                      response: gym_list)))
                                           : showMyDialog(context, 'Error!',
-                                          "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");
+                                              "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
                                         'assets/images/dummy2.png',
@@ -136,13 +136,13 @@ class ChooseWayState extends State<ChooseYourWay> {
                                     onTap: () {
                                       pool_and_beach_list != null
                                           ? Navigator.push(
-                                          context,
-                                          SizeRoute(
-                                              page: GymMemberPlan(
-                                                  response:
-                                                  pool_and_beach_list)))
+                                              context,
+                                              SizeRoute(
+                                                  page: GymMemberPlan(
+                                                      response:
+                                                          pool_and_beach_list)))
                                           : showMyDialog(context, 'Error!',
-                                          "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
+                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
                                         'assets/images/dummy.png',
@@ -159,14 +159,16 @@ class ChooseWayState extends State<ChooseYourWay> {
                                     onTap: () {
                                       guest_list != null
                                           ? Navigator.push(
-                                          context,
-                                          SizeRoute(
-                                              page: SignupScreen(
+                                              context,
+                                              SizeRoute(
+                                                  page: SignupScreen(
                                                 response: guest_list,
                                                 type: 'guest',
+                                                formType: "",
+                                                isSingle: true,
                                               )))
                                           : showMyDialog(context, 'Error!',
-                                          "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
+                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
                                         'assets/images/dummy1.png',
@@ -179,14 +181,16 @@ class ChooseWayState extends State<ChooseYourWay> {
                                     onTap: () {
                                       fairMont_list != null
                                           ? Navigator.push(
-                                          context,
-                                          SizeRoute(
-                                              page: SignupScreen(
+                                              context,
+                                              SizeRoute(
+                                                  page: SignupScreen(
                                                 response: fairMont_list,
                                                 type: 'guest',
+                                                formType: "",
+                                                isSingle: true,
                                               )))
                                           : showMyDialog(context, 'Error!',
-                                          "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
+                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
                                     child: _CommonView(
                                         'assets/images/fairmont.jpg',
@@ -204,10 +208,10 @@ class ChooseWayState extends State<ChooseYourWay> {
                   )),
               Center(
                   child: Text(
-                    'Already Registered?',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
-                  )),
+                'Already Registered?',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15),
+              )),
               Center(
                 child: FlatButton(
                     onPressed: () {
@@ -216,7 +220,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                     child: Text(
                       login,
                       style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     )),
               )
             ],
@@ -274,8 +278,7 @@ class ChooseWayState extends State<ChooseYourWay> {
   }
 }
 
-Widget _CommonView(String image, String title, String des) =>
-    GestureDetector(
+Widget _CommonView(String image, String title, String des) => GestureDetector(
       child: Container(
         child: Column(
           children: <Widget>[

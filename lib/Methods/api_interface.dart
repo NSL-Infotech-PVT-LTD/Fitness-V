@@ -82,6 +82,7 @@ Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(parms));
+  print("signUpResponse---->"+response.body.toString());
   return StatusResponse.fromJson(json.decode(response.body));
 }
 

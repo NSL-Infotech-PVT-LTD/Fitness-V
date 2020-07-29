@@ -1,3 +1,4 @@
+import 'AuthError.dart';
 import 'Data.dart';
 
 class StatusResponse {
@@ -5,6 +6,7 @@ class StatusResponse {
   int code;
   Data data;
   String error;
+  AuthError errors;
 
   StatusResponse(this.status, this.code, this.data, this.error);
 
@@ -16,7 +18,8 @@ class StatusResponse {
 
 
     error = json['error'];
-    print("==========> "+error.toString());
+    errors = json['errors']!=null?new AuthError.fromJson(json['errors']):null;
+    print("==========> "+data.toString());
 
   }
 
@@ -30,6 +33,8 @@ class StatusResponse {
     }
     if (this.error != null) {
       data['error'] = this.error;
+    }else if(this.errors !=null){
+      data['errors'] = this.errors.toJson();
     }
     return data;
   }

@@ -64,8 +64,9 @@ const fitness  = 'Functional Fitness workout';
 const group ='Group Class. 3-4 Hrs. Healthy lifestyle concept';
 
 const fill ='Fill Up Details';
-const couple ='Couple/Monthly';
-const aed ='AED 5800';
+const couple ='Couple/';
+const aed ='AED ';
+const error ='Error! ';
 
 //font area
 

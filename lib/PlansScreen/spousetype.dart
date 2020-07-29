@@ -1,20 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:volt/AuthScreens/LoginScreen.dart';
-import 'package:volt/AuthScreens/SignupScreen.dart';
-import 'package:volt/Methods/Method.dart';
-import 'package:volt/Methods/api_interface.dart';
-import 'package:volt/PlansScreen/GymMemberPlan.dart';
-import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+import '../AuthScreens/SignupScreen.dart';
+import '../AuthScreens/SuccessScreen.dart';
 import '../Methods.dart';
+import '../Methods/Method.dart';
+import '../Methods/api_interface.dart';
+import '../Value/Strings.dart';
+import '../Value/Strings.dart';
 
 class SpouseType extends StatefulWidget {
+  List response;
+  String type = "";
+  int plan_index = 0;
+  String roleId = "";
+
+  SpouseType({this.response, this.plan_index, this.type, this.roleId});
+
   @override
   _SpouseTypeState createState() => _SpouseTypeState();
 }
@@ -22,9 +30,61 @@ class SpouseType extends StatefulWidget {
 class _SpouseTypeState extends State<SpouseType> {
   bool acceptTerms = false;
   double setWidth;
+  bool _isIos;
+  String deviceType = '';
+  String roleId = "";
+  String deviceToken = "";
+  var errorMessage = '';
+  var errorMessage1 = '';
+
+  String rolePlanId = "";
+  var result, result1;
+
+  @override
+  void initState() {
+    _isIos = Platform.isIOS;
+    deviceType = _isIos ? 'ios' : 'android';
+    super.initState();
+  }
+
+  _navigateAndDisplaySelection(BuildContext context, String formType) async {
+    result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              SignupScreen(
+                formType: formType,
+                editData: result,
+                isSingle: false,
+                isEmailError:errorMessage1.contains("email has")?true:false,
+              )),
+    );
+
+    setState(() {});
+  }
+
+  _navigateAndDisplaySelection1(BuildContext context, String formType) async {
+    result1 = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              SignupScreen(
+                formType: formType,
+                editData: result1,
+                isSingle: false,
+                isEmailError:errorMessage1.contains("email 1")?true:false,
+              )),
+    );
+    setState(() {});
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    rolePlanId = widget.response[widget.plan_index]['id'].toString();
+
+//    print("=======>" + widget.roleId);
     return Scaffold(
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(
@@ -66,9 +126,10 @@ class _SpouseTypeState extends State<SpouseType> {
                         Container(
                           color: Colors.black,
                           padding:
-                              EdgeInsets.only(right: padding25, top: padding20),
+                          EdgeInsets.only(right: padding25, top: padding20),
                           child: Text(
-                            couple,
+                            couple +
+                                widget.response[widget.plan_index]['fee_type'],
                             style: TextStyle(
                               color: CColor.WHITE,
                               fontSize: textSize10,
@@ -79,7 +140,9 @@ class _SpouseTypeState extends State<SpouseType> {
                           color: Colors.black,
                           padding: EdgeInsets.only(right: padding25),
                           child: Text(
-                            aed,
+                            aed +
+                                widget.response[widget.plan_index]['fee']
+                                    .toString(),
                             style: TextStyle(
                               color: CColor.WHITE,
                               fontSize: textSize18,
@@ -95,6 +158,8 @@ class _SpouseTypeState extends State<SpouseType> {
                 padding: EdgeInsets.all(10),
               ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -103,12 +168,17 @@ class _SpouseTypeState extends State<SpouseType> {
                         height: SizeConfig.screenHeight * 0.20,
                         width: SizeConfig.screenWidth * 0.40,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.blueGrey,
-                          ),
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
+                            border: Border.all(
+                              color: errorMessage1.contains("email has")
+                                  ? Colors.red
+                                  : Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(0.0),
+                            color: result != null
+                                ? Colors.black
+                                : Colors.transparent),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Row(
                               //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,35 +187,42 @@ class _SpouseTypeState extends State<SpouseType> {
 //                                Padding(
 //                                  padding: EdgeInsets.all(10),
 //                                ),
-                              SizedBox(width: SizeConfig.blockSizeHorizontal * 2, ),
+                                SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 2,
+                                ),
                                 Text(
-                                  'Spouse#1',
+                                  result != null
+                                      ? result[FIRSTNAME]
+                                      : 'Spouse#1',
                                   style: TextStyle(
-                                    // color: CColor.WHITE,
-                                    fontSize: textSize18,
+                                    color: result != null
+                                        ? CColor.WHITE
+                                        : Colors.black,
+                                    fontSize: textSize12,
                                   ),
                                 ),
+                                Spacer(),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: SvgPicture.asset(
                                     baseImageAssetsUrl + 'user.svg',
-                                    height: 40,
-                                    width: 40,
+                                    height: 25,
+                                    width: 25,
                                   ),
                                 ),
                               ],
                             ),
                             Container(
                               margin: EdgeInsets.only(top: padding15),
-                              height: button_height,
+                              height: 45,
                               width: 120,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                color: Colors.blueGrey,
-                              )),
+                                    color: Colors.black,
+                                  )),
                               child: RaisedButton(
                                 onPressed: () {
-                                  // Navigator.push(context, ScaleRoute(page: whereToGO));
+                                  _navigateAndDisplaySelection(context, "");
                                 },
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -153,7 +230,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                 child: Text(
                                   'Fill Details',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                             ),
@@ -167,46 +244,58 @@ class _SpouseTypeState extends State<SpouseType> {
                         height: SizeConfig.screenHeight * 0.20,
                         width: SizeConfig.screenWidth * 0.40,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.blueGrey,
-                          ),
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
+                            border: Border.all(
+                              color: errorMessage1.contains("email 1")
+                                  ? Colors.red
+                                  : Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(0.0),
+                            color: result1 != null
+                                ? Colors.black
+                                : Colors.transparent),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Row(
                               //   crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: SizeConfig.blockSizeHorizontal * 2, ),
+                                SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 2,
+                                ),
                                 Text(
-                                  'Spouse#2',
+                                  result1 != null
+                                      ? result1[FIRSTNAME + "_1"]
+                                      : 'Spouse#2',
                                   style: TextStyle(
-                                    // color: CColor.WHITE,
-                                    fontSize: textSize18,
+                                    color: result1 != null
+                                        ? CColor.WHITE
+                                        : Colors.black,
+                                    fontSize: textSize12,
                                   ),
                                 ),
+                                Spacer(),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: SvgPicture.asset(
                                     baseImageAssetsUrl + 'user.svg',
-                                    height: 40,
-                                    width: 40,
+                                    height: 25,
+                                    width: 25,
                                   ),
                                 ),
                               ],
                             ),
                             Container(
                               margin: EdgeInsets.only(top: padding15),
-                              height: button_height,
+                              height: 45,
                               width: 120,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                color: Colors.blueGrey,
-                              )),
+                                    color: Colors.black,
+                                  )),
                               child: RaisedButton(
                                 onPressed: () {
-                                  // Navigator.push(context, ScaleRoute(page: whereToGO));
+                                  _navigateAndDisplaySelection1(context, "_1");
                                 },
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -214,7 +303,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                 child: Text(
                                   'Fill Details',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                             ),
@@ -232,8 +321,8 @@ class _SpouseTypeState extends State<SpouseType> {
                     width: setWidth,
                     decoration: BoxDecoration(
                         border: Border.all(
-                      color: Colors.blueGrey,
-                    )),
+                          color: Colors.blueGrey,
+                        )),
                     child: RaisedButton(
                       onPressed: () {
                         // Navigator.push(context, ScaleRoute(page: whereToGO));
@@ -259,11 +348,113 @@ class _SpouseTypeState extends State<SpouseType> {
                 width: SizeConfig.screenWidth,
                 decoration: BoxDecoration(
                     border: Border.all(
-                  color: Colors.blueGrey,
-                )),
+                      color: Colors.blueGrey,
+                    )),
                 child: RaisedButton(
                   onPressed: () {
-                    // Navigator.push(context, ScaleRoute(page: whereToGO));
+                    if (result != null && result1 != null && acceptTerms) {
+                      Map<String, String> parms = {
+                        /**
+                         * single form detail
+                         */
+
+                        FIRSTNAME: result[FIRSTNAME],
+                        MIDDLENAME: result[MIDDLENAME],
+                        LASTNAME: result[LASTNAME],
+                        MOBILE: result[MOBILE],
+                        EMAIL: result[EMAIL],
+                        PASSWORD: result[PASSWORD],
+                        BIRTH_DATE: result[BIRTH_DATE],
+                        EMIRATES_ID: result[EMIRATES_ID],
+                        ROLE_ID: widget.roleId,
+                        ROLE_PLAN_ID: rolePlanId,
+                        EMEREGENCY_NUMBER: result[EMEREGENCY_NUMBER],
+                        DESIGNATION: result[DESIGNATION],
+                        ADDRESS: result[ADDRESS],
+
+                        /**
+                         * form 1 details
+                         */
+                        FIRSTNAME + "_1": result1[FIRSTNAME + "_1"],
+                        MIDDLENAME + "_1": result1[MIDDLENAME + "_1"],
+                        LASTNAME + "_1": result1[LASTNAME + "_1"],
+                        MOBILE + "_1": result1[MOBILE + "_1"],
+                        EMAIL + "_1": result1[EMAIL + "_1"],
+                        PASSWORD + "_1": result1[PASSWORD + "_1"],
+                        BIRTH_DATE + "_1": result1[BIRTH_DATE + "_1"],
+                        EMIRATES_ID + "_1": result1[EMIRATES_ID + "_1"],
+                        DEVICE_TYPE: deviceType,
+                        DEVICE_TOKEN: "Devicedsbfs",
+                      };
+                      print(parms.toString() + "------Parameters");
+                      isConnectedToInternet().then((internet) {
+                        if (internet != null && internet) {
+                          showProgress(context, "Please wait.....");
+
+                          signUpToServer(parms).then((response) {
+                            dismissDialog(context);
+                            if (response.status) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                ScaleRoute(page: SuccessScreen()),
+                                    (r) => false,
+                              );
+                            } else {
+                              dismissDialog(context);
+
+                              print("error" + response.toString());
+                              if (response.error != null)
+                                showDialogBox(
+                                    context, "Error!", response.error);
+                              else {
+                                errorMessage1 = '';
+                                if (response.errors != null) {
+                                  var value = response.errors.toJson();
+                                  print("Error--->" +
+                                      value.keys
+                                          .toSet()
+                                          .contains('email_1')
+                                          .toString());
+                                  if (value['email'] != null) {
+                                    errorMessage = response.errors.email;
+                                    setState(() {
+                                      errorMessage1 = response.errors.email;
+                                    });
+                                  } else if (response.errors.email_1 != null) {
+                                    errorMessage = response.errors.email_1;
+                                    setState(() {
+                                      errorMessage1 = response.errors.email_1;
+                                    });
+                                  } else if (response.errors.email_2 != null) {
+                                    errorMessage = response.errors.email_2;
+                                    setState(() {
+                                      errorMessage1 = response.errors.email_2;
+                                    });
+                                  } else if (response.errors.email_3 != null) {
+                                    errorMessage = response.errors.email_3;
+                                    setState(() {
+                                      errorMessage1 = response.errors.email_3;
+                                    });
+                                  }
+
+                                  showDialogBox(context, error, errorMessage);
+                                }
+                              }
+                            }
+                          });
+                        } else {
+                          showDialogBox(
+                              context, 'Internet Error', pleaseCheckInternet);
+                          dismissDialog(context);
+                        }
+                        dismissDialog(context);
+                      });
+                    } else if (!acceptTerms) {
+                      showDialogBox(context, termsofService,
+                          'Please read & accept our terms of services');
+                    } else {
+                      showDialogBox(context, error, 'Please fill details');
+                    }
                   },
                   color: Colors.black,
                   shape: RoundedRectangleBorder(
@@ -336,104 +527,104 @@ class _SpouseTypeState extends State<SpouseType> {
           return StatefulBuilder(builder: (context, setState) {
             return SingleChildScrollView(
                 child: Container(
-              color: Colors.transparent,
-              //could change this to Color(0xFF737373),
-              //so you don't have to change MaterialApp canvasColor
-              child: new Container(
-                  decoration: new BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: new BorderRadius.only(
-                          topLeft: const Radius.circular(50.0),
-                          topRight: const Radius.circular(50.0))),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 30,
-                      ),
-                      InkWell(
-                        child: Padding(
-                          child: Align(
-                            child: Icon(Icons.close),
-                            alignment: Alignment.topRight,
-                          ),
-                          padding: EdgeInsets.all(15),
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      Text(title,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(loremIpsum,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ),
-                            textAlign: TextAlign.center),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Row(
+                  color: Colors.transparent,
+                  //could change this to Color(0xFF737373),
+                  //so you don't have to change MaterialApp canvasColor
+                  child: new Container(
+                      decoration: new BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: new BorderRadius.only(
+                              topLeft: const Radius.circular(50.0),
+                              topRight: const Radius.circular(50.0))),
+                      child: Column(
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 25, bottom: 0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset(
-                                baseImageAssetsUrl + 'logo_black.png',
-                                height: 90,
-                                color: Color(0xff8B8B8B),
-                                width: 120,
-                              ),
-                            ),
+                          SizedBox(
+                            height: 30,
                           ),
-                          Spacer(),
-                          Padding(
-                            padding: EdgeInsets.only(left: 25, bottom: 0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: SvgPicture.asset(
-                                baseImageAssetsUrl + 'vector_lady.svg',
-                                height: 90,
-                                width: 120,
+                          InkWell(
+                            child: Padding(
+                              child: Align(
+                                child: Icon(Icons.close),
+                                alignment: Alignment.topRight,
                               ),
+                              padding: EdgeInsets.all(15),
                             ),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Text(title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text(loremIpsum,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                textAlign: TextAlign.center),
                           ),
                           SizedBox(
-                            width: 20,
+                            height: 50,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(left: 25, bottom: 0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Image.asset(
+                                    baseImageAssetsUrl + 'logo_black.png',
+                                    height: 90,
+                                    color: Color(0xff8B8B8B),
+                                    width: 120,
+                                  ),
+                                ),
+                              ),
+                              Spacer(),
+                              Padding(
+                                padding: EdgeInsets.only(left: 25, bottom: 0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: SvgPicture.asset(
+                                    baseImageAssetsUrl + 'vector_lady.svg',
+                                    height: 90,
+                                    width: 120,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 40, bottom: 10),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  volt_rights,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xff8B8B8B),
+                                      fontSize: 8,
+                                      fontStyle: FontStyle.italic,
+                                      fontFamily: open_italic),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 50,
                           )
                         ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 40, bottom: 10),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              volt_rights,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color(0xff8B8B8B),
-                                  fontSize: 8,
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: open_italic),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      )
-                    ],
-                  )),
-            ));
+                      )),
+                ));
           });
         });
   }

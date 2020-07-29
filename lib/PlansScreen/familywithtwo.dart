@@ -1,20 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:volt/AuthScreens/LoginScreen.dart';
-import 'package:volt/AuthScreens/SignupScreen.dart';
-import 'package:volt/Methods/Method.dart';
-import 'package:volt/Methods/api_interface.dart';
-import 'package:volt/PlansScreen/GymMemberPlan.dart';
-import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+import '../AuthScreens/SignupScreen.dart';
+import '../AuthScreens/SuccessScreen.dart';
 import '../Methods.dart';
+import '../Methods/Method.dart';
+import '../Methods/api_interface.dart';
+import '../Methods/api_interface.dart';
+import '../Value/Strings.dart';
 
 class FamilyWithTwo extends StatefulWidget {
+  List response;
+  String type = "";
+  int plan_index = 0;
+  String roleId = "";
+
+  FamilyWithTwo({this.response, this.plan_index, this.type, this.roleId});
+
   @override
   _FamilyWithTwoState createState() => _FamilyWithTwoState();
 }
@@ -22,9 +30,79 @@ class FamilyWithTwo extends StatefulWidget {
 class _FamilyWithTwoState extends State<FamilyWithTwo> {
   bool acceptTerms = false;
   double setWidth;
+  bool _isIos;
+  String deviceType = '';
+  String roleId = "";
+  String deviceToken = "";
+  var errorMessage = '';
+  var errorMessage1 = '';
+  String rolePlanId = "";
+  var result, result1, result2, result3;
+
+  @override
+  void initState() {
+    _isIos = Platform.isIOS;
+    deviceType = _isIos ? 'ios' : 'android';
+    super.initState();
+  }
+
+  _navigateAndDisplaySelection(BuildContext context, String formType) async {
+    result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SignupScreen(
+                formType: formType,
+                editData: result,
+                isSingle: false,
+              )),
+    );
+
+    setState(() {});
+  }
+
+  _navigateAndDisplaySelection1(BuildContext context, String formType) async {
+    result1 = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SignupScreen(
+                formType: formType,
+                editData: result1,
+                isSingle: false,
+              )),
+    );
+    setState(() {});
+  }
+
+  _navigateAndDisplaySelection2(BuildContext context, String formType) async {
+    result2 = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SignupScreen(
+                formType: formType,
+                editData: result2,
+                isSingle: false,
+              )),
+    );
+    setState(() {});
+  }
+
+  _navigateAndDisplaySelection3(BuildContext context, String formType) async {
+    result3 = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SignupScreen(
+                formType: formType,
+                editData: result3,
+                isSingle: false,
+              )),
+    );
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    rolePlanId = widget.response[widget.plan_index]['id'].toString();
+
     return Scaffold(
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(
@@ -66,9 +144,10 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                         Container(
                           color: Colors.black,
                           padding:
-                          EdgeInsets.only(right: padding25, top: padding20),
+                              EdgeInsets.only(right: padding25, top: padding20),
                           child: Text(
-                            couple,
+                            couple +
+                                widget.response[widget.plan_index]['fee_type'],
                             style: TextStyle(
                               color: CColor.WHITE,
                               fontSize: textSize10,
@@ -79,7 +158,9 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                           color: Colors.black,
                           padding: EdgeInsets.only(right: padding25),
                           child: Text(
-                            aed,
+                            aed +
+                                widget.response[widget.plan_index]['fee']
+                                    .toString(),
                             style: TextStyle(
                               color: CColor.WHITE,
                               fontSize: textSize18,
@@ -104,45 +185,58 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                         width: SizeConfig.screenWidth * 0.40,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.blueGrey,
+                            color: errorMessage1.contains("email has")
+                                ? Colors.red
+                                : Colors.black,
                           ),
+                          color: result != null
+                              ? Colors.black
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(0.0),
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Row(
                               //   crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: SizeConfig.blockSizeHorizontal * 2, ),
+                                SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 2,
+                                ),
                                 Text(
-                                  'Member#1',
+                                  result != null
+                                      ? result[FIRSTNAME]
+                                      : 'Member#1',
                                   style: TextStyle(
-                                    // color: CColor.WHITE,
-                                    fontSize: textSize16,
+                                    color: result != null
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: textSize12,
                                   ),
                                 ),
+                                Spacer(),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: SvgPicture.asset(
                                     baseImageAssetsUrl + 'user.svg',
-                                    height: 40,
-                                    width: 40,
+                                    height: 25,
+                                    width: 25,
                                   ),
                                 ),
                               ],
                             ),
                             Container(
                               margin: EdgeInsets.only(top: padding15),
-                              height: button_height,
+                              height: 45,
                               width: 120,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.blueGrey,
-                                  )),
+                                color: Colors.blueGrey,
+                              )),
                               child: RaisedButton(
                                 onPressed: () {
-                                  // Navigator.push(context, ScaleRoute(page: whereToGO));
+                                  _navigateAndDisplaySelection(context, "");
                                 },
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -150,7 +244,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                 child: Text(
                                   'Fill Details',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                             ),
@@ -165,45 +259,58 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                         width: SizeConfig.screenWidth * 0.40,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.blueGrey,
+                            color: errorMessage1.contains("email 1")
+                                ? Colors.red
+                                : Colors.black,
                           ),
+                          color: result1 != null
+                              ? Colors.black
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(0.0),
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Row(
                               //   crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: SizeConfig.blockSizeHorizontal * 2, ),
+                                SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 2,
+                                ),
                                 Text(
-                                  'Member#2',
+                                  result1 != null
+                                      ? result1[FIRSTNAME + "_1"]
+                                      : 'Member#2',
                                   style: TextStyle(
-                                    // color: CColor.WHITE,
-                                    fontSize: textSize16,
+                                    color: result1 != null
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: textSize12,
                                   ),
                                 ),
+                                Spacer(),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: SvgPicture.asset(
                                     baseImageAssetsUrl + 'user.svg',
-                                    height: 40,
-                                    width: 40,
+                                    height: 25,
+                                    width: 25,
                                   ),
                                 ),
                               ],
                             ),
                             Container(
                               margin: EdgeInsets.only(top: padding15),
-                              height: button_height,
+                              height: 45,
                               width: 120,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.blueGrey,
-                                  )),
+                                color: Colors.blueGrey,
+                              )),
                               child: RaisedButton(
                                 onPressed: () {
-                                  // Navigator.push(context, ScaleRoute(page: whereToGO));
+                                  _navigateAndDisplaySelection1(context, "_1");
                                 },
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -211,7 +318,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                 child: Text(
                                   'Fill Details',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                             ),
@@ -220,9 +327,9 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 5,
-                  ),
+//                  SizedBox(
+//                    height: SizeConfig.blockSizeVertical * 5,
+//                  ),
 //                  Container(
 //                    margin: EdgeInsets.only(top: padding15),
 //                    height: button_height,
@@ -247,9 +354,8 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                 ],
               ),
               SizedBox(
-                height: 5,
+                height: 25,
               ),
-
               Column(
                 children: <Widget>[
                   Row(
@@ -260,45 +366,58 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                         width: SizeConfig.screenWidth * 0.40,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.blueGrey,
+                            color: errorMessage1.contains("email 2")
+                                ? Colors.red
+                                : Colors.black,
                           ),
+                          color: result2 != null
+                              ? Colors.black
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(0.0),
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Row(
                               //   crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: SizeConfig.blockSizeHorizontal * 2, ),
+                                SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 2,
+                                ),
                                 Text(
-                                  'Child#1',
+                                  result2 != null
+                                      ? result2[FIRSTNAME + "_2"]
+                                      : 'Child#1',
                                   style: TextStyle(
-                                    // color: CColor.WHITE,
-                                    fontSize: textSize18,
+                                    color: result2 != null
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: textSize12,
                                   ),
                                 ),
+                                Spacer(),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: SvgPicture.asset(
                                     baseImageAssetsUrl + 'user.svg',
-                                    height: 40,
-                                    width: 40,
+                                    height: 25,
+                                    width: 25,
                                   ),
                                 ),
                               ],
                             ),
                             Container(
                               margin: EdgeInsets.only(top: padding15),
-                              height: button_height,
+                              height: 45,
                               width: 120,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.blueGrey,
-                                  )),
+                                color: Colors.blueGrey,
+                              )),
                               child: RaisedButton(
                                 onPressed: () {
-                                  // Navigator.push(context, ScaleRoute(page: whereToGO));
+                                  _navigateAndDisplaySelection2(context, "_2");
                                 },
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -306,7 +425,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                 child: Text(
                                   'Fill Details',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                             ),
@@ -321,45 +440,58 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                         width: SizeConfig.screenWidth * 0.40,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.blueGrey,
+                            color: errorMessage1.contains("email 3")
+                                ? Colors.red
+                                : Colors.black,
                           ),
+                          color: result3 != null
+                              ? Colors.black
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(0.0),
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Row(
                               //   crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: SizeConfig.blockSizeHorizontal * 2, ),
+                                SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 2,
+                                ),
                                 Text(
-                                  'Child#2',
+                                  result3 != null
+                                      ? result3[FIRSTNAME + "_3"]
+                                      : 'Child#2',
                                   style: TextStyle(
-                                    // color: CColor.WHITE,
-                                    fontSize: textSize18,
+                                    color: result3 != null
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: textSize12,
                                   ),
                                 ),
+                                Spacer(),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: SvgPicture.asset(
                                     baseImageAssetsUrl + 'user.svg',
-                                    height: 40,
-                                    width: 40,
+                                    height: 25,
+                                    width: 25,
                                   ),
                                 ),
                               ],
                             ),
                             Container(
                               margin: EdgeInsets.only(top: padding15),
-                              height: button_height,
+                              height: 45,
                               width: 120,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.blueGrey,
-                                  )),
+                                color: Colors.blueGrey,
+                              )),
                               child: RaisedButton(
                                 onPressed: () {
-                                  // Navigator.push(context, ScaleRoute(page: whereToGO));
+                                  _navigateAndDisplaySelection3(context, "_3");
                                 },
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -367,7 +499,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                 child: Text(
                                   'Fill Details',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                             ),
@@ -385,8 +517,8 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                     width: setWidth,
                     decoration: BoxDecoration(
                         border: Border.all(
-                          color: Colors.blueGrey,
-                        )),
+                      color: Colors.blueGrey,
+                    )),
                     child: RaisedButton(
                       onPressed: () {
                         // Navigator.push(context, ScaleRoute(page: whereToGO));
@@ -409,42 +541,175 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                 width: SizeConfig.screenWidth,
                 decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.blueGrey,
-                    )),
+                  color: Colors.blueGrey,
+                )),
                 child: RaisedButton(
                   onPressed: () {
-                    // Navigator.push(context, ScaleRoute(page: whereToGO));
+                    if (result != null && result1 != null && acceptTerms) {
+                      Map<String, String> parms = {
+                        /**
+                         * single form detail
+                         */
+
+                        FIRSTNAME: result[FIRSTNAME],
+                        MIDDLENAME: result[MIDDLENAME],
+                        LASTNAME: result[LASTNAME],
+                        MOBILE: result[MOBILE],
+                        EMAIL: result[EMAIL],
+                        PASSWORD: result[PASSWORD],
+                        BIRTH_DATE: result[BIRTH_DATE],
+                        EMIRATES_ID: result[EMIRATES_ID],
+                        ROLE_ID: widget.roleId,
+                        ROLE_PLAN_ID: rolePlanId,
+                        EMEREGENCY_NUMBER: result[EMEREGENCY_NUMBER],
+                        DESIGNATION: result[DESIGNATION],
+                        ADDRESS: result[ADDRESS],
+
+                        /**
+                         * form 1 details
+                         */
+                        FIRSTNAME + "_1": result1[FIRSTNAME + "_1"],
+                        MIDDLENAME + "_1": result1[MIDDLENAME + "_1"],
+                        LASTNAME + "_1": result1[LASTNAME + "_1"],
+                        MOBILE + "_1": result1[MOBILE + "_1"],
+                        EMAIL + "_1": result1[EMAIL + "_1"],
+                        PASSWORD + "_1": result1[PASSWORD + "_1"],
+                        BIRTH_DATE + "_1": result1[BIRTH_DATE + "_1"],
+                        EMIRATES_ID + "_1": result1[EMIRATES_ID + "_1"],
+
+                        /**
+                         * form 2 details
+                         */
+
+                        FIRSTNAME + "_2": result2[FIRSTNAME + "_2"],
+                        MIDDLENAME + "_2": result2[MIDDLENAME + "_2"],
+                        LASTNAME + "_2": result2[LASTNAME + "_2"],
+                        MOBILE + "_2": result2[MOBILE + "_2"],
+                        EMAIL + "_2": result2[EMAIL + "_2"],
+                        PASSWORD + "_2": result2[PASSWORD + "_2"],
+                        BIRTH_DATE + "_2": result2[BIRTH_DATE + "_2"],
+                        EMIRATES_ID + "_2": result2[EMIRATES_ID + "_2"],
+
+                        /**
+                         * form 3 details
+                         */
+
+                        FIRSTNAME + "_3": result3[FIRSTNAME + "_3"],
+                        MIDDLENAME + "_3": result3[MIDDLENAME + "_3"],
+                        LASTNAME + "_3": result3[LASTNAME + "_3"],
+                        MOBILE + "_3": result3[MOBILE + "_3"],
+                        EMAIL + "_3": result3[EMAIL + "_3"],
+                        PASSWORD + "_3": result3[PASSWORD + "_3"],
+                        BIRTH_DATE + "_3": result3[BIRTH_DATE + "_3"],
+                        EMIRATES_ID + "_3": result3[EMIRATES_ID + "_3"],
+                        DEVICE_TYPE: deviceType,
+                        DEVICE_TOKEN: "Devicedsbfs",
+                      };
+                      print(parms.toString() + "------Parameters");
+                      isConnectedToInternet().then((internet) {
+                        if (internet != null && internet) {
+                          showProgress(context, "Please wait.....");
+                          signUpToServer(parms).then((response) {
+                            dismissDialog(context);
+                            if (response.status) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                ScaleRoute(page: SuccessScreen()),
+                                (r) => false,
+                              );
+                            } else {
+                              dismissDialog(context);
+
+                              print("error" + response.toString());
+                              if (response.error != null)
+                                showDialogBox(
+                                    context, "Error!", response.error);
+                              else {
+                                errorMessage1 = '';
+                                var name = '';
+                                if (response.errors != null) {
+                                  var value = response.errors.toJson();
+                                  print("Error--->" +
+                                      value.keys
+                                          .toSet()
+                                          .contains('email_1')
+                                          .toString());
+                                  if (value['email'] != null) {
+                                    errorMessage = response.errors.email;
+                                    name = result[FIRSTNAME];
+                                    setState(() {
+                                      errorMessage1 = response.errors.email;
+                                    });
+                                  } else if (response.errors.email_1 != null) {
+                                    errorMessage = response.errors.email_1;
+                                    name = result1[FIRSTNAME + "_1"];
+                                    setState(() {
+                                      errorMessage1 = response.errors.email_1;
+                                    });
+                                  } else if (response.errors.email_2 != null) {
+                                    errorMessage = response.errors.email_2;
+                                    name = result2[FIRSTNAME + "_2"];
+                                    setState(() {
+                                      errorMessage1 = response.errors.email_2;
+                                    });
+                                  } else if (response.errors.email_3 != null) {
+                                    errorMessage = response.errors.email_3;
+                                    name = result3[FIRSTNAME + "_3"];
+                                    setState(() {
+                                      errorMessage1 = response.errors.email_3;
+                                    });
+                                  }
+
+                                  showDialogBox(
+                                      context,   "Error in form of $name", errorMessage);
+                                }
+                              }
+                            }
+                          });
+                        } else {
+                          showDialogBox(
+                              context, 'Internet Error', pleaseCheckInternet);
+                          dismissDialog(context);
+                        }
+                        dismissDialog(context);
+                      });
+                    } else if (!acceptTerms) {
+                      showDialogBox(context, termsofService,
+                          'Please read & accept our terms of services');
+                    } else {
+                      showDialogBox(context, error, 'Please fill details');
+                    }
                   },
                   color: Colors.black,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0.0)),
                   child: Text(
-                    'Next',
+                    signup,
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: padding15, left: 20, right: 20),
-                height: button_height,
-                width: SizeConfig.screenWidth,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.blueGrey,
-                    )),
-                child: RaisedButton(
-                  onPressed: () {
-                    // Navigator.push(context, ScaleRoute(page: whereToGO));
-                  },
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0)),
-                  child: Text(
-                    'Choose Another Plan',
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                  ),
-                ),
-              ),
+//              Container(
+//                margin: EdgeInsets.only(top: padding15, left: 20, right: 20),
+//                height: button_height,
+//                width: SizeConfig.screenWidth,
+//                decoration: BoxDecoration(
+//                    border: Border.all(
+//                  color: Colors.blueGrey,
+//                )),
+//                child: RaisedButton(
+//                  onPressed: () {
+//                    // Navigator.push(context, ScaleRoute(page: whereToGO));
+//                  },
+//                  color: Colors.white,
+//                  shape: RoundedRectangleBorder(
+//                      borderRadius: BorderRadius.circular(0.0)),
+//                  child: Text(
+//                    'Choose Another Plan',
+//                    style: TextStyle(color: Colors.black, fontSize: 16),
+//                  ),
+//                ),
+//              ),
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 3,
               )
@@ -509,104 +774,104 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
           return StatefulBuilder(builder: (context, setState) {
             return SingleChildScrollView(
                 child: Container(
-                  color: Colors.transparent,
-                  //could change this to Color(0xFF737373),
-                  //so you don't have to change MaterialApp canvasColor
-                  child: new Container(
-                      decoration: new BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: new BorderRadius.only(
-                              topLeft: const Radius.circular(50.0),
-                              topRight: const Radius.circular(50.0))),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 30,
+              color: Colors.transparent,
+              //could change this to Color(0xFF737373),
+              //so you don't have to change MaterialApp canvasColor
+              child: new Container(
+                  decoration: new BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: new BorderRadius.only(
+                          topLeft: const Radius.circular(50.0),
+                          topRight: const Radius.circular(50.0))),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 30,
+                      ),
+                      InkWell(
+                        child: Padding(
+                          child: Align(
+                            child: Icon(Icons.close),
+                            alignment: Alignment.topRight,
                           ),
-                          InkWell(
-                            child: Padding(
-                              child: Align(
-                                child: Icon(Icons.close),
-                                alignment: Alignment.topRight,
-                              ),
-                              padding: EdgeInsets.all(15),
+                          padding: EdgeInsets.all(15),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Text(title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(loremIpsum,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
                             ),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          Text(title,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center),
-                          SizedBox(
-                            height: 15,
-                          ),
+                            textAlign: TextAlign.center),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Row(
+                        children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Text(loremIpsum,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                textAlign: TextAlign.center),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(left: 25, bottom: 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Image.asset(
-                                    baseImageAssetsUrl + 'logo_black.png',
-                                    height: 90,
-                                    color: Color(0xff8B8B8B),
-                                    width: 120,
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(left: 25, bottom: 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: SvgPicture.asset(
-                                    baseImageAssetsUrl + 'vector_lady.svg',
-                                    height: 90,
-                                    width: 120,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 40, bottom: 10),
+                            padding: EdgeInsets.only(left: 25, bottom: 0),
                             child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  volt_rights,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Color(0xff8B8B8B),
-                                      fontSize: 8,
-                                      fontStyle: FontStyle.italic,
-                                      fontFamily: open_italic),
-                                )),
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset(
+                                baseImageAssetsUrl + 'logo_black.png',
+                                height: 90,
+                                color: Color(0xff8B8B8B),
+                                width: 120,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(left: 25, bottom: 0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: SvgPicture.asset(
+                                baseImageAssetsUrl + 'vector_lady.svg',
+                                height: 90,
+                                width: 120,
+                              ),
+                            ),
                           ),
                           SizedBox(
-                            height: 50,
+                            width: 20,
                           )
                         ],
-                      )),
-                ));
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 40, bottom: 10),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              volt_rights,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color(0xff8B8B8B),
+                                  fontSize: 8,
+                                  fontStyle: FontStyle.italic,
+                                  fontFamily: open_italic),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      )
+                    ],
+                  )),
+            ));
           });
         });
   }

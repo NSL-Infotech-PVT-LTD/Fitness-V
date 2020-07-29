@@ -10,6 +10,9 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+import '../Methods/api_interface.dart';
+import '../Value/SizeConfig.dart';
+
 class ChooseMemberShip extends StatefulWidget {
   var response;
 
@@ -39,6 +42,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 
   @override
   Widget build(BuildContext context) {
+//    print(widget.response['id'].toString());
     limit = widget.response['plan_detail'];
 
 //    print("jugraj------>"+widget.response.toString());
@@ -103,12 +107,19 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                 padding: EdgeInsets.all(20),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
-                      baseImageAssetsUrl + 'gym.png',
-                      height: 225,
-                      width: SizeConfig.screenWidth,
-                      fit: BoxFit.fill,
-                    )),
+                    child: widget.response['image'] != null
+                        ? FadeInImage.assetNetwork(
+                            placeholder: baseImageAssetsUrl + 'logo_white.png',
+                            image:
+                                BASE_URL + IMAGE_URL + widget.response['image'],
+                            fit: BoxFit.cover,
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight * .25,
+                          )
+                        : Image.asset(baseImageAssetsUrl + 'gym.png',
+                            fit: BoxFit.cover,
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight * .25)),
               ),
 
               Container(
@@ -314,7 +325,6 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 //                            context,
 //                            new MaterialPageRoute(builder: (context) =>FamilyWithTwo()));     //SpouseType()));
 
-
                         currentSelectedIndex == -1
                             ? showDialogBox(context, "Choose Plan Alert",
                                 'Please choose your plan type')
@@ -351,30 +361,38 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
     );
   }
 
-  checkRoll(){
-    if (widget.response['category'].toString() ==
-        'Couple') {
-      Navigator.pushReplacement(
-                            context,
-                            new MaterialPageRoute(builder: (context) =>SpouseType()));
-
-      print('this is couples');
-    }else if (widget.response['category'].toString() ==
-        'Family with 2') {
-      Navigator.pushReplacement(
+  checkRoll() {
+    if (widget.response['category'].toString() == 'Couple') {
+      Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) =>FamilyWithTwo()));
-
-      print('this is Family with 2');
-    }else{
+          new MaterialPageRoute(
+              builder: (context) => SpouseType(
+                    response: widget.response['plan_detail'],
+                    plan_index: plan_index,
+                    type: "member",
+                    roleId: widget.response['id'].toString(),
+                  )));
+    } else if (widget.response['category'].toString() == 'Family with 2') {
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => FamilyWithTwo(
+                    response: widget.response['plan_detail'],
+                    plan_index: plan_index,
+                    type: "member",
+                roleId: widget.response['id'].toString(),
+              )));
+    } else {
       Navigator.push(
           context,
           ScaleRoute(
               page: SignupScreen(
-                response: widget.response['plan_detail'],
-                plan_index: plan_index,
-                type: "member",
-              )));
+            response: widget.response['plan_detail'],
+            planIndex: plan_index,
+            type: "member",
+            isSingle: true,
+            formType: "",
+          )));
     }
   }
 }

@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:volt/AuthScreens/SuccessScreen.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
@@ -14,13 +12,28 @@ import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
 import '../Methods.dart';
+import '../Methods/api_interface.dart';
+import '../Value/Strings.dart';
+import 'SuccessScreen.dart';
 
 class SignupScreen extends StatefulWidget {
-  List response;
-  String type = "";
-  int plan_index = 0;
+  final List response;
+  final String type;
+  final int planIndex;
+  final String formType;
+  final bool isSingle;
+  final bool isEmailError;
 
-  SignupScreen({this.response, this.plan_index, this.type});
+  final Map<String, String> editData;
+
+  SignupScreen(
+      {this.response,
+      this.planIndex,
+      this.type,
+      this.formType,
+      this.editData,
+      this.isEmailError,
+      this.isSingle});
 
   @override
   State<StatefulWidget> createState() => SignupState();
@@ -48,12 +61,14 @@ class SignupState extends State<SignupScreen> {
 
   bool _isIos;
   String deviceType = '';
-  String role_id = "";
-  String device_token = "";
+  String roleId = "";
+  String deviceToken = "";
 
-  String role_plan_id = "";
+  String rolePlanId = "";
   var fromDate, toDate;
   var formatter = new DateFormat("yyyy-MM-dd");
+
+  Map<String, String> parms;
 
   void fromDatePicker() async {
     var order = await getData();
@@ -79,150 +94,195 @@ class SignupState extends State<SignupScreen> {
   @override
   void initState() {
     _isIos = Platform.isIOS;
+    print("SendData===>" + parms.toString());
+    print("SendData1===>" + widget.editData.toString());
     deviceType = _isIos ? 'ios' : 'android';
+    if (widget.editData != null) {
+      if (widget.editData.containsKey(FIRSTNAME + "_1")) {
+        _setData("_1");
+      } else if (widget.editData.containsKey(FIRSTNAME + "_2")) {
+        _setData("_2");
+      } else if (widget.editData.containsKey(FIRSTNAME + "_3")) {
+        _setData("_3");
+      } else {
+        _setData("");
+      }
+    }
     super.initState();
+  }
+
+  _setData(String type) {
+    firstNameController.text = widget.editData[FIRSTNAME + type];
+    middletNameController.text = widget.editData[MIDDLENAME + type];
+    lastNameController.text = widget.editData[LASTNAME + type];
+    mobileController.text = widget.editData[MOBILE + type];
+    emergencyController.text = widget.editData[EMEREGENCY_NUMBER + type];
+    emailController.text = widget.editData[EMAIL + type];
+    passwordController.text = widget.editData[PASSWORD + type];
+    fromDate = widget.editData[BIRTH_DATE + type];
+    designationController.text = widget.editData[DESIGNATION + type];
+    emiratesController.text = widget.editData[EMIRATES_ID + type];
+    addressController.text = widget.editData[ADDRESS + type];
   }
 
   @override
   Widget build(BuildContext context) {
-    role_id = widget.response[0]['id'].toString();
+    if (widget.type != null) {
+      roleId = widget.response[0]['id'].toString();
 
-    if (widget.type != 'guest') {
-      List plans = widget.response;
-      print(plans.toString());
-      if (plans.length > 0) {
-        role_plan_id = plans[widget.plan_index]['id'].toString();
-
-        print(role_plan_id.toString());
-        print(role_id.toString());
+      if (widget.type != 'guest') {
+        List plans = widget.response;
+        if (plans.length > 0) {
+          rolePlanId = plans[widget.planIndex]['id'].toString();
+        }
       }
     }
     SizeConfig().init(context);
-    return Form(
-      key: formKey,
-      child: Scaffold(
-        backgroundColor: CColor.WHITE,
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                expandedHeight: 300.0,
-                floating: false,
-                backgroundColor: Colors.black,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text("",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      )),
-                  background: Container(
-                    margin: EdgeInsets.fromLTRB(0, topMargin, 0, 0),
-                    height: 300,
-                    width: SizeConfig.screenWidth,
-                    color: Colors.black,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                            left: 0,
-                            right: 0,
-                            top: padding50,
-                            child: Image.asset(
-                              baseImageUrl + 'exc_sign.png',
-                              height: 111,
-                            )),
-                        Positioned(
-                          left: 50,
-                          bottom: padding50 + padding30,
-                          child: Image.asset(baseImageUrl + 'user_sign.png'),
-                        ),
-                        Positioned(
-                          left: 90,
-                          bottom: padding50 + padding30,
-                          child: Text(
-                            signup,
-                            style: TextStyle(
-                                color: CColor.WHITE, fontSize: textSize24),
-                          ),
-                        ),
-                        Positioned(
-                          left: 90,
-                          right: 60,
-                          bottom: padding45,
-                          child: Padding(
-                            child: Text(
-                              'Please give us your details to enjoy our premium experience',
-                              style: TextStyle(
-                                  color: CColor.WHITE, fontSize: textSize12),
+    return WillPopScope(
+        onWillPop: () {
+          Navigator.pop(context, widget.editData);
+          return new Future(() => false);
+        },
+        child: Form(
+          key: formKey,
+          child: Scaffold(
+            backgroundColor: CColor.WHITE,
+            body: NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    expandedHeight: 300.0,
+                    floating: false,
+                    backgroundColor: Colors.black,
+                    pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: true,
+                      title: Text("",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          )),
+                      background: Container(
+                        margin: EdgeInsets.fromLTRB(0, topMargin, 0, 0),
+                        height: 300,
+                        width: SizeConfig.screenWidth,
+                        color: Colors.black,
+                        child: Stack(
+                          children: <Widget>[
+                            Positioned(
+                                left: 0,
+                                right: 0,
+                                top: padding50,
+                                child: Image.asset(
+                                  baseImageUrl + 'exc_sign.png',
+                                  height: 111,
+                                )),
+                            Positioned(
+                              left: 50,
+                              bottom: padding50 + padding30,
+                              child:
+                                  Image.asset(baseImageUrl + 'user_sign.png'),
                             ),
-                            padding: EdgeInsets.fromLTRB(5, 10, 20, 0),
-                          ),
+                            Positioned(
+                              left: 90,
+                              bottom: padding50 + padding30,
+                              child: Text(
+                                signup,
+                                style: TextStyle(
+                                    color: CColor.WHITE, fontSize: textSize24),
+                              ),
+                            ),
+                            Positioned(
+                              left: 90,
+                              right: 60,
+                              bottom: padding45,
+                              child: Padding(
+                                child: Text(
+                                  'Please give us your details to enjoy our premium experience',
+                                  style: TextStyle(
+                                      color: CColor.WHITE,
+                                      fontSize: textSize12),
+                                ),
+                                padding: EdgeInsets.fromLTRB(5, 10, 20, 0),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ];
-          },
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(
-                      padding50, padding30, padding50, padding30),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        'Enter your personal details below: ',
-                        style:
-                            TextStyle(color: Color(0xFF707070), fontSize: 15),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            }
-                            return null;
-                          },
-                          controller: firstNameController,
-                          decoration: InputDecoration(
-                              hintText: firstname + '*',
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: middletNameController,
-                          decoration: InputDecoration(
-                              hintText: midlename,
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            }
-                            return null;
-                          },
-                          controller: lastNameController,
-                          decoration: InputDecoration(
-                              hintText: lastname + '*',
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
+                ];
+              },
+              body: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(
+                          padding50, padding30, padding50, padding30),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            'Enter your personal details below: ',
+                            style: TextStyle(
+                                color: Color(0xFF707070), fontSize: 15),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter(
+                                    RegExp("[a-zA-Z]"))
+                              ],
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return fieldIsRequired;
+                                }
+                                return null;
+                              },
+                              controller: firstNameController,
+                              decoration: InputDecoration(
+                                  hintText: firstname + '*',
+                                  hintStyle: TextStyle(fontSize: textSize12)),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter(
+                                    RegExp("[a-zA-Z]"))
+                              ],
+                              controller: middletNameController,
+                              decoration: InputDecoration(
+                                  hintText: midlename,
+                                  hintStyle: TextStyle(fontSize: textSize12)),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter(
+                                    RegExp("[a-zA-Z]"))
+                              ],
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return fieldIsRequired;
+                                }
+                                return null;
+                              },
+                              controller: lastNameController,
+                              decoration: InputDecoration(
+                                  hintText: lastname + '*',
+                                  hintStyle: TextStyle(fontSize: textSize12)),
+                            ),
+                          ),
 
 //                      Row(
 //                        mainAxisAlignment: MainAxisAlignment.start,
@@ -236,117 +296,120 @@ class SignupState extends State<SignupScreen> {
 //                          radiobutton('None'),
 //                        ],
 //                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            } else if (value.length < 9) {
-                              return 'Please Enter Valid Number';
-                            }
-                            return null;
-                          },
-                          controller: mobileController,
-                          decoration: InputDecoration(
-                              hintText: mobile,
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            } else if (value.length < 9) {
-                              return 'Please enter valid number';
-                            }
-                            return null;
-                          },
-                          controller: emergencyController,
-                          decoration: InputDecoration(
-                              hintText: emergencyContact,
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            } else if (!validateEmail(value)) {
-                              return 'Please enter valid email';
-                            }
-                            return null;
-                          },
-                          controller: emailController,
-                          decoration: InputDecoration(
-                              hintText: email + '*',
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.visiblePassword,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            } else if (value.length < 5) {
-                              return 'Password must be more than 6 words';
-                            }
-                            return null;
-                          },
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              hintText: password + '*',
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: margin20, bottom: 10),
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(button_radius)),
-                            border:
-                                Border.all(color: Colors.black26, width: 1)),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  fromDate == null
-                                      ? birthDate
-                                      : fromDate.toString(),
-                                  style: TextStyle(
-                                      fontSize: textSize12,
-                                      color: fromDate == null
-                                          ? Colors.black45
-                                          : Colors.black),
-                                )),
-                            Spacer(),
-                            GestureDetector(
-                              onTap: fromDatePicker,
-                              child: Container(
-                                height: 50,
-                                width: 40,
-                                color: Color(0xFFDFDFDF),
-                                child: Image(
-                                  image:
-                                      AssetImage(baseImageUrl + 'calendar.png'),
-                                ),
-                              ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return fieldIsRequired;
+                                } else if (value.length < 9) {
+                                  return 'Please Enter Valid Number';
+                                }
+                                return null;
+                              },
+                              controller: mobileController,
+                              decoration: InputDecoration(
+                                  hintText: mobile,
+                                  hintStyle: TextStyle(fontSize: textSize12)),
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
+                          Visibility(
+                              visible: widget.formType.isEmpty ? true : false,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 12),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return fieldIsRequired;
+                                    } else if (value.length < 9) {
+                                      return 'Please enter valid number';
+                                    }
+                                    return null;
+                                  },
+                                  controller: emergencyController,
+                                  decoration: InputDecoration(
+                                      hintText: emergencyContact,
+                                      hintStyle:
+                                          TextStyle(fontSize: textSize12)),
+                                ),
+                              )),
+                          Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return fieldIsRequired;
+                                } else if (!validateEmail(value)) {
+                                  return 'Please enter valid email';
+                                }
+                                return null;
+                              },
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                  hintText: email + '*',
+                                  hintStyle: TextStyle(fontSize: textSize12)),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: TextFormField(
+                              keyboardType: TextInputType.visiblePassword,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return fieldIsRequired;
+                                } else if (value.length < 5) {
+                                  return 'Password must be more than 6 words';
+                                }
+                                return null;
+                              },
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  hintText: password + '*',
+                                  hintStyle: TextStyle(fontSize: textSize12)),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: margin20, bottom: 10),
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(button_radius)),
+                                border: Border.all(
+                                    color: Colors.black26, width: 1)),
+                            child: Row(
+                              children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      fromDate == null
+                                          ? birthDate
+                                          : fromDate.toString(),
+                                      style: TextStyle(
+                                          fontSize: textSize12,
+                                          color: fromDate == null
+                                              ? Colors.black45
+                                              : Colors.black),
+                                    )),
+                                Spacer(),
+                                GestureDetector(
+                                  onTap: fromDatePicker,
+                                  child: Container(
+                                    height: 50,
+                                    width: 40,
+                                    color: Color(0xFFDFDFDF),
+                                    child: Image(
+                                      image: AssetImage(
+                                          baseImageUrl + 'calendar.png'),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
 //                      Row(
 //                        mainAxisAlignment: MainAxisAlignment.start,
 //                        children: <Widget>[
@@ -354,158 +417,183 @@ class SignupState extends State<SignupScreen> {
 //                          radioMerital(married),
 //                        ],
 //                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: designationController,
-                          decoration: InputDecoration(
-                              hintText: designation,
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            }
-                            return null;
-                          },
-                          controller: emiratesController,
-                          decoration: InputDecoration(
-                              hintText: emiratesId,
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return fieldIsRequired;
-                            }
-                            return null;
-                          },
-                          controller: addressController,
-                          decoration: InputDecoration(
-                              hintText: address,
-                              hintStyle: TextStyle(fontSize: textSize12)),
-                        ),
-                      ),
-                      checkbox(iaccept, termsofService, acceptTerms),
-                      Container(
-                        margin: EdgeInsets.only(top: padding15),
-                        height: button_height,
-                        width: SizeConfig.screenWidth,
-                        child: RaisedButton(
-                          onPressed: () {
-                            if (formKey.currentState.validate()) {
-//                              if (radioItem.isEmpty) {
-//                                showDialogBox(context, 'Child',
-//                                    'Please select you child(s)');
-//                              } else
-
-                              if (fromDate == null) {
-                                showDialogBox(context, 'Date of Birth',
-                                    'Please fill your date of birth');
-                              } else if (!acceptTerms) {
-                                showDialogBox(context, termsofService,
-                                    'Please read & accept our terms of services');
-                              } else {
-//                                if (radioItem == '1') {
-//                                  radioItem = '1_child';
-//                                } else if (radioItem == '2') {
-//                                  radioItem = '2_child';
-//                                } else {
-//                                  radioItem = 'none';
-//                                }
-                                Map<String, String> parms = {
-                                  FIRSTNAME: firstNameController.text
-                                      .toString()
-                                      .trim(),
-                                  MIDDLENAME: middletNameController.text
-                                      .toString()
-                                      .trim(),
-                                  LASTNAME:
-                                      lastNameController.text.toString().trim(),
-                                  CHILD: radioItem.toString(),
-                                  MOBILE:
-                                      mobileController.text.toString().trim(),
-                                  EMEREGENCY_NUMBER: emergencyController.text
-                                      .toString()
-                                      .trim(),
-                                  EMAIL: emailController.text.toString().trim(),
-                                  PASSWORD:
-                                      emailController.text.toString().trim(),
-                                  BIRTH_DATE: fromDate,
-                                  DESIGNATION: designationController.text
-                                      .toString()
-                                      .trim(),
-                                  EMIRATES_ID:
-                                      emiratesController.text.toString().trim(),
-                                  ADDRESS:
-                                      addressController.text.toString().trim(),
-                                  ROLE_ID: role_id,
-                                  ROLE_PLAN_ID: role_plan_id,
-                                  DEVICE_TYPE: deviceType,
-                                  DEVICE_TOKEN: "Devicedsbfs",
-                                };
-
-                                print(parms.toString() + "------Parameters");
-                                isConnectedToInternet().then((internet) {
-                                  if (internet != null && internet) {
-                                    signUpToServer(parms).then((response) {
-                                      showProgress(context, "Please wait.....");
-
-                                      dismissDialog(context);
-                                      if (response.status) {
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          ScaleRoute(page: SuccessScreen()),
-                                          (r) => false,
-                                        );
-                                      } else {
-                                        print(response.toString());
-                                        showDialogBox(context, "Error!",
-                                            response.error);
-                                      }
-                                    });
-                                  } else {
-                                    showDialogBox(context, 'Internet Error',
-                                        pleaseCheckInternet);
-                                    dismissDialog(context);
-                                  }
-                                  dismissDialog(context);
-                                });
-                              }
-                            }
-                          },
-                          color: Colors.black,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(button_radius)),
-                          child: Text(
-                            signup,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
+                          Visibility(
+                            visible: widget.formType.isEmpty ? true : false,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 0),
+                              child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                controller: designationController,
+                                decoration: InputDecoration(
+                                    hintText: designation,
+                                    hintStyle: TextStyle(fontSize: textSize12)),
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return fieldIsRequired;
+                                }
+                                return null;
+                              },
+                              controller: emiratesController,
+                              decoration: InputDecoration(
+                                  hintText: emiratesId,
+                                  hintStyle: TextStyle(fontSize: textSize12)),
+                            ),
+                          ),
+                          Visibility(
+                            visible: widget.formType.isEmpty ? true : false,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 12),
+                              child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return fieldIsRequired;
+                                  }
+                                  return null;
+                                },
+                                controller: addressController,
+                                decoration: InputDecoration(
+                                    hintText: address,
+                                    hintStyle: TextStyle(fontSize: textSize12)),
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                              visible: widget.isSingle,
+                              child: checkbox(
+                                  iaccept, termsofService, acceptTerms)),
+                          Container(
+                            margin: EdgeInsets.only(top: padding25),
+                            height: button_height,
+                            width: SizeConfig.screenWidth,
+                            child: RaisedButton(
+                              onPressed: () {
+                                if (formKey.currentState.validate()) {
+                                  if (fromDate == null) {
+                                    showDialogBox(context, 'Date of Birth',
+                                        'Please fill your date of birth');
+                                  } else if (widget.isSingle && !acceptTerms) {
+                                    showDialogBox(context, termsofService,
+                                        'Please read & accept our terms of services');
+                                  } else {
+                                    parms = {
+                                      FIRSTNAME + widget.formType:
+                                          firstNameController.text
+                                              .toString()
+                                              .trim(),
+                                      MIDDLENAME + widget.formType:
+                                          middletNameController.text
+                                              .toString()
+                                              .trim(),
+                                      LASTNAME + widget.formType:
+                                          lastNameController.text
+                                              .toString()
+                                              .trim(),
+//                                  CHILD: radioItem.toString(),
+                                      MOBILE + widget.formType: mobileController
+                                          .text
+                                          .toString()
+                                          .trim(),
+
+                                      EMAIL + widget.formType: emailController
+                                          .text
+                                          .toString()
+                                          .trim(),
+                                      PASSWORD + widget.formType:
+                                          passwordController.text
+                                              .toString()
+                                              .trim(),
+                                      BIRTH_DATE + widget.formType: fromDate,
+
+                                      EMIRATES_ID + widget.formType:
+                                          emiratesController.text
+                                              .toString()
+                                              .trim(),
+                                      ROLE_ID: roleId,
+                                      ROLE_PLAN_ID: rolePlanId,
+
+                                      EMEREGENCY_NUMBER: emergencyController
+                                          .text
+                                          .toString()
+                                          .trim(),
+                                      DESIGNATION: designationController.text
+                                          .toString()
+                                          .trim(),
+                                      ADDRESS: addressController.text
+                                          .toString()
+                                          .trim(),
+                                      DEVICE_TYPE: deviceType,
+                                      DEVICE_TOKEN: "Devicedsbfs",
+                                    };
+                                    print(
+                                        parms.toString() + "------Parameters");
+
+                                    if (widget.isSingle) {
+                                      isConnectedToInternet().then((internet) {
+                                        if (internet != null && internet) {
+                                          signUpToServer(parms)
+                                              .then((response) {
+                                            showProgress(
+                                                context, "Please wait.....");
+
+                                            dismissDialog(context);
+                                            if (response.status) {
+                                              Navigator.pushAndRemoveUntil(
+                                                context,
+                                                ScaleRoute(
+                                                    page: SuccessScreen()),
+                                                (r) => false,
+                                              );
+                                            } else {
+                                              print(response.toString());
+                                              showDialogBox(context, "Error!",
+                                                  response.error);
+                                            }
+                                          });
+                                        } else {
+                                          showDialogBox(
+                                              context,
+                                              'Internet Error',
+                                              pleaseCheckInternet);
+                                          dismissDialog(context);
+                                        }
+                                        dismissDialog(context);
+                                      });
+                                    } else {
+                                      Navigator.pop(context, parms);
+                                    }
+                                  }
+                                }
+                              },
+                              color: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(button_radius)),
+                              child: Text(
+                                widget.isSingle ? signup : 'Done',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget myText(String hint, bool isNumber) {

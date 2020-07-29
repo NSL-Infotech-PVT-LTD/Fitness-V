@@ -63,7 +63,6 @@ class GymMemberState extends State<GymMemberPlan> {
           widget.response[i]['category'],
           widget.response[i]['name'],
           plansList,
-
           widget.response[i]));
     }
 
@@ -124,7 +123,7 @@ class GymMemberState extends State<GymMemberPlan> {
                       child: Container(
                         height: indexValue % 2 == 0
                             ? SizeConfig.blockSizeVertical * 40
-                            : SizeConfig.blockSizeVertical * 20,
+                            : SizeConfig.blockSizeVertical * 35,
                         width: SizeConfig.screenWidth,
                         decoration: BoxDecoration(color: Colors.black),
                       ),
@@ -136,11 +135,11 @@ class GymMemberState extends State<GymMemberPlan> {
                       children: <Widget>[
                         carouselSlider = CarouselSlider(
                           height: SizeConfig.screenHeight * .9,
-                          initialPage: 0,
+                          initialPage: 1,
                           enlargeCenterPage: true,
                           autoPlay: true,
                           reverse: false,
-                          enableInfiniteScroll: true,
+                          enableInfiniteScroll: false,
                           autoPlayInterval: Duration(seconds: 4),
                           autoPlayAnimationDuration:
                               Duration(milliseconds: 2000),
@@ -239,104 +238,103 @@ class GymMemberState extends State<GymMemberPlan> {
             color: Colors.white54,
             borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Card(
-          color: CColor.WHITE,
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-          child: Container(
-            child: SingleChildScrollView(
-            child: Column(
-
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(padding10),
-                  decoration: BoxDecoration(
-                      color: Color(0xFFE9E9E9),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20))),
-                  child: Column(
-                    children: <Widget>[
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: imageLink != null
-                              ? FadeInImage.assetNetwork(
-                                  placeholder:
-                                      baseImageAssetsUrl + 'logo_white.png',
-                                  image: BASE_URL + IMAGE_URL + imageLink,
-                                  fit: BoxFit.cover,
-                                  height: SizeConfig.screenHeight * .25,
-                                )
-                              : Image.asset(baseImageAssetsUrl + 'gym.png',
-                                  fit: BoxFit.cover,
-                                  height: SizeConfig.screenHeight * .25)),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 12, 10, 10),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              planType,
-                              style: TextStyle(
-                                  fontSize: textSize16,
-                                  fontWeight: FontWeight.bold),
+            color: CColor.WHITE,
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            child: Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(padding10),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFE9E9E9),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20))),
+                      child: Column(
+                        children: <Widget>[
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: imageLink != null
+                                  ? FadeInImage.assetNetwork(
+                                      placeholder:
+                                          baseImageAssetsUrl + 'logo_white.png',
+                                      image: BASE_URL + IMAGE_URL + imageLink,
+                                      fit: BoxFit.cover,
+                                      height: SizeConfig.screenHeight * .25,
+                                    )
+                                  : Image.asset(baseImageAssetsUrl + 'gym.png',
+                                      fit: BoxFit.cover,
+                                      height: SizeConfig.screenHeight * .25)),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(10, 12, 10, 10),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  planType,
+                                  style: TextStyle(
+                                      fontSize: textSize16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Spacer(),
+                                Text(
+                                  planDetail,
+                                  style: TextStyle(
+                                      fontSize: textSize10,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ],
                             ),
-                            Spacer(),
-                            Text(
-                              planDetail,
-                              style: TextStyle(
-                                  fontSize: textSize10,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        primary: false,
+                        scrollDirection: Axis.vertical,
+                        itemCount: plans.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              child: CustomPlansDetails(
+                            items: plans[index],
+                          ));
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
+                      child: Column(
+                        children: <Widget>[
+                          checkbox("Free", ' Group Classes', signle, 0),
+                          checkbox("Pay For", ' Personal Trainer', couple, 1),
+                          checkbox("Pay For", ' Pool & Beaches', family, 2),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                        child: fullWidthButton(
+                            context,
+                            choosePlan,
+                            SizeConfig.screenWidth,
+                            FontWeight.bold,
+                            ChooseMemberShip(
+                              response: response,
+                            )))
+                  ],
                 ),
-                Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    primary: false,
-                    scrollDirection: Axis.vertical,
-                    itemCount: plans.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                          child: CustomPlansDetails(
-                        items: plans[index],
-                      ));
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
-                  child: Column(
-                    children: <Widget>[
-                      checkbox("Free", ' Group Classes', signle, 0),
-                      checkbox("Pay For", ' Personal Trainer', couple, 1),
-                      checkbox("Pay For", ' Pool & Beaches', family, 2),
-                    ],
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                    child: fullWidthButton(
-                        context,
-                        choosePlan,
-                        SizeConfig.screenWidth,
-                        FontWeight.bold,
-                        ChooseMemberShip(
-                          response: response,
-                        )))
-              ],
-            ),
-          ),
-        )));
+              ),
+            )));
   }
 
   Widget plans(String fee_type, String fee) {
