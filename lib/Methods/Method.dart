@@ -52,7 +52,28 @@ void showDialogBox(context, String title, String message) {
         );
       });
 }
-
+void exitDialog(context){
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Alert!"),
+          content: Text("Are you sure to exit?\nIf you exit, data will be vanished."),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            FlatButton(
+                child: const Text('Ok'),
+                onPressed: () => {
+                  Navigator.pop(context),
+                  Navigator.pop(context),
+                }),
+          ],
+        );
+      });
+}
 class SlidingRight extends MaterialPageRoute {
   Widget page;
 

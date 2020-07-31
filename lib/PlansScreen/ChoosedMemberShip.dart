@@ -109,7 +109,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                     borderRadius: BorderRadius.circular(10.0),
                     child: widget.response['image'] != null
                         ? FadeInImage.assetNetwork(
-                            placeholder: baseImageAssetsUrl + 'logo_white.png',
+                            placeholder: baseImageAssetsUrl + 'logo_black.png',
                             image:
                                 BASE_URL + IMAGE_URL + widget.response['image'],
                             fit: BoxFit.cover,

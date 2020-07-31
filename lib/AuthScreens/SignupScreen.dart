@@ -127,6 +127,17 @@ class SignupState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //[{id: 1, fee: 250, fee_type: Monthly, role_id: 1, role_plan: Monthly: AED 250},
+    // {id: 2, fee: 1700, fee_type: Quarterly, role_id: 1, role_plan: Quarterly: AED 1700},
+    // {id: 3, fee: 3200, fee_type: Half yearly, role_id: 1, role_plan: Half yearly: AED 3200},
+    // {id: 4, fee: 6000, fee_type: Yearly, role_id: 1, role_plan: Yearly: AED 6000}]
+
+    // [{id: 25, fee: 400, fee_type: Monthly, role_id: 7, role_plan: Monthly: AED 400},
+    // {id: 26, fee: 700, fee_type: Quarterly, role_id: 7, role_plan: Quarterly: AED 700},
+    // {id: 27, fee: 1300, fee_type: Half yearly, role_id: 7, role_plan: Half yearly: AED 1300},
+    // {id: 28, fee: 1900, fee_type: Yearly, role_id: 7, role_plan: Yearly: AED 1900}]
+
+    print(widget.response.toString());
     if (widget.type != null) {
       roleId = widget.response[0]['id'].toString();
 
@@ -134,6 +145,7 @@ class SignupState extends State<SignupScreen> {
         List plans = widget.response;
         if (plans.length > 0) {
           rolePlanId = plans[widget.planIndex]['id'].toString();
+          roleId = widget.response[widget.planIndex]['role_id'].toString();
         }
       }
     }
@@ -156,6 +168,7 @@ class SignupState extends State<SignupScreen> {
                     floating: false,
                     backgroundColor: Colors.black,
                     pinned: true,
+                    iconTheme: IconThemeData(color: Colors.white),
                     flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
                       title: Text("",
@@ -300,6 +313,8 @@ class SignupState extends State<SignupScreen> {
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
                               keyboardType: TextInputType.number,
+                              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                              maxLength: 15,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return fieldIsRequired;
@@ -320,6 +335,8 @@ class SignupState extends State<SignupScreen> {
                                 padding: EdgeInsets.only(top: 12),
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                                  maxLength: 15,
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return fieldIsRequired;
@@ -537,12 +554,11 @@ class SignupState extends State<SignupScreen> {
 
                                     if (widget.isSingle) {
                                       isConnectedToInternet().then((internet) {
+                                        showProgress(
+                                            context, "Please wait.....");
                                         if (internet != null && internet) {
                                           signUpToServer(parms)
                                               .then((response) {
-                                            showProgress(
-                                                context, "Please wait.....");
-
                                             dismissDialog(context);
                                             if (response.status) {
                                               Navigator.pushAndRemoveUntil(
@@ -553,8 +569,14 @@ class SignupState extends State<SignupScreen> {
                                               );
                                             } else {
                                               print(response.toString());
+                                              var errorMessage = '';
+                                              if(response.error!=null){
+                                                errorMessage = response.error.toString();
+                                              }else if(response.errors!=null){
+                                                errorMessage = response.errors.email.toString();
+                                              }
                                               showDialogBox(context, "Error!",
-                                                  response.error);
+                                                  errorMessage);
                                             }
                                           });
                                         } else {
