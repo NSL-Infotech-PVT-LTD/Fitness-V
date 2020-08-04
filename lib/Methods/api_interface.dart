@@ -9,6 +9,7 @@ String LOGIN = BASE_URL + "api/login";
 String ROLE = BASE_URL + "api/roles";
 String REGISTRATION = BASE_URL + "api/register";
 String GETPROFILE = BASE_URL + "api/getprofile";
+String RESET_PASSWORD = BASE_URL + "api/reset/password";
 
 String CUSTOMER_ID = "";
 
@@ -78,6 +79,15 @@ Future<StatusResponse> getRoles() async {
 
 Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
   final response = await http.post(REGISTRATION,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(parms));
+  print("signUpResponse---->"+response.body.toString());
+  return StatusResponse.fromJson(json.decode(response.body));
+}
+Future<StatusResponse> resetPassword(Map<String, String> parms) async {
+  final response = await http.post(RESET_PASSWORD,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -1,5 +1,6 @@
 import 'package:device_info/device_info.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:volt/Value/CColor.dart';
@@ -52,13 +53,39 @@ void showDialogBox(context, String title, String message) {
         );
       });
 }
-void exitDialog(context){
+
+void cupertinoDialog(context, String negativeText, String positiveText) {
+  CupertinoDialogAction(
+      child: Column(
+        children: <Widget>[
+
+          Text(
+            negativeText,
+            style: TextStyle(color: Color(0xFF71747E), fontSize: 18.0),
+          ),
+          Text(
+            positiveText,
+            style: TextStyle(fontSize: 18.0),
+          ),
+        ],
+      ),
+      isDefaultAction: true,
+      onPressed: () {
+        Navigator.pop(context, true);
+      }
+
+
+  );
+}
+
+void exitDialog(context) {
   showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text("Alert!"),
-          content: Text("Are you sure to exit?\nIf you exit, data will be vanished."),
+          content: Text(
+              "Are you sure to exit?\nIf you exit, data will be vanished."),
           actions: <Widget>[
             FlatButton(
               child: const Text('Cancel'),
@@ -66,7 +93,8 @@ void exitDialog(context){
             ),
             FlatButton(
                 child: const Text('Ok'),
-                onPressed: () => {
+                onPressed: () =>
+                {
                   Navigator.pop(context),
                   Navigator.pop(context),
                 }),
@@ -74,6 +102,7 @@ void exitDialog(context){
         );
       });
 }
+
 class SlidingRight extends MaterialPageRoute {
   Widget page;
 

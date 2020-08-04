@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:volt/AuthScreens/forgot_password.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/api_interface.dart';
@@ -318,6 +319,22 @@ class LoginState extends State<LoginScreen> {
                                     ],
                                   ),
                                 ),
+                                Align(
+                                    alignment: Alignment.topRight,
+                                    child:
+                                    FlatButton(
+                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) => ForgotPassword()));
+                                      },
+                                      child:Text(
+                                        forgetPassword,
+                                        style: TextStyle(color: Colors.white),
+                                      ),)
+                                ),
                                 Container(
                                   child: RaisedButton(
                                     onPressed: () {
@@ -368,6 +385,8 @@ class LoginState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
+
+
                                 FlatButton(
                                   padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
                                   child: Column(
