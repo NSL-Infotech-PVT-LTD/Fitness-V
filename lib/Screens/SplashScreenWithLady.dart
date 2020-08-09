@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:volt/MemberDashboard/Dashboard.dart';
+import 'package:volt/Methods/Pref.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -13,17 +17,42 @@ class SplashScreenWithLady extends StatefulWidget {
 }
 
 class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
+  String _auth = '';
   @override
   void dispose() {
     super.dispose();
   }
 
+  _moveScreen(){
+
+      if(_auth.isEmpty) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => ChooseYourWay()));
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Dashboard()));
+      }
+
+  }
+  @override
+  void initState() {
+      super.initState();
+      _loadAuth();
+  }
+  _loadAuth() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _auth = (prefs.getString(USER_AUTH) ?? '');
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
     Timer(
         Duration(seconds: 3),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ChooseYourWay())));
+        () => _moveScreen() );
     SizeConfig().init(context);
 
     return Scaffold(

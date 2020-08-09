@@ -40,6 +40,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class SignupState extends State<SignupScreen> {
+
+
   String baseImageUrl = 'assets/images/';
   String radioItem = '';
   String radioItemMarital = '';
@@ -77,6 +79,8 @@ class SignupState extends State<SignupScreen> {
     });
   }
 
+
+
   Future<DateTime> getData() {
     return showDatePicker(
         context: context,
@@ -110,6 +114,22 @@ class SignupState extends State<SignupScreen> {
     }
     super.initState();
   }
+
+//  @override
+//  void dispose(){
+//    firstNameController.dispose();
+//    middletNameController.dispose();
+//    lastNameController.dispose();
+//    mobileController.dispose();
+//    emergencyController.dispose();
+//    emailController.dispose();
+//    passwordController.dispose();
+//    designationController.dispose();
+//    emiratesController.dispose();
+//    addressController.dispose();
+//    super.dispose();
+//  }
+//
 
   _setData(String type) {
     firstNameController.text = widget.editData[FIRSTNAME + type];
@@ -617,6 +637,7 @@ class SignupState extends State<SignupScreen> {
           ),
         ));
   }
+
 
   Widget myText(String hint, bool isNumber) {
     return Padding(

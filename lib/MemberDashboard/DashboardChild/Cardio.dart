@@ -1,16 +1,68 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Methods.dart';
+import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/Pref.dart';
+import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/TrainerPackage/TrainerDetail.dart';
 import 'package:volt/Value/Strings.dart';
 
-class Cardio extends StatelessWidget {
-  final trainerList = List<RecomendedTrainerClass>.generate(
-      10,
-      (index) => RecomendedTrainerClass(
-          trainerName: 'Neo Faith',
-          trainerExperience: '6.5 Year Experinece',
-          imgLink: baseImageAssetsUrl + 'dummy2.png'));
+class Cardio extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _CardioState();
+}
+
+class _CardioState extends State<Cardio> {
+  List trainerList;
+  var checkList;
+
+  @override
+  void initState() {
+    String auth = '';
+    getString(USER_AUTH)
+        .then((value) => {auth = value})
+        .whenComplete(() => {getList(auth)});
+    super.initState();
+  }
+
+  void getList(String auth) async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        Map<String, String> parms = {
+          SEARCH: '',
+          LIMIT: '10',
+        };
+        getTrainersListApi(auth, parms).then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null && response.data.data.length > 0) {
+              checkList = response.data.data.toList();
+              trainerList = List<RecomendedTrainerClass>.generate(
+                  response.data.data.length,
+                  (index) => RecomendedTrainerClass(
+                      trainerName: response.data.data[index]['full_name'],
+                      trainerExperience: '6.5 Year Experinece',
+                      imgLink: baseImageAssetsUrl + 'dummy2.png'));
+
+              setState(() {});
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,12 +182,14 @@ class Cardio extends StatelessWidget {
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
-                                builder: (context) => TrainerDetail()));
+                                builder: (context) => TrainerDetail(
+                                      id: checkList[index]['id'],
+                                    )));
                       },
                     ),
                   );
                 },
-                itemCount: trainerList.length,
+                itemCount: trainerList == null ? 0 : trainerList.length,
                 scrollDirection: Axis.horizontal,
               ),
             )),

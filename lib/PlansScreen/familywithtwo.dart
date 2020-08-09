@@ -912,7 +912,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
               setState(() {
                 acceptTerms = value;
                 if (value) {
-                  termsBottom('Terms of Services');
+                //  termsBottom('Terms of Services');
                 }
               });
             },

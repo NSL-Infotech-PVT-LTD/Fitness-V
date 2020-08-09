@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:volt/Bookings/YourBooking.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
+import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/Pref.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/TrainerPackage/TrainerService.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -12,11 +15,61 @@ import 'package:volt/Value/Strings.dart';
 import '../Methods.dart';
 
 class TrainerDetail extends StatefulWidget {
+  final int id;
+
+  TrainerDetail({@required this.id});
+
   @override
   State<StatefulWidget> createState() => TrainerDetailState();
 }
 
 class TrainerDetailState extends State<TrainerDetail> {
+  String fullName = '', services = '', about = '';
+  int trainees = 0, reviewsCount = 0;
+  String rating;
+
+  @override
+  void initState() {
+    String auth = '';
+    getString(USER_AUTH)
+        .then((value) => {auth = value})
+        .whenComplete(() => {getTrainerDetail(auth)});
+    super.initState();
+  }
+
+  void getTrainerDetail(String auth) async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        Map<String, String> parms = {
+          ID: widget.id.toString(),
+        };
+        getTrainersDetailApi(auth, parms).then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null && response.data.trainer != null) {
+              fullName = response.data.trainer.full_name;
+              services = response.data.trainer.services;
+              about = response.data.trainer.about;
+              reviewsCount = response.data.trainer.booking_reviewed_cnt;
+              rating = response.data.trainer.rating_avg;
+              trainees = response.data.trainer.booking_cnt;
+              setState(() {});
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
+
   final trainerList = List<RecomendedTrainerClass>.generate(
       10,
       (index) => RecomendedTrainerClass(
@@ -41,6 +94,7 @@ class TrainerDetailState extends State<TrainerDetail> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.id.toString() + "=====>TrainerId");
     SizeConfig().init(context);
     return Scaffold(
       body: SingleChildScrollView(
@@ -127,7 +181,7 @@ class TrainerDetailState extends State<TrainerDetail> {
                         Row(
                           children: <Widget>[
                             Text(
-                              'Farley Willth',
+                              fullName.isEmpty ? 'Farley Willth' : fullName,
                               style: TextStyle(fontSize: 17),
                             ),
                             SizedBox(width: 5),
@@ -143,7 +197,9 @@ class TrainerDetailState extends State<TrainerDetail> {
                         ),
                         Text('7 years Experineced',
                             style: TextStyle(fontSize: 10)),
-                        Text('1022 Trainees (789 Reviews)',
+                        Text(
+                            trainees.toString() +
+                                ' Trainees ($reviewsCount Reviews)',
                             style: TextStyle(fontSize: 10)),
                         Padding(
                           child: Row(
@@ -248,7 +304,9 @@ class TrainerDetailState extends State<TrainerDetail> {
                                   padding: EdgeInsets.only(
                                       left: 20, top: 10, right: 20),
                                   child: Text(
-                                    'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.',
+                                    about == null
+                                        ? 'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.'
+                                        : about,
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.black54,
@@ -304,7 +362,9 @@ class TrainerDetailState extends State<TrainerDetail> {
                                   padding: EdgeInsets.only(
                                       left: 20, top: 10, right: 20),
                                   child: Text(
-                                    'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.',
+                                    services == null
+                                        ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
+                                        : services,
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.black54,
