@@ -40,6 +40,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class SignupState extends State<SignupScreen> {
+
+
   String baseImageUrl = 'assets/images/';
   String radioItem = '';
   String radioItemMarital = '';
@@ -81,6 +83,7 @@ class SignupState extends State<SignupScreen> {
     final Color resolvedBorderColor = CupertinoDynamicColor.resolve(Colors.black26, context);
     print(resolvedBorderColor);
 
+
     return IgnorePointer(
       child: Center(
         child: Container(
@@ -98,6 +101,7 @@ class SignupState extends State<SignupScreen> {
       ),
     );
   }
+
   Future<DateTime> getData() {
 
     return showDatePicker(
@@ -132,6 +136,22 @@ class SignupState extends State<SignupScreen> {
     }
     super.initState();
   }
+
+//  @override
+//  void dispose(){
+//    firstNameController.dispose();
+//    middletNameController.dispose();
+//    lastNameController.dispose();
+//    mobileController.dispose();
+//    emergencyController.dispose();
+//    emailController.dispose();
+//    passwordController.dispose();
+//    designationController.dispose();
+//    emiratesController.dispose();
+//    addressController.dispose();
+//    super.dispose();
+//  }
+//
 
   _setData(String type) {
     firstNameController.text = widget.editData[FIRSTNAME + type];
@@ -514,7 +534,7 @@ class SignupState extends State<SignupScreen> {
                             width: SizeConfig.screenWidth,
                             child: RaisedButton(
                               onPressed: () {
-                                _buildMagnifierScreen();
+//                                _buildMagnifierScreen();
                                 if (formKey.currentState.validate()) {
                                   if (fromDate == null) {
                                     showDialogBox(context, 'Date of Birth',
@@ -640,6 +660,7 @@ class SignupState extends State<SignupScreen> {
           ),
         ));
   }
+
 
   Widget myText(String hint, bool isNumber) {
     return Padding(

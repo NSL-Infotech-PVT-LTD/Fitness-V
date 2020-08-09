@@ -617,7 +617,7 @@ class _SpouseTypeState extends State<SpouseType> {
               setState(() {
                 acceptTerms = value;
                 if (value) {
-                  termsBottom('Terms of Services');
+                //  termsBottom('Terms of Services');
                 }
               });
             },

@@ -8,8 +8,10 @@ import 'package:volt/ResponseModel/StatusResponse.dart';
 String LOGIN = BASE_URL + "api/login";
 String ROLE = BASE_URL + "api/roles";
 String REGISTRATION = BASE_URL + "api/register";
-String GETPROFILE = BASE_URL + "api/getprofile";
-String RESET_PASSWORD = BASE_URL + "api/reset/password";
+String GETPROFILE = BASE_URL + "api/get-profile";
+String RESET_PASSWORD = BASE_URL + "api/reset-password";
+String getTrainersList = BASE_URL + "api/trainers";
+String trainers = BASE_URL + "api/trainer";
 
 String CUSTOMER_ID = "";
 
@@ -27,6 +29,7 @@ String CUSTOMER_NAME = "customer_name";
 String Product_ID = "product_id";
 
 String SEARCH = "search";
+String LIMIT = "limit";
 
 //signup keys
 String NAME = "name";
@@ -57,14 +60,47 @@ String DEALER_PROFILE_IMAGE = "uploads/dealer/profile_image/";
 String IMAGE_URL = "uploads/roles/";
 String MORE_IMAGE_URL = "uploads/product/images/";
 String BARCODE_URL = "uploads/product/barcode/";
-
+//flutter build apk --release --target-platform=android-arm64
 Future<StatusResponse> getLogin(Map<String, String> parms) async {
   final response = await http.post(LOGIN,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(parms));
-  return StatusResponse.fromJson(json.decode(response.body));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> getTrainersListApi(
+    String auth, Map<String, String> parms) async {
+  final response = await http.post(getTrainersList,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': auth
+      },
+      body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  print("ResponseTrainersList--->" + map.toString());
+
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> getTrainersDetailApi(
+    String auth, Map<String, String> parms) async {
+  final response = await http.post(trainers,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': auth
+      },
+      body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  print("ResponseTrainersList--->" + map.toString());
+
+  return StatusResponse.fromJson(map);
 }
 
 Future<StatusResponse> getRoles() async {
@@ -83,17 +119,21 @@ Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(parms));
-  print("signUpResponse---->"+response.body.toString());
+  print("signUpResponse---->" + response.body.toString());
   return StatusResponse.fromJson(json.decode(response.body));
 }
+
 Future<StatusResponse> resetPassword(Map<String, String> parms) async {
   final response = await http.post(RESET_PASSWORD,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(parms));
-  print("signUpResponse---->"+response.body.toString());
-  return StatusResponse.fromJson(json.decode(response.body));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  print("resetPassword==>" + map.toString());
+
+  return StatusResponse.fromJson(map);
 }
 
 Future<StatusResponse> getProfile(String userAuth) async {
@@ -101,7 +141,6 @@ Future<StatusResponse> getProfile(String userAuth) async {
     GETPROFILE,
     headers: header(userAuth),
   );
-  print("json Data " + json.decode(response.body));
 
   return StatusResponse.fromJson(json.decode(response.body));
 }

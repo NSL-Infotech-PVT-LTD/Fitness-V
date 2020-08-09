@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/Methods.dart';
+import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -14,6 +17,21 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileState extends State<ProfileScreen> {
+  String _userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAuth();
+  }
+
+  _loadAuth() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userName = (prefs.getString(USER_NAME) ?? '');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -74,7 +92,7 @@ class ProfileState extends State<ProfileScreen> {
             Padding(
               padding: EdgeInsets.only(top: 10, bottom: 10),
               child: Text(
-                'Firley Willth',
+                _userName.isEmpty ? 'Firley Willth' : _userName,
                 textAlign: TextAlign.center,
                 style:
                     TextStyle(color: Color(0xff8B8B8B), fontSize: textSize20),
@@ -246,6 +264,31 @@ class ProfileState extends State<ProfileScreen> {
                           padding: EdgeInsets.only(left: 20),
                           child: Text(
                             'Terms & Conditions',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(0xff8B8B8B), fontSize: 16),
+                          ))
+                    ],
+                  )),
+            ),
+            myDivider(),
+            GestureDetector(
+              onTap: () {
+                logoutDialog(context);
+              },
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.exit_to_app,
+                        size: 30,
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                            'Logout',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Color(0xff8B8B8B), fontSize: 16),

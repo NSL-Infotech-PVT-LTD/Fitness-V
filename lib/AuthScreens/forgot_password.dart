@@ -1,7 +1,5 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/api_interface.dart';
 
@@ -10,7 +8,6 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -21,39 +18,60 @@ class ForgotPasswordState extends State<ForgotPassword> {
   TextEditingController _emailAddressFieldController = TextEditingController();
   bool _validate1 = false;
 
-
   final _formKey = GlobalKey<FormState>();
 
-
   void forgotPassword() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
 
-      isConnectedToInternet().then((internet) {
-        if (internet != null && internet) {
-          showProgress(context, "Please wait.....");
+        Map<String, String> parms = {
+          EMAIL: _emailAddressFieldController.text,
+        };
+        resetPassword(parms).then((response) {
 
-          Map<String, String> parms = {
-            EMAIL: _emailAddressFieldController.text,
-          };
-          resetPassword(parms).then((response) {
-            print("CheckBeforSuccess->" + response.toJson().toString());
-
-            dismissDialog(context);
-            if (response.status) {
-              Navigator.pushReplacement(context,
-                  new MaterialPageRoute(builder: (context) => Dashboard()));
-            } else {
-              print(response.toString());
-              dismissDialog(context);
-              //need to change
-              showDialogBox(context, "Error!", response.error);
-            }
-          });
-        } else {
-          showDialogBox(context, 'Internet Error', pleaseCheckInternet);
           dismissDialog(context);
-        }
-      });
+          if (response.status) {
 
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Check"),
+
+                    content: Text(
+                        "Password reset link sent, please check inbox"),
+                    actions: <Widget>[
+
+                      FlatButton(
+                          child: const Text('Ok'),
+                          onPressed: () => {
+                            Navigator.pop(context),
+                            Navigator.pop(context),
+                          }),
+                    ],
+                  );
+                });
+          } else {
+            var message = '';
+            dismissDialog(context);
+            //need to change
+            if (response.error != null) {
+              message = response.error;
+            } else if (response.errors != null) {
+              message = response.errors.email;
+            }
+            if (message.isNotEmpty) {
+              showDialogBox(context, "Error!", message);
+            }
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
   }
 
   @override
@@ -109,12 +127,11 @@ class ForgotPasswordState extends State<ForgotPassword> {
                                     fit: BoxFit.fill,
                                   ),
                                 ),
-
                                 SizedBox(
                                   height: 100,
                                 ),
                                 Text(
-                                 'Forgot Password ',
+                                  'Forgot Password ',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: textSize16,
@@ -178,8 +195,6 @@ class ForgotPasswordState extends State<ForgotPassword> {
                                     ],
                                   ),
                                 ),
-
-
                                 Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: RaisedButton(
@@ -189,11 +204,10 @@ class ForgotPasswordState extends State<ForgotPassword> {
                                         setState(() {
                                           _validate1 = true;
                                         });
-                                      } else{
+                                      } else {
                                         _validate1 = false;
                                         forgotPassword();
                                       }
-
                                     },
                                     color: Color(0xff484848),
                                     padding: EdgeInsets.all(0.0),
@@ -224,8 +238,6 @@ class ForgotPasswordState extends State<ForgotPassword> {
                                     ),
                                   ),
                                 ),
-
-
                               ],
                             )),
                       ),

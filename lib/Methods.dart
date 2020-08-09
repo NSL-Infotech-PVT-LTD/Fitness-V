@@ -71,6 +71,19 @@ void termsBottom(String title, context) {
                     SizedBox(
                       height: 50,
                     ),
+                    Padding(
+                        padding: EdgeInsets.only(right: 20),
+                        child: GestureDetector(
+                          child: Align(
+                              alignment: Alignment.topRight,
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.black,
+                              )),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        )),
                     Text(title,
                         style: TextStyle(
                           fontSize: 16,

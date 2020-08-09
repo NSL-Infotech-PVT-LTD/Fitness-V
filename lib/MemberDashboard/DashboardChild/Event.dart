@@ -1,10 +1,10 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Methods/ents.dart';
-import 'package:volt/ResponseModel/UserResponse.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -28,12 +28,6 @@ class Event extends StatefulWidget {
 class _EventState extends State<Event> {
   Evet evnts;
 
-  String imag = '';
-  List gym_list;
-  List pool_and_beach_list;
-  List guest_list;
-  List fairMont_list;
-
   NetworkUtil _netUtil = new NetworkUtil();
   String _serverResponse = "";
   bool _isLoading = false;
@@ -45,31 +39,27 @@ class _EventState extends State<Event> {
 
   // SharedPreferences variables
   SharedPreferences prefs;
-  String _id;
 
   var apiResponse;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _createveentsupcomingList();
-    _createveentspastList();
+    String auth = '';
+    getString(USER_AUTH).then((value) {
+      auth = value;
+      print('jugraj' + auth);
+    }).whenComplete(
+        () => {_createveentsupcomingList(auth), _createveentspastList(auth)});
   }
 
-  void _createveentsupcomingList() async {
-    //prefs = await SharedPreferences.getInstance();
-
-    // TODO: Ater the SharedPreferences object is created at login, delete
-
-    _netUtil.post(context, Constants.event, body: {
+  void _createveentsupcomingList(String auth) async {
+    _netUtil.post(context, Constants.event, auth, body: {
       "order_by": "upcoming",
     }).then((response) async {
       print("Sanjeev-->" + response.body);
 
       var extracted = json.decode(response.body);
-      //  print(evnts.length);
       if ((extracted["code"] == 200)) {
         setState(() {
           print(
@@ -83,7 +73,6 @@ class _EventState extends State<Event> {
           evnts = Evet.fromJson(eventsInJsonFormat);
           _isLoading = false;
         });
-        // TODO: Add code for the No Blocked Users scenario.
       } else {
         _serverResponse = extracted['error'];
 
@@ -100,12 +89,12 @@ class _EventState extends State<Event> {
   }
 
   ///past
-  void _createveentspastList() async {
+  void _createveentspastList(String auth) async {
     //prefs = await SharedPreferences.getInstance();
 
     // TODO: Ater the SharedPreferences object is created at login, delete
 
-    _netUtil.post(context, Constants.event, body: {
+    _netUtil.post(context, Constants.event, auth, body: {
       "order_by": "past",
     }).then((response) async {
       print("Sanjeev-->" + response.body);
@@ -229,7 +218,7 @@ class _EventState extends State<Event> {
                       ),
                       // SizedBox(height: SizeConfig.blockSizeVertical * 0.),
                       Container(
-                         //   color: Colors.black,
+                        //   color: Colors.black,
                         padding: EdgeInsets.all(5),
                         height: SizeConfig.screenHeight * 0.5,
                         child: TabBarView(
@@ -252,7 +241,7 @@ class _EventState extends State<Event> {
                                             children: <Widget>[
                                               Container(
                                                 padding: EdgeInsets.all(10),
-                                             //   color: Colors.red,
+                                                //   color: Colors.red,
                                                 height:
                                                     SizeConfig.screenHeight *
                                                         0.22,
@@ -275,48 +264,53 @@ class _EventState extends State<Event> {
                                                     )),
                                               ),
                                               Container(
-                                                padding: EdgeInsets.only(left:20,bottom:20),
-                                                child:Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                //    mainAxisAlignment: MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Container(
-                                              //      color:Colors.red,
-                                                      //   padding: EdgeInsets.only(left:10),
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Text(
-                                                        myData[index]['name'],
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 22.0),
-                                                      )),
-                                                  SizedBox(
-                                                    width: SizeConfig.screenWidth * 0.2,
-                                                    child:Divider(
-                                                    thickness: 2,
-                                                    color: Colors.white,
-                                                    height: 9,
-                                                  )),
+                                                padding: EdgeInsets.only(
+                                                    left: 20, bottom: 20),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  //    mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Container(
+                                                        //      color:Colors.red,
+                                                        //   padding: EdgeInsets.only(left:10),
+                                                        alignment:
+                                                            Alignment.topLeft,
+                                                        child: Text(
+                                                          myData[index]['name'],
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 22.0),
+                                                        )),
+                                                    SizedBox(
+                                                        width: SizeConfig
+                                                                .screenWidth *
+                                                            0.2,
+                                                        child: Divider(
+                                                          thickness: 2,
+                                                          color: Colors.white,
+                                                          height: 9,
+                                                        )),
 //                                                  SizedBox(
 //                                                    height: SizeConfig.blockSizeVertical * 3,
 //                                                  ),
-                                                  Container(
-                                                      // padding: EdgeInsets.all(20),
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Text(
-                                                        myData[index]
-                                                            ['description'],
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15.0),
-                                                      )),
-
-                                                ],
-                                              ),
-                                              )], ////gro
+                                                    Container(
+                                                        // padding: EdgeInsets.all(20),
+                                                        alignment:
+                                                            Alignment.topLeft,
+                                                        child: Text(
+                                                          myData[index]
+                                                              ['description'],
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15.0),
+                                                        )),
+                                                  ],
+                                                ),
+                                              )
+                                            ], ////gro
                                           ),
                                         ],
                                       ),
@@ -346,47 +340,52 @@ class _EventState extends State<Event> {
                                                 padding: EdgeInsets.all(10),
                                                 //   color: Colors.red,
                                                 height:
-                                                SizeConfig.screenHeight *
-                                                    0.22,
+                                                    SizeConfig.screenHeight *
+                                                        0.22,
                                                 width: SizeConfig.screenWidth,
                                                 child: GestureDetector(
                                                     onTap: () {},
                                                     child: FadeInImage
                                                         .assetNetwork(
                                                       placeholder:
-                                                      baseImageAssetsUrl +
-                                                          'logo_white.png',
+                                                          baseImageAssetsUrl +
+                                                              'logo_white.png',
                                                       image: BASE_URL +
                                                           Constants.uploads +
                                                           Constants.event +
                                                           "/" +
                                                           myDatapast[index]
-                                                          ['image'],
+                                                              ['image'],
                                                       fit: BoxFit.cover,
                                                       //  height: SizeConfig.screenHeight * .25,
                                                     )),
                                               ),
                                               Container(
-                                                padding: EdgeInsets.only(left:20,bottom:20),
-                                                child:Column(
+                                                padding: EdgeInsets.only(
+                                                    left: 20, bottom: 20),
+                                                child: Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   //    mainAxisAlignment: MainAxisAlignment.start,
                                                   children: <Widget>[
                                                     Container(
-                                                      //      color:Colors.red,
-                                                      //   padding: EdgeInsets.only(left:10),
+                                                        //      color:Colors.red,
+                                                        //   padding: EdgeInsets.only(left:10),
                                                         alignment:
-                                                        Alignment.topLeft,
+                                                            Alignment.topLeft,
                                                         child: Text(
-                                                          myDatapast[index]['name'],
+                                                          myDatapast[index]
+                                                              ['name'],
                                                           style: TextStyle(
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize: 22.0),
                                                         )),
                                                     SizedBox(
-                                                        width: SizeConfig.screenWidth * 0.2,
-                                                        child:Divider(
+                                                        width: SizeConfig
+                                                                .screenWidth *
+                                                            0.2,
+                                                        child: Divider(
                                                           thickness: 2,
                                                           color: Colors.white,
                                                           height: 9,
@@ -395,20 +394,21 @@ class _EventState extends State<Event> {
 //                                                    height: SizeConfig.blockSizeVertical * 3,
 //                                                  ),
                                                     Container(
-                                                      // padding: EdgeInsets.all(20),
+                                                        // padding: EdgeInsets.all(20),
                                                         alignment:
-                                                        Alignment.topLeft,
+                                                            Alignment.topLeft,
                                                         child: Text(
                                                           myDatapast[index]
-                                                          ['description'],
+                                                              ['description'],
                                                           style: TextStyle(
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize: 15.0),
                                                         )),
-
                                                   ],
                                                 ),
-                                              )], ////gro
+                                              )
+                                            ], ////gro
                                           ),
                                         ],
                                       ),

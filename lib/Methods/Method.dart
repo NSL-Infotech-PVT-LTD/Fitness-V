@@ -3,6 +3,10 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:volt/AuthScreens/LoginScreen.dart';
+
+import 'package:volt/Methods.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Value/CColor.dart';
 
 ProgressDialog progress(context) {
@@ -58,7 +62,6 @@ void cupertinoDialog(context, String negativeText, String positiveText) {
   CupertinoDialogAction(
       child: Column(
         children: <Widget>[
-
           Text(
             negativeText,
             style: TextStyle(color: Color(0xFF71747E), fontSize: 18.0),
@@ -72,10 +75,7 @@ void cupertinoDialog(context, String negativeText, String positiveText) {
       isDefaultAction: true,
       onPressed: () {
         Navigator.pop(context, true);
-      }
-
-
-  );
+      });
 }
 
 void exitDialog(context) {
@@ -93,11 +93,35 @@ void exitDialog(context) {
             ),
             FlatButton(
                 child: const Text('Ok'),
-                onPressed: () =>
-                {
-                  Navigator.pop(context),
-                  Navigator.pop(context),
-                }),
+                onPressed: () => {
+                      Navigator.pop(context),
+                      Navigator.pop(context),
+                    }),
+          ],
+        );
+      });
+}
+
+void logoutDialog(context) {
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Logout!"),
+          content: Text("Are you sure, you want to logout."),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            FlatButton(
+                child: const Text('Ok'),
+                onPressed: () => {
+                      clearedShared(),
+                      Navigator.pushAndRemoveUntil(context,
+                          ScaleRoute(page: LoginScreen()), (r) => false),
+                    }),
           ],
         );
       });
@@ -146,16 +170,13 @@ void showProgress(context, String msg) {
       backgroundColor: Colors.white,
       progressWidget: CircularProgressIndicator(
         backgroundColor: CColor.App_Color,
-
       ),
       elevation: 10.0,
       insetAnimCurve: Curves.easeInOut,
       progress: 0.0,
       maxProgress: 100.0,
       progressTextStyle: TextStyle(
-          color: CColor.App_Color,
-          fontSize: 10.0,
-          fontWeight: FontWeight.w400),
+          color: CColor.App_Color, fontSize: 10.0, fontWeight: FontWeight.w400),
       messageTextStyle: TextStyle(
         color: Colors.black,
         fontSize: 12.0,
