@@ -78,29 +78,7 @@ class SignupState extends State<SignupScreen> {
       if (order != null) fromDate = formatter.format(order);
     });
   }
-// Draws the magnifier borders.
-  Widget _buildMagnifierScreen() {
-    final Color resolvedBorderColor = CupertinoDynamicColor.resolve(Colors.black26, context);
-    print(resolvedBorderColor);
 
-
-    return IgnorePointer(
-      child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            // remove this attribute
-            border: Border(
-              top: BorderSide(width: 0.0, color: resolvedBorderColor),
-              bottom: BorderSide(width: 0.0, color: resolvedBorderColor),
-            ),
-          ),
-          constraints: BoxConstraints.expand(
-            height: SizeConfig.screenHeight,
-          ),
-        ),
-      ),
-    );
-  }
 
   Future<DateTime> getData() {
 

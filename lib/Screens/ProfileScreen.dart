@@ -6,6 +6,7 @@ import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
+import 'package:volt/Profile/userProfile.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -21,8 +22,87 @@ class ProfileState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    super.initState();
     _loadAuth();
+    super.initState();
+  }
+
+  void getTerms() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        getTermsApi().then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null) {
+              if (response.data.config != null &&
+                  response.data.config.isNotEmpty)
+                termsBottom(
+                    'Terms & Conditions', response.data.config, context);
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
+
+  void getPrivacy() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        getPrivacyApi().then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null) {
+              if (response.data.config != null &&
+                  response.data.config.isNotEmpty)
+                termsBottom('Privacy Policy', response.data.config, context);
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        }).whenComplete(() => dismissDialog(context));
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
+
+  void getAbout() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        getAboutApi().then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null) {
+              if (response.data.config != null &&
+                  response.data.config.isNotEmpty)
+                termsBottom(contactAndAboutVolt, response.data.config, context);
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
   }
 
   _loadAuth() async {
@@ -145,21 +225,25 @@ class ProfileState extends State<ProfileScreen> {
                   )),
             ),
             myDivider(),
-            Container(
-              padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SvgPicture.asset(baseImageAssetsUrl + 'new.svg'),
-                  Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'My Profile',
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: Color(0xff8B8B8B), fontSize: 16),
-                      ))
-                ],
+            GestureDetector(
+              onTap: () =>
+                  Navigator.push(context, ScaleRoute(page: UserProfile())),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SvgPicture.asset(baseImageAssetsUrl + 'new.svg'),
+                    Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'My Profile',
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(color: Color(0xff8B8B8B), fontSize: 16),
+                        ))
+                  ],
+                ),
               ),
             ),
             myDivider(),
@@ -208,7 +292,7 @@ class ProfileState extends State<ProfileScreen> {
             myDivider(),
             GestureDetector(
                 onTap: () {
-                  termsBottom('Privacy Policy', context);
+                  getPrivacy();
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
@@ -228,27 +312,31 @@ class ProfileState extends State<ProfileScreen> {
                   ),
                 )),
             myDivider(),
-            Container(
-              padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SvgPicture.asset(baseImageAssetsUrl + 'headphones.svg'),
-                  Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Contact & About VOLT',
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: Color(0xff8B8B8B), fontSize: 16),
-                      ))
-                ],
-              ),
-            ),
+            GestureDetector(
+                onTap: () {
+                  getAbout();
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SvgPicture.asset(baseImageAssetsUrl + 'headphones.svg'),
+                      Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                            contactAndAboutVolt,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(0xff8B8B8B), fontSize: 16),
+                          ))
+                    ],
+                  ),
+                )),
             myDivider(),
             GestureDetector(
               onTap: () {
-                termsBottom('Terms & Conditions', context);
+                getTerms();
               },
               child: Container(
                   padding: EdgeInsets.fromLTRB(40, 25, 40, 25),

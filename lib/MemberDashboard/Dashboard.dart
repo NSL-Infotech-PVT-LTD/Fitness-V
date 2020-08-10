@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
-import 'package:volt/MemberDashboard/DashboardChild/Event.dart';
+import 'package:volt/MemberDashboard/DashboardChild/Event/Event.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
 import 'package:volt/Screens/ProfileScreen.dart';

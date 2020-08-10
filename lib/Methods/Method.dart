@@ -130,16 +130,16 @@ void logoutDialog(context) {
       });
 }
 
-Widget whitePlaceHolder(String imageLink,double height,double width) => FadeInImage.assetNetwork(
+Widget whitePlaceHolder(String roleUrl,String imageLink,double height,double width) => FadeInImage.assetNetwork(
       placeholder: baseImageAssetsUrl + 'logo_white.png',
-      image: BASE_URL + IMAGE_URL + imageLink,
+      image: BASE_URL+roleUrl  + imageLink,
       fit: BoxFit.cover,
       height:height,
     );
 
-Widget blackPlaceHolder(String imageLink,double height,double width) => FadeInImage.assetNetwork(
+Widget blackPlaceHolder(String roleUrl,String imageLink,double height,double width) => FadeInImage.assetNetwork(
       placeholder: baseImageAssetsUrl + 'logo_black.png',
-      image: BASE_URL + IMAGE_URL + imageLink,
+      image: BASE_URL + roleUrl + imageLink,
       fit: BoxFit.cover,
       width: width,
       height: height,

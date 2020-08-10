@@ -12,6 +12,12 @@ String GETPROFILE = BASE_URL + "api/get-profile";
 String RESET_PASSWORD = BASE_URL + "api/reset-password";
 String getTrainersList = BASE_URL + "api/trainers";
 String trainers = BASE_URL + "api/trainer";
+String profile = BASE_URL + "api/get-profile";
+String trainerReviews = BASE_URL + "api/trainer/reviews";
+String eventDetails = BASE_URL + "api/event";
+String privacyUrl = BASE_URL + "api/event";
+String aboutUsUrl = BASE_URL + "api/config/about_us";
+String termsConditionUrl = BASE_URL + "api/config/terms_and_conditions";
 
 String CUSTOMER_ID = "";
 
@@ -27,6 +33,7 @@ String Authorization = "Authorization";
 String Content_Type = "Content-Type";
 String CUSTOMER_NAME = "customer_name";
 String Product_ID = "product_id";
+String trainerId = "trainer_id";
 
 String SEARCH = "search";
 String LIMIT = "limit";
@@ -58,6 +65,7 @@ String ORDER_BY = "price_high";
 String BASE_URL = "https://dev.netscapelabs.com/volt/public/";
 String DEALER_PROFILE_IMAGE = "uploads/dealer/profile_image/";
 String IMAGE_URL = "uploads/roles/";
+String imageUrlEvent = "uploads/events/";
 String MORE_IMAGE_URL = "uploads/product/images/";
 String BARCODE_URL = "uploads/product/barcode/";
 //flutter build apk --release --target-platform=android-arm64
@@ -103,6 +111,20 @@ Future<StatusResponse> getTrainersDetailApi(
   return StatusResponse.fromJson(map);
 }
 
+Future<StatusResponse> getProfileDetailApi(
+    String auth) async {
+  final response = await http.post(profile,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': auth
+      },);
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  print("getProfileDetailApi--->" + map.toString());
+
+  return StatusResponse.fromJson(map);
+}
+
 Future<StatusResponse> getRoles() async {
   final response = await http.post(
     ROLE,
@@ -123,6 +145,25 @@ Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
+Future<StatusResponse> getTermsApi() async {
+  final response = await http.get(termsConditionUrl);
+  print("Terms---->" + response.body.toString());
+  return StatusResponse.fromJson(json.decode(response.body));
+}
+
+Future<StatusResponse> getPrivacyApi() async {
+  final response = await http.get(privacyUrl);
+  print("Privacy---->" + response.body.toString());
+  return StatusResponse.fromJson(json.decode(response.body));
+}
+
+Future<StatusResponse> getAboutApi() async {
+
+  final response = await http.get(aboutUsUrl);
+  print("About---->" + response.body.toString());
+  return StatusResponse.fromJson(json.decode(response.body));
+}
+
 Future<StatusResponse> resetPassword(Map<String, String> parms) async {
   final response = await http.post(RESET_PASSWORD,
       headers: <String, String>{
@@ -136,13 +177,26 @@ Future<StatusResponse> resetPassword(Map<String, String> parms) async {
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getProfile(String userAuth) async {
-  final response = await http.post(
-    GETPROFILE,
-    headers: header(userAuth),
-  );
+Future<StatusResponse> getEventDetailsApi(
+    String userAuth, Map<String, String> parms) async {
+  final response = await http.post(eventDetails,
+      headers: header(userAuth), body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  print("EventDetail------>" + map.toString());
 
-  return StatusResponse.fromJson(json.decode(response.body));
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> getTrainerReviewsApi(
+    String userAuth, Map<String, String> parms) async {
+  final response = await http.post(trainerReviews,
+      headers: header(userAuth), body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  print("getTrainerReviewsApi------>" + map.toString());
+
+  return StatusResponse.fromJson(map);
 }
 
 header(String auth) => {

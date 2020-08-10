@@ -49,7 +49,7 @@ Widget backWithArrowAndIcon(String imageUrl) => Container(
       padding: EdgeInsets.fromLTRB(padding10, padding5, padding10, padding10),
     );
 
-void termsBottom(String title, context) {
+void termsBottom(String title,String msg, context) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -95,7 +95,7 @@ void termsBottom(String title, context) {
                     ),
                     Padding(
                       padding: EdgeInsets.all(20),
-                      child: Text(loremIpsum,
+                      child: Text(msg ==null?loremIpsum:msg,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,

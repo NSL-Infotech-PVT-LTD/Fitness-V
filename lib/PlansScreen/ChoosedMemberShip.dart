@@ -108,7 +108,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: widget.response['image'] != null
-                        ? blackPlaceHolder(
+                        ? blackPlaceHolder(IMAGE_URL,
                             widget.response['image'],
                             SizeConfig.screenHeight * .25,
                             SizeConfig.screenWidth)

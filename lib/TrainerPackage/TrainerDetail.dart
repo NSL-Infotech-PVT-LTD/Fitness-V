@@ -11,6 +11,7 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'package:volt/util/starDisplay.dart';
 
 import '../Methods.dart';
 
@@ -24,24 +25,25 @@ class TrainerDetail extends StatefulWidget {
 }
 
 class TrainerDetailState extends State<TrainerDetail> {
-  String fullName = '', services = '', about = '';
+  String fullName = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   String rating;
 
+  int myId = 0;
+  String auth = '';
+
   @override
   void initState() {
-    String auth = '';
     getString(USER_AUTH)
         .then((value) => {auth = value})
-        .whenComplete(() => {getTrainerDetail(auth)});
+        .whenComplete(() => {_getTrainerDetail(auth)});
     super.initState();
   }
 
-  void getTrainerDetail(String auth) async {
+  void _getTrainerDetail(String auth) async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
         showProgress(context, "Please wait.....");
-
         Map<String, String> parms = {
           ID: widget.id.toString(),
         };
@@ -50,11 +52,13 @@ class TrainerDetailState extends State<TrainerDetail> {
           if (response.status) {
             if (response.data != null && response.data.trainer != null) {
               fullName = response.data.trainer.full_name;
+              imgLink = response.data.trainer.image;
               services = response.data.trainer.services;
               about = response.data.trainer.about;
               reviewsCount = response.data.trainer.booking_reviewed_cnt;
               rating = response.data.trainer.rating_avg;
               trainees = response.data.trainer.booking_cnt;
+              _getTrainerReview();
               setState(() {});
             }
           } else {
@@ -66,6 +70,28 @@ class TrainerDetailState extends State<TrainerDetail> {
       } else {
         showDialogBox(context, 'Internet Error', pleaseCheckInternet);
         dismissDialog(context);
+      }
+    });
+  }
+  void _getTrainerReview() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        Map<String, String> parms = {
+          ID: widget.id.toString(),
+        };
+        getTrainerReviewsApi(auth, parms).then((response) {
+          if (response.status) {
+            if (response.data != null && response.data.trainer != null) {
+
+              setState(() {});
+            }
+          } else {
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
       }
     });
   }
@@ -94,8 +120,9 @@ class TrainerDetailState extends State<TrainerDetail> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.id.toString() + "=====>TrainerId");
     SizeConfig().init(context);
+    myId = widget.id;
+
     return Scaffold(
       body: SingleChildScrollView(
         physics: ScrollPhysics(),
@@ -158,13 +185,20 @@ class TrainerDetailState extends State<TrainerDetail> {
                       Positioned(
                         bottom: 6,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 20),
-                          child: Image.asset(
-                            baseImageAssetsUrl + 'dummy2.png',
-                            fit: BoxFit.cover,
-                            height: SizeConfig.blockSizeVertical * 25,
-                          ),
-                        ),
+                            padding: EdgeInsets.only(left: 20, right: 20),
+                            child: imgLink == null
+                                ? Image.asset(
+                                    baseImageAssetsUrl + 'logo_black.png',
+                                    fit: BoxFit.none,
+                                    height: SizeConfig.blockSizeVertical * 15,
+                                  )
+                                : FadeInImage.assetNetwork(
+                                    placeholder:
+                                        baseImageAssetsUrl + 'logo_black.png',
+                                    image: BASE_URL + IMAGE_URL + imgLink,
+                                    fit: BoxFit.cover,
+                                    height: SizeConfig.blockSizeVertical * 25,
+                                  )),
                       ),
                       SvgPicture.asset(
                         baseImageAssetsUrl + 'popular.svg',
@@ -207,31 +241,13 @@ class TrainerDetailState extends State<TrainerDetail> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.black12,
-                                size: 20,
-                              ),
+                              StarDisplayWidget(
+                                value: rating==null?0.0:double.parse(rating),
+                                filledStar: Icon(Icons.star,
+                                    color: Colors.black, size: 20),
+                                unfilledStar: Icon(Icons.star,
+                                    color: CColor.PRIMARYCOLOR, size: 20),
+                              )
                             ],
                           ),
                           padding: EdgeInsets.only(top: 10),
@@ -399,12 +415,16 @@ class TrainerDetailState extends State<TrainerDetail> {
                                                     context,
                                                     new MaterialPageRoute(
                                                         builder: (context) =>
-                                                            TrainerDetail()));
+                                                            TrainerDetail(
+                                                              id: myId,
+                                                            )));
                                               },
                                             ),
                                           );
                                         },
-                                        itemCount: trainerList.length,
+                                        itemCount: trainerList == null
+                                            ? 0
+                                            : trainerList.length,
                                         scrollDirection: Axis.horizontal,
                                       ),
                                     )),

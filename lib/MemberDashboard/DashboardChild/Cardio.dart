@@ -176,6 +176,7 @@ class _CardioState extends State<Cardio> {
                     child: RecomendedTrainer(
                       trainerClass: trainerList[index],
                       callback: () {
+                        print("CheckMyList------>"+checkList.toString());
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
@@ -226,7 +227,7 @@ class RecomendedTrainer extends StatelessWidget {
                       width: 125,
                       height: 110,
                     )
-                  : blackPlaceHolder(trainerClass.imgLink, 110.0, 110.0),
+                  : blackPlaceHolder(IMAGE_URL,trainerClass.imgLink, 110.0, 110.0),
               Padding(
                 padding: EdgeInsets.only(left: 5, top: 5),
                 child: Text(

@@ -2,6 +2,8 @@ import 'package:volt/ResponseModel/PleanDetail.dart';
 
 class UserResponse {
   int id;
+  String name;
+  String location;
   int booking_cnt;
   int booking_reviewed_cnt;
   String rating_avg;
@@ -9,6 +11,12 @@ class UserResponse {
   String first_name;
   String middle_name;
   String last_name;
+  String mobile;
+  String emergency_contact_no;
+  String emirates_id;
+  String address;
+  String email;
+  String designation;
   String category;
   String image;
   String params;
@@ -18,14 +26,23 @@ class UserResponse {
   String deleted_at;
   String created_at;
   String updated_at;
+  String birth_date;
   List<PlanDetail> plan_detail;
   UserResponse(
     this.id,
+    this.name,
+    this.location,
     this.booking_cnt,
     this.booking_reviewed_cnt,
     this.rating_avg,
     this.full_name,
     this.first_name,
+    this.mobile,
+    this.emergency_contact_no,
+    this.email,
+    this.designation,
+    this.emirates_id,
+    this.address,
     this.middle_name,
     this.last_name,
     this.category,
@@ -38,15 +55,24 @@ class UserResponse {
     this.created_at,
     this.updated_at,
     this.plan_detail,
+    this.birth_date,
   );
 
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    name = json['name'];
+    location = json['location'];
     booking_reviewed_cnt = json['booking_reviewed_cnt'];
     booking_cnt = json['booking_cnt'];
     rating_avg = json['rating_avg'];
     full_name = json['full_name'];
     first_name = json['first_name'];
+    mobile = json['mobile'];
+    emergency_contact_no = json['emergency_contact_no'];
+    email = json['email'];
+    designation = json['designation'];
+    emirates_id = json['emirates_id'];
+    address = json['address'];
     middle_name = json['middle_name'];
     last_name = json['last_name'];
     category = json['category'];
@@ -58,17 +84,26 @@ class UserResponse {
     deleted_at = json['deleted_at'];
     created_at = json['created_at'];
     updated_at = json['updated_at'];
+    birth_date = json['birth_date'];
     plan_detail = json['plan_detail'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['name'] = this.name;
+    data['location'] = this.location;
     data['booking_reviewed_cnt'] = this.booking_reviewed_cnt;
     data['rating_avg'] = this.rating_avg;
     data['booking_cnt'] = this.booking_cnt;
     data['full_name'] = this.full_name;
     data['first_name'] = this.first_name;
+    data['mobile'] = this.mobile;
+    data['emergency_contact_no'] = this.emergency_contact_no;
+    data['email'] = this.email;
+    data['designation'] = this.designation;
+    data['emirates_id'] = this.emirates_id;
+    data['address'] = this.address;
     data['middle_name'] = this.middle_name;
     data['last_name'] = this.last_name;
     data['category'] = this.category;
@@ -80,6 +115,7 @@ class UserResponse {
     data['deleted_at'] = this.deleted_at;
     data['created_at'] = this.created_at;
     data['updated_at'] = this.updated_at;
+    data['birth_date'] = this.birth_date;
     data['plan_detail'] = this.plan_detail;
   }
 }

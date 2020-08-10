@@ -6,6 +6,8 @@ const guest = 'Guest';
 const choosePlan = 'Choose Plan';
 const today = 'Today';
 const recent = 'Recent';
+const updateProfile = 'Update Profile';
+const contactAndAboutVolt = 'Contact & About VOLT';
 const back = 'Back';
 const notifications = 'Notifications';
 const groupClasses = 'Group Classes';
@@ -58,7 +60,7 @@ const pleaseCheckInternet =
 const upcoming = 'Upcoming';
 const recent1  = 'Recent';
 const events  = 'Events';
-const fantastic  = ' We have a fantastic range of special events. Here are some of our current and recent'
+const fantastic  = 'We have a fantastic range of special events. Here are some of our current and recent'
     '  activities. designed to help you enjoy your Volt membership to the max!';
 const fitness  = 'Functional Fitness workout';
 const group ='Group Class. 3-4 Hrs. Healthy lifestyle concept';

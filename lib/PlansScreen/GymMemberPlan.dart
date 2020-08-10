@@ -261,7 +261,7 @@ class GymMemberState extends State<GymMemberPlan> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: imageLink != null
-                                  ? whitePlaceHolder(imageLink,SizeConfig.screenHeight * .25,0.0)
+                                  ? whitePlaceHolder(IMAGE_URL,imageLink,SizeConfig.screenHeight * .25,0.0)
                                   : Image.asset(baseImageAssetsUrl + 'gym.png',
                                       fit: BoxFit.cover,
                                       height: SizeConfig.screenHeight * .25)),

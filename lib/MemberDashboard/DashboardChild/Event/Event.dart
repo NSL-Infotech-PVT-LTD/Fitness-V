@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:volt/Methods/Method.dart';
+import 'package:volt/MemberDashboard/DashboardChild/Event/eventDetail.dart';
+import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Methods/ents.dart';
@@ -29,7 +30,6 @@ class _EventState extends State<Event> {
   Evet evnts;
 
   NetworkUtil _netUtil = new NetworkUtil();
-  String _serverResponse = "";
   bool _isLoading = false;
   Map<String, dynamic> data;
   List<dynamic> myData = new List<dynamic>();
@@ -74,8 +74,6 @@ class _EventState extends State<Event> {
           _isLoading = false;
         });
       } else {
-        _serverResponse = extracted['error'];
-
         setState(() {
           _isLoading = false;
         });
@@ -97,8 +95,6 @@ class _EventState extends State<Event> {
     _netUtil.post(context, Constants.event, auth, body: {
       "order_by": "past",
     }).then((response) async {
-      print("Sanjeev-->" + response.body);
-
       var extracted = json.decode(response.body);
 
       if ((extracted["code"] == 200)) {
@@ -113,8 +109,6 @@ class _EventState extends State<Event> {
         });
         // TODO: Add code for the No Blocked Users scenario.
       } else {
-        _serverResponse = extracted['error'];
-
         setState(() {
           _isLoading = false;
         });
@@ -136,43 +130,47 @@ class _EventState extends State<Event> {
     return _isLoading
         ? Center(child: new CircularProgressIndicator())
         : Column(
-            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               GestureDetector(
                   onTap: () {},
                   child: Image.asset(
                     baseImageAssetsUrl + 'fitness.png',
+                    fit: BoxFit.cover,
+                    width: SizeConfig.screenWidth,
+                    height: SizeConfig.screenHeight * .17,
                   )),
               SizedBox(height: 10),
               Row(
                 children: <Widget>[
                   SizedBox(
-                    width: SizeConfig.blockSizeHorizontal * 10,
+                    width: SizeConfig.blockSizeHorizontal * 5,
                   ),
                   SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
-                      height: 20, width: 20),
+                      height: 15, width: 15),
                   SizedBox(
                     width: SizeConfig.blockSizeHorizontal * 3,
                   ),
                   Text(
                     events,
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
               Row(
                 children: <Widget>[
                   SizedBox(
-                    width: SizeConfig.blockSizeHorizontal * 16,
+                    width: SizeConfig.blockSizeHorizontal * 12,
                   ),
                   Expanded(
                     child: Text(
                       fantastic,
-                      maxLines: 3,
-                      textAlign: TextAlign.center,
+                      style: TextStyle(color: CColor.LightGrey, fontSize: 10),
                     ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 20,
               ),
               DefaultTabController(
                   length: 2,
@@ -181,9 +179,9 @@ class _EventState extends State<Event> {
                     children: <Widget>[
                       Card(
                         elevation: 5,
-                        color: CColor.WHITE,
+                        color: Color(0xFFE0E0E0),
                         child: Container(
-                          height: 40,
+                          height: 50,
                           padding: EdgeInsets.only(left: padding15),
                           width: SizeConfig.screenWidth,
                           child: TabBar(
@@ -207,29 +205,33 @@ class _EventState extends State<Event> {
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 3,
                       ),
-                      Row(
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            baseImageAssetsUrl + 'filling_fast.svg',
-                            height: 30,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
+
                       // SizedBox(height: SizeConfig.blockSizeVertical * 0.),
                       Container(
                         //   color: Colors.black,
                         padding: EdgeInsets.all(5),
-                        height: SizeConfig.screenHeight * 0.5,
+                        height: SizeConfig.screenHeight * 0.7,
                         child: TabBarView(
                           children: <Widget>[
-                            Column(
+                           new Column(
                               children: <Widget>[
-                                ListView.builder(
-                                  padding: EdgeInsets.all(8),
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      baseImageAssetsUrl + 'filling_fast.svg',
+                                      height: 30,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ],
+                                ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 350, minHeight: 300.0),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8.0),
+                          physics: BouncingScrollPhysics(),
+                          primary: false,
+                          scrollDirection: Axis.vertical,
                                   itemCount: myData.length,
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
@@ -242,12 +244,18 @@ class _EventState extends State<Event> {
                                               Container(
                                                 padding: EdgeInsets.all(10),
                                                 //   color: Colors.red,
-                                                height:
-                                                    SizeConfig.screenHeight *
+                                                height: SizeConfig.screenHeight *
                                                         0.22,
                                                 width: SizeConfig.screenWidth,
                                                 child: GestureDetector(
-                                                    onTap: () {},
+                                                    onTap: () { Navigator.push(
+                                                        context,
+                                                        ScaleRoute(
+                                                            page: EventDetail(
+                                                              id: myData[index]['id'],
+                                                              status: upcoming,
+                                                            )));
+                                                    },
                                                     child: FadeInImage
                                                         .assetNetwork(
                                                       placeholder:
@@ -302,9 +310,11 @@ class _EventState extends State<Event> {
                                                         child: Text(
                                                           myData[index]
                                                               ['description'],
+                                                          maxLines: 1,
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
+
                                                               fontSize: 15.0),
                                                         )),
                                                   ],
@@ -317,7 +327,7 @@ class _EventState extends State<Event> {
                                     );
                                   },
                                 ),
-                              ],
+                      )],
                             ),
                             //Todo 2nd tab
                             Column(
@@ -330,6 +340,9 @@ class _EventState extends State<Event> {
                                   itemCount: myDatapast.length,
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
+                                      onTap: () {
+
+                                      },
                                       child: Column(
                                         //    crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
@@ -344,21 +357,35 @@ class _EventState extends State<Event> {
                                                         0.22,
                                                 width: SizeConfig.screenWidth,
                                                 child: GestureDetector(
-                                                    onTap: () {},
-                                                    child: FadeInImage
-                                                        .assetNetwork(
-                                                      placeholder:
-                                                          baseImageAssetsUrl +
-                                                              'logo_white.png',
-                                                      image: BASE_URL +
-                                                          Constants.uploads +
-                                                          Constants.event +
-                                                          "/" +
-                                                          myDatapast[index]
-                                                              ['image'],
-                                                      fit: BoxFit.cover,
-                                                      //  height: SizeConfig.screenHeight * .25,
-                                                    )),
+                                                    onTap: () {  Navigator.push(
+                                                        context,
+                                                        ScaleRoute(
+                                                            page: EventDetail(
+                                                              id: myDatapast[index]
+                                                              ['id'],
+                                                              status: recent,
+                                                            )));},
+                                                    child: ColorFiltered(
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                          Colors.grey,
+                                                          BlendMode.saturation,
+                                                        ),
+                                                        child: FadeInImage
+                                                            .assetNetwork(
+                                                          placeholder:
+                                                              baseImageAssetsUrl +
+                                                                  'logo_black.png',
+                                                          image: BASE_URL +
+                                                              Constants
+                                                                  .uploads +
+                                                              Constants.event +
+                                                              "/" +
+                                                              myDatapast[index]
+                                                                  ['image'],
+                                                          fit: BoxFit.cover,
+                                                          //  height: SizeConfig.screenHeight * .25,
+                                                        ))),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.only(
@@ -417,103 +444,6 @@ class _EventState extends State<Event> {
                                 ),
                               ],
                             ),
-//                            Container(
-//                              //    height: 80,
-//                              //   color:Colors.red,
-//                              child: ListView.builder(
-//                                padding: EdgeInsets.all(10),
-//                                scrollDirection: Axis.vertical,
-//                                shrinkWrap: true,
-//                                physics: NeverScrollableScrollPhysics(),
-//                                itemCount: myDatapast.length,
-//                                itemBuilder: (context, index) {
-//                                  return GestureDetector(
-//                                    child: Column(
-//                                      //    crossAxisAlignment: CrossAxisAlignment.start,
-//                                      children: <Widget>[
-//                                        Stack(
-//                                          alignment: Alignment.bottomRight,
-//                                          children: <Widget>[
-//                                            Container(
-//                                              // height: SizeConfig.screenHeight * 0.3,
-//                                              // width: SizeConfig.screenWidth,
-//                                              child: GestureDetector(
-//                                                  onTap: () {},
-//                                                  child: Image.network(
-//                                                    BASE_URL +
-//                                                        Constants.uploads +
-//                                                        Constants.event +
-//                                                        "/" +
-//                                                        myDatapast[index]
-//                                                            ['image'],
-//                                                  )),
-//                                            ),
-//                                            Container(
-//                                              //   color: Colors.blue,
-//                                              height:
-//                                                  SizeConfig.screenHeight * 0.2,
-//                                              child: Column(
-//                                                crossAxisAlignment:
-//                                                    CrossAxisAlignment.start,
-//                                                children: <Widget>[
-//                                                  Container(
-////                                                          padding:
-////                                                              EdgeInsets.all(30),
-//                                                      alignment:
-//                                                          Alignment.bottomLeft,
-//                                                      child: Text(
-//                                                        myDatapast[index]
-//                                                            ['name'],
-//                                                        style: TextStyle(
-//                                                            color: Colors.white,
-//                                                            fontSize: 22.0),
-//                                                      )),
-//                                                  Divider(
-//                                                    color: Colors.red,
-//                                                  ),
-//                                                  Container(
-//                                                      padding:
-//                                                          EdgeInsets.all(20),
-//                                                      alignment:
-//                                                          Alignment.topLeft,
-//                                                      child: Text(
-//                                                        myDatapast[index]
-//                                                            ['description'],
-//                                                        style: TextStyle(
-//                                                            color: Colors.white,
-//                                                            fontSize: 15.0),
-//                                                      )),
-//
-////                                                  Padding(
-////                                                    padding: const EdgeInsets.only(left:27.0,bottom: 20),
-////                                                    child: SizedBox(
-//////                                                      width:
-//////                                                          SizeConfig.screenWidth *
-//////                                                              0.30,
-////                                                      //   height: SizeConfig.screenHeight * 0.9,
-////                                                      child: Divider(
-////                                                        thickness: 2.0,
-////                                                        color: Colors.red,
-////                                                      ),
-////                                                    ),
-////                                                  ),
-//                                                ],
-//                                              ),
-//                                            ),
-//                                          ], ////gro
-//                                        ),
-////                                          Divider(
-////                                            height: 9,
-////                                          ),
-////                                          Divider(
-////                                            height: 2,
-////                                          ),
-//                                      ],
-//                                    ),
-//                                  );
-//                                },
-//                              ),
-//                            ),
                           ],
                         ),
                       ),
@@ -544,58 +474,3 @@ void showMyDialog(context, String title, String message) {
         );
       });
 }
-
-Widget _CommonView(String image, String title, String des) => GestureDetector(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      image,
-                      width: 76,
-                      fit: BoxFit.cover,
-                      height: 76,
-                    )),
-                new Container(
-                  width: SizeConfig.blockSizeHorizontal * 50,
-                  padding: const EdgeInsets.only(left: padding25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        title,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.start,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5),
-                        child: Text(
-                          des,
-                          style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Spacer(),
-                //   Icon(Icons.arrow_forward_ios)
-              ],
-            ),
-          ],
-        ),
-        padding: EdgeInsets.all(padding30),
-      ),
-    );
