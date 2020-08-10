@@ -108,14 +108,10 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: widget.response['image'] != null
-                        ? FadeInImage.assetNetwork(
-                            placeholder: baseImageAssetsUrl + 'logo_black.png',
-                            image:
-                                BASE_URL + IMAGE_URL + widget.response['image'],
-                            fit: BoxFit.cover,
-                            width: SizeConfig.screenWidth,
-                            height: SizeConfig.screenHeight * .25,
-                          )
+                        ? blackPlaceHolder(
+                            widget.response['image'],
+                            SizeConfig.screenHeight * .25,
+                            SizeConfig.screenWidth)
                         : Image.asset(baseImageAssetsUrl + 'gym.png',
                             fit: BoxFit.cover,
                             width: SizeConfig.screenWidth,
@@ -380,8 +376,8 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                     response: widget.response['plan_detail'],
                     plan_index: plan_index,
                     type: "member",
-                roleId: widget.response['id'].toString(),
-              )));
+                    roleId: widget.response['id'].toString(),
+                  )));
     } else {
       Navigator.push(
           context,

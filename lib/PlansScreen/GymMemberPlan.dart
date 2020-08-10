@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/Methods.dart';
+import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/PlansScreen/ChoosedMemberShip.dart';
 import 'package:volt/Value/CColor.dart';
@@ -260,13 +261,7 @@ class GymMemberState extends State<GymMemberPlan> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: imageLink != null
-                                  ? FadeInImage.assetNetwork(
-                                      placeholder:
-                                          baseImageAssetsUrl + 'logo_white.png',
-                                      image: BASE_URL + IMAGE_URL + imageLink,
-                                      fit: BoxFit.cover,
-                                      height: SizeConfig.screenHeight * .25,
-                                    )
+                                  ? whitePlaceHolder(imageLink,SizeConfig.screenHeight * .25,0.0)
                                   : Image.asset(baseImageAssetsUrl + 'gym.png',
                                       fit: BoxFit.cover,
                                       height: SizeConfig.screenHeight * .25)),

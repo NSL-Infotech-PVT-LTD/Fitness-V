@@ -7,7 +7,10 @@ import 'package:volt/AuthScreens/LoginScreen.dart';
 
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Pref.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
+import 'package:volt/Value/SizeConfig.dart';
+import 'package:volt/Value/Strings.dart';
 
 ProgressDialog progress(context) {
   return ProgressDialog(
@@ -126,6 +129,21 @@ void logoutDialog(context) {
         );
       });
 }
+
+Widget whitePlaceHolder(String imageLink,double height,double width) => FadeInImage.assetNetwork(
+      placeholder: baseImageAssetsUrl + 'logo_white.png',
+      image: BASE_URL + IMAGE_URL + imageLink,
+      fit: BoxFit.cover,
+      height:height,
+    );
+
+Widget blackPlaceHolder(String imageLink,double height,double width) => FadeInImage.assetNetwork(
+      placeholder: baseImageAssetsUrl + 'logo_black.png',
+      image: BASE_URL + IMAGE_URL + imageLink,
+      fit: BoxFit.cover,
+      width: width,
+      height: height,
+    );
 
 class SlidingRight extends MaterialPageRoute {
   Widget page;

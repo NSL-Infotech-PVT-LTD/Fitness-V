@@ -75,7 +75,7 @@ class TrainerDetailState extends State<TrainerDetail> {
       (index) => RecomendedTrainerClass(
           trainerName: 'Neo Faith',
           trainerExperience: '6.5 Year Experinece',
-          imgLink: baseImageAssetsUrl + 'dummy2.png'));
+          imgLink: null));
 
   final reviewList = List<Reviews>.generate(
       10,
