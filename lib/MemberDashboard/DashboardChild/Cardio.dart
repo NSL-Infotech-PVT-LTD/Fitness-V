@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
-import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/TrainerPackage/TrainerDetail.dart';
 import 'package:volt/Value/Strings.dart';
 
@@ -47,7 +44,7 @@ class _CardioState extends State<Cardio> {
                   (index) => RecomendedTrainerClass(
                       trainerName: response.data.data[index]['full_name'],
                       trainerExperience: '6.5 Year Experinece',
-                      imgLink: baseImageAssetsUrl + 'dummy2.png'));
+                      imgLink: response.data.data[index]['image']));
 
               setState(() {});
             }
@@ -222,12 +219,14 @@ class RecomendedTrainer extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Image.asset(
-                trainerClass.imgLink,
-                fit: BoxFit.cover,
-                width: 110,
-                height: 110,
-              ),
+              trainerClass.imgLink == null
+                  ? Image.asset(
+                      baseImageAssetsUrl + 'logo_black.png',
+
+                      width: 125,
+                      height: 110,
+                    )
+                  : blackPlaceHolder(trainerClass.imgLink, 110.0, 110.0),
               Padding(
                 padding: EdgeInsets.only(left: 5, top: 5),
                 child: Text(
