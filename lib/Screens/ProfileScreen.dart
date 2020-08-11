@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
 import 'package:volt/Profile/userProfile.dart';
@@ -19,10 +20,15 @@ class ProfileScreen extends StatefulWidget {
 
 class ProfileState extends State<ProfileScreen> {
   String _userName = '';
+  var result;
 
   @override
   void initState() {
     _loadAuth();
+    getString(userImage)
+        .then((value) => {result = value})
+        .whenComplete(() => setState(() {}));
+
     super.initState();
   }
 
@@ -105,6 +111,19 @@ class ProfileState extends State<ProfileScreen> {
     });
   }
 
+  _navigateAndDisplaySelection(BuildContext context) async {
+    result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserProfile()),
+    );
+    getString(userImage)
+        .then((value) => {result = value})
+        .whenComplete(() => setState(() {}));
+
+    print(result.toString() + "jugraj---------");
+    setState(() {});
+  }
+
   _loadAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -157,15 +176,21 @@ class ProfileState extends State<ProfileScreen> {
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 15,
-                    child: Image.asset(
-                      baseImageAssetsUrl + 'circleuser.png',
-                      height: 105,
-                      width: 105,
-                    ),
-                  ),
+                      left: SizeConfig.screenWidth * .37,
+                      right: SizeConfig.screenWidth * .37,
+                      bottom: 15,
+                      child: result == null
+                          ? Image.asset(
+                              baseImageAssetsUrl + 'circleuser.png',
+                              height: 105,
+                              width: 105,
+                            )
+                          : CircleAvatar(
+                              radius: 52.0,
+                              backgroundImage: NetworkImage(
+                                  BASE_URL + 'uploads/image/' + result),
+                              backgroundColor: Colors.transparent,
+                            )),
                 ],
               ),
             ),
@@ -178,26 +203,29 @@ class ProfileState extends State<ProfileScreen> {
                     TextStyle(color: Color(0xff8B8B8B), fontSize: textSize20),
               ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                    height: 32,
-                    width: 95,
-                    child: FlatButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit Details',
-                          textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: Color(0xff8B8B8B), fontSize: 12),
-                        ))),
-                Icon(
-                  Icons.edit,
-                  size: 20,
-                ),
-              ],
+            Visibility(
+              visible: false,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                      height: 32,
+                      width: 95,
+                      child: FlatButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Edit Details',
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: Color(0xff8B8B8B), fontSize: 12),
+                          ))),
+                  Icon(
+                    Icons.edit,
+                    size: 20,
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 30,
@@ -226,8 +254,7 @@ class ProfileState extends State<ProfileScreen> {
             ),
             myDivider(),
             GestureDetector(
-              onTap: () =>
-                  Navigator.push(context, ScaleRoute(page: UserProfile())),
+              onTap: () => _navigateAndDisplaySelection(context),
               child: Container(
                 padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
                 child: Row(

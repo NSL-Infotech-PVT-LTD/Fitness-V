@@ -1,8 +1,11 @@
 import 'package:volt/ResponseModel/PleanDetail.dart';
+import 'package:volt/ResponseModel/createdByDetail.dart';
 
 class UserResponse {
   int id;
   String name;
+  String review;
+  int rating;
   String location;
   int booking_cnt;
   int booking_reviewed_cnt;
@@ -27,6 +30,7 @@ class UserResponse {
   String created_at;
   String updated_at;
   String birth_date;
+  CreatedByModel created_by_detail;
   List<PlanDetail> plan_detail;
   UserResponse(
     this.id,
@@ -55,6 +59,7 @@ class UserResponse {
     this.created_at,
     this.updated_at,
     this.plan_detail,
+    this.created_by_detail,
     this.birth_date,
   );
 
@@ -85,6 +90,8 @@ class UserResponse {
     created_at = json['created_at'];
     updated_at = json['updated_at'];
     birth_date = json['birth_date'];
+    created_by_detail =
+    json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
     plan_detail = json['plan_detail'];
   }
 
@@ -117,5 +124,9 @@ class UserResponse {
     data['updated_at'] = this.updated_at;
     data['birth_date'] = this.birth_date;
     data['plan_detail'] = this.plan_detail;
+
+    if (this.created_by_detail != null) {
+      data['created_by_detail'] = this.created_by_detail.toJson();
+    }
   }
 }

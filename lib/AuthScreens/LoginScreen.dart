@@ -44,11 +44,13 @@ class LoginState extends State<LoginScreen> {
           if (response.status) {
             setString(USER_AUTH, "Bearer " + response.data.token);
             if (response.data != null && response.data.user != null)
-              setString(
-                  USER_NAME,
-                  response.data.user.first_name +
-                      " " +
-                      response.data.user.last_name);
+              setString(userImage, response.data.user.image);
+
+            setString(
+                USER_NAME,
+                response.data.user.first_name +
+                    " " +
+                    response.data.user.last_name);
             Navigator.pushAndRemoveUntil(
                 context, ScaleRoute(page: Dashboard()), (r) => false);
           } else {

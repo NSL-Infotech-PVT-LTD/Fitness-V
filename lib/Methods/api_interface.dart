@@ -1,6 +1,7 @@
 //Api's references
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:volt/ResponseModel/StatusResponse.dart';
@@ -18,6 +19,7 @@ String eventDetails = BASE_URL + "api/event";
 String privacyUrl = BASE_URL + "api/event";
 String aboutUsUrl = BASE_URL + "api/config/about_us";
 String termsConditionUrl = BASE_URL + "api/config/terms_and_conditions";
+String updateProfileUrl = BASE_URL + "api/update";
 
 String CUSTOMER_ID = "";
 
@@ -27,6 +29,7 @@ String DEVICE_TYPE = "device_type";
 String DEVICE_TOKEN = "device_token";
 
 String ID = "id";
+String trainer_id = "trainer_id";
 String ANDROID = "android";
 String DEVICE_TOKEN_VALUE = "value";
 String Authorization = "Authorization";
@@ -58,6 +61,7 @@ String EMIRATES_ID = "emirates_id";
 //user data
 String USER_AUTH = "USER_AUTH";
 String USER_NAME = "USER_NAME";
+String userImage = "userImage";
 String USER_EMAIL = "USER_EMAIL";
 String CONTENT_VALUE = "application/x-www-form-urlencoded";
 String ORDER_BY = "price_high";
@@ -81,8 +85,8 @@ Future<StatusResponse> getLogin(Map<String, String> parms) async {
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getTrainersListApi(
-    String auth, Map<String, String> parms) async {
+Future<StatusResponse> getTrainersListApi(String auth,
+    Map<String, String> parms) async {
   final response = await http.post(getTrainersList,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -96,8 +100,8 @@ Future<StatusResponse> getTrainersListApi(
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getTrainersDetailApi(
-    String auth, Map<String, String> parms) async {
+Future<StatusResponse> getTrainersDetailApi(String auth,
+    Map<String, String> parms) async {
   final response = await http.post(trainers,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -111,13 +115,14 @@ Future<StatusResponse> getTrainersDetailApi(
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getProfileDetailApi(
-    String auth) async {
-  final response = await http.post(profile,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': auth
-      },);
+Future<StatusResponse> getProfileDetailApi(String auth) async {
+  final response = await http.post(
+    profile,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': auth
+    },
+  );
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
   print("getProfileDetailApi--->" + map.toString());
@@ -158,7 +163,6 @@ Future<StatusResponse> getPrivacyApi() async {
 }
 
 Future<StatusResponse> getAboutApi() async {
-
   final response = await http.get(aboutUsUrl);
   print("About---->" + response.body.toString());
   return StatusResponse.fromJson(json.decode(response.body));
@@ -177,8 +181,8 @@ Future<StatusResponse> resetPassword(Map<String, String> parms) async {
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getEventDetailsApi(
-    String userAuth, Map<String, String> parms) async {
+Future<StatusResponse> getEventDetailsApi(String userAuth,
+    Map<String, String> parms) async {
   final response = await http.post(eventDetails,
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
@@ -188,8 +192,8 @@ Future<StatusResponse> getEventDetailsApi(
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getTrainerReviewsApi(
-    String userAuth, Map<String, String> parms) async {
+Future<StatusResponse> getTrainerReviewsApi(String userAuth,
+    Map<String, String> parms) async {
   final response = await http.post(trainerReviews,
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
@@ -199,7 +203,34 @@ Future<StatusResponse> getTrainerReviewsApi(
   return StatusResponse.fromJson(map);
 }
 
-header(String auth) => {
+
+Future<StatusResponse> updateUserProfileApi(String userAuth, File file,
+    Map<String, String> parms) async {
+  final postUri = Uri.parse(updateProfileUrl);
+  http.MultipartRequest request = http.MultipartRequest('POST', postUri);
+
+  request.headers['Authorization'] = userAuth;
+  request.fields.addAll(parms);
+  if(file!=null) {
+    http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'image', file.path); //returns a Future<MultipartFile>
+
+    request.files.add(multipartFile);
+  }
+  var streamedResponse = await request.send();
+  var response = await http.Response.fromStream(streamedResponse);
+
+  print("updateUserProfileApi------>" + response.body.toString());
+
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  return StatusResponse.fromJson(map);
+
+}
+
+
+header(String auth) =>
+    {
       Content_Type: 'application/json; charset=UTF-8',
       Authorization: auth,
     };

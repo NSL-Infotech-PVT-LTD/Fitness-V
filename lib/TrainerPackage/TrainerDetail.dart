@@ -28,7 +28,7 @@ class TrainerDetailState extends State<TrainerDetail> {
   String fullName = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   String rating;
-
+  List<Reviews> reviewList = List<Reviews>();
   int myId = 0;
   String auth = '';
 
@@ -73,16 +73,24 @@ class TrainerDetailState extends State<TrainerDetail> {
       }
     });
   }
+
   void _getTrainerReview() async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
         Map<String, String> parms = {
-          ID: widget.id.toString(),
+          trainer_id:1.toString(),
         };
         getTrainerReviewsApi(auth, parms).then((response) {
           if (response.status) {
-            if (response.data != null && response.data.trainer != null) {
-
+            if (response.data != null && response.data.data != null) {
+              reviewList = List<Reviews>.generate(
+                  response.data.data.length,
+                  (i) => Reviews(
+                      imageUrl: response.data.data[i]['created_by_detail']
+                          ['image'],
+                      title: response.data.data[i]['review'],
+                      text1:
+                          'Posted on ' + response.data.data[i]['created_at']));
               setState(() {});
             }
           } else {
@@ -102,14 +110,6 @@ class TrainerDetailState extends State<TrainerDetail> {
           trainerName: 'Neo Faith',
           trainerExperience: '6.5 Year Experinece',
           imgLink: null));
-
-  final reviewList = List<Reviews>.generate(
-      10,
-      (i) => Reviews(
-          imageUrl: baseImageAssetsUrl + 'dummy2.png',
-          title:
-              "What is Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum has been the industry's standard dummy text",
-          text1: 'Posted on Thursday, 22/02/2020'));
 
   void handleClick(String value) {
     switch (value) {
@@ -242,7 +242,8 @@ class TrainerDetailState extends State<TrainerDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               StarDisplayWidget(
-                                value: rating==null?0.0:double.parse(rating),
+                                value:
+                                    rating == null ? 0.0 : double.parse(rating),
                                 filledStar: Icon(Icons.star,
                                     color: Colors.black, size: 20),
                                 unfilledStar: Icon(Icons.star,
@@ -484,7 +485,9 @@ class CustomReviews extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Image.asset(
-              items.imageUrl,
+              items.imageUrl == null
+                  ? baseImageAssetsUrl + 'logo_black.png'
+                  : BASE_URL + IMAGE_URL + items.imageUrl,
               width: 35,
               height: 35,
             ),
@@ -494,7 +497,7 @@ class CustomReviews extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   child: Text(
-                    items.title,
+                    items.title==null?'No Review Found': items.title,
                     style: TextStyle(fontSize: 12, color: Colors.black45),
                   ),
                   padding: EdgeInsets.only(left: 15),
@@ -503,38 +506,21 @@ class CustomReviews extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.black,
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.star,
-                        color: Colors.black,
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.star,
-                        color: Colors.black,
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.star,
-                        color: Colors.black,
-                        size: 10,
-                      ),
-                      Icon(
-                        Icons.star,
-                        color: Colors.grey,
-                        size: 10,
-                      ),
+                      StarDisplayWidget(
+                        value:
+                        items.rating == null ? 0: items.rating,
+                        filledStar: Icon(Icons.star,
+                            color: Colors.black, size: 20),
+                        unfilledStar: Icon(Icons.star,
+                            color: CColor.PRIMARYCOLOR, size: 20),
+                      )
                     ],
                   ),
                   padding: EdgeInsets.only(left: 15, top: 10),
                 ),
                 Padding(
                   child: Text(
-                    items.text1,
+                    items.text1==null?'':items.text1,
                     style: TextStyle(fontSize: 6, color: Colors.black26),
                     textAlign: TextAlign.start,
                   ),
