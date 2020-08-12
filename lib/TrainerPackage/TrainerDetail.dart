@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:volt/Bookings/YourBooking.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
@@ -25,12 +24,14 @@ class TrainerDetail extends StatefulWidget {
 }
 
 class TrainerDetailState extends State<TrainerDetail> {
-  String fullName = '', services = '', about = '', imgLink;
+  String fullName = '', expirence = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   String rating;
   List<Reviews> reviewList = List<Reviews>();
+  List<RecomendedTrainerClass> trainerList = List<RecomendedTrainerClass>();
   int myId = 0;
   String auth = '';
+  var _checkList;
 
   @override
   void initState() {
@@ -57,7 +58,19 @@ class TrainerDetailState extends State<TrainerDetail> {
               about = response.data.trainer.about;
               reviewsCount = response.data.trainer.booking_reviewed_cnt;
               rating = response.data.trainer.rating_avg;
+              expirence = response.data.trainer.expirence;
               trainees = response.data.trainer.booking_cnt;
+
+              if (response.data.related.length > 0) {
+                _checkList = response.data.related;
+
+                trainerList = List<RecomendedTrainerClass>.generate(
+                    response.data.related.length,
+                    (index) => RecomendedTrainerClass(
+                        trainerName: response.data.related[index]['full_name'],
+                        trainerExperience: '',
+                        imgLink: response.data.related[index]['image']));
+              }
               _getTrainerReview();
               setState(() {});
             }
@@ -78,7 +91,7 @@ class TrainerDetailState extends State<TrainerDetail> {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
         Map<String, String> parms = {
-          trainer_id:1.toString(),
+          trainer_id: widget.id.toString(),
         };
         getTrainerReviewsApi(auth, parms).then((response) {
           if (response.status) {
@@ -91,6 +104,7 @@ class TrainerDetailState extends State<TrainerDetail> {
                       title: response.data.data[i]['review'],
                       text1:
                           'Posted on ' + response.data.data[i]['created_at']));
+              print("ReviewSize" + reviewList.length.toString());
               setState(() {});
             }
           } else {
@@ -103,13 +117,6 @@ class TrainerDetailState extends State<TrainerDetail> {
       }
     });
   }
-
-  final trainerList = List<RecomendedTrainerClass>.generate(
-      10,
-      (index) => RecomendedTrainerClass(
-          trainerName: 'Neo Faith',
-          trainerExperience: '6.5 Year Experinece',
-          imgLink: null));
 
   void handleClick(String value) {
     switch (value) {
@@ -183,26 +190,27 @@ class TrainerDetailState extends State<TrainerDetail> {
                     height: SizeConfig.blockSizeVertical * 25,
                     child: Stack(children: <Widget>[
                       Positioned(
-                        bottom: 6,
+                        bottom: imgLink == null ? 60 : 6,
                         child: Padding(
                             padding: EdgeInsets.only(left: 20, right: 20),
                             child: imgLink == null
                                 ? Image.asset(
-                                    baseImageAssetsUrl + 'logo_black.png',
-                                    fit: BoxFit.none,
+                                    baseImageAssetsUrl + 'place_holder.png',
                                     height: SizeConfig.blockSizeVertical * 15,
                                   )
                                 : FadeInImage.assetNetwork(
                                     placeholder:
                                         baseImageAssetsUrl + 'logo_black.png',
-                                    image: BASE_URL + IMAGE_URL + imgLink,
+                                    image: BASE_URL +
+                                        'uploads/trainer-user/' +
+                                        imgLink,
                                     fit: BoxFit.cover,
                                     height: SizeConfig.blockSizeVertical * 25,
                                   )),
                       ),
-                      SvgPicture.asset(
-                        baseImageAssetsUrl + 'popular.svg',
-                      ),
+//                      SvgPicture.asset(
+//                        baseImageAssetsUrl + 'popular.svg',
+//                      ),
                     ])),
                 Container(
                     width: SizeConfig.blockSizeHorizontal * 35,
@@ -229,7 +237,10 @@ class TrainerDetailState extends State<TrainerDetail> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text('7 years Experineced',
+                        Text(
+                            expirence == null
+                                ? 'No expirence'
+                                : expirence + " Years",
                             style: TextStyle(fontSize: 10)),
                         Text(
                             trainees.toString() +
@@ -398,7 +409,10 @@ class TrainerDetailState extends State<TrainerDetail> {
                                 Padding(
                                   padding:
                                       EdgeInsets.only(left: 20, bottom: 20),
-                                  child: Text('Related Trainers',
+                                  child: Text(
+                                      trainerList.length > 0
+                                          ? 'Related Trainers'
+                                          : '',
                                       style: TextStyle(fontSize: 12)),
                                 ),
                                 Padding(
@@ -417,7 +431,8 @@ class TrainerDetailState extends State<TrainerDetail> {
                                                     new MaterialPageRoute(
                                                         builder: (context) =>
                                                             TrainerDetail(
-                                                              id: myId,
+                                                              id: _checkList[
+                                                                  index]['id'],
                                                             )));
                                               },
                                             ),
@@ -434,20 +449,30 @@ class TrainerDetailState extends State<TrainerDetail> {
                         ConstrainedBox(
                           constraints:
                               BoxConstraints(maxHeight: 200, minHeight: 56.0),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.all(20),
-                              physics: BouncingScrollPhysics(),
-                              primary: false,
-                              scrollDirection: Axis.vertical,
-                              itemCount: reviewList.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  child: CustomReviews(
-                                    items: reviewList[index],
-                                  ),
-                                );
-                              }),
+                          child: reviewList.length > 0
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.all(20),
+                                  physics: BouncingScrollPhysics(),
+                                  primary: false,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: reviewList.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      child: reviewList.length > 0
+                                          ? CustomReviews(
+                                              items: reviewList[index],
+                                            )
+                                          : Image.asset(
+                                              baseImageAssetsUrl +
+                                                  'no_reviews.png',
+                                              height: 50,
+                                              width: 50,
+                                            ),
+                                    );
+                                  })
+                              : Image.asset(
+                                  baseImageAssetsUrl + 'no_reviews.png'),
                         ),
                       ],
                     ),
@@ -497,7 +522,7 @@ class CustomReviews extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   child: Text(
-                    items.title==null?'No Review Found': items.title,
+                    items.title == null ? 'No Review Found' : items.title,
                     style: TextStyle(fontSize: 12, color: Colors.black45),
                   ),
                   padding: EdgeInsets.only(left: 15),
@@ -507,10 +532,9 @@ class CustomReviews extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       StarDisplayWidget(
-                        value:
-                        items.rating == null ? 0: items.rating,
-                        filledStar: Icon(Icons.star,
-                            color: Colors.black, size: 20),
+                        value: items.rating == null ? 0 : items.rating,
+                        filledStar:
+                            Icon(Icons.star, color: Colors.black, size: 20),
                         unfilledStar: Icon(Icons.star,
                             color: CColor.PRIMARYCOLOR, size: 20),
                       )
@@ -520,7 +544,7 @@ class CustomReviews extends StatelessWidget {
                 ),
                 Padding(
                   child: Text(
-                    items.text1==null?'':items.text1,
+                    items.text1 == null ? '' : items.text1,
                     style: TextStyle(fontSize: 6, color: Colors.black26),
                     textAlign: TextAlign.start,
                   ),

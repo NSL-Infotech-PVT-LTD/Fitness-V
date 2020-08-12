@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Event/Event.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
-import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
@@ -145,10 +144,9 @@ class DashboardState extends State<Dashboard> {
                           )
                         : CircleAvatar(
                             radius: 25.0,
-                            child: blackPlaceHolder(
-                                'uploads/image/', imageValue, 40, 40),
-//                            backgroundImage: NetworkImage(
-//                                BASE_URL + 'uploads/image/' + imageValue),
+
+                            backgroundImage: NetworkImage(
+                                BASE_URL + 'uploads/image/' + imageValue),
                             backgroundColor: Colors.transparent,
                           ),
                   ),

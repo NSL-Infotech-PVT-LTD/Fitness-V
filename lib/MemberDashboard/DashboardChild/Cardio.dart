@@ -43,7 +43,7 @@ class _CardioState extends State<Cardio> {
                   response.data.data.length,
                   (index) => RecomendedTrainerClass(
                       trainerName: response.data.data[index]['full_name'],
-                      trainerExperience: '6.5 Year Experinece',
+                      trainerExperience: response.data.data[index]['expirence'],
                       imgLink: response.data.data[index]['image']));
 
               setState(() {});
@@ -176,7 +176,7 @@ class _CardioState extends State<Cardio> {
                     child: RecomendedTrainer(
                       trainerClass: trainerList[index],
                       callback: () {
-                        print("CheckMyList------>"+checkList.toString());
+                        print("CheckMyList------>" + checkList.toString());
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
@@ -223,11 +223,11 @@ class RecomendedTrainer extends StatelessWidget {
               trainerClass.imgLink == null
                   ? Image.asset(
                       baseImageAssetsUrl + 'logo_black.png',
-
                       width: 125,
                       height: 110,
                     )
-                  : blackPlaceHolder(IMAGE_URL,trainerClass.imgLink, 110.0, 110.0),
+                  : blackPlaceHolder('uploads/trainer-user/',
+                      trainerClass.imgLink, 110.0, 110.0),
               Padding(
                 padding: EdgeInsets.only(left: 5, top: 5),
                 child: Text(
@@ -238,7 +238,9 @@ class RecomendedTrainer extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 5),
                 child: Text(
-                  trainerClass.trainerExperience,
+                  trainerClass.trainerExperience == null
+                      ? 'No expirence'
+                      : trainerClass.trainerExperience + " Years",
                   style: TextStyle(fontSize: 7, color: Color(0xffc1c1c1)),
                 ),
               ),

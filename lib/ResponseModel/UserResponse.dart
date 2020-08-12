@@ -10,6 +10,7 @@ class UserResponse {
   int booking_cnt;
   int booking_reviewed_cnt;
   String rating_avg;
+  String expirence;
   String full_name;
   String first_name;
   String middle_name;
@@ -41,6 +42,7 @@ class UserResponse {
     this.rating_avg,
     this.full_name,
     this.first_name,
+    this.expirence,
     this.mobile,
     this.emergency_contact_no,
     this.email,
@@ -67,6 +69,7 @@ class UserResponse {
     id = json['id'];
     name = json['name'];
     location = json['location'];
+    expirence = json['expirence'];
     booking_reviewed_cnt = json['booking_reviewed_cnt'];
     booking_cnt = json['booking_cnt'];
     rating_avg = json['rating_avg'];
@@ -100,6 +103,7 @@ class UserResponse {
     data['id'] = this.id;
     data['name'] = this.name;
     data['location'] = this.location;
+    data['expirence'] = this.expirence;
     data['booking_reviewed_cnt'] = this.booking_reviewed_cnt;
     data['rating_avg'] = this.rating_avg;
     data['booking_cnt'] = this.booking_cnt;

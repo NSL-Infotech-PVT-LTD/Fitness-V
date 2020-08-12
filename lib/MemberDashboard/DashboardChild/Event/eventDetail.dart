@@ -54,7 +54,7 @@ class EventDetailState extends State<EventDetail> {
               _eventLocation = response.data.location_detail.location;
               _eventTime = "From : " +
                   response.data.start_date +
-                  "\nTo : " +
+                  "\nTo      : " +
                   response.data.end_date;
 
               setState(() {});

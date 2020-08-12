@@ -15,6 +15,7 @@ class Data {
   UserResponse location_detail;
   UserResponse trainer;
   List<dynamic> data;
+  List<dynamic> related;
   List<dynamic> gym_members;
 
   List<dynamic> pool_and_beach_members;
@@ -39,6 +40,7 @@ class Data {
       this.location_detail,
       this.gym_members,
       this.pool_and_beach_members,
+      this.related,
       this.local_guest,
       this.fairmont_hotel_guest});
 
@@ -70,6 +72,9 @@ class Data {
     local_guest = json['local_guest'] != null ? json['local_guest'] : null;
     fairmont_hotel_guest = json['fairmont_hotel_guest'] != null
         ? json['fairmont_hotel_guest']
+        : null;
+    related = json['related'] != null
+        ? json['related']
         : null;
   }
 
@@ -110,8 +115,11 @@ class Data {
       data['local_guest'] = this.local_guest;
     }
 
-    if (this.gym_members != null) {
+    if (this.fairmont_hotel_guest != null) {
       data['fairmont_hotel_guest'] = this.fairmont_hotel_guest;
+    }
+    if (this.related != null) {
+      data['related'] = this.related;
     }
   }
 }
