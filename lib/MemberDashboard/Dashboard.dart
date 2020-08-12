@@ -4,6 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Event/Event.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
+import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/Pref.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
 import 'package:volt/Screens/ProfileScreen.dart';
 import 'package:volt/Value/CColor.dart';
@@ -20,12 +23,21 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
+  String imageValue;
   final List<Widget> _children = [Home(), Cardio(), Event()];
 
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    getString(userImage)
+        .then((value) => {imageValue = value})
+        .whenComplete(() => setState(() {}));
+    super.initState();
   }
 
   @override
@@ -125,11 +137,20 @@ class DashboardState extends State<Dashboard> {
                           new MaterialPageRoute(
                               builder: (context) => ProfileScreen()));
                     },
-                    child: Image.asset(
-                      baseImageAssetsUrl + 'circleuser.png',
-                      height: 40,
-                      width: 40,
-                    ),
+                    child: imageValue == null
+                        ? Image.asset(
+                            baseImageAssetsUrl + 'circleuser.png',
+                            height: 40,
+                            width: 40,
+                          )
+                        : CircleAvatar(
+                            radius: 25.0,
+                            child: blackPlaceHolder(
+                                'uploads/image/', imageValue, 40, 40),
+//                            backgroundImage: NetworkImage(
+//                                BASE_URL + 'uploads/image/' + imageValue),
+                            backgroundColor: Colors.transparent,
+                          ),
                   ),
                   SizedBox(
                     width: 5,
@@ -162,7 +183,7 @@ class DashboardState extends State<Dashboard> {
             ),
             Divider(
               height: .5,
-             // color: CColor.PRIMARYCOLOR,
+              // color: CColor.PRIMARYCOLOR,
             ),
             _children[_currentIndex],
             SizedBox(
