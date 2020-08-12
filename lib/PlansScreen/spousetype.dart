@@ -84,10 +84,10 @@ class _SpouseTypeState extends State<SpouseType> {
     return WillPopScope(
         // ignore: missing_return
         onWillPop: () {
-          if (result != null || result1 != null){
+          if (result != null || result1 != null) {
             exitDialog(context);
-          return new Future(() => false);
-        }else{
+            return new Future(() => false);
+          } else {
             Navigator.pop(context);
           }
         },
@@ -617,7 +617,7 @@ class _SpouseTypeState extends State<SpouseType> {
               setState(() {
                 acceptTerms = value;
                 if (value) {
-                //  termsBottom('Terms of Services');
+                  //  termsBottom('Terms of Services');
                 }
               });
             },
@@ -641,7 +641,7 @@ class _SpouseTypeState extends State<SpouseType> {
               ),
             ),
             onTap: () {
-              termsBottom('Terms of Services');
+              getTerms();
             },
           ),
         ],
@@ -649,7 +649,33 @@ class _SpouseTypeState extends State<SpouseType> {
     );
   }
 
-  void termsBottom(String title) {
+  void getTerms() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        getTermsApi().then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null) {
+              if (response.data.config != null &&
+                  response.data.config.isNotEmpty)
+                termsBottom('Terms & Conditions', response.data.config);
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
+
+  void termsBottom(String title, String msg) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -694,7 +720,7 @@ class _SpouseTypeState extends State<SpouseType> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text(loremIpsum,
+                        child: Text(msg,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,

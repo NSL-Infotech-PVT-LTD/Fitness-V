@@ -43,8 +43,7 @@ class ProfileState extends State<ProfileScreen> {
             if (response.data != null) {
               if (response.data.config != null &&
                   response.data.config.isNotEmpty)
-                termsBottom(
-                    'Terms & Conditions', response.data.config, context);
+                termsBottom('Terms & Conditions', response.data.config, context);
             }
           } else {
             dismissDialog(context);

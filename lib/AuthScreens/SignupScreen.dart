@@ -40,8 +40,6 @@ class SignupScreen extends StatefulWidget {
 }
 
 class SignupState extends State<SignupScreen> {
-
-
   String baseImageUrl = 'assets/images/';
   String radioItem = '';
   String radioItemMarital = '';
@@ -79,9 +77,7 @@ class SignupState extends State<SignupScreen> {
     });
   }
 
-
   Future<DateTime> getData() {
-
     return showDatePicker(
         context: context,
         initialDate: DateTime(2019),
@@ -333,7 +329,9 @@ class SignupState extends State<SignupScreen> {
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
                               keyboardType: TextInputType.number,
-                              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                              inputFormatters: [
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
                               maxLength: 15,
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -355,7 +353,9 @@ class SignupState extends State<SignupScreen> {
                                 padding: EdgeInsets.only(top: 12),
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                                  inputFormatters: [
+                                    WhitelistingTextInputFormatter.digitsOnly
+                                  ],
                                   maxLength: 15,
                                   validator: (value) {
                                     if (value.isEmpty) {
@@ -591,10 +591,14 @@ class SignupState extends State<SignupScreen> {
                                             } else {
                                               print(response.toString());
                                               var errorMessage = '';
-                                              if(response.error!=null){
-                                                errorMessage = response.error.toString();
-                                              }else if(response.errors!=null){
-                                                errorMessage = response.errors.email.toString();
+                                              if (response.error != null) {
+                                                errorMessage =
+                                                    response.error.toString();
+                                              } else if (response.errors !=
+                                                  null) {
+                                                errorMessage = response
+                                                    .errors.email
+                                                    .toString();
                                               }
                                               showDialogBox(context, "Error!",
                                                   errorMessage);
@@ -638,7 +642,6 @@ class SignupState extends State<SignupScreen> {
           ),
         ));
   }
-
 
   Widget myText(String hint, bool isNumber) {
     return Padding(
@@ -703,7 +706,7 @@ class SignupState extends State<SignupScreen> {
               setState(() {
                 acceptTerms = value;
                 if (value) {
-                  termsBottom('Terms of Services');
+                 // getTerms();
                 }
               });
             },
@@ -727,7 +730,7 @@ class SignupState extends State<SignupScreen> {
               ),
             ),
             onTap: () {
-              termsBottom('Terms of Services');
+              getTerms();
             },
           ),
         ],
@@ -735,7 +738,33 @@ class SignupState extends State<SignupScreen> {
     );
   }
 
-  void termsBottom(String title) {
+  void getTerms() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        getTermsApi().then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null) {
+              if (response.data.config != null &&
+                  response.data.config.isNotEmpty)
+                termsBottom('Terms & Conditions', response.data.config);
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
+
+  void termsBottom(String title, String msg) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -780,7 +809,7 @@ class SignupState extends State<SignupScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text(loremIpsum,
+                        child: Text(msg,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,

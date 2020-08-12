@@ -936,15 +936,40 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
               ),
             ),
             onTap: () {
-              termsBottom('Terms of Services');
+              getTerms();
             },
           ),
         ],
       ),
     );
   }
+  void getTerms() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
 
-  void termsBottom(String title) {
+        getTermsApi().then((response) {
+          dismissDialog(context);
+          if (response.status) {
+            if (response.data != null) {
+              if (response.data.config != null &&
+                  response.data.config.isNotEmpty)
+                termsBottom('Terms & Conditions', response.data.config);
+            }
+          } else {
+            dismissDialog(context);
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        });
+      } else {
+        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
+
+  void termsBottom(String title,String msg) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -989,7 +1014,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text(loremIpsum,
+                        child: Text(msg,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
