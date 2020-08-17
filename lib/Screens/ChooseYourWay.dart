@@ -238,6 +238,7 @@ class ChooseWayState extends State<ChooseYourWay> {
           print("CheckBeforSuccess->" + response.toJson().toString());
           dismissDialog(context);
           if (response.status) {
+
             gym_list = response.data.gym_members;
             pool_and_beach_list = response.data.pool_and_beach_members;
             guest_list = response.data.local_guest;
@@ -246,7 +247,7 @@ class ChooseWayState extends State<ChooseYourWay> {
             //need to change
             showDialogBox(context, "Error!", response.error);
           }
-        });
+        }).whenComplete(() => dismissDialog(context));
       } else {
         showDialogBox(context, 'Internet Error', pleaseCheckInternet);
         dismissDialog(context);

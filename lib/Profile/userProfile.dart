@@ -201,6 +201,7 @@ class UserProfileState extends State<UserProfile> {
                       baseImageAssetsUrl + 'horizontal.svg',
                       width: SizeConfig.screenWidth,
                     ),
+
                   ),
                   Positioned(
                       left: SizeConfig.screenWidth * .37,

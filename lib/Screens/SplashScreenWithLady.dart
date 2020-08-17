@@ -18,41 +18,38 @@ class SplashScreenWithLady extends StatefulWidget {
 
 class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
   String _auth = '';
+
   @override
   void dispose() {
     super.dispose();
   }
 
-  _moveScreen(){
-
-      if(_auth.isEmpty) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ChooseYourWay()));
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Dashboard()));
-      }
-
+  _moveScreen() {
+    if (_auth.isEmpty) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => ChooseYourWay()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
+    }
   }
+
   @override
   void initState() {
-      super.initState();
-      _loadAuth();
+    super.initState();
+    _loadAuth();
   }
+
   _loadAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _auth = (prefs.getString(USER_AUTH) ?? '');
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
-
-    Timer(
-        Duration(seconds: 3),
-        () => _moveScreen() );
+    Timer(Duration(seconds: 3), () => _moveScreen());
     SizeConfig().init(context);
 
     return Scaffold(

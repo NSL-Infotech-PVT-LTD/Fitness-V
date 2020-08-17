@@ -22,7 +22,7 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
-  String imageValue;
+  var imageValue;
   final List<Widget> _children = [Home(), Cardio(), Event()];
 
   void onTabTapped(int index) {
@@ -37,6 +37,20 @@ class DashboardState extends State<Dashboard> {
         .then((value) => {imageValue = value})
         .whenComplete(() => setState(() {}));
     super.initState();
+  }
+
+
+  _navigateAndDisplaySelection(BuildContext context) async {
+    imageValue = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProfileScreen()),
+    );
+    getString(userImage)
+        .then((value) => {imageValue = value})
+        .whenComplete(() => setState(() {}));
+
+    print(imageValue.toString() + "jugraj---------");
+    setState(() {});
   }
 
   @override
@@ -131,10 +145,7 @@ class DashboardState extends State<Dashboard> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => ProfileScreen()));
+                      _navigateAndDisplaySelection(context);
                     },
                     child: imageValue == null
                         ? Image.asset(
@@ -144,7 +155,6 @@ class DashboardState extends State<Dashboard> {
                           )
                         : CircleAvatar(
                             radius: 25.0,
-
                             backgroundImage: NetworkImage(
                                 BASE_URL + 'uploads/image/' + imageValue),
                             backgroundColor: Colors.transparent,

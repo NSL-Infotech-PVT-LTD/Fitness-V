@@ -39,6 +39,7 @@ class ImagePickerDialog extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       'Choose From',
+                      style: TextStyle(color: Colors.white),
                     )),
               ),
             ),

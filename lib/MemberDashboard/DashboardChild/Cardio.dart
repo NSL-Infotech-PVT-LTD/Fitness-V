@@ -5,6 +5,7 @@ import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/TrainerPackage/TrainerDetail.dart';
+import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
 class Cardio extends StatefulWidget {
@@ -14,11 +15,12 @@ class Cardio extends StatefulWidget {
 
 class _CardioState extends State<Cardio> {
   List trainerList;
-  var checkList;
+  List checkList;
 
   @override
   void initState() {
     String auth = '';
+
     getString(USER_AUTH)
         .then((value) => {auth = value})
         .whenComplete(() => {getList(auth)});
@@ -39,6 +41,7 @@ class _CardioState extends State<Cardio> {
           if (response.status) {
             if (response.data != null && response.data.data.length > 0) {
               checkList = response.data.data.toList();
+
               trainerList = List<RecomendedTrainerClass>.generate(
                   response.data.data.length,
                   (index) => RecomendedTrainerClass(
@@ -46,6 +49,7 @@ class _CardioState extends State<Cardio> {
                       trainerExperience: response.data.data[index]['expirence'],
                       imgLink: response.data.data[index]['image']));
 
+//              print(trainerExperiencerList[0]['full_name']);
               setState(() {});
             }
           } else {
@@ -61,8 +65,41 @@ class _CardioState extends State<Cardio> {
     });
   }
 
+  Widget checkImage1() {
+    print("mjudhsg==" + checkList.toString());
+    if (checkList != null) {
+      if (checkList.length > 0) {
+        return checkList[0]['image'] == null
+            ? Image.asset(
+                baseImageAssetsUrl + 'logo_black.png',
+                height: 200,
+                width: MediaQuery.of(context).size.width * .43,
+              )
+            : blackPlaceHolder('uploads/trainer-user/', checkList[0]['image'],
+                200, MediaQuery.of(context).size.width * .43);
+      }
+    }
+  }
+
+  Widget checkImage2() {
+    if (checkList != null) {
+      if (checkList.length > 1) {
+        return checkList[1]['image'] == null
+            ? Image.asset(
+                baseImageAssetsUrl + 'place_holder.png',
+                height: 200,
+                width: MediaQuery.of(context).size.width * .43,
+              )
+            : blackPlaceHolder('uploads/trainer-user/', checkList[1]['image'],
+                200, MediaQuery.of(context).size.width * .43);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +140,7 @@ class _CardioState extends State<Cardio> {
               Padding(
                   padding: EdgeInsets.only(left: 5),
                   child: Text(
-                    'Recommended for your',
+                    'Recommended for you',
                     style: TextStyle(fontSize: 12),
                   ))
             ],
@@ -116,44 +153,98 @@ class _CardioState extends State<Cardio> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Image.asset(
-                      baseImageAssetsUrl + 'dummy2.png',
-                      height: 200,
-                      width: MediaQuery.of(context).size.width * .43,
-                      fit: BoxFit.cover,
-                    ),
-                    Text(
-                      'Farley Willth',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    Text('7 years experineced',
-                        style:
-                            TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
-                  ],
+                GestureDetector(
+                  onTap: () {
+                    if (checkList != null) {
+                      if (checkList.length > 0) {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => TrainerDetail(
+                                      id: checkList[0]['id'],
+                                    )));
+                      }
+                    }
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+//                      checkImage1(),
+
+                      checkList != null &&
+                              checkList.length > 0 &&
+                              checkList[0]['image'] != null
+                          ? blackPlaceHolder(
+                              'uploads/trainer-user/',
+                              checkList[0]['image'],
+                              200,
+                              MediaQuery.of(context).size.width * .43)
+                          : Image.asset(
+                              baseImageAssetsUrl + 'logo_black.png',
+                              height: 200,
+                              width: MediaQuery.of(context).size.width * .43,
+                            ),
+                      Text(
+                        checkList != null && checkList.length > 0
+                            ? checkList[0]['full_name']
+                            : 'Farley Willth',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Text(
+                          checkList != null && checkList.length > 0
+                              ? checkList[0]['expirence'] + ' years experineced'
+                              : '',
+                          style:
+                              TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   width: 5,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Image.asset(
-                      baseImageAssetsUrl + 'dummy1.png',
-                      fit: BoxFit.cover,
-                      width: MediaQuery.of(context).size.width * .43,
-                      height: 200,
-                    ),
-                    Text(
-                      'Neo Jones',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    Text('6.5 years experineced',
-                        style:
-                            TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
-                  ],
+                GestureDetector(
+                  onTap: () {
+                    if (checkList != null) {
+                      if (checkList.length > 0) {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => TrainerDetail(
+                                      id: checkList[0]['id'],
+                                    )));
+                      }
+                    }
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      checkList != null &&
+                              checkList.length > 1 &&
+                              checkList[1]['image'] != null
+                          ? blackPlaceHolder(
+                              'uploads/trainer-user/',
+                              checkList[1]['image'],
+                              200,
+                              MediaQuery.of(context).size.width * .43)
+                          : Image.asset(
+                              baseImageAssetsUrl + 'logo_black.png',
+                              height: 200,
+                              width: MediaQuery.of(context).size.width * .43,
+                            ),
+                      Text(
+                        checkList != null && checkList.length > 1
+                            ? checkList[1]['full_name']
+                            : 'Farley Willth',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Text(
+                          checkList != null && checkList.length > 1
+                              ? checkList[1]['expirence'] + ' years experineced'
+                              : '',
+                          style:
+                              TextStyle(fontSize: 7, color: Color(0xffc1c1c1))),
+                    ],
+                  ),
                 ),
               ],
             )),
@@ -161,10 +252,13 @@ class _CardioState extends State<Cardio> {
           padding: EdgeInsets.only(top: 20, bottom: 20),
           child: myDivider(),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 20, bottom: 20),
-          child: Text('People also searched for these Trainers',
-              style: TextStyle(fontSize: 12)),
+        Visibility(
+          visible: false,
+          child: Padding(
+            padding: EdgeInsets.only(left: 20, bottom: 20),
+            child: Text('People also searched for these Trainers',
+                style: TextStyle(fontSize: 12)),
+          ),
         ),
         Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -174,20 +268,20 @@ class _CardioState extends State<Cardio> {
                 itemBuilder: (context, index) {
                   return Container(
                     child: RecomendedTrainer(
-                      trainerClass: trainerList[index],
+                      trainerClass: trainerList[index + 2],
                       callback: () {
                         print("CheckMyList------>" + checkList.toString());
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => TrainerDetail(
-                                      id: checkList[index]['id'],
+                                      id: checkList[index + 2]['id'],
                                     )));
                       },
                     ),
                   );
                 },
-                itemCount: trainerList == null ? 0 : trainerList.length,
+                itemCount: trainerList == null ? 0 : trainerList.length - 2,
                 scrollDirection: Axis.horizontal,
               ),
             )),
@@ -227,12 +321,14 @@ class RecomendedTrainer extends StatelessWidget {
                       height: 110,
                     )
                   : blackPlaceHolder('uploads/trainer-user/',
-                      trainerClass.imgLink, 110.0, 110.0),
+                      trainerClass.imgLink, 110.0, 125.0),
               Padding(
                 padding: EdgeInsets.only(left: 5, top: 5),
-                child: Text(
-                  trainerClass.trainerName,
-                  style: TextStyle(fontSize: 12),
+                child: Expanded(
+                  child: Text(
+                    trainerClass.trainerName,
+                    style: TextStyle(fontSize: 12),
+                  ),
                 ),
               ),
               Padding(

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Value/CColor.dart';
@@ -49,7 +50,28 @@ Widget backWithArrowAndIcon(String imageUrl) => Container(
       padding: EdgeInsets.fromLTRB(padding10, padding5, padding10, padding10),
     );
 
-void termsBottom(String title,String msg, context) {
+Widget bottomDialogLog() => CupertinoActionSheet(
+      title: Text("Cupertino Action Sheet"),
+      message: Text("Select any action "),
+      actions: <Widget>[
+        CupertinoActionSheetAction(
+          child: Text("Action 1"),
+          isDefaultAction: true,
+          onPressed: () {
+            print("Action 1 is been clicked");
+          },
+        ),
+        CupertinoActionSheetAction(
+          child: Text("Action 2"),
+          isDestructiveAction: true,
+          onPressed: () {
+            print("Action 2 is been clicked");
+          },
+        )
+      ],
+    );
+
+void termsBottom(String title, String msg, context) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -95,7 +117,7 @@ void termsBottom(String title,String msg, context) {
                     ),
                     Padding(
                       padding: EdgeInsets.all(20),
-                      child: Text(msg ==null?loremIpsum:msg,
+                      child: Text(msg == null ? loremIpsum : msg,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,

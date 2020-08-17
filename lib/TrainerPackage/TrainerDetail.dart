@@ -24,6 +24,7 @@ class TrainerDetail extends StatefulWidget {
 }
 
 class TrainerDetailState extends State<TrainerDetail> {
+
   String fullName = '', expirence = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   String rating;
@@ -204,8 +205,9 @@ class TrainerDetailState extends State<TrainerDetail> {
                                     image: BASE_URL +
                                         'uploads/trainer-user/' +
                                         imgLink,
-                                    fit: BoxFit.cover,
-                                    height: SizeConfig.blockSizeVertical * 25,
+//                                    fit: BoxFit.cover,
+                              width: SizeConfig.blockSizeHorizontal * 50,
+                              height: SizeConfig.blockSizeVertical * 25,
                                   )),
                       ),
 //                      SvgPicture.asset(
@@ -222,9 +224,11 @@ class TrainerDetailState extends State<TrainerDetail> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            Text(
-                              fullName.isEmpty ? 'Farley Willth' : fullName,
-                              style: TextStyle(fontSize: 17),
+                            Expanded(
+                              child: Text(
+                                fullName.isEmpty ? 'Farley Willth' : fullName,
+                                style: TextStyle(fontSize: 17),
+                              ),
                             ),
                             SizedBox(width: 5),
                             SvgPicture.asset(

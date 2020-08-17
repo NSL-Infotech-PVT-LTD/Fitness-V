@@ -72,6 +72,7 @@ String IMAGE_URL = "uploads/roles/";
 String imageUrlEvent = "uploads/events/";
 String MORE_IMAGE_URL = "uploads/product/images/";
 String BARCODE_URL = "uploads/product/barcode/";
+String trainerUser = "uploads/trainer-user/";
 //flutter build apk --release --target-platform=android-arm64
 Future<StatusResponse> getLogin(Map<String, String> parms) async {
   final response = await http.post(LOGIN,
