@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
 
+import 'Methods/Method.dart';
 import 'Value/Dimens.dart';
 import 'Value/Strings.dart';
 
@@ -182,6 +184,10 @@ void termsBottom(String title, String msg, context) {
       });
 }
 
+Widget setNoDataContent() => Align(
+    alignment: Alignment.center,
+    child: Image.asset(baseImageAssetsUrl + 'place_holder.png'));
+
 Widget fullWidthButton(context, String title, double setWidth, FontWeight bold,
         StatefulWidget whereToGO) =>
     Container(
@@ -222,6 +228,37 @@ Widget finishAllScreenButton(context, String title, double setWidth,
         ),
       ),
     );
+
+void bookingFunction(
+    String auth, context, String model_type, String model_id) async {
+  isConnectedToInternet().then((internet) {
+    if (internet != null && internet) {
+      showProgress(context, "Please wait.....");
+      Map<String, String> parms = {
+        "model_type": model_type,
+        "model_id": model_id,
+      };
+
+      bookingApi(auth, parms).then((response) {
+        dismissDialog(context);
+
+        if (response.status) {
+          if (response.data != null) {
+
+            showDialogBox(context, "Booking confirmed", response.data.message);
+          }
+        } else {
+          dismissDialog(context);
+          if (response.error != null)
+            showDialogBox(context, "Error!", response.error);
+        }
+      });
+    } else {
+      showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+      dismissDialog(context);
+    }
+  }).whenComplete(() => dismissDialog(context));
+}
 
 class SizeRoute extends PageRouteBuilder {
   final Widget page;

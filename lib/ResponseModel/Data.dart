@@ -4,6 +4,7 @@ class Data {
   String message;
   String token;
   int id;
+  int last_page;
   String name;
   String config;
   String image;
@@ -28,6 +29,7 @@ class Data {
       {this.token,
       this.message,
       this.id,
+      this.last_page,
       this.name,
       this.config,
       this.image,
@@ -54,6 +56,7 @@ class Data {
     start_date = json['start_date'];
     end_date = json['end_date'];
     id = json['id'];
+    last_page = json['last_page'];
     current_page = json['current_page'];
     user =
         json['user'] != null ? new UserResponse.fromJson(json['user']) : null;
@@ -82,6 +85,7 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['message'] = this.message;
     data['id'] = this.id;
+    data['last_page'] = this.last_page;
     data['name'] = this.name;
     data['config'] = this.config;
     data['start_date'] = this.start_date;

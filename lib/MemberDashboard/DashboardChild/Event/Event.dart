@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Event/eventDetail.dart';
 import 'package:volt/Methods.dart';
+import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
-import 'package:volt/Methods/ents.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -27,10 +27,12 @@ class Event extends StatefulWidget {
 }
 
 class _EventState extends State<Event> {
-  Evet evnts;
+  int pagePast = 1;
+  int totalPagePast = 1;
+  ScrollController _scPast = new ScrollController();
+  bool isLoadingPast = false;
 
   NetworkUtil _netUtil = new NetworkUtil();
-  bool _isLoading = false;
   Map<String, dynamic> data;
   List<dynamic> myData = new List<dynamic>();
   List<dynamic> myDatapast = new List<dynamic>();
@@ -44,300 +46,348 @@ class _EventState extends State<Event> {
 
   @override
   void initState() {
-    super.initState();
     String auth = '';
     getString(USER_AUTH).then((value) {
       auth = value;
-      print('jugraj' + auth);
-    }).whenComplete(
-        () => {_createveentsupcomingList(auth), _createveentspastList(auth)});
+    }).whenComplete(() => {
+          _createveentsupcomingList(auth, pagePast),
+          _createveentspastList(auth)
+        });
+
+    super.initState();
+
+    _scPast.addListener(() {
+      if (_scPast.position.pixels == _scPast.position.maxScrollExtent) {
+        if (pagePast <= totalPagePast)
+          _createveentsupcomingList(auth, pagePast);
+      }
+    });
   }
 
-  void _createveentsupcomingList(String auth) async {
-    _netUtil.post(context, Constants.event, auth, body: {
-      "order_by": "upcoming",
-    }).then((response) async {
-      print("Sanjeev-->" + response.body);
+  @override
+  void dispose() {
+    _scPast.dispose();
+    pagePast = 1;
+    super.dispose();
+  }
 
-      var extracted = json.decode(response.body);
-      if ((extracted["code"] == 200)) {
-        setState(() {
-          print(
-              '---------------------STARTING TO PARSE THE RESPONSE--------------------');
-          _isLoading = false;
-          apiResponse = extracted['data'];
-          //    print(apiResponse);
-          myData = apiResponse['data'] as List;
-
-          var eventsInJsonFormat = apiResponse['data'];
-          evnts = Evet.fromJson(eventsInJsonFormat);
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }).catchError((error) {
+  void _createveentsupcomingList(String auth, int index) async {
+    showProgress(context, 'Loading..');
+    if (!isLoadingPast) {
       setState(() {
-        _isLoading = false;
+        isLoadingPast = true;
       });
-      print(error.toString());
-    });
+      _netUtil
+          .post(context, Constants.event, auth, body: {
+            "order_by": "upcoming",
+            LIMIT: '10',
+            PAGE: index.toString(),
+          })
+          .then((response) async {
+            dismissDialog(context);
+            var extracted = json.decode(response.body);
+
+            if ((extracted["code"] == 200)) {
+              setState(() {
+                apiResponse = extracted['data'];
+
+//          myData = apiResponse['data'] as List;
+                totalPagePast = extracted['data']['last_page'];
+                List tList = new List();
+                for (int i = 0; i < (apiResponse['data'] as List).length; i++) {
+                  tList.add((apiResponse['data'] as List)[i]);
+                }
+
+                print(totalPagePast.toString() + "========>.>>>");
+
+                setState(() {
+                  isLoadingPast = false;
+                  myData.addAll(tList);
+                  pagePast++;
+                });
+              });
+            } else {
+              setState(() {});
+            }
+          })
+          .whenComplete(() => dismissDialog(context))
+          .catchError((error) {
+            setState(() {});
+            print(error.toString());
+          })
+          .whenComplete(() => dismissDialog(context));
+    }
   }
 
   ///past
   void _createveentspastList(String auth) async {
-    //prefs = await SharedPreferences.getInstance();
-
-    // TODO: Ater the SharedPreferences object is created at login, delete
-
+//    showProgress(context, 'Loading..');
     _netUtil.post(context, Constants.event, auth, body: {
       "order_by": "past",
     }).then((response) async {
+      print("S`anjeev-->" + myData.length.toString());
+
       var extracted = json.decode(response.body);
 
       if ((extracted["code"] == 200)) {
         setState(() {
           print(
               '---------------------STARTING TO PARSE THE RESPONSE--------------------');
-          _isLoading = false;
           apiResponse = extracted['data'];
           //   print(apiResponse);
           myDatapast = apiResponse['data'] as List;
-          _isLoading = false;
         });
         // TODO: Add code for the No Blocked Users scenario.
       } else {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() {});
       }
 
       //    print(widget.name,);
       //  print('------------Ended _getEvetsList()-------------');
     }).catchError((error) {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
       print(error.toString());
-    });
+    }).whenComplete(() => dismissDialog(context));
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return _isLoading
-        ? Center(child: new CircularProgressIndicator())
-        : Column(
-            children: <Widget>[
-              GestureDetector(
-                  onTap: () {},
-                  child: Image.asset(
-                    baseImageAssetsUrl + 'fitness.png',
-                    fit: BoxFit.cover,
-                    width: SizeConfig.screenWidth,
-                    height: SizeConfig.screenHeight * .17,
-                  )),
-              SizedBox(height: 10),
-              Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: SizeConfig.blockSizeHorizontal * 5,
-                  ),
-                  SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
-                      height: 15, width: 15),
-                  SizedBox(
-                    width: SizeConfig.blockSizeHorizontal * 3,
-                  ),
-                  Text(
-                    events,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
+    return Column(
+      children: <Widget>[
+        GestureDetector(
+            onTap: () {},
+            child: Image.asset(
+              baseImageAssetsUrl + 'fitness.png',
+              fit: BoxFit.cover,
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.screenHeight * .17,
+            )),
+        SizedBox(height: 10),
+        Row(
+          children: <Widget>[
+            SizedBox(
+              width: SizeConfig.blockSizeHorizontal * 5,
+            ),
+            SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
+                height: 15, width: 15),
+            SizedBox(
+              width: SizeConfig.blockSizeHorizontal * 3,
+            ),
+            Text(
+              events,
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            SizedBox(
+              width: SizeConfig.blockSizeHorizontal * 12,
+            ),
+            Expanded(
+              child: Text(
+                fantastic,
+                style: TextStyle(color: CColor.LightGrey, fontSize: 10),
               ),
-              Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: SizeConfig.blockSizeHorizontal * 12,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        DefaultTabController(
+            length: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  color: Color(0xffE1E1E1),
+                  margin: EdgeInsets.only(top: 20, bottom: 10),
+                  padding: EdgeInsets.only(left: padding15),
+                  width: SizeConfig.screenWidth,
+                  child: TabBar(
+                    tabs: [
+                      Tab(
+                          icon: Text(
+                        upcoming,
+                        style: TextStyle(fontSize: textSize16),
+                      )),
+                      Tab(
+                          icon: Text(recent1,
+                              style: TextStyle(fontSize: textSize16))),
+                    ],
+                    isScrollable: true,
+                    indicatorColor: Colors.black,
+                    labelColor: Color(0xFF474747),
+                    unselectedLabelColor: Color(0xFFC1C1C1),
                   ),
-                  Expanded(
-                    child: Text(
-                      fantastic,
-                      style: TextStyle(color: CColor.LightGrey, fontSize: 10),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        height: 50,
-                        color: Color(0xffE1E1E1),
-                        margin: EdgeInsets.only(top: 20, bottom: 10),
-                        padding: EdgeInsets.only(left: padding15),
-                        width: SizeConfig.screenWidth,
-                        child: TabBar(
-                          tabs: [
-                            Tab(
-                                icon: Text(
-                              upcoming,
-                              style: TextStyle(fontSize: textSize16),
-                            )),
-                            Tab(
-                                icon: Text(recent1,
-                                    style: TextStyle(fontSize: textSize16))),
-                          ],
-                          isScrollable: true,
-                          indicatorColor: Colors.black,
-                          labelColor: Color(0xFF474747),
-                          unselectedLabelColor: Color(0xFFC1C1C1),
-                        ),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 3,
-                      ),
+                ),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 3,
+                ),
 
-                      // SizedBox(height: SizeConfig.blockSizeVertical * 0.),
-                      Container(
-                        //   color: Colors.black,
-                        padding: EdgeInsets.all(5),
-                        height: SizeConfig.screenHeight * 0.7,
-                        child: TabBarView(
-                          children: <Widget>[
-                            new Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    SvgPicture.asset(
-                                      baseImageAssetsUrl + 'filling_fast.svg',
-                                      height: 30,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ],
-                                ),
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxHeight: 350, minHeight: 300.0),
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    padding: EdgeInsets.all(8.0),
-                                    physics: BouncingScrollPhysics(),
-                                    primary: false,
-                                    scrollDirection: Axis.vertical,
+                // SizedBox(height: SizeConfig.blockSizeVertical * 0.),
+                Container(
+                  //   color: Colors.black,
+                  padding: EdgeInsets.all(5),
+                  height: myData.length == 0
+                      ? SizeConfig.screenHeight * 0.4
+                      : SizeConfig.screenHeight * 0.7,
+                  child: TabBarView(children: <Widget>[
+                    new Column(
+                      children: <Widget>[
+//                                Row(
+//                                  children: <Widget>[
+//                                    SvgPicture.asset(
+//                                      baseImageAssetsUrl + 'filling_fast.svg',
+//                                      height: 30,
+//                                      fit: BoxFit.cover,
+//                                    ),
+//                                  ],
+//                                ),
+                        myData.length == 0
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 60.0),
+                                child: Image.asset(
+                                    baseImageAssetsUrl + 'no_event.png'),
+                              )
+                            : ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxHeight: 350, minHeight: 300.0),
+                                child: ListView.builder(
                                     itemCount: myData.length,
+                                    // Add one more item for progress indicator
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
                                     itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        child: Column(
-                                          //    crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Stack(
-                                              alignment: Alignment.bottomRight,
-                                              children: <Widget>[
-                                                Container(
-                                                  padding: EdgeInsets.all(10),
-                                                  //   color: Colors.red,
-                                                  height:
-                                                      SizeConfig.screenHeight *
-                                                          0.22,
-                                                  width: SizeConfig.screenWidth,
-                                                  child: GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            ScaleRoute(
-                                                                page:
-                                                                    EventDetail(
-                                                              id: myData[index]
-                                                                  ['id'],
-                                                              status: upcoming,
-                                                            )));
-                                                      },
-                                                      child: FadeInImage
-                                                          .assetNetwork(
-                                                        placeholder:
-                                                            baseImageAssetsUrl +
-                                                                'logo_white.png',
-                                                        image: BASE_URL +
-                                                            Constants.uploads +
-                                                            Constants.event +
-                                                            "/" +
-                                                            myData[index]
-                                                                ['image'],
-                                                        fit: BoxFit.cover,
-                                                        //  height: SizeConfig.screenHeight * .25,
-                                                      )),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 20, bottom: 20),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    //    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Container(
-                                                          //      color:Colors.red,
-                                                          //   padding: EdgeInsets.only(left:10),
-                                                          alignment:
-                                                              Alignment.topLeft,
-                                                          child: Text(
-                                                            myData[index]
-                                                                ['name'],
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 22.0),
-                                                          )),
-                                                      SizedBox(
-                                                          width: SizeConfig
-                                                                  .screenWidth *
-                                                              0.2,
-                                                          child: Divider(
-                                                            thickness: 2,
-                                                            color: Colors.white,
-                                                            height: 9,
-                                                          )),
+                                      if (index == myData.length) {
+                                        return buildProgressIndicator(
+                                            isLoadingPast);
+                                      } else {
+                                        return new GestureDetector(
+                                          child: Column(
+                                            //    crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Stack(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                children: <Widget>[
+                                                  Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    //   color: Colors.red,
+                                                    height: SizeConfig
+                                                            .screenHeight *
+                                                        0.22,
+                                                    width:
+                                                        SizeConfig.screenWidth,
+                                                    child: GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              ScaleRoute(
+                                                                  page:
+                                                                      EventDetail(
+                                                                id: myData[
+                                                                        index]
+                                                                    ['id'],
+                                                                status:
+                                                                    upcoming,
+                                                              )));
+                                                        },
+                                                        child: FadeInImage
+                                                            .assetNetwork(
+                                                          placeholder:
+                                                              baseImageAssetsUrl +
+                                                                  'logo_white.png',
+                                                          image: BASE_URL +
+                                                              Constants
+                                                                  .uploads +
+                                                              Constants.event +
+                                                              "/" +
+                                                              myData[index]
+                                                                  ['image'],
+                                                          fit: BoxFit.cover,
+                                                          //  height: SizeConfig.screenHeight * .25,
+                                                        )),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 20, bottom: 20),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      //    mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Container(
+                                                            //      color:Colors.red,
+                                                            //   padding: EdgeInsets.only(left:10),
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Text(
+                                                              myData[index]
+                                                                  ['name'],
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      22.0),
+                                                            )),
+                                                        SizedBox(
+                                                            width: SizeConfig
+                                                                    .screenWidth *
+                                                                0.2,
+                                                            child: Divider(
+                                                              thickness: 2,
+                                                              color:
+                                                                  Colors.white,
+                                                              height: 9,
+                                                            )),
 //                                                  SizedBox(
 //                                                    height: SizeConfig.blockSizeVertical * 3,
 //                                                  ),
-                                                      Container(
-                                                          // padding: EdgeInsets.all(20),
-                                                          alignment:
-                                                              Alignment.topLeft,
-                                                          child: Text(
-                                                            myData[index]
-                                                                ['description'],
-                                                            maxLines: 1,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 15.0),
-                                                          )),
-                                                    ],
-                                                  ),
-                                                )
-                                              ], ////gro
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                            //Todo 2nd tab
-                            Column(
-                              children: <Widget>[
-                                ListView.builder(
+                                                        Container(
+                                                            // padding: EdgeInsets.all(20),
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Text(
+                                                              myData[index][
+                                                                  'description'],
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      15.0),
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ], ////gro
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    }),
+                              ),
+                      ],
+                    ),
+                    //Todo 2nd tab
+                    new Column(
+                      children: <Widget>[
+                        myDatapast.length == 0
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 60.0),
+                                child: Image.asset(
+                                    baseImageAssetsUrl + 'no_event.png'),
+                              )
+                            : ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxHeight: 350, minHeight: 300.0),
+                                child: ListView.builder(
                                   padding: EdgeInsets.all(8),
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
@@ -447,15 +497,15 @@ class _EventState extends State<Event> {
                                     );
                                   },
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-            ],
-          );
+                              ),
+                      ],
+                    )
+                  ]),
+                ),
+              ],
+            )),
+      ],
+    );
   }
 }
 

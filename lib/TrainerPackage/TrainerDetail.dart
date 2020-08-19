@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
@@ -24,9 +25,10 @@ class TrainerDetail extends StatefulWidget {
 }
 
 class TrainerDetailState extends State<TrainerDetail> {
-
   String fullName = '', expirence = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
+  bool _enabled = true;
+
   String rating;
   List<Reviews> reviewList = List<Reviews>();
   List<RecomendedTrainerClass> trainerList = List<RecomendedTrainerClass>();
@@ -64,6 +66,7 @@ class TrainerDetailState extends State<TrainerDetail> {
 
               if (response.data.related.length > 0) {
                 _checkList = response.data.related;
+                _enabled = false;
 
                 trainerList = List<RecomendedTrainerClass>.generate(
                     response.data.related.length,
@@ -206,8 +209,8 @@ class TrainerDetailState extends State<TrainerDetail> {
                                         'uploads/trainer-user/' +
                                         imgLink,
 //                                    fit: BoxFit.cover,
-                              width: SizeConfig.blockSizeHorizontal * 50,
-                              height: SizeConfig.blockSizeVertical * 25,
+                                    width: SizeConfig.blockSizeHorizontal * 50,
+                                    height: SizeConfig.blockSizeVertical * 25,
                                   )),
                       ),
 //                      SvgPicture.asset(
@@ -268,8 +271,28 @@ class TrainerDetailState extends State<TrainerDetail> {
                           ),
                           padding: EdgeInsets.only(top: 10),
                         ),
-                        fullWidthButton(context, book_now, 150,
-                            FontWeight.normal, TrainerService())
+                        Container(
+                          margin: EdgeInsets.only(top: padding15),
+                          height: button_height,
+                          width: 150,
+                          child: RaisedButton(
+                            onPressed: () {
+                              bookingFunction(auth, context, trainerUsers,
+                                  widget.id.toString());
+                            },
+                            color: Colors.black,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(button_radius)),
+                            child: Text(
+                              book_now,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            ),
+                          ),
+                        ),
                       ],
                     ))
               ],

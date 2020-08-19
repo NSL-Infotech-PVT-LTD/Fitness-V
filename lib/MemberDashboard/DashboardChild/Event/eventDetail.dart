@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:volt/AuthScreens/LoginScreen.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
@@ -22,14 +23,14 @@ class EventDetail extends StatefulWidget {
 
 class EventDetailState extends State<EventDetail> {
   String _imageLink;
-  String _about='';
-  String _eventName='';
-  String _eventLocation='';
-  String _eventTime='';
+  String _about = '';
+  String _eventName = '';
+  String _eventLocation = '';
+  String _eventTime = '';
+  String auth = '';
 
   @override
   void initState() {
-    String auth = '';
     getString(USER_AUTH)
         .then((value) => {auth = value})
         .whenComplete(() => {getEventDetail(auth)});
@@ -46,8 +47,9 @@ class EventDetailState extends State<EventDetail> {
         getEventDetailsApi(auth, parms).then((response) {
           dismissDialog(context);
           if (response.status) {
-            if (response.data != null) {
-              print("Even=====>"+response.toJson().toString());
+            if (response.data != null &&
+                response.data.location_detail != null) {
+              print("Even=====>" + response.toJson().toString());
               _eventName = response.data.name;
               _imageLink = response.data.image;
               _about = response.data.description;
@@ -129,7 +131,6 @@ class EventDetailState extends State<EventDetail> {
                           fontFamily: open_light),
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.fromLTRB(25.0, 10, 8.0, 5),
                     child: Text(
@@ -143,7 +144,7 @@ class EventDetailState extends State<EventDetail> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(25.0, 0, 8.0, 10),
                     child: Text(
-                      _eventLocation,
+                      _eventLocation == null ? '' : _eventLocation,
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: textSize12,
@@ -175,14 +176,38 @@ class EventDetailState extends State<EventDetail> {
                           fontFamily: open_light),
                     ),
                   ),
+                  Visibility(
+                  visible: widget.status != recent,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        margin: EdgeInsets.only(top: padding15),
+                        height: button_height,
+                        width: 150,
+                        child: RaisedButton(
+                          onPressed: () {
+                            bookingFunction(auth, context, eventKey, widget.id.toString());
+                          },
+                          color: Colors.black,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(button_radius)),
+                          child: Text(
+                            book_now,
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+
                 ])));
   }
 
   Widget setImage(String status, String imgLink) => status == recent
       ? ColorFiltered(
           colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
-          child: blackPlaceHolder(imageUrlEvent,
-              imgLink, SizeConfig.screenHeight * .25, SizeConfig.screenWidth))
-      : blackPlaceHolder(
-      imageUrlEvent,  imgLink, SizeConfig.screenHeight * .25, SizeConfig.screenWidth);
+          child: blackPlaceHolder(imageUrlEvent, imgLink,
+              SizeConfig.screenHeight * .25, SizeConfig.screenWidth))
+      : blackPlaceHolder(imageUrlEvent, imgLink, SizeConfig.screenHeight * .25,
+          SizeConfig.screenWidth);
 }

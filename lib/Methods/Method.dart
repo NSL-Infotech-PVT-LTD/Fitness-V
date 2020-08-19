@@ -12,13 +12,6 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
-ProgressDialog progress(context) {
-  return ProgressDialog(
-    context,
-    type: ProgressDialogType.Normal,
-    isDismissible: true,
-  );
-}
 
 Future<String> getDeviceID(bool isIOS) async {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -181,6 +174,28 @@ bool validateEmail(String value) {
   return (!regex.hasMatch(value)) ? false : true;
 }
 
+Widget buildProgressIndicator(bool isLoading) {
+  return new Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: new Align(
+      alignment: Alignment.centerRight,
+      child: new Opacity(
+        opacity: isLoading ? 1.0 : 00,
+        child: new CircularProgressIndicator(
+          backgroundColor: Colors.black,
+        ),
+      ),
+    ),
+  );
+}
+
+ProgressDialog progress(context) {
+  return ProgressDialog(
+    context,
+    type: ProgressDialogType.Normal,
+    isDismissible: true,
+  );
+}
 void showProgress(context, String msg) {
   progress(context).style(
       message: msg,
@@ -204,7 +219,6 @@ void showProgress(context, String msg) {
 
   progress(context).show();
 }
-
 void dismissDialog(context) {
   if (progress(context) != null) progress(context).hide();
 }

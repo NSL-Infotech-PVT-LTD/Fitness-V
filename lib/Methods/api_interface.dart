@@ -20,6 +20,7 @@ String privacyUrl = BASE_URL + "api/event";
 String aboutUsUrl = BASE_URL + "api/config/about_us";
 String termsConditionUrl = BASE_URL + "api/config/terms_and_conditions";
 String updateProfileUrl = BASE_URL + "api/update";
+String bookingUrl = BASE_URL + "api/bookings/store";
 
 String CUSTOMER_ID = "";
 
@@ -40,6 +41,7 @@ String trainerId = "trainer_id";
 
 String SEARCH = "search";
 String LIMIT = "limit";
+String PAGE = "page";
 
 //signup keys
 String NAME = "name";
@@ -53,10 +55,13 @@ String ROLE_ID = "role_id";
 String ROLE_PLAN_ID = "role_plan_id";
 String EMEREGENCY_NUMBER = "emergency_contact_no";
 String CHILD = "child";
-String EMAIL = "email";
 String MOBILE = "mobile";
+String EMAIL = "email";
 String PASSWORD = "password";
 String EMIRATES_ID = "emirates_id";
+String eventKey = "events";
+String classSchedules = "class_schedules";
+String trainerUsers = "trainer_users";
 
 //user data
 String USER_AUTH = "USER_AUTH";
@@ -86,8 +91,8 @@ Future<StatusResponse> getLogin(Map<String, String> parms) async {
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getTrainersListApi(String auth,
-    Map<String, String> parms) async {
+Future<StatusResponse> getTrainersListApi(
+    String auth, Map<String, String> parms) async {
   final response = await http.post(getTrainersList,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -96,13 +101,12 @@ Future<StatusResponse> getTrainersListApi(String auth,
       body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
-  print("ResponseTrainersList--->" + map.toString());
 
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getTrainersDetailApi(String auth,
-    Map<String, String> parms) async {
+Future<StatusResponse> getTrainersDetailApi(
+    String auth, Map<String, String> parms) async {
   final response = await http.post(trainers,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -111,7 +115,6 @@ Future<StatusResponse> getTrainersDetailApi(String auth,
       body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
-  print("ResponseTrainersList--->" + map.toString());
 
   return StatusResponse.fromJson(map);
 }
@@ -126,7 +129,6 @@ Future<StatusResponse> getProfileDetailApi(String auth) async {
   );
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
-  print("getProfileDetailApi--->" + map.toString());
 
   return StatusResponse.fromJson(map);
 }
@@ -147,25 +149,21 @@ Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(parms));
-  print("signUpResponse---->" + response.body.toString());
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
 Future<StatusResponse> getTermsApi() async {
   final response = await http.get(termsConditionUrl);
-  print("Terms---->" + response.body.toString());
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
 Future<StatusResponse> getPrivacyApi() async {
   final response = await http.get(privacyUrl);
-  print("Privacy---->" + response.body.toString());
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
 Future<StatusResponse> getAboutApi() async {
   final response = await http.get(aboutUsUrl);
-  print("About---->" + response.body.toString());
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
@@ -177,42 +175,49 @@ Future<StatusResponse> resetPassword(Map<String, String> parms) async {
       body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
-  print("resetPassword==>" + map.toString());
 
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getEventDetailsApi(String userAuth,
-    Map<String, String> parms) async {
+Future<StatusResponse> getEventDetailsApi(
+    String userAuth, Map<String, String> parms) async {
   final response = await http.post(eventDetails,
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
-  print("EventDetail------>" + map.toString());
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> bookingApi(
+    String userAuth, Map<String, String> parms) async {
+  final response = await http.post(bookingUrl,
+      headers: header(userAuth), body: jsonEncode(parms));
+  print("Parms+======>"+response.body.toString());
+
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
 
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> getTrainerReviewsApi(String userAuth,
-    Map<String, String> parms) async {
+Future<StatusResponse> getTrainerReviewsApi(
+    String userAuth, Map<String, String> parms) async {
   final response = await http.post(trainerReviews,
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
-  print("getTrainerReviewsApi------>" + map.toString());
 
   return StatusResponse.fromJson(map);
 }
 
-
-Future<StatusResponse> updateUserProfileApi(String userAuth, File file,
-    Map<String, String> parms) async {
+Future<StatusResponse> updateUserProfileApi(
+    String userAuth, File file, Map<String, String> parms) async {
   final postUri = Uri.parse(updateProfileUrl);
   http.MultipartRequest request = http.MultipartRequest('POST', postUri);
 
   request.headers['Authorization'] = userAuth;
   request.fields.addAll(parms);
-  if(file!=null) {
+  if (file != null) {
     http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
         'image', file.path); //returns a Future<MultipartFile>
 
@@ -221,17 +226,12 @@ Future<StatusResponse> updateUserProfileApi(String userAuth, File file,
   var streamedResponse = await request.send();
   var response = await http.Response.fromStream(streamedResponse);
 
-  print("updateUserProfileApi------>" + response.body.toString());
-
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
   return StatusResponse.fromJson(map);
-
 }
 
-
-header(String auth) =>
-    {
+header(String auth) => {
       Content_Type: 'application/json; charset=UTF-8',
       Authorization: auth,
     };

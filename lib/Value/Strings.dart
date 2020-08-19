@@ -60,6 +60,7 @@ const pleaseCheckInternet =
 const upcoming = 'Upcoming';
 const recent1  = 'Recent';
 const events  = 'Events';
+
 const fantastic  = 'We have a fantastic range of special events. Here are some of our current and recent'
     '  activities. designed to help you enjoy your Volt membership to the max!';
 const fitness  = 'Functional Fitness workout';
