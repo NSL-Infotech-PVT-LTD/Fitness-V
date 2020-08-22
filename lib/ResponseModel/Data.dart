@@ -15,6 +15,7 @@ class Data {
   bool is_booked_by_me;
   UserResponse user;
   UserResponse location_detail;
+  UserResponse model_detail;
   UserResponse trainer;
   List<dynamic> data;
   List<dynamic> related;
@@ -43,6 +44,7 @@ class Data {
       this.location_detail,
       this.gym_members,
       this.pool_and_beach_members,
+      this.model_detail,
       this.related,
       this.is_booked_by_me,
       this.local_guest,
@@ -71,6 +73,7 @@ class Data {
         ? new UserResponse.fromJson(json['location_detail'])
         : null;
     data = json['data'] != null ? json['data'] : null;
+    model_detail = json['model_detail'] != null ? json['model_detail'] : null;
     gym_members = json['gym_members'] != null ? json['gym_members'] : null;
     pool_and_beach_members = json['pool_and_beach_members'] != null
         ? json['pool_and_beach_members']
@@ -79,9 +82,7 @@ class Data {
     fairmont_hotel_guest = json['fairmont_hotel_guest'] != null
         ? json['fairmont_hotel_guest']
         : null;
-    related = json['related'] != null
-        ? json['related']
-        : null;
+    related = json['related'] != null ? json['related'] : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +104,9 @@ class Data {
     }
     if (this.trainer != null) {
       data['trainer'] = this.trainer.toJson();
+    }
+    if (this.model_detail != null) {
+      data['model_detail'] = this.model_detail.toJson();
     }
     if (this.location_detail != null) {
       data['location_detail'] = this.location_detail.toJson();

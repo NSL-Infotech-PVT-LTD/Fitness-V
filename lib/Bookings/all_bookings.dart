@@ -24,6 +24,7 @@ class AllBookingsState extends State<AllBookings> {
   ScrollController _sc = new ScrollController();
   bool _isLoading = false;
 
+  model_detail
 
   var _all = true;
   var _trainers = false;
@@ -54,12 +55,14 @@ class AllBookingsState extends State<AllBookings> {
       }
     });
   }
+
   @override
   void dispose() {
     _sc.dispose();
     _page = 1;
     super.dispose();
   }
+
   void _getBookings(String auth) async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
@@ -74,12 +77,17 @@ class AllBookingsState extends State<AllBookings> {
             if (response.data != null && response.data.data.length > 0) {
               _bookingList = List<CustomBooking>.generate(
                   response.data.data.length,
-                  (index) => CustomBooking(
-                      bookingId: response.data.data[index]['id'].toString(),
-                      name: "Jugraj",
-                      imgLink: null,
-                      bookingDate: 'dsk',
-                      serviceHours:
+                      (index) =>
+                      CustomBooking(
+                          bookingId: response.data.data[index]['id'].toString(),
+                          name: response.data
+                              .data[index]['model_detail']['first_name'] + " " +
+                              response.data
+                                  .data[index]['model_detail']['last_name'],
+                          imgLink: response.data
+                              .data[index]['model_detail']['image'],
+                          bookingDate: response.data.data[index]['created_at'],
+                          serviceHours:
                           response.data.data[index]['hours'].toString()));
 
               setState(() {});
@@ -108,200 +116,204 @@ class AllBookingsState extends State<AllBookings> {
           return StatefulBuilder(builder: (context, setState) {
             return SingleChildScrollView(
                 child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              color: Colors.transparent,
-              //could change this to Color(0xFF737373),
-              //so you don't have to change MaterialApp canvasColor
-              child: new Container(
-                  child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 10,
-                  ),
-                  InkWell(
-                    child: Padding(
-                      child: Align(
-                        child: Icon(Icons.close),
-                        alignment: Alignment.topRight,
-                      ),
-                      padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Text(title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {
-                            setBoolState();
-                            _all = true;
-                            setState(() {
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  color: Colors.transparent,
+                  //could change this to Color(0xFF737373),
+                  //so you don't have to change MaterialApp canvasColor
+                  child: new Container(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 10,
+                          ),
+                          InkWell(
+                            child: Padding(
+                              child: Align(
+                                child: Icon(Icons.close),
+                                alignment: Alignment.topRight,
+                              ),
+                              padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                            ),
+                            onTap: () {
                               Navigator.pop(context);
-                            });
-                          },
-                          child: Container(
-                              height: 70,
-                              width: 70,
-                              child: Center(
-                                child: Text(
-                                  'All',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color:
-                                          _all ? Colors.white : Colors.black),
+                            },
+                          ),
+                          Text(title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              GestureDetector(
+                                  onTap: () {
+                                    setBoolState();
+                                    _all = true;
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  child: Container(
+                                      height: 70,
+                                      width: 70,
+                                      child: Center(
+                                        child: Text(
+                                          'All',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color:
+                                              _all ? Colors.white : Colors
+                                                  .black),
+                                        ),
+                                      ),
+                                      margin: EdgeInsets.all(10.0),
+                                      decoration: BoxDecoration(
+                                          color: _all ? Colors.black : Colors
+                                              .black26,
+                                          shape: BoxShape.circle))),
+                              GestureDetector(
+                                  onTap: () {
+                                    setBoolState();
+                                    _trainers = true;
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  child: Container(
+                                      height: 70,
+                                      width: 70,
+                                      child: Center(
+                                        child: Text(
+                                          'Trainers',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: _trainers
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                      ),
+                                      margin: EdgeInsets.all(10.0),
+                                      decoration: BoxDecoration(
+                                          color:
+                                          _trainers ? Colors.black : Colors
+                                              .black26,
+                                          shape: BoxShape.circle))),
+                              GestureDetector(
+                                  onTap: () {
+                                    setBoolState();
+                                    _groupClass = true;
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  child: Container(
+                                      child: Center(
+                                        child: Text(
+                                          'Group Classes',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: _groupClass
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                      ),
+                                      height: 70,
+                                      width: 70,
+                                      margin: EdgeInsets.all(10.0),
+                                      decoration: BoxDecoration(
+                                          color: _groupClass
+                                              ? Colors.black
+                                              : Colors.black26,
+                                          shape: BoxShape.circle))),
+                              GestureDetector(
+                                  onTap: () {
+                                    setBoolState();
+                                    _events = true;
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  child: Container(
+                                      height: 70,
+                                      width: 70,
+                                      child: Center(
+                                        child: Text(
+                                          'Events',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: _events
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                      ),
+                                      margin: EdgeInsets.all(10.0),
+                                      decoration: BoxDecoration(
+                                          color:
+                                          _events ? Colors.black : Colors
+                                              .black26,
+                                          shape: BoxShape.circle))),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(left: 25, bottom: 0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Image.asset(
+                                    baseImageAssetsUrl + 'logo_black.png',
+                                    height: 90,
+                                    color: Color(0xff8B8B8B),
+                                    width: 120,
+                                  ),
                                 ),
                               ),
-                              margin: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                  color: _all ? Colors.black : Colors.black26,
-                                  shape: BoxShape.circle))),
-                      GestureDetector(
-                          onTap: () {
-                            setBoolState();
-                            _trainers = true;
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: Container(
-                              height: 70,
-                              width: 70,
-                              child: Center(
-                                child: Text(
-                                  'Trainers',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: _trainers
-                                          ? Colors.white
-                                          : Colors.black),
+                              Spacer(),
+                              Padding(
+                                padding: EdgeInsets.only(left: 25, bottom: 0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: SvgPicture.asset(
+                                    baseImageAssetsUrl + 'vector_lady.svg',
+                                    height: 90,
+                                    width: 120,
+                                  ),
                                 ),
                               ),
-                              margin: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                  color:
-                                      _trainers ? Colors.black : Colors.black26,
-                                  shape: BoxShape.circle))),
-                      GestureDetector(
-                          onTap: () {
-                            setBoolState();
-                            _groupClass = true;
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: Container(
-                              child: Center(
+                              SizedBox(
+                                width: 20,
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 40, bottom: 10),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Group Classes',
+                                  volt_rights,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 12,
-                                      color: _groupClass
-                                          ? Colors.white
-                                          : Colors.black),
-                                ),
-                              ),
-                              height: 70,
-                              width: 70,
-                              margin: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                  color: _groupClass
-                                      ? Colors.black
-                                      : Colors.black26,
-                                  shape: BoxShape.circle))),
-                      GestureDetector(
-                          onTap: () {
-                            setBoolState();
-                            _events = true;
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: Container(
-                              height: 70,
-                              width: 70,
-                              child: Center(
-                                child: Text(
-                                  'Events',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: _events
-                                          ? Colors.white
-                                          : Colors.black),
-                                ),
-                              ),
-                              margin: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                  color:
-                                      _events ? Colors.black : Colors.black26,
-                                  shape: BoxShape.circle))),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 25, bottom: 0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Image.asset(
-                            baseImageAssetsUrl + 'logo_black.png',
-                            height: 90,
-                            color: Color(0xff8B8B8B),
-                            width: 120,
+                                      color: Color(0xff8B8B8B),
+                                      fontSize: 8,
+                                      fontStyle: FontStyle.italic,
+                                      fontFamily: open_italic),
+                                )),
                           ),
-                        ),
-                      ),
-                      Spacer(),
-                      Padding(
-                        padding: EdgeInsets.only(left: 25, bottom: 0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: SvgPicture.asset(
-                            baseImageAssetsUrl + 'vector_lady.svg',
-                            height: 90,
-                            width: 120,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 40, bottom: 10),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          volt_rights,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Color(0xff8B8B8B),
-                              fontSize: 8,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: open_italic),
-                        )),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  )
-                ],
-              )),
-            ));
+                          SizedBox(
+                            height: 50,
+                          )
+                        ],
+                      )),
+                ));
           });
         });
   }
@@ -471,7 +483,8 @@ class BookingView extends StatelessWidget {
                                     Text(
                                       customBooking.serviceHours == 'null'
                                           ? '--'
-                                          : '${customBooking.serviceHours} Hours',
+                                          : '${customBooking
+                                          .serviceHours} Hours',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 14,
@@ -507,19 +520,19 @@ class BookingView extends StatelessWidget {
                       ),
                       customBooking.imgLink == null
                           ? Image.asset(
-                              baseImageAssetsUrl + 'logo_black.png',
-                              width: SizeConfig.screenWidth * .25,
-                              height: 110,
-                              fit: BoxFit.fill,
-                            )
+                        baseImageAssetsUrl + 'logo_black.png',
+                        width: SizeConfig.screenWidth * .25,
+                        height: 110,
+                        fit: BoxFit.fill,
+                      )
                           : FadeInImage.assetNetwork(
-                              placeholder:
-                                  baseImageAssetsUrl + 'logo_black.png',
-                              image: BASE_URL +
-                                  trainerUser +
-                                  customBooking.imgLink,
-                              width: SizeConfig.screenWidth * .25,
-                            ),
+                        placeholder:
+                        baseImageAssetsUrl + 'logo_black.png',
+                        image: BASE_URL +
+                            trainerUser +
+                            customBooking.imgLink,
+                        width: SizeConfig.screenWidth * .25,
+                      ),
                     ],
                   ),
                 ],
