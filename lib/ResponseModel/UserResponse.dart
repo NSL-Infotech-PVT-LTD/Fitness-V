@@ -31,6 +31,7 @@ class UserResponse {
   String created_at;
   String updated_at;
   String birth_date;
+  bool is_booked_by_me;
   CreatedByModel created_by_detail;
   List<PlanDetail> plan_detail;
   UserResponse(
@@ -63,6 +64,7 @@ class UserResponse {
     this.plan_detail,
     this.created_by_detail,
     this.birth_date,
+    this.is_booked_by_me,
   );
 
   UserResponse.fromJson(Map<String, dynamic> json) {
@@ -93,6 +95,7 @@ class UserResponse {
     created_at = json['created_at'];
     updated_at = json['updated_at'];
     birth_date = json['birth_date'];
+    is_booked_by_me = json['is_booked_by_me'];
     created_by_detail =
     json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
     plan_detail = json['plan_detail'];
@@ -128,6 +131,7 @@ class UserResponse {
     data['updated_at'] = this.updated_at;
     data['birth_date'] = this.birth_date;
     data['plan_detail'] = this.plan_detail;
+    data['is_booked_by_me'] = this.is_booked_by_me;
 
     if (this.created_by_detail != null) {
       data['created_by_detail'] = this.created_by_detail.toJson();

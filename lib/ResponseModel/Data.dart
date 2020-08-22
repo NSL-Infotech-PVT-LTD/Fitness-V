@@ -12,6 +12,7 @@ class Data {
   int current_page;
   String start_date;
   String end_date;
+  bool is_booked_by_me;
   UserResponse user;
   UserResponse location_detail;
   UserResponse trainer;
@@ -43,6 +44,7 @@ class Data {
       this.gym_members,
       this.pool_and_beach_members,
       this.related,
+      this.is_booked_by_me,
       this.local_guest,
       this.fairmont_hotel_guest});
 
@@ -57,6 +59,7 @@ class Data {
     end_date = json['end_date'];
     id = json['id'];
     last_page = json['last_page'];
+    is_booked_by_me = json['is_booked_by_me'];
     current_page = json['current_page'];
     user =
         json['user'] != null ? new UserResponse.fromJson(json['user']) : null;
@@ -94,6 +97,7 @@ class Data {
     data['image'] = this.image;
     data['current_page'] = this.current_page;
     data['token'] = this.token;
+    data['is_booked_by_me'] = this.is_booked_by_me;
     if (this.user != null) {
       data['user'] = this.user.toJson();
     }

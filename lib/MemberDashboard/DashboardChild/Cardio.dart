@@ -215,12 +215,12 @@ class _CardioState extends State<Cardio> {
                         child: GestureDetector(
                           onTap: () {
                             if (checkList != null) {
-                              if (checkList.length > 0) {
+                              if (checkList.length > 1) {
                                 Navigator.push(
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) => TrainerDetail(
-                                              id: checkList[0]['id'],
+                                              id: checkList[1]['id'],
                                             )));
                               }
                             }

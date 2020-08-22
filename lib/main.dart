@@ -17,7 +17,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'regular',  
         primaryColor: CColor.PRIMARYCOLOR,
-
+        sliderTheme: SliderTheme.of(context).copyWith(  thumbColor: Color(0xFFEB1555),
+        inactiveTrackColor: Color(0xFF8D8E98),
+        activeTrackColor: Colors.white,
+        overlayColor: Color(0x99EB1555),
+        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10.0),
+        overlayShape: RoundSliderOverlayShape(overlayRadius: 15.0),
+        ),
         accentColor:CColor.PRIMARYCOLOR,
       ),
       home: SplashScreenWithLady(),

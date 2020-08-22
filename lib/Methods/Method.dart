@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:volt/AuthScreens/LoginScreen.dart';
+import 'package:volt/MemberDashboard/Dashboard.dart';
 
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Pref.dart';
@@ -48,6 +49,26 @@ void showDialogBox(context, String title, String message) {
             FlatButton(
               child: const Text('OK'),
               onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      });
+}
+
+void showDialogRemoveUntil(context, String title, String message) {
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('OK'),
+              onPressed: () => Navigator.pushAndRemoveUntil(
+                  context, ScaleRoute(page: Dashboard()), (r) => false),
             ),
           ],
         );
@@ -133,7 +154,6 @@ Widget whitePlaceHolder(String roleUrl,String imageLink,double height,double wid
 Widget blackPlaceHolder(String roleUrl,String imageLink,double height,double width) => FadeInImage.assetNetwork(
       placeholder: baseImageAssetsUrl + 'logo_black.png',
       image: BASE_URL + roleUrl + imageLink,
-      fit: BoxFit.cover,
       width: width,
       height: height,
     );

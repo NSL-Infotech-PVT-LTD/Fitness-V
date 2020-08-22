@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:volt/Bookings/all_bookings.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
@@ -30,7 +31,7 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
           context, MaterialPageRoute(builder: (context) => ChooseYourWay()));
     } else {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+          context, MaterialPageRoute(builder: (context) => AllBookings()));
     }
   }
 

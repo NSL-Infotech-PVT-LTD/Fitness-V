@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:volt/AuthScreens/LoginScreen.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
@@ -25,6 +24,7 @@ class EventDetailState extends State<EventDetail> {
   String _imageLink;
   String _about = '';
   String _eventName = '';
+  bool _is_booked_by_me = false;
   String _eventLocation = '';
   String _eventTime = '';
   String auth = '';
@@ -52,6 +52,7 @@ class EventDetailState extends State<EventDetail> {
               print("Even=====>" + response.toJson().toString());
               _eventName = response.data.name;
               _imageLink = response.data.image;
+              _is_booked_by_me = response.data.is_booked_by_me;
               _about = response.data.description;
               _eventLocation = response.data.location_detail.location;
               _eventTime = "From : " +
@@ -177,7 +178,7 @@ class EventDetailState extends State<EventDetail> {
                     ),
                   ),
                   Visibility(
-                  visible: widget.status != recent,
+                    visible: widget.status != recent,
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Container(
@@ -186,20 +187,26 @@ class EventDetailState extends State<EventDetail> {
                         width: 150,
                         child: RaisedButton(
                           onPressed: () {
-                            bookingFunction(auth, context, eventKey, widget.id.toString());
+                            if (!_is_booked_by_me)
+                              bookingFunction(auth, context, eventKey,
+                                  widget.id.toString(), '');
                           },
-                          color: Colors.black,
+                          color:
+                              _is_booked_by_me ? Colors.black54 : Colors.black,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(button_radius)),
+                              borderRadius:
+                                  BorderRadius.circular(button_radius)),
                           child: Text(
-                            book_now,
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                            _is_booked_by_me ? alreadyBooked : book_now,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: _is_booked_by_me ? 13 : 16),
                           ),
                         ),
                       ),
                     ),
                   )
-
                 ])));
   }
 

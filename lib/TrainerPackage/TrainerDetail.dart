@@ -1,19 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
-import 'package:volt/TrainerPackage/TrainerService.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 import 'package:volt/util/starDisplay.dart';
-
-import '../Methods.dart';
 
 class TrainerDetail extends StatefulWidget {
   final int id;
@@ -27,7 +23,7 @@ class TrainerDetail extends StatefulWidget {
 class TrainerDetailState extends State<TrainerDetail> {
   String fullName = '', expirence = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
-  bool _enabled = true;
+  bool is_booked_by_me = false;
 
   String rating;
   List<Reviews> reviewList = List<Reviews>();
@@ -63,10 +59,10 @@ class TrainerDetailState extends State<TrainerDetail> {
               rating = response.data.trainer.rating_avg;
               expirence = response.data.trainer.expirence;
               trainees = response.data.trainer.booking_cnt;
+              is_booked_by_me = response.data.trainer.is_booked_by_me;
 
               if (response.data.related.length > 0) {
                 _checkList = response.data.related;
-                _enabled = false;
 
                 trainerList = List<RecomendedTrainerClass>.generate(
                     response.data.related.length,
@@ -143,7 +139,7 @@ class TrainerDetailState extends State<TrainerDetail> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: 50,
+              height: 35,
             ),
             Container(
                 padding: EdgeInsets.fromLTRB(padding20, 0, 0, 0),
@@ -176,14 +172,14 @@ class TrainerDetailState extends State<TrainerDetail> {
                   ],
                 )),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Divider(
               height: .5,
               color: CColor.PRIMARYCOLOR,
             ),
             SizedBox(
-              height: 30,
+              height: 15,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -277,19 +273,25 @@ class TrainerDetailState extends State<TrainerDetail> {
                           width: 150,
                           child: RaisedButton(
                             onPressed: () {
-                              bookingFunction(auth, context, trainerUsers,
-                                  widget.id.toString());
+                              if (!is_booked_by_me) {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => SelectSession(id:widget.id,image: imgLink,name: fullName,)));
+                              }
                             },
-                            color: Colors.black,
+                            color:
+                                is_booked_by_me ? Colors.black54 : Colors.black,
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(button_radius)),
                             child: Text(
-                              book_now,
+                              is_booked_by_me ? alreadyBooked : book_now,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                  fontSize: is_booked_by_me ? 13 : 16),
                             ),
                           ),
                         ),
@@ -304,7 +306,7 @@ class TrainerDetailState extends State<TrainerDetail> {
                   Container(
                     color: Color(0xffE1E1E1),
                     width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.only(top: 20, bottom: 10),
+                    margin: EdgeInsets.only(top: 0, bottom: 10),
                     padding: EdgeInsets.only(left: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,13 +338,12 @@ class TrainerDetailState extends State<TrainerDetail> {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                        maxHeight: SizeConfig.blockSizeVertical * 90,
+                        maxHeight: SizeConfig.blockSizeVertical * 95,
                         minHeight: 56.0),
                     child: TabBarView(
                       children: <Widget>[
                         Container(
                             padding: EdgeInsets.fromLTRB(10, 0, 20, 20),
-                            height: MediaQuery.of(context).size.height,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -582,4 +583,7 @@ class CustomReviews extends StatelessWidget {
           ],
         ));
   }
+
+//  Widget _showSession(context, String _imageLink,var valueHolder) => ;
+//
 }

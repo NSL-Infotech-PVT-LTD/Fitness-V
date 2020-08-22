@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
 
@@ -229,14 +230,17 @@ Widget finishAllScreenButton(context, String title, double setWidth,
       ),
     );
 
-void bookingFunction(
-    String auth, context, String model_type, String model_id) async {
+Future<bool> bookingFunction(String auth, context, String model_type,
+    String model_id, String hours) async {
+  bool isBooked = false;
   isConnectedToInternet().then((internet) {
     if (internet != null && internet) {
       showProgress(context, "Please wait.....");
       Map<String, String> parms = {
         "model_type": model_type,
         "model_id": model_id,
+        if (model_type == trainerUsers) "hours": hours,
+        if (model_type == classSchedules) "session": hours,
       };
 
       bookingApi(auth, parms).then((response) {
@@ -244,8 +248,10 @@ void bookingFunction(
 
         if (response.status) {
           if (response.data != null) {
-
+            isBooked = true;
             showDialogBox(context, "Booking confirmed", response.data.message);
+//            Navigator.pushAndRemoveUntil(
+//                context, ScaleRoute(page: Dashboard()), (r) => false);
           }
         } else {
           dismissDialog(context);
@@ -258,6 +264,7 @@ void bookingFunction(
       dismissDialog(context);
     }
   }).whenComplete(() => dismissDialog(context));
+  return isBooked;
 }
 
 class SizeRoute extends PageRouteBuilder {

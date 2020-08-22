@@ -21,6 +21,7 @@ String aboutUsUrl = BASE_URL + "api/config/about_us";
 String termsConditionUrl = BASE_URL + "api/config/terms_and_conditions";
 String updateProfileUrl = BASE_URL + "api/update";
 String bookingUrl = BASE_URL + "api/bookings/store";
+String allBookinsUrl = BASE_URL + "api/bookings";
 
 String CUSTOMER_ID = "";
 
@@ -192,7 +193,7 @@ Future<StatusResponse> bookingApi(
     String userAuth, Map<String, String> parms) async {
   final response = await http.post(bookingUrl,
       headers: header(userAuth), body: jsonEncode(parms));
-  print("Parms+======>"+response.body.toString());
+  print("Parms+======>" + response.body.toString());
 
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
@@ -207,6 +208,16 @@ Future<StatusResponse> getTrainerReviewsApi(
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
 
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> allBookingsApi(
+    String userAuth, Map<String, String> parms) async {
+  final response = await http.post(allBookinsUrl,
+      headers: header(userAuth), body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  print("AllBokingUrl====>" + map.toString());
   return StatusResponse.fromJson(map);
 }
 
