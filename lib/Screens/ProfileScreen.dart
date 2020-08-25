@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:volt/Bookings/all_bookings.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
@@ -295,6 +296,35 @@ class ProfileState extends State<ProfileScreen> {
                               padding: EdgeInsets.only(left: 20),
                               child: Text(
                                 'Notification',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color(0xff8B8B8B), fontSize: 16),
+                              ))
+                        ],
+                      )),
+                ),
+                myDivider(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => AllBookings()));
+                  },
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            baseImageAssetsUrl + 'bookings.svg',
+                            height: 30,
+                            width: 30,
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                'Bookings',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color(0xff8B8B8B), fontSize: 16),

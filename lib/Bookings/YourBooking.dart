@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:volt/Bookings/BookingConfirmed.dart';
-import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
@@ -31,6 +29,8 @@ class YourBooking extends StatefulWidget {
 
 class YourBookingState extends State<YourBooking> {
   String auth = '';
+  bool isBookingConfirmed = false;
+
 
   @override
   void initState() {
@@ -48,12 +48,7 @@ class YourBookingState extends State<YourBooking> {
     return Scaffold(
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(
-        child: WillPopScope(
-          onWillPop: () {
-            Navigator.pushAndRemoveUntil(
-                context, ScaleRoute(page: Dashboard()), (r) => false);
-            return new Future(() => false);
-          },
+
           child: Column(
             children: <Widget>[
               Container(
@@ -70,6 +65,7 @@ class YourBookingState extends State<YourBooking> {
                           width: SizeConfig.blockSizeHorizontal * 90,
                           child: RaisedButton(
                               onPressed: () {
+                                isBookingConfirmed = true;
                                 bookingFunction(auth, context, trainerUsers,
                                     widget.id.toString(), widget.serviceHours);
                               },
@@ -103,8 +99,10 @@ class YourBookingState extends State<YourBooking> {
                           width: 40,
                           child: RaisedButton(
                               onPressed: () {
-                                Navigator.push(context,
-                                    SizeRoute(page: BookingConfirmed()));
+                                bookingFunction(auth, context, trainerUsers,
+                                    widget.id.toString(), widget.serviceHours);
+//                                Navigator.push(context,
+//                                    SizeRoute(page: BookingConfirmed()));
                               },
                               color: Color(0xff707070),
                               shape: RoundedRectangleBorder(
@@ -230,7 +228,7 @@ class YourBookingState extends State<YourBooking> {
                                     ),
                                   ),
                                   Positioned(
-                                    top: 125,
+                                    top: 175,
                                     left: 55,
                                     child: Text(
                                       'Training Period',
@@ -241,7 +239,7 @@ class YourBookingState extends State<YourBooking> {
                                     ),
                                   ),
                                   Positioned(
-                                    top: 135,
+                                    top: 185,
                                     left: 55,
                                     child: Text(
                                       formattedDate,
@@ -252,7 +250,7 @@ class YourBookingState extends State<YourBooking> {
                                     ),
                                   ),
                                   Positioned(
-                                    top: 165,
+                                    top: SizeConfig.screenHeight*.17,
                                     left: 55,
                                     child: Text(
                                       '--------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------      --------',
@@ -263,7 +261,7 @@ class YourBookingState extends State<YourBooking> {
                                     ),
                                   ),
                                   Positioned(
-                                    top: 200,
+                                    top: 210,
                                     left: 55,
                                     child: Text(
                                       'Booking ID',
@@ -274,10 +272,10 @@ class YourBookingState extends State<YourBooking> {
                                     ),
                                   ),
                                   Positioned(
-                                    top: 210,
+                                    top: 220,
                                     left: 55,
                                     child: Text(
-                                      '${rng.nextInt(100000000)}',
+                                      '${""}',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,
@@ -317,7 +315,6 @@ class YourBookingState extends State<YourBooking> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

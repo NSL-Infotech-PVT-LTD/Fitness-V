@@ -4,6 +4,7 @@ import 'package:volt/ResponseModel/createdByDetail.dart';
 class UserResponse {
   int id;
   String name;
+  String model_type;
   String review;
   int rating;
   String location;
@@ -33,10 +34,12 @@ class UserResponse {
   String birth_date;
   bool is_booked_by_me;
   CreatedByModel created_by_detail;
+  CreatedByModel model_detail;
   List<PlanDetail> plan_detail;
   UserResponse(
     this.id,
     this.name,
+    this.model_type,
     this.location,
     this.booking_cnt,
     this.booking_reviewed_cnt,
@@ -63,6 +66,7 @@ class UserResponse {
     this.updated_at,
     this.plan_detail,
     this.created_by_detail,
+    this.model_detail,
     this.birth_date,
     this.is_booked_by_me,
   );
@@ -70,6 +74,7 @@ class UserResponse {
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    model_type = json['model_type'];
     location = json['location'];
     expirence = json['expirence'];
     booking_reviewed_cnt = json['booking_reviewed_cnt'];
@@ -98,12 +103,15 @@ class UserResponse {
     is_booked_by_me = json['is_booked_by_me'];
     created_by_detail =
     json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
+    model_detail =
+    json['model_detail'] != null ? new CreatedByModel.fromJson(json['model_detail']) : null;
     plan_detail = json['plan_detail'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['model_type'] = this.model_type;
     data['name'] = this.name;
     data['location'] = this.location;
     data['expirence'] = this.expirence;
@@ -135,6 +143,8 @@ class UserResponse {
 
     if (this.created_by_detail != null) {
       data['created_by_detail'] = this.created_by_detail.toJson();
+    }if (this.model_detail != null) {
+      data['model_detail'] = this.model_detail.toJson();
     }
   }
 }

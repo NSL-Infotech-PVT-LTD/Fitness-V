@@ -72,7 +72,7 @@ class LoginState extends State<LoginScreen> {
 
   @override
   void initState() {
-    passwordVisible = false;
+    passwordVisible = true;
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
     super.initState();
@@ -229,6 +229,7 @@ class LoginState extends State<LoginScreen> {
                                           cursorColor: Colors.black,
                                           keyboardType:
                                           TextInputType.visiblePassword,
+
                                           obscureText: passwordVisible,
                                           key: new Key('password'),
                                           controller:

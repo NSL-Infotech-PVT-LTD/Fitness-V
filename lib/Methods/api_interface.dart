@@ -193,7 +193,6 @@ Future<StatusResponse> bookingApi(
     String userAuth, Map<String, String> parms) async {
   final response = await http.post(bookingUrl,
       headers: header(userAuth), body: jsonEncode(parms));
-  print("Parms+======>" + response.body.toString());
 
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
@@ -217,7 +216,6 @@ Future<StatusResponse> allBookingsApi(
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
-  print("AllBokingUrl====>" + map.toString());
   return StatusResponse.fromJson(map);
 }
 

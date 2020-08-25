@@ -17,6 +17,7 @@ class Data {
   UserResponse location_detail;
   UserResponse model_detail;
   UserResponse trainer;
+  UserResponse booking;
   List<dynamic> data;
   List<dynamic> related;
   List<dynamic> gym_members;
@@ -24,8 +25,6 @@ class Data {
   List<dynamic> pool_and_beach_members;
   List<dynamic> local_guest;
   List<dynamic> fairmont_hotel_guest;
-
-//  e user;
 
   Data(
       {this.token,
@@ -47,6 +46,7 @@ class Data {
       this.model_detail,
       this.related,
       this.is_booked_by_me,
+      this.booking,
       this.local_guest,
       this.fairmont_hotel_guest});
 
@@ -65,6 +65,8 @@ class Data {
     current_page = json['current_page'];
     user =
         json['user'] != null ? new UserResponse.fromJson(json['user']) : null;
+    booking =
+        json['booking'] != null ? new UserResponse.fromJson(json['booking']) : null;
     trainer = json['trainer'] != null
         ? new UserResponse.fromJson(json['trainer'])
         : null;
@@ -101,6 +103,8 @@ class Data {
     data['is_booked_by_me'] = this.is_booked_by_me;
     if (this.user != null) {
       data['user'] = this.user.toJson();
+    } if (this.booking != null) {
+      data['booking'] = this.booking.toJson();
     }
     if (this.trainer != null) {
       data['trainer'] = this.trainer.toJson();

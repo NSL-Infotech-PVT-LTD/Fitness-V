@@ -155,6 +155,7 @@ Widget blackPlaceHolder(String roleUrl,String imageLink,double height,double wid
       placeholder: baseImageAssetsUrl + 'logo_black.png',
       image: BASE_URL + roleUrl + imageLink,
       width: width,
+      fit: BoxFit.cover,
       height: height,
     );
 

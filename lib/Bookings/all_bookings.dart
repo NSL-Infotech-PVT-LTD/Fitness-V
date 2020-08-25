@@ -24,22 +24,26 @@ class AllBookingsState extends State<AllBookings> {
   ScrollController _sc = new ScrollController();
   bool _isLoading = false;
 
-  model_detail
-
   var _all = true;
   var _trainers = false;
   var _groupClass = false;
   var _events = false;
   List<CustomBooking> _bookingList;
 
-  void setBoolState() {
+  void setBoolState(String type) {
     _all = false;
     _trainers = false;
     _groupClass = false;
     _events = false;
+
+    _page = 1;
+    _total = 1;
+    _isLoading = false;
+    _modelType = type;
   }
 
   String _auth;
+  String _modelType = 'all';
 
   @override
   void initState() {
@@ -50,8 +54,7 @@ class AllBookingsState extends State<AllBookings> {
 
     _sc.addListener(() {
       if (_sc.position.pixels == _sc.position.maxScrollExtent) {
-        if (_page <= _total)
-          _getBookings(_auth);
+        if (_page <= _total) _getBookings(_auth);
       }
     });
   }
@@ -66,41 +69,52 @@ class AllBookingsState extends State<AllBookings> {
   void _getBookings(String auth) async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
-        showProgress(context, "Please wait.....");
-        Map<String, String> parms = {
-          LIMIT: '10',
-          PAGE: _page.toString(),
-        };
-        allBookingsApi(auth, parms).then((response) {
-          dismissDialog(context);
-          if (response.status) {
-            if (response.data != null && response.data.data.length > 0) {
-              _bookingList = List<CustomBooking>.generate(
-                  response.data.data.length,
-                      (index) =>
-                      CustomBooking(
-                          bookingId: response.data.data[index]['id'].toString(),
-                          name: response.data
-                              .data[index]['model_detail']['first_name'] + " " +
-                              response.data
-                                  .data[index]['model_detail']['last_name'],
-                          imgLink: response.data
-                              .data[index]['model_detail']['image'],
-                          bookingDate: response.data.data[index]['created_at'],
-                          serviceHours:
-                          response.data.data[index]['hours'].toString()));
+        showProgress(context, loading);
+        if (!_isLoading) {
+          setState(() {
+            _isLoading = true;
+          });
 
-              setState(() {});
+          Map<String, String> parms = {
+            LIMIT: '20',
+            PAGE: _page.toString(),
+            'model_type': _modelType,
+          };
+          allBookingsApi(auth, parms).then((response) {
+
+            if (response.status) {
+              if (response.data != null) {
+                _total = response.data.last_page;
+                List tList = new List();
+                for (int i = 0; i < response.data.data.length; i++) {
+                  tList.add(response.data.data[i]);
+                }
+                print("CheckList------>$_modelType");
+
+                setState(() {
+                  _isLoading = false;
+                  _bookingList = List<CustomBooking>.generate(
+                      tList.length,
+                      (index) => CustomBooking(
+                          bookingId: tList[index]['id'].toString(),
+                          bookingType: tList[index]['model_type'].toString(),
+                          name: tList[index]['model_type'] == 'events'
+                              ? tList[index]['model_detail']['name']
+                              : tList[index]['model_detail']['full_name'],
+                          imgLink: tList[index]['model_detail']['image'],
+                          bookingDate: tList[index]['created_at'],
+                          serviceHours: tList[index]['hours'].toString()));
+                  _page++;
+                });
+              }
+            } else {
+              if (response.error != null)
+                showDialogBox(context, "Error!", response.error);
             }
-          } else {
-            dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
-          }
-        }).whenComplete(() => dismissDialog(context));
+          }).whenComplete(() => dismissDialog(context));
+        }
       } else {
         showDialogBox(context, 'Internet Error', pleaseCheckInternet);
-        dismissDialog(context);
       }
     });
   }
@@ -116,204 +130,205 @@ class AllBookingsState extends State<AllBookings> {
           return StatefulBuilder(builder: (context, setState) {
             return SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
-                  color: Colors.transparent,
-                  //could change this to Color(0xFF737373),
-                  //so you don't have to change MaterialApp canvasColor
-                  child: new Container(
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 10,
-                          ),
-                          InkWell(
-                            child: Padding(
-                              child: Align(
-                                child: Icon(Icons.close),
-                                alignment: Alignment.topRight,
-                              ),
-                              padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-                            ),
-                            onTap: () {
+              margin: EdgeInsets.only(left: 10, right: 10),
+              color: Colors.transparent,
+              //could change this to Color(0xFF737373),
+              //so you don't have to change MaterialApp canvasColor
+              child: new Container(
+                  child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  InkWell(
+                    child: Padding(
+                      child: Align(
+                        child: Icon(Icons.close),
+                        alignment: Alignment.topRight,
+                      ),
+                      padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Text(title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {
+                            setBoolState('all');
+                            _all = true;
+                            _getBookings(_auth);
+                            setState(() {
                               Navigator.pop(context);
-                            },
-                          ),
-                          Text(title,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              GestureDetector(
-                                  onTap: () {
-                                    setBoolState();
-                                    _all = true;
-                                    setState(() {
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                  child: Container(
-                                      height: 70,
-                                      width: 70,
-                                      child: Center(
-                                        child: Text(
-                                          'All',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                              _all ? Colors.white : Colors
-                                                  .black),
-                                        ),
-                                      ),
-                                      margin: EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                          color: _all ? Colors.black : Colors
-                                              .black26,
-                                          shape: BoxShape.circle))),
-                              GestureDetector(
-                                  onTap: () {
-                                    setBoolState();
-                                    _trainers = true;
-                                    setState(() {
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                  child: Container(
-                                      height: 70,
-                                      width: 70,
-                                      child: Center(
-                                        child: Text(
-                                          'Trainers',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: _trainers
-                                                  ? Colors.white
-                                                  : Colors.black),
-                                        ),
-                                      ),
-                                      margin: EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                          color:
-                                          _trainers ? Colors.black : Colors
-                                              .black26,
-                                          shape: BoxShape.circle))),
-                              GestureDetector(
-                                  onTap: () {
-                                    setBoolState();
-                                    _groupClass = true;
-                                    setState(() {
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                  child: Container(
-                                      child: Center(
-                                        child: Text(
-                                          'Group Classes',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: _groupClass
-                                                  ? Colors.white
-                                                  : Colors.black),
-                                        ),
-                                      ),
-                                      height: 70,
-                                      width: 70,
-                                      margin: EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                          color: _groupClass
-                                              ? Colors.black
-                                              : Colors.black26,
-                                          shape: BoxShape.circle))),
-                              GestureDetector(
-                                  onTap: () {
-                                    setBoolState();
-                                    _events = true;
-                                    setState(() {
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                  child: Container(
-                                      height: 70,
-                                      width: 70,
-                                      child: Center(
-                                        child: Text(
-                                          'Events',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: _events
-                                                  ? Colors.white
-                                                  : Colors.black),
-                                        ),
-                                      ),
-                                      margin: EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                          color:
-                                          _events ? Colors.black : Colors
-                                              .black26,
-                                          shape: BoxShape.circle))),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(left: 25, bottom: 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Image.asset(
-                                    baseImageAssetsUrl + 'logo_black.png',
-                                    height: 90,
-                                    color: Color(0xff8B8B8B),
-                                    width: 120,
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(left: 25, bottom: 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: SvgPicture.asset(
-                                    baseImageAssetsUrl + 'vector_lady.svg',
-                                    height: 90,
-                                    width: 120,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 40, bottom: 10),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
+                            });
+                          },
+                          child: Container(
+                              height: 70,
+                              width: 70,
+                              child: Center(
                                 child: Text(
-                                  volt_rights,
-                                  textAlign: TextAlign.center,
+                                  'All',
                                   style: TextStyle(
-                                      color: Color(0xff8B8B8B),
-                                      fontSize: 8,
-                                      fontStyle: FontStyle.italic,
-                                      fontFamily: open_italic),
-                                )),
+                                      fontSize: 12,
+                                      color:
+                                          _all ? Colors.white : Colors.black),
+                                ),
+                              ),
+                              margin: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  color: _all ? Colors.black : Colors.black26,
+                                  shape: BoxShape.circle))),
+                      GestureDetector(
+                          onTap: () {
+                            setBoolState('trainer_users');
+                            _trainers = true;
+                            _getBookings(_auth);
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Container(
+                              height: 70,
+                              width: 70,
+                              child: Center(
+                                child: Text(
+                                  'Trainers',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: _trainers
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                              ),
+                              margin: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  color:
+                                      _trainers ? Colors.black : Colors.black26,
+                                  shape: BoxShape.circle))),
+//                      GestureDetector(
+//                          onTap: () {
+//                            setBoolState();
+//                            _groupClass = true;
+//                            _modelType = 'class_schedules';
+//                            _getBookings(_auth);
+//                            setState(() {
+//                              Navigator.pop(context);
+//                            });
+//                          },
+//                          child: Container(
+//                              child: Center(
+//                                child: Text(
+//                                  'Group Classes',
+//                                  textAlign: TextAlign.center,
+//                                  style: TextStyle(
+//                                      fontSize: 12,
+//                                      color: _groupClass
+//                                          ? Colors.white
+//                                          : Colors.black),
+//                                ),
+//                              ),
+//                              height: 70,
+//                              width: 70,
+//                              margin: EdgeInsets.all(10.0),
+//                              decoration: BoxDecoration(
+//                                  color: _groupClass
+//                                      ? Colors.black
+//                                      : Colors.black26,
+//                                  shape: BoxShape.circle))),
+                      GestureDetector(
+                          onTap: () {
+                            setBoolState('events');
+                            _events = true;
+                            _getBookings(_auth);
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Container(
+                              height: 70,
+                              width: 70,
+                              child: Center(
+                                child: Text(
+                                  'Events',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: _events
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                              ),
+                              margin: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  color:
+                                      _events ? Colors.black : Colors.black26,
+                                  shape: BoxShape.circle))),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 25, bottom: 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Image.asset(
+                            baseImageAssetsUrl + 'logo_black.png',
+                            height: 90,
+                            color: Color(0xff8B8B8B),
+                            width: 120,
                           ),
-                          SizedBox(
-                            height: 50,
-                          )
-                        ],
-                      )),
-                ));
+                        ),
+                      ),
+                      Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(left: 25, bottom: 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: SvgPicture.asset(
+                            baseImageAssetsUrl + 'vector_lady.svg',
+                            height: 90,
+                            width: 120,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 40, bottom: 10),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          volt_rights,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Color(0xff8B8B8B),
+                              fontSize: 8,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: open_italic),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  )
+                ],
+              )),
+            ));
           });
         });
   }
@@ -322,6 +337,21 @@ class AllBookingsState extends State<AllBookings> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (_bookingList != null) filterBottom('Choose Filter');
+        },
+        child: Image.asset(
+          baseImageAssetsUrl + 'filter.png',
+          height: 29,
+          width: 29,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.black,
+        tooltip: 'Capture Picture',
+        elevation: 5,
+        splashColor: Colors.grey,
+      ),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -332,12 +362,12 @@ class AllBookingsState extends State<AllBookings> {
               children: <Widget>[
                 backWithArrow(context),
                 Spacer(),
-                GestureDetector(
-                    onTap: () => filterBottom('Choose Filter'),
-                    child: Icon(Icons.sort)),
-                SizedBox(
-                  width: 30,
-                )
+//                GestureDetector(
+//                    onTap: () => filterBottom('Choose Filter'),
+//                    child: Icon(Icons.sort)),
+//                SizedBox(
+//                  width: 30,
+//                )
               ],
             ),
             SizedBox(
@@ -367,20 +397,52 @@ class AllBookingsState extends State<AllBookings> {
                 ),
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: _bookingList == null ? 0 : _bookingList.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                      margin: EdgeInsets.all(10),
-                      child: BookingView(
-                        customBooking: _bookingList[index],
-                      ));
-                },
+            _bookingList != null && _bookingList.length > 0
+                ? Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      controller: _sc,
+                      itemCount: _bookingList == null ? 0 : _bookingList.length,
+                      itemBuilder: (context, index) {
+                        if (index == _bookingList.length) {
+                          return buildProgressIndicator(_isLoading);
+                        } else {
+                          return Container(
+                              margin: EdgeInsets.all(10),
+                              child: BookingView(
+                                customBooking: _bookingList[index],
+                              ));
+                        }
+                      },
 //              ),],
-              ),
-            )
+                    ),
+                  )
+                : Container(
+                    height: SizeConfig.screenHeight * .7,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          baseImageAssetsUrl + 'bookings.svg',
+                          height: 100,
+                          width: 100,
+                          color: Colors.black45,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Center(
+                          child: Text(
+                            'Bookings Not Found.',
+                            style: TextStyle(
+                                color: Colors.black45,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
           ],
         ),
       ),
@@ -394,9 +456,11 @@ class CustomBooking {
   final String name;
   final String serviceHours;
   final String bookingDate;
+  final String bookingType;
 
   const CustomBooking({
     this.bookingId,
+    this.bookingType,
     this.name,
     this.serviceHours,
     this.bookingDate,
@@ -413,132 +477,149 @@ class BookingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: callback,
-        child: DottedBorder(
-          borderType: BorderType.RRect,
-          strokeWidth: 1,
-          color: Colors.black38,
-          radius: Radius.circular(8),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+    return customBooking != null
+        ? GestureDetector(
+            onTap: callback,
+            child: DottedBorder(
+              borderType: BorderType.RRect,
+              strokeWidth: 1,
+              color: Colors.black38,
+              radius: Radius.circular(8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        width: SizeConfig.screenWidth * .6,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Booking ID',
-                              style: TextStyle(
-                                  color: Colors.black38, fontSize: 10),
-                            ),
-                            Text(
-                              customBooking.bookingId,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Trainer Name',
-                              style: TextStyle(
-                                  color: Colors.black38, fontSize: 10),
-                            ),
-                            Text(
-                              'Jugraj Singh',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: SizeConfig.screenWidth * .6,
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'Service Hours',
-                                      style: TextStyle(
-                                          color: Colors.black38, fontSize: 10),
-                                    ),
-                                    Text(
-                                      customBooking.serviceHours == 'null'
-                                          ? '--'
-                                          : '${customBooking
-                                          .serviceHours} Hours',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
+                                Text(
+                                  'Booking ID',
+                                  style: TextStyle(
+                                      color: Colors.black38, fontSize: 10),
+                                ),
+                                Text(
+                                  customBooking.bookingId,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
-                                  width: 20,
+                                  height: 10,
                                 ),
-                                Column(
+                                Text(
+                                  '${customBooking.bookingType == 'events' ? 'Event' : 'Trainer'} Name',
+                                  style: TextStyle(
+                                      color: Colors.black38, fontSize: 10),
+                                ),
+                                Text(
+                                  customBooking.name == null
+                                      ? 'Name not found'
+                                      : customBooking.name,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      'Booking Date',
-                                      style: TextStyle(
-                                          color: Colors.black38, fontSize: 10),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Service Hours',
+                                          style: TextStyle(
+                                              color: Colors.black38,
+                                              fontSize: 10),
+                                        ),
+                                        Text(
+                                          customBooking.serviceHours == 'null'
+                                              ? '--'
+                                              : '${customBooking.serviceHours == null ? '' : customBooking.serviceHours} Hours',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      '22 june, 2020',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Booking Date',
+                                          style: TextStyle(
+                                              color: Colors.black38,
+                                              fontSize: 10),
+                                        ),
+                                        Text(
+                                          customBooking.bookingDate,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      customBooking.imgLink == null
-                          ? Image.asset(
-                        baseImageAssetsUrl + 'logo_black.png',
-                        width: SizeConfig.screenWidth * .25,
-                        height: 110,
-                        fit: BoxFit.fill,
-                      )
-                          : FadeInImage.assetNetwork(
-                        placeholder:
-                        baseImageAssetsUrl + 'logo_black.png',
-                        image: BASE_URL +
-                            trainerUser +
-                            customBooking.imgLink,
-                        width: SizeConfig.screenWidth * .25,
+                          ),
+                          customBooking.imgLink == null
+                              ? Image.asset(
+                                  baseImageAssetsUrl + 'logo_black.png',
+                                  width: SizeConfig.screenWidth * .25,
+                                  height: 110,
+                                  fit: BoxFit.fill,
+                                )
+                              : FadeInImage.assetNetwork(
+                                  placeholder:
+                                      baseImageAssetsUrl + 'logo_black.png',
+                                  image: BASE_URL +
+                                      '${customBooking.bookingType == 'events' ? imageUrlEvent : trainerUser}' +
+                                      customBooking.imgLink,
+                                  height: SizeConfig.screenHeight * .13,
+                                  fit: BoxFit.cover,
+                                  width: SizeConfig.screenWidth * .28,
+                                ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
+            ))
+        : Center(
+            child: Text(
+              'No Data Found',
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
-          ),
-        ));
+          );
   }
 }

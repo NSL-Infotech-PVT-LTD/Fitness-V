@@ -108,8 +108,8 @@ class AllTrainersViewState extends State<AllTrainersView> {
   }
 
   Widget _buildList() {
-    return users.length > 0
-        ? GridView.count(
+    return
+        GridView.count(
             crossAxisCount: 2,
             padding: EdgeInsets.symmetric(vertical: 8.0),
             controller: _sc,
@@ -210,7 +210,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
 //          },
 //          controller: _sc,
 //        ),
-            )
-        :setNoDataContent();
+            );
+
   }
 }

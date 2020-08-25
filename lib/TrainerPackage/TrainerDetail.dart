@@ -225,7 +225,7 @@ class TrainerDetailState extends State<TrainerDetail> {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                fullName.isEmpty ? 'Farley Willth' : fullName,
+                                fullName.isEmpty ? '' : fullName,
                                 style: TextStyle(fontSize: 17),
                               ),
                             ),
@@ -306,7 +306,7 @@ class TrainerDetailState extends State<TrainerDetail> {
                   Container(
                     color: Color(0xffE1E1E1),
                     width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.only(top: 0, bottom: 10),
+                    margin: EdgeInsets.only(top: 15, bottom: 10),
                     padding: EdgeInsets.only(left: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

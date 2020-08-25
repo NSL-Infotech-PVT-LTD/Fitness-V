@@ -31,7 +31,7 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
           context, MaterialPageRoute(builder: (context) => ChooseYourWay()));
     } else {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => AllBookings()));
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
     }
   }
 

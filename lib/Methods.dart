@@ -5,6 +5,7 @@ import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
 
+import 'Bookings/BookingConfirmed.dart';
 import 'Methods/Method.dart';
 import 'Value/Dimens.dart';
 import 'Value/Strings.dart';
@@ -247,11 +248,21 @@ Future<bool> bookingFunction(String auth, context, String model_type,
         dismissDialog(context);
 
         if (response.status) {
-          if (response.data != null) {
-            isBooked = true;
-            showDialogBox(context, "Booking confirmed", response.data.message);
-//            Navigator.pushAndRemoveUntil(
-//                context, ScaleRoute(page: Dashboard()), (r) => false);
+          if (response.data != null && response.data.booking != null) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                ScaleRoute(
+                    page: BookingConfirmed(
+                  createdAt: response.data.booking.created_at,
+                  image: response.data.booking.model_detail.image,
+                  name: response.data.booking.model_type == 'events'
+                      ? response.data.booking.model_detail.name
+                      : response.data.booking.model_detail.full_name,
+                  bookingId: response.data.booking.id.toString(),
+//                  hours: response.data.booking.id.toString(),
+                  modelType: response.data.booking.model_type,
+                )),
+                (r) => false);
           }
         } else {
           dismissDialog(context);
