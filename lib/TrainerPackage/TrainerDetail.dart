@@ -277,7 +277,7 @@ class TrainerDetailState extends State<TrainerDetail> {
                                 Navigator.push(
                                     context,
                                     new MaterialPageRoute(
-                                        builder: (context) => SelectSession(id:widget.id,image: imgLink,name: fullName,)));
+                                        builder: (context) => SelectSession(id:widget.id,image: imgLink,name: fullName,isGroupClass: false,)));
                               }
                             },
                             color:

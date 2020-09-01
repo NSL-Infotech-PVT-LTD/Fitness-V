@@ -568,7 +568,7 @@ class SignupState extends State<SignupScreen> {
                                           .toString()
                                           .trim(),
                                       DEVICE_TYPE: deviceType,
-                                      DEVICE_TOKEN: "Devicedsbfs",
+                                      DEVICE_TOKEN:deviceTokenValue,
                                     };
                                     print(
                                         parms.toString() + "------Parameters");

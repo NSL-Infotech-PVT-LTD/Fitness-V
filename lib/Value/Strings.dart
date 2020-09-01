@@ -50,6 +50,7 @@ const loading = "Loading....";
 const dollar = "\$";
 const userName = 'Username';
 const localGuest = 'Local Guest';
+const fairmontHotel = 'Fairmont Hotel Guest';
 const existingAcc = 'Existing Account Login';
 const anual = 'Annual';
 const months3 = '3 Months';

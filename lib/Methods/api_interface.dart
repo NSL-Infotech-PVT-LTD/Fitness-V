@@ -22,6 +22,8 @@ String termsConditionUrl = BASE_URL + "api/config/terms_and_conditions";
 String updateProfileUrl = BASE_URL + "api/update";
 String bookingUrl = BASE_URL + "api/bookings/store";
 String allBookinsUrl = BASE_URL + "api/bookings";
+String getClassesListUrl = BASE_URL + "api/class-schedules";
+String getClassesbyIdUrl = BASE_URL + "api/class-schedule";
 
 String CUSTOMER_ID = "";
 
@@ -33,6 +35,7 @@ String DEVICE_TOKEN = "device_token";
 String ID = "id";
 String trainer_id = "trainer_id";
 String ANDROID = "android";
+String deviceTokenValue= "deviceTokenValue";
 String DEVICE_TOKEN_VALUE = "value";
 String Authorization = "Authorization";
 String Content_Type = "Content-Type";
@@ -69,6 +72,7 @@ String USER_AUTH = "USER_AUTH";
 String USER_NAME = "USER_NAME";
 String userImage = "userImage";
 String USER_EMAIL = "USER_EMAIL";
+String roleType = 'roleType';
 String CONTENT_VALUE = "application/x-www-form-urlencoded";
 String ORDER_BY = "price_high";
 
@@ -79,6 +83,7 @@ String imageUrlEvent = "uploads/events/";
 String MORE_IMAGE_URL = "uploads/product/images/";
 String BARCODE_URL = "uploads/product/barcode/";
 String trainerUser = "uploads/trainer-user/";
+String imageClassUrl = "uploads/class/";
 //flutter build apk --release --target-platform=android-arm64
 Future<StatusResponse> getLogin(Map<String, String> parms) async {
   final response = await http.post(LOGIN,
@@ -95,6 +100,34 @@ Future<StatusResponse> getLogin(Map<String, String> parms) async {
 Future<StatusResponse> getTrainersListApi(
     String auth, Map<String, String> parms) async {
   final response = await http.post(getTrainersList,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': auth
+      },
+      body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> getGroupClassListApi(
+    String auth, Map<String, String> parms) async {
+  final response = await http.post(getClassesListUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': auth
+      },
+      body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> getGroupClassDetailApi(
+    String auth, Map<String, String> parms) async {
+  final response = await http.post(getClassesbyIdUrl,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth

@@ -12,6 +12,8 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'package:volt/changes.dart';
+import 'package:volt/util/custom_dashboard_appbar.dart';
 
 import 'GroupClassses.dart';
 
@@ -23,7 +25,7 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
   var imageValue;
-  final List<Widget> _children = [Home(), Cardio(), Event()];
+  final List<Widget> _children = [Home(), Cardio(), EventClass()];
 
   void onTabTapped(int index) {
     setState(() {
@@ -38,7 +40,6 @@ class DashboardState extends State<Dashboard> {
         .whenComplete(() => setState(() {}));
     super.initState();
   }
-
 
   _navigateAndDisplaySelection(BuildContext context) async {
     imageValue = await Navigator.push(
@@ -134,118 +135,190 @@ class DashboardState extends State<Dashboard> {
                           )))
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-            SizedBox(
-              height: topMargin40,
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      _navigateAndDisplaySelection(context);
-                    },
-                    child: imageValue == null
-                        ? Image.asset(
-                            baseImageAssetsUrl + 'circleuser.png',
-                            height: 40,
-                            width: 40,
-                          )
-                        : CircleAvatar(
-                            radius: 25.0,
-                            backgroundImage: NetworkImage(
-                                BASE_URL + 'uploads/image/' + imageValue),
-                            backgroundColor: Colors.transparent,
-                          ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => GroupClasses()));
-                    },
-                    child: Image.asset(
-                      baseImageAssetsUrl + 'logo_black.png',
-                      width: 60,
-                      height: 30,
+        appBar: CustomAppBar(
+          height: 140,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: topMargin40,
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        _navigateAndDisplaySelection(context);
+                      },
+                      child: imageValue == null
+                          ? Image.asset(
+                        baseImageAssetsUrl + 'circleuser.png',
+                        height: 40,
+                        width: 40,
+                      )
+                          : CircleAvatar(
+                        radius: 25.0,
+                        backgroundImage: NetworkImage(
+                            BASE_URL + 'uploads/image/' + imageValue),
+                        backgroundColor: Colors.transparent,
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  GestureDetector(
+                    SizedBox(
+                      width: 5,
+                    ),
+                    GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
-                                builder: (context) => NotificationScreen()));
+                                builder: (context) => GroupClasses()));
                       },
-                      child:
-                          SvgPicture.asset(baseImageAssetsUrl + 'noti_dot.svg'))
-                ],
+                      child: Image.asset(
+                        baseImageAssetsUrl + 'logo_black.png',
+                        width: 60,
+                        height: 30,
+                      ),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) =>
+                                      NotificationScreen()));
+                        },
+                        child: SvgPicture.asset(
+                            baseImageAssetsUrl + 'noti_dot.svg'))
+                  ],
+                ),
               ),
-            ),
-            Divider(
-              height: .5,
-              // color: CColor.PRIMARYCOLOR,
-            ),
-            _children[_currentIndex],
-            SizedBox(
-              height: 50,
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 25, bottom: 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Image.asset(
-                      baseImageAssetsUrl + 'logo_black.png',
-                      height: 90,
-                      color: Color(0xff8B8B8B),
-                      width: 120,
-                    ),
+              Divider(
+                height: .5,
+                // color: CColor.PRIMARYCOLOR,
+              ),
+
+            ],
+
+          ),
+        ),
+        body: _currentIndex == 2
+            ? Container(
+                child: _children[_currentIndex],
+              )
+            : SingleChildScrollView(
+                child: Column(children: <Widget>[
+//                  SizedBox(
+//                    height: topMargin40,
+//                  ),
+//                  Container(
+//                    padding: EdgeInsets.all(20),
+//                    child: Row(
+//                      children: <Widget>[
+//                        GestureDetector(
+//                          onTap: () {
+//                            _navigateAndDisplaySelection(context);
+//                          },
+//                          child: imageValue == null
+//                              ? Image.asset(
+//                                  baseImageAssetsUrl + 'circleuser.png',
+//                                  height: 40,
+//                                  width: 40,
+//                                )
+//                              : CircleAvatar(
+//                                  radius: 25.0,
+//                                  backgroundImage: NetworkImage(
+//                                      BASE_URL + 'uploads/image/' + imageValue),
+//                                  backgroundColor: Colors.transparent,
+//                                ),
+//                        ),
+//                        SizedBox(
+//                          width: 5,
+//                        ),
+//                        GestureDetector(
+//                          onTap: () {
+//                            Navigator.push(
+//                                context,
+//                                new MaterialPageRoute(
+//                                    builder: (context) => GroupClasses()));
+//                          },
+//                          child: Image.asset(
+//                            baseImageAssetsUrl + 'logo_black.png',
+//                            width: 60,
+//                            height: 30,
+//                          ),
+//                        ),
+//                        Spacer(),
+//                        GestureDetector(
+//                            onTap: () {
+//                              Navigator.push(
+//                                  context,
+//                                  new MaterialPageRoute(
+//                                      builder: (context) =>
+//                                          NotificationScreen()));
+//                            },
+//                            child: SvgPicture.asset(
+//                                baseImageAssetsUrl + 'noti_dot.svg'))
+//                      ],
+//                    ),
+//                  ),
+//                  Divider(
+//                    height: .5,
+//                    // color: CColor.PRIMARYCOLOR,
+//                  ),
+                  _children[_currentIndex],
+                  SizedBox(
+                    height: 50,
                   ),
-                ),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(left: 25, bottom: 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: SvgPicture.asset(
-                      baseImageAssetsUrl + 'vector_lady.svg',
-                      height: 90,
-                      width: 120,
-                    ),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 25, bottom: 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Image.asset(
+                            baseImageAssetsUrl + 'logo_black.png',
+                            height: 90,
+                            color: Color(0xff8B8B8B),
+                            width: 120,
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(left: 25, bottom: 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: SvgPicture.asset(
+                            baseImageAssetsUrl + 'vector_lady.svg',
+                            height: 90,
+                            width: 120,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      )
+                    ],
                   ),
-                ),
-                SizedBox(
-                  width: 20,
-                )
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 40, bottom: 10),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    volt_rights,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Color(0xff8B8B8B),
-                        fontSize: 8,
-                        fontStyle: FontStyle.italic,
-                        fontFamily: open_italic),
-                  )),
-            ),
-            SizedBox(
-              height: 50,
-            )
-          ]),
-        ));
+                  Padding(
+                    padding: EdgeInsets.only(left: 40, bottom: 10),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          volt_rights,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Color(0xff8B8B8B),
+                              fontSize: 8,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: open_italic),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  )
+                ]),
+              ));
   }
 }

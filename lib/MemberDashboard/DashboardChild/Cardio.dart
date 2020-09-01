@@ -381,10 +381,10 @@ class RecomendedTrainer extends StatelessWidget {
               ),
             ],
           ),
-          semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
           elevation: 2,
+          shadowColor: Colors.grey.withOpacity(.2 ),
         ));
   }
 }

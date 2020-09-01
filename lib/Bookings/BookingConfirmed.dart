@@ -25,6 +25,21 @@ class BookingConfirmed extends StatefulWidget {
 }
 
 class BookingConfirmedState extends State<BookingConfirmed> {
+  String _roleUrl = '';
+
+  @override
+  void initState() {
+    if (widget.modelType == 'events') {
+      _roleUrl = imageUrlEvent;
+    } else if (widget.modelType == 'class_schedules') {
+      _roleUrl = imageClassUrl;
+    } else {
+      _roleUrl = trainerUser;
+    }
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -136,7 +151,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                                     baseImageAssetsUrl +
                                                         'logo_black.png',
                                                 image: BASE_URL +
-                                                    '${widget.modelType == 'events' ? imageUrlEvent : 'uploads/trainer-user/'}' +
+                                                    _roleUrl +
                                                     widget.image,
                                                 fit: BoxFit.cover,
                                                 height: 70,

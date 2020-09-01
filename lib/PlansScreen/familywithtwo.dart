@@ -773,7 +773,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                             BIRTH_DATE + "_3": result3[BIRTH_DATE + "_3"],
                             EMIRATES_ID + "_3": result3[EMIRATES_ID + "_3"],
                             DEVICE_TYPE: deviceType,
-                            DEVICE_TOKEN: "Devicedsbfs",
+                            DEVICE_TOKEN: deviceTokenValue,
                           };
                           print(parms.toString() + "------Parameters");
                           isConnectedToInternet().then((internet) {

@@ -86,19 +86,25 @@ class AllBookingsState extends State<AllBookings> {
               if (response.data != null) {
                 _total = response.data.last_page;
                 List tList = new List();
+
                 for (int i = 0; i < response.data.data.length; i++) {
                   tList.add(response.data.data[i]);
+
                 }
                 print("CheckList------>$_modelType");
 
                 setState(() {
                   _isLoading = false;
+
                   _bookingList = List<CustomBooking>.generate(
                       tList.length,
-                      (index) => CustomBooking(
+                      (index) =>
+
+                          CustomBooking(
+
                           bookingId: tList[index]['id'].toString(),
                           bookingType: tList[index]['model_type'].toString(),
-                          name: tList[index]['model_type'] == 'events'
+                          name:tList[index]['model_type'] == 'events'
                               ? tList[index]['model_detail']['name']
                               : tList[index]['model_detail']['full_name'],
                           imgLink: tList[index]['model_detail']['image'],
@@ -216,36 +222,35 @@ class AllBookingsState extends State<AllBookings> {
                                   color:
                                       _trainers ? Colors.black : Colors.black26,
                                   shape: BoxShape.circle))),
-//                      GestureDetector(
-//                          onTap: () {
-//                            setBoolState();
-//                            _groupClass = true;
-//                            _modelType = 'class_schedules';
-//                            _getBookings(_auth);
-//                            setState(() {
-//                              Navigator.pop(context);
-//                            });
-//                          },
-//                          child: Container(
-//                              child: Center(
-//                                child: Text(
-//                                  'Group Classes',
-//                                  textAlign: TextAlign.center,
-//                                  style: TextStyle(
-//                                      fontSize: 12,
-//                                      color: _groupClass
-//                                          ? Colors.white
-//                                          : Colors.black),
-//                                ),
-//                              ),
-//                              height: 70,
-//                              width: 70,
-//                              margin: EdgeInsets.all(10.0),
-//                              decoration: BoxDecoration(
-//                                  color: _groupClass
-//                                      ? Colors.black
-//                                      : Colors.black26,
-//                                  shape: BoxShape.circle))),
+                      GestureDetector(
+                          onTap: () {
+                            setBoolState("class_schedules");
+                            _groupClass = true;
+                            _getBookings(_auth);
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Container(
+                              child: Center(
+                                child: Text(
+                                  'Group Classes',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: _groupClass
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                              ),
+                              height: 70,
+                              width: 70,
+                              margin: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  color: _groupClass
+                                      ? Colors.black
+                                      : Colors.black26,
+                                  shape: BoxShape.circle))),
                       GestureDetector(
                           onTap: () {
                             setBoolState('events');

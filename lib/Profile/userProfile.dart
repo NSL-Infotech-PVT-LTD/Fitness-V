@@ -519,7 +519,7 @@ class UserProfileState extends State<UserProfile> {
                                             .toString()
                                             .trim(),
                                         DEVICE_TYPE: deviceType,
-                                        DEVICE_TOKEN: "Devicedsbfs",
+                                        DEVICE_TOKEN: deviceTokenValue,
                                       };
 
                                       print(parms.toString() +

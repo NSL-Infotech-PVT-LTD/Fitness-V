@@ -12,12 +12,16 @@ class Data {
   int current_page;
   String start_date;
   String end_date;
+  String class_type;
+  String capacity;
+  String duration;
   bool is_booked_by_me;
   UserResponse user;
   UserResponse location_detail;
   UserResponse model_detail;
   UserResponse trainer;
   UserResponse booking;
+  UserResponse class_detail;
   List<dynamic> data;
   List<dynamic> related;
   List<dynamic> gym_members;
@@ -37,6 +41,9 @@ class Data {
       this.description,
       this.start_date,
       this.end_date,
+      this.class_type,
+      this.capacity,
+      this.duration,
       this.current_page,
       this.user,
       this.trainer,
@@ -47,6 +54,7 @@ class Data {
       this.related,
       this.is_booked_by_me,
       this.booking,
+      this.class_detail,
       this.local_guest,
       this.fairmont_hotel_guest});
 
@@ -59,14 +67,21 @@ class Data {
     image = json['image'];
     start_date = json['start_date'];
     end_date = json['end_date'];
+    class_type = json['class_type'];
+    capacity = json['capacity'];
+    duration = json['duration'];
     id = json['id'];
     last_page = json['last_page'];
     is_booked_by_me = json['is_booked_by_me'];
     current_page = json['current_page'];
     user =
         json['user'] != null ? new UserResponse.fromJson(json['user']) : null;
-    booking =
-        json['booking'] != null ? new UserResponse.fromJson(json['booking']) : null;
+    booking = json['booking'] != null
+        ? new UserResponse.fromJson(json['booking'])
+        : null;
+    class_detail = json['class_detail'] != null
+        ? new UserResponse.fromJson(json['class_detail'])
+        : null;
     trainer = json['trainer'] != null
         ? new UserResponse.fromJson(json['trainer'])
         : null;
@@ -96,6 +111,9 @@ class Data {
     data['config'] = this.config;
     data['start_date'] = this.start_date;
     data['end_date'] = this.end_date;
+    data['class_type'] = this.class_type;
+    data['capacity'] = this.capacity;
+    data['duration'] = this.duration;
     data['description'] = this.description;
     data['image'] = this.image;
     data['current_page'] = this.current_page;
@@ -103,7 +121,8 @@ class Data {
     data['is_booked_by_me'] = this.is_booked_by_me;
     if (this.user != null) {
       data['user'] = this.user.toJson();
-    } if (this.booking != null) {
+    }
+    if (this.booking != null) {
       data['booking'] = this.booking.toJson();
     }
     if (this.trainer != null) {
@@ -118,6 +137,9 @@ class Data {
 
     if (this.data != null) {
       data['data'] = this.data;
+    }
+    if (this.class_detail != null) {
+      data['class_detail'] = this.class_detail;
     }
     if (this.gym_members != null) {
       data['gym_members'] = this.gym_members;

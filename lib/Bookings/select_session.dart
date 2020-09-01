@@ -14,8 +14,10 @@ class SelectSession extends StatefulWidget {
   final int id;
   final String image;
   final String name;
+  final bool isGroupClass;
 
-  const SelectSession({Key key, this.id, this.image,this.name});
+  const SelectSession(
+      {Key key, this.isGroupClass, this.id, this.image, this.name});
 
   @override
   State<StatefulWidget> createState() => SelectSessionState();
@@ -25,16 +27,33 @@ class SelectSessionState extends State<SelectSession> {
   int valueHolder = 0;
   String _imageLink;
   String auth = '';
+  String _roleType = '';
+  bool _wantToShowPrice = false;
 
   @override
   void initState() {
     getString(USER_AUTH).then((value) => {auth = value});
+
+    getString(roleType)
+        .then((value) => {_roleType = value})
+        .whenComplete(() => {
+
+              if (_roleType == localGuest ||
+                  _roleType == fairmontHotel ||
+                  widget.isGroupClass)
+                {_wantToShowPrice = false}
+              else
+                {_wantToShowPrice = true}
+            });
+
     super.initState();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     _imageLink = widget.image;
+    _wantToShowPrice = !widget.isGroupClass;
     SizeConfig().init(context);
     return Scaffold(
       body: SingleChildScrollView(
@@ -121,14 +140,16 @@ class SelectSessionState extends State<SelectSession> {
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.only(left: 10, top: 10),
-                          width: SizeConfig.screenWidth * .72,
+                          width: widget.isGroupClass
+                              ? SizeConfig.screenWidth * .55
+                              : SizeConfig.screenWidth * .72,
                           child: Slider(
                               value: valueHolder.toDouble() == 0
                                   ? 1
                                   : valueHolder.toDouble(),
                               min: 0,
-                              max: 24,
-                              divisions: 4,
+                              max: widget.isGroupClass ? 12 : 24,
+                              divisions: widget.isGroupClass ? 2 : 4,
                               activeColor: Colors.black,
                               inactiveColor: Colors.grey,
                               label:
@@ -172,12 +193,15 @@ class SelectSessionState extends State<SelectSession> {
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ),
-                              Container(
-                                width: SizeConfig.screenWidth * .17,
-                                child: Text(
-                                  '24',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(color: Colors.black),
+                              Visibility(
+                                visible: !widget.isGroupClass,
+                                child: Container(
+                                  width: SizeConfig.screenWidth * .17,
+                                  child: Text(
+                                    '24',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               ),
                             ],
@@ -191,53 +215,57 @@ class SelectSessionState extends State<SelectSession> {
               SizedBox(
                 height: 30,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 25.0, right: 25, top: 0, bottom: 10),
-                child: Row(
-                  children: <Widget>[
-                    new RichText(
-                        textAlign: TextAlign.start,
-                        text: TextSpan(
-                            text: "Price",
-                            style: TextStyle(
-                                fontSize: textSize12, color: Colors.black),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: "",
-                                  style: TextStyle(
-                                      fontSize: textSize8,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black45))
-                            ])),
-                    SizedBox(
-                      width: SizeConfig.screenWidth * .1,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 10, top: 10),
-                      width: 150,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(16))),
-                      child: Center(
+              Visibility(
+                visible: _wantToShowPrice,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 25.0, right: 25, top: 0, bottom: 10),
+                  child: Row(
+                    children: <Widget>[
+                      new RichText(
+                          textAlign: TextAlign.start,
+                          text: TextSpan(
+                              text: "Price",
+                              style: TextStyle(
+                                  fontSize: textSize12, color: Colors.black),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: "",
+                                    style: TextStyle(
+                                        fontSize: textSize8,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black45))
+                              ])),
+                      SizedBox(
+                        width: SizeConfig.screenWidth * .1,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 10, top: 10),
+                        width: 150,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16))),
+                        child: Center(
+                            child: Text(
+                          '${sendValue()} $aed',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 5, top: 10),
+                        height: 60,
+                        child: Align(
+                          alignment: Alignment.center,
                           child: Text(
-                        '${sendValue()} $aed',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 5, top: 10),
-                      height: 60,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          '/ Hour',
-                          style: TextStyle(color: Colors.grey),
+                            '/ Hour',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -256,9 +284,12 @@ class SelectSessionState extends State<SelectSession> {
                               builder: (context) => YourBooking(
                                     id: widget.id,
                                     image: widget.image,
+                                    isGroupClass: widget.isGroupClass,
                                     name: widget.name,
                                     payment: sendValue().toString(),
-                                    serviceHours: valueHolder==0?1.toString():valueHolder.toString(),
+                                    serviceHours: valueHolder == 0
+                                        ? 1.toString()
+                                        : valueHolder.toString(),
                                   )));
                     },
                     child: Text(
@@ -293,7 +324,9 @@ class SelectSessionState extends State<SelectSession> {
 
   Widget setImage(String imgLink) => FadeInImage.assetNetwork(
         placeholder: baseImageAssetsUrl + 'logo_black.png',
-        image: BASE_URL + trainerUser + imgLink,
+        image: BASE_URL +
+            "${widget.isGroupClass ? imageClassUrl : trainerUser}" +
+            imgLink,
         fit: BoxFit.cover,
         width: SizeConfig.screenWidth,
         height: 250,

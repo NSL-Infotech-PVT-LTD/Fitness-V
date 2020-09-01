@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:volt/GroupClasses/group_classes.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -123,7 +124,7 @@ class Home extends StatelessWidget {
                     Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (context) => GroupClasses()));
+                            builder: (context) => GroupClass()));
                   },
                   child: Container(
                       decoration: BoxDecoration(

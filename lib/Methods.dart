@@ -249,15 +249,25 @@ Future<bool> bookingFunction(String auth, context, String model_type,
 
         if (response.status) {
           if (response.data != null && response.data.booking != null) {
+            var name = '';
+
+            if (response.data.booking.model_type == 'events') {
+              name = response.data.booking.model_detail.name;
+            } else if (response.data.booking.model_type == 'class_schedules') {
+              name = response.data.booking.model_detail.class_detail.name;
+            } else {
+              name = response.data.booking.model_detail.full_name;
+            }
+
             Navigator.pushAndRemoveUntil(
                 context,
                 ScaleRoute(
                     page: BookingConfirmed(
                   createdAt: response.data.booking.created_at,
-                  image: response.data.booking.model_detail.image,
-                  name: response.data.booking.model_type == 'events'
-                      ? response.data.booking.model_detail.name
-                      : response.data.booking.model_detail.full_name,
+                  image: response.data.booking.model_type == 'class_schedules'
+                      ? response.data.booking.model_detail.class_detail.image
+                      : response.data.booking.model_detail.image,
+                  name: name,
                   bookingId: response.data.booking.id.toString(),
 //                  hours: response.data.booking.id.toString(),
                   modelType: response.data.booking.model_type,

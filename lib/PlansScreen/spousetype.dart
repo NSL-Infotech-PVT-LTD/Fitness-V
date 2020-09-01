@@ -507,7 +507,7 @@ class _SpouseTypeState extends State<SpouseType> {
                             BIRTH_DATE + "_1": result1[BIRTH_DATE + "_1"],
                             EMIRATES_ID + "_1": result1[EMIRATES_ID + "_1"],
                             DEVICE_TYPE: deviceType,
-                            DEVICE_TOKEN: "Devicedsbfs",
+                            DEVICE_TOKEN:deviceTokenValue,
                           };
                           print(parms.toString() + "------Parameters");
                           isConnectedToInternet().then((internet) {

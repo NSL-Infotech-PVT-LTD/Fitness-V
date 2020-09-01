@@ -194,7 +194,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                                     },
                                     child: _CommonView(
                                         'assets/images/fairmont.jpg',
-                                        "Fairmont Hotel Guest",
+                                        fairmontHotel,
                                         "")),
                                 Divider(
                                   height: 2,

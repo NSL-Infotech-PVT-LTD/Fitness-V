@@ -1,5 +1,6 @@
 import 'package:volt/ResponseModel/PleanDetail.dart';
 import 'package:volt/ResponseModel/createdByDetail.dart';
+import 'package:volt/ResponseModel/role_model.dart';
 
 class UserResponse {
   int id;
@@ -24,6 +25,7 @@ class UserResponse {
   String designation;
   String category;
   String image;
+  String description;
   String params;
   String about;
   String services;
@@ -34,6 +36,7 @@ class UserResponse {
   String birth_date;
   bool is_booked_by_me;
   CreatedByModel created_by_detail;
+  RoleModel role;
   CreatedByModel model_detail;
   List<PlanDetail> plan_detail;
   UserResponse(
@@ -61,6 +64,7 @@ class UserResponse {
     this.about,
     this.services,
     this.status,
+    this.description,
     this.deleted_at,
     this.created_at,
     this.updated_at,
@@ -68,6 +72,7 @@ class UserResponse {
     this.created_by_detail,
     this.model_detail,
     this.birth_date,
+    this.role,
     this.is_booked_by_me,
   );
 
@@ -91,6 +96,7 @@ class UserResponse {
     middle_name = json['middle_name'];
     last_name = json['last_name'];
     category = json['category'];
+    description = json['description'];
     image = json['image'];
     params = json['params'];
     about = json['about'];
@@ -101,8 +107,8 @@ class UserResponse {
     updated_at = json['updated_at'];
     birth_date = json['birth_date'];
     is_booked_by_me = json['is_booked_by_me'];
-    created_by_detail =
-    json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
+    created_by_detail = json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
+    role = json['role'] != null ? new RoleModel.fromJson(json['role']) : null;
     model_detail =
     json['model_detail'] != null ? new CreatedByModel.fromJson(json['model_detail']) : null;
     plan_detail = json['plan_detail'];
@@ -114,6 +120,7 @@ class UserResponse {
     data['model_type'] = this.model_type;
     data['name'] = this.name;
     data['location'] = this.location;
+    data['description'] = this.description;
     data['expirence'] = this.expirence;
     data['booking_reviewed_cnt'] = this.booking_reviewed_cnt;
     data['rating_avg'] = this.rating_avg;
@@ -145,6 +152,8 @@ class UserResponse {
       data['created_by_detail'] = this.created_by_detail.toJson();
     }if (this.model_detail != null) {
       data['model_detail'] = this.model_detail.toJson();
+    }if (this.role != null) {
+      data['role'] = this.role.toJson();
     }
   }
 }
