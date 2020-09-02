@@ -49,7 +49,6 @@ class EventDetailState extends State<EventDetail> {
           if (response.status) {
             if (response.data != null &&
                 response.data.location_detail != null) {
-              print("Even=====>" + response.toJson().toString());
               _eventName = response.data.name;
               _imageLink = response.data.image;
               _is_booked_by_me = response.data.is_booked_by_me;

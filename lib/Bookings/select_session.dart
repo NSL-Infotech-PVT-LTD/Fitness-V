@@ -15,9 +15,15 @@ class SelectSession extends StatefulWidget {
   final String image;
   final String name;
   final bool isGroupClass;
+  final String roleType;
 
   const SelectSession(
-      {Key key, this.isGroupClass, this.id, this.image, this.name});
+      {Key key,
+      this.isGroupClass,
+      this.id,
+      this.image,
+      this.name,
+      this.roleType});
 
   @override
   State<StatefulWidget> createState() => SelectSessionState();
@@ -27,24 +33,19 @@ class SelectSessionState extends State<SelectSession> {
   int valueHolder = 0;
   String _imageLink;
   String auth = '';
-  String _roleType = '';
-  bool _wantToShowPrice = false;
+  bool _wantToShowPrice = true;
 
   @override
   void initState() {
     getString(USER_AUTH).then((value) => {auth = value});
 
-    getString(roleType)
-        .then((value) => {_roleType = value})
-        .whenComplete(() => {
-
-              if (_roleType == localGuest ||
-                  _roleType == fairmontHotel ||
-                  widget.isGroupClass)
-                {_wantToShowPrice = false}
-              else
-                {_wantToShowPrice = true}
-            });
+    if (widget.isGroupClass) {
+      if (widget.roleType == localGuest || widget.roleType == fairmontHotel) {
+        _wantToShowPrice = true;
+      } else {
+        _wantToShowPrice = false;
+      }
+    }
 
     super.initState();
     setState(() {});
@@ -53,7 +54,6 @@ class SelectSessionState extends State<SelectSession> {
   @override
   Widget build(BuildContext context) {
     _imageLink = widget.image;
-    _wantToShowPrice = !widget.isGroupClass;
     SizeConfig().init(context);
     return Scaffold(
       body: SingleChildScrollView(
@@ -159,7 +159,6 @@ class SelectSessionState extends State<SelectSession> {
                                   valueHolder = newValue.round() == 18
                                       ? 24
                                       : newValue.round();
-                                  print(valueHolder.toString());
                                 });
                               },
                               semanticFormatterCallback: (double newValue) {

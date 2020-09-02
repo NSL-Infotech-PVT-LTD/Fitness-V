@@ -51,7 +51,6 @@ class _CardioState extends State<Cardio> {
                       trainerExperience: response.data.data[index]['expirence'],
                       imgLink: response.data.data[index]['image']));
 
-//              print(trainerExperiencerList[0]['full_name']);
               setState(() {});
             }
           } else {
@@ -68,7 +67,6 @@ class _CardioState extends State<Cardio> {
   }
 
   Widget checkImage1() {
-    print("mjudhsg==" + checkList.toString());
     if (checkList != null) {
       if (checkList.length > 0) {
         return checkList[0]['image'] == null

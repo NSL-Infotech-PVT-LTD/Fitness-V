@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';

@@ -65,38 +65,82 @@ class SignupState extends State<SignupScreen> {
   String deviceToken = "";
 
   String rolePlanId = "";
-  var fromDate, toDate;
+  var fromDate;
+  var myDate;
   var formatter = new DateFormat("yyyy-MM-dd");
 
   Map<String, String> parms;
 
-  void fromDatePicker() async {
-    var order = await getData();
-    setState(() {
-      if (order != null) fromDate = formatter.format(order);
-    });
+  void fromDatePicker() {
+    getData();
   }
 
   Future<DateTime> getData() {
-    return showDatePicker(
+    return showCupertinoModalPopup(
         context: context,
-        initialDate: DateTime(2019),
-        firstDate: DateTime(1980),
-        lastDate: DateTime(2020),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.fallback(),
-            child: child,
-          );
+        builder: (context) {
+          return CupertinoActionSheet(
+
+              actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: Text(
+                      "Done",
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  )),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  if (myDate != null) fromDate = formatter.format(myDate);
+                });
+              },
+            ),
+            Container(
+              height: 300.0,
+              color: Colors.white,
+              child: CupertinoDatePicker(
+                use24hFormat: true,
+                maximumDate: new DateTime(2019, 12, 30),
+                minimumYear: 1970,
+                maximumYear: 2019,
+
+                minuteInterval: 1,
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: DateTime(2018),
+                backgroundColor: Colors.white,
+                onDateTimeChanged: (dateTime) {
+                  myDate = dateTime;
+//                setState(() {
+//                  if (dateTime != null) fromDate = formatter.format(dateTime);
+//                });
+                },
+              ),
+            ),
+          ]);
         });
+
+//    return showDatePicker(
+//        context: context,
+//        initialDate: DateTime(2019),
+//        firstDate: DateTime(1980),
+//        lastDate: DateTime(2020),
+//        builder: (BuildContext context, Widget child) {
+//          return Theme(
+//            data: ThemeData.fallback(),
+//            child: child,
+//          );
+//        });
   }
 
   @override
   void initState() {
     _isIos = Platform.isIOS;
-    print("SendData===>" + parms.toString());
-    print("SendData1===>" + widget.editData.toString());
-    deviceType = _isIos ? 'ios' : 'android';
+     deviceType = _isIos ? 'ios' : 'android';
     if (widget.editData != null) {
       if (widget.editData.containsKey(FIRSTNAME + "_1")) {
         _setData("_1");
@@ -153,7 +197,6 @@ class SignupState extends State<SignupScreen> {
     // {id: 27, fee: 1300, fee_type: Half yearly, role_id: 7, role_plan: Half yearly: AED 1300},
     // {id: 28, fee: 1900, fee_type: Yearly, role_id: 7, role_plan: Yearly: AED 1900}]
 
-    print(widget.response.toString());
     if (widget.type != null) {
       roleId = widget.response[0]['id'].toString();
 
@@ -568,10 +611,8 @@ class SignupState extends State<SignupScreen> {
                                           .toString()
                                           .trim(),
                                       DEVICE_TYPE: deviceType,
-                                      DEVICE_TOKEN:deviceTokenValue,
+                                      DEVICE_TOKEN: deviceTokenValue,
                                     };
-                                    print(
-                                        parms.toString() + "------Parameters");
 
                                     if (widget.isSingle) {
                                       isConnectedToInternet().then((internet) {
@@ -589,7 +630,6 @@ class SignupState extends State<SignupScreen> {
                                                 (r) => false,
                                               );
                                             } else {
-                                              print(response.toString());
                                               var errorMessage = '';
                                               if (response.error != null) {
                                                 errorMessage =
@@ -706,7 +746,7 @@ class SignupState extends State<SignupScreen> {
               setState(() {
                 acceptTerms = value;
                 if (value) {
-                 // getTerms();
+                  // getTerms();
                 }
               });
             },

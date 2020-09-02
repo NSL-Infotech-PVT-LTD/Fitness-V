@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:volt/GroupClasses/group_classes.dart';
 import 'package:volt/Value/CColor.dart';
@@ -19,6 +20,7 @@ class Home extends StatelessWidget {
             padding: EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
+
                 Row(
                   children: <Widget>[
                     Container(

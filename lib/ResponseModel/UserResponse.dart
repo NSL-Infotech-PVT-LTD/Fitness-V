@@ -109,8 +109,7 @@ class UserResponse {
     is_booked_by_me = json['is_booked_by_me'];
     created_by_detail = json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
     role = json['role'] != null ? new RoleModel.fromJson(json['role']) : null;
-    model_detail =
-    json['model_detail'] != null ? new CreatedByModel.fromJson(json['model_detail']) : null;
+    model_detail = json['model_detail'] != null ? new CreatedByModel.fromJson(json['model_detail']) : null;
     plan_detail = json['plan_detail'];
   }
 

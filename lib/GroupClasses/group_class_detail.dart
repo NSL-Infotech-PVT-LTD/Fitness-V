@@ -24,6 +24,7 @@ class GroupClassDetail extends StatefulWidget {
 class _DetailState extends State<GroupClassDetail> {
   String auth = '';
   int id;
+  String _roleType = '';
 
   String fullName = '',
       recurring = '',
@@ -39,6 +40,9 @@ class _DetailState extends State<GroupClassDetail> {
     getString(USER_AUTH)
         .then((value) => {auth = value})
         .whenComplete(() => {_getClassDetail(auth)});
+
+    getString(roleType)
+        .then((value) => {_roleType = value});
     super.initState();
   }
 
@@ -376,6 +380,7 @@ class _DetailState extends State<GroupClassDetail> {
                           image: classImage,
                           name: className,
                           isGroupClass: true,
+                              roleType: _roleType,
                         )));
                   },
                   color: Colors.black,

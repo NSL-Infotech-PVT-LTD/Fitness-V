@@ -20,10 +20,12 @@ class TrainerDetail extends StatefulWidget {
   State<StatefulWidget> createState() => TrainerDetailState();
 }
 
-class TrainerDetailState extends State<TrainerDetail> {
+class TrainerDetailState extends State<TrainerDetail>
+    with SingleTickerProviderStateMixin {
   String fullName = '', expirence = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   bool is_booked_by_me = false;
+  TabController controller;
 
   String rating;
   List<Reviews> reviewList = List<Reviews>();
@@ -31,13 +33,18 @@ class TrainerDetailState extends State<TrainerDetail> {
   int myId = 0;
   String auth = '';
   var _checkList;
+  String _roleType = '';
 
   @override
   void initState() {
     getString(USER_AUTH)
         .then((value) => {auth = value})
         .whenComplete(() => {_getTrainerDetail(auth)});
+
+    getString(roleType).then((value) => {_roleType = value});
+
     super.initState();
+    controller = TabController(length: 2, vsync: this);
   }
 
   void _getTrainerDetail(String auth) async {
@@ -66,7 +73,7 @@ class TrainerDetailState extends State<TrainerDetail> {
 
                 trainerList = List<RecomendedTrainerClass>.generate(
                     response.data.related.length,
-                    (index) => RecomendedTrainerClass(
+                        (index) => RecomendedTrainerClass(
                         trainerName: response.data.related[index]['full_name'],
                         trainerExperience: '',
                         imgLink: response.data.related[index]['image']));
@@ -98,13 +105,12 @@ class TrainerDetailState extends State<TrainerDetail> {
             if (response.data != null && response.data.data != null) {
               reviewList = List<Reviews>.generate(
                   response.data.data.length,
-                  (i) => Reviews(
+                      (i) => Reviews(
                       imageUrl: response.data.data[i]['created_by_detail']
-                          ['image'],
+                      ['image'],
                       title: response.data.data[i]['review'],
                       text1:
-                          'Posted on ' + response.data.data[i]['created_at']));
-              print("ReviewSize" + reviewList.length.toString());
+                      'Posted on ' + response.data.data[i]['created_at']));
               setState(() {});
             }
           } else {
@@ -131,385 +137,390 @@ class TrainerDetailState extends State<TrainerDetail> {
     myId = widget.id;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: ScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 35,
-            ),
-            Container(
-                padding: EdgeInsets.fromLTRB(padding20, 0, 0, 0),
-                child: Row(
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              floating: false,
+              pinned: true,
+              iconTheme: IconThemeData(color: Colors.transparent),
+              backgroundColor: Colors.white,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
+                background: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(Icons.arrow_back_ios)),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        personal_trainer,
-                        style: TextStyle(fontSize: textSize20),
-                      ),
+                    SizedBox(
+                      height: 35,
                     ),
-                    Spacer(),
-                    PopupMenuButton<String>(
-                      onSelected: handleClick,
-                      itemBuilder: (BuildContext context) {
-                        return {'Settings'}.map((String choice) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            child: Text(choice),
-                          );
-                        }).toList();
-                      },
+                    Container(
+                        padding: EdgeInsets.fromLTRB(padding20, 0, 0, 0),
+                        child: Row(
+                          children: <Widget>[
+                            GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Icon(Icons.arrow_back_ios)),
+                            Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(
+                                personal_trainer,
+                                style: TextStyle(fontSize: textSize20),
+                              ),
+                            ),
+                            Spacer(),
+                            PopupMenuButton<String>(
+                              onSelected: handleClick,
+                              itemBuilder: (BuildContext context) {
+                                return {'Settings'}.map((String choice) {
+                                  return PopupMenuItem<String>(
+                                    value: choice,
+                                    child: Text(choice),
+                                  );
+                                }).toList();
+                              },
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 10,
                     ),
-                  ],
-                )),
-            SizedBox(
-              height: 10,
-            ),
-            Divider(
-              height: .5,
-              color: CColor.PRIMARYCOLOR,
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                    width: SizeConfig.blockSizeHorizontal * 50,
-                    height: SizeConfig.blockSizeVertical * 25,
-                    child: Stack(children: <Widget>[
-                      Positioned(
-                        bottom: imgLink == null ? 60 : 6,
-                        child: Padding(
-                            padding: EdgeInsets.only(left: 20, right: 20),
-                            child: imgLink == null
-                                ? Image.asset(
-                                    baseImageAssetsUrl + 'place_holder.png',
-                                    height: SizeConfig.blockSizeVertical * 15,
-                                  )
-                                : FadeInImage.assetNetwork(
-                                    placeholder:
-                                        baseImageAssetsUrl + 'logo_black.png',
-                                    image: BASE_URL +
-                                        'uploads/trainer-user/' +
-                                        imgLink,
+                    Divider(
+                      height: .5,
+                      color: CColor.PRIMARYCOLOR,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                            width: SizeConfig.blockSizeHorizontal * 50,
+                            height: SizeConfig.blockSizeVertical * 25,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                bottom: imgLink == null ? 60 : 6,
+                                child: Padding(
+                                    padding:
+                                    EdgeInsets.only(left: 20, right: 20),
+                                    child: imgLink == null
+                                        ? Image.asset(
+                                      baseImageAssetsUrl +
+                                          'place_holder.png',
+                                      height:
+                                      SizeConfig.blockSizeVertical *
+                                          15,
+                                    )
+                                        : FadeInImage.assetNetwork(
+                                      placeholder: baseImageAssetsUrl +
+                                          'logo_black.png',
+                                      image: BASE_URL +
+                                          'uploads/trainer-user/' +
+                                          imgLink,
 //                                    fit: BoxFit.cover,
-                                    width: SizeConfig.blockSizeHorizontal * 50,
-                                    height: SizeConfig.blockSizeVertical * 25,
-                                  )),
-                      ),
+                                      width:
+                                      SizeConfig.blockSizeHorizontal *
+                                          50,
+                                      height:
+                                      SizeConfig.blockSizeVertical *
+                                          25,
+                                    )),
+                              ),
 //                      SvgPicture.asset(
 //                        baseImageAssetsUrl + 'popular.svg',
 //                      ),
-                    ])),
-                Container(
-                    width: SizeConfig.blockSizeHorizontal * 35,
-                    height: SizeConfig.blockSizeVertical * 25,
-                    padding: EdgeInsets.only(top: 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                fullName.isEmpty ? '' : fullName,
-                                style: TextStyle(fontSize: 17),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            SvgPicture.asset(
-                              baseImageAssetsUrl + 'check_circle.svg',
-                              height: 15,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                            expirence == null
-                                ? 'No expirence'
-                                : expirence + " Years",
-                            style: TextStyle(fontSize: 10)),
-                        Text(
-                            trainees.toString() +
-                                ' Trainees ($reviewsCount Reviews)',
-                            style: TextStyle(fontSize: 10)),
-                        Padding(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              StarDisplayWidget(
-                                value:
-                                    rating == null ? 0.0 : double.parse(rating),
-                                filledStar: Icon(Icons.star,
-                                    color: Colors.black, size: 20),
-                                unfilledStar: Icon(Icons.star,
-                                    color: CColor.PRIMARYCOLOR, size: 20),
-                              )
-                            ],
-                          ),
-                          padding: EdgeInsets.only(top: 10),
-                        ),
+                            ])),
                         Container(
-                          margin: EdgeInsets.only(top: padding15),
-                          height: button_height,
-                          width: 150,
-                          child: RaisedButton(
-                            onPressed: () {
-                              if (!is_booked_by_me) {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => SelectSession(id:widget.id,image: imgLink,name: fullName,isGroupClass: false,)));
-                              }
-                            },
-                            color:
-                                is_booked_by_me ? Colors.black54 : Colors.black,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(button_radius)),
-                            child: Text(
-                              is_booked_by_me ? alreadyBooked : book_now,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: is_booked_by_me ? 13 : 16),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ))
-              ],
-            ),
-            DefaultTabController(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    color: Color(0xffE1E1E1),
-                    width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.only(top: 15, bottom: 10),
-                    padding: EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        TabBar(
-                          indicator: UnderlineTabIndicator(
-                              borderSide: BorderSide(width: 1.0),
-                              insets: EdgeInsets.symmetric(horizontal: 16.0)),
-                          indicatorColor: Colors.black,
-                          isScrollable: true,
-                          unselectedLabelColor: Colors.black26,
-                          tabs: <Widget>[
-                            Tab(
-                              child: Text(
-                                'Description',
-                                style: TextStyle(fontWeight: FontWeight.normal),
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                'Reviews',
-                                style: TextStyle(fontWeight: FontWeight.normal),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxHeight: SizeConfig.blockSizeVertical * 95,
-                        minHeight: 56.0),
-                    child: TabBarView(
-                      children: <Widget>[
-                        Container(
-                            padding: EdgeInsets.fromLTRB(10, 0, 20, 20),
+                            width: SizeConfig.blockSizeHorizontal * 35,
+                            height: SizeConfig.blockSizeVertical * 25,
+                            padding: EdgeInsets.only(top: 18),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20, top: 10, right: 20),
-                                  child: Text(
-                                    'About Trainer',
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20, top: 10, right: 20),
-                                  child: Text(
-                                    about == null
-                                        ? 'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.'
-                                        : about,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 20,
-                                  ),
-                                  child: Divider(
-                                    height: .5,
-                                    color: CColor.PRIMARYCOLOR,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20, top: 20, right: 20),
-                                  child: Text(
-                                    'Certifications & Specifications',
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20, top: 10, right: 20),
-                                  child: Text(
-                                    'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 20,
-                                  ),
-                                  child: Divider(
-                                    height: .5,
-                                    color: CColor.PRIMARYCOLOR,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20, top: 20, right: 20),
-                                  child: Text(
-                                    'Specialities',
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20, top: 10, right: 20),
-                                  child: Text(
-                                    services == null
-                                        ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
-                                        : services,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                                  child: Divider(
-                                    height: .5,
-                                    color: CColor.PRIMARYCOLOR,
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 20, bottom: 20),
-                                  child: Text(
-                                      trainerList.length > 0
-                                          ? 'Related Trainers'
-                                          : '',
-                                      style: TextStyle(fontSize: 12)),
-                                ),
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 20, right: 0),
-                                    child: Container(
-                                      height: 160,
-                                      child: ListView.builder(
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            child: RecomendedTrainer(
-                                              trainerClass: trainerList[index],
-                                              callback: () {
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    new MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            TrainerDetail(
-                                                              id: _checkList[
-                                                                  index]['id'],
-                                                            )));
-                                              },
-                                            ),
-                                          );
-                                        },
-                                        itemCount: trainerList == null
-                                            ? 0
-                                            : trainerList.length,
-                                        scrollDirection: Axis.horizontal,
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Text(
+                                        fullName.isEmpty ? '' : fullName,
+                                        style: TextStyle(fontSize: 17),
                                       ),
-                                    )),
+                                    ),
+                                    SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      baseImageAssetsUrl + 'check_circle.svg',
+                                      height: 15,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                    expirence == null
+                                        ? 'No expirence'
+                                        : expirence + " Years",
+                                    style: TextStyle(fontSize: 10)),
+                                Text(
+                                    trainees.toString() +
+                                        ' Trainees ($reviewsCount Reviews)',
+                                    style: TextStyle(fontSize: 10)),
+                                Padding(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      StarDisplayWidget(
+                                        value: rating == null
+                                            ? 0.0
+                                            : double.parse(rating),
+                                        filledStar: Icon(Icons.star,
+                                            color: Colors.black, size: 20),
+                                        unfilledStar: Icon(Icons.star,
+                                            color: CColor.PRIMARYCOLOR,
+                                            size: 20),
+                                      )
+                                    ],
+                                  ),
+                                  padding: EdgeInsets.only(top: 10),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: padding15),
+                                  height: button_height,
+                                  width: 150,
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      if (!is_booked_by_me) {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SelectSession(
+                                                      id: widget.id,
+                                                      image: imgLink,
+                                                      name: fullName,
+                                                      isGroupClass: false,
+                                                      roleType: _roleType,
+                                                    )));
+                                      }
+                                    },
+                                    color: is_booked_by_me
+                                        ? Colors.black54
+                                        : Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            button_radius)),
+                                    child: Text(
+                                      is_booked_by_me
+                                          ? alreadyBooked
+                                          : book_now,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: is_booked_by_me ? 13 : 16),
+                                    ),
+                                  ),
+                                ),
                               ],
-                            )),
-                        ConstrainedBox(
-                          constraints:
-                              BoxConstraints(maxHeight: 200, minHeight: 56.0),
-                          child: reviewList.length > 0
-                              ? ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.all(20),
-                                  physics: BouncingScrollPhysics(),
-                                  primary: false,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: reviewList.length,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      child: reviewList.length > 0
-                                          ? CustomReviews(
-                                              items: reviewList[index],
-                                            )
-                                          : Image.asset(
-                                              baseImageAssetsUrl +
-                                                  'no_reviews.png',
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                    );
-                                  })
-                              : Image.asset(
-                                  baseImageAssetsUrl + 'no_reviews.png'),
-                        ),
+                            ))
                       ],
                     ),
+                  ],
+                ),
+              ),
+              expandedHeight: SizeConfig.blockSizeVertical * 40,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(10.0),
+                // Add this code
+                child: Container(
+                  color: Color(0xffE1E1E1),
+                  width: SizeConfig.screenWidth,
+                  child: TabBar(
+                    indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(width: 1.0),
+                        insets: EdgeInsets.symmetric(horizontal: 16.0)),
+                    indicatorColor: Colors.black,
+                    isScrollable: true,
+                    controller: controller,
+                    unselectedLabelColor: Colors.black26,
+                    tabs: <Widget>[
+                      Tab(
+                        child: Text(
+                          'Description',
+                          style: TextStyle(fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          'Reviews',
+                          style: TextStyle(fontWeight: FontWeight.normal),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ];
+        },
+        body: DefaultTabController(
+          child: TabBarView(
+            controller: controller,
+            children: <Widget>[
+              Wrap(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                        child: Text(
+                          'About Trainer',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                        child: Text(
+                          about == null
+                              ? 'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.'
+                              : about,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: Divider(
+                          height: .5,
+                          color: CColor.PRIMARYCOLOR,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                        child: Text(
+                          'Certifications & Specifications',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                        child: Text(
+                          'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: Divider(
+                          height: .5,
+                          color: CColor.PRIMARYCOLOR,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                        child: Text(
+                          'Specialities',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                        child: Text(
+                          services == null
+                              ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
+                              : services,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20, bottom: 20),
+                        child: Divider(
+                          height: .5,
+                          color: CColor.PRIMARYCOLOR,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, bottom: 20),
+                        child: Text(
+                            trainerList.length > 0 ? 'Related Trainers' : '',
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(left: 20, right: 0),
+                          child: Container(
+                            height: 160,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: RecomendedTrainer(
+                                    trainerClass: trainerList[index],
+                                    callback: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TrainerDetail(
+                                                    id: _checkList[index]['id'],
+                                                  )));
+                                    },
+                                  ),
+                                );
+                              },
+                              itemCount:
+                              trainerList == null ? 0 : trainerList.length,
+                              scrollDirection: Axis.horizontal,
+                            ),
+                          )),
+                    ],
                   )
                 ],
               ),
-              length: 2,
-            )
-          ],
+              reviewList.length > 0
+                  ? ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(20),
+                  physics: BouncingScrollPhysics(),
+                  primary: false,
+                  scrollDirection: Axis.vertical,
+                  itemCount: reviewList.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      child: reviewList.length > 0
+                          ? CustomReviews(
+                        items: reviewList[index],
+                      )
+                          : Image.asset(
+                        baseImageAssetsUrl + 'no_reviews.png',
+                        height: 50,
+                        width: 50,
+                      ),
+                    );
+                  })
+                  : Image.asset(baseImageAssetsUrl + 'no_reviews.png'),
+            ],
+          ),
+          length: 2,
         ),
       ),
     );
@@ -546,40 +557,40 @@ class CustomReviews extends StatelessWidget {
             ),
             Expanded(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  child: Text(
-                    items.title == null ? 'No Review Found' : items.title,
-                    style: TextStyle(fontSize: 12, color: Colors.black45),
-                  ),
-                  padding: EdgeInsets.only(left: 15),
-                ),
-                Padding(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      StarDisplayWidget(
-                        value: items.rating == null ? 0 : items.rating,
-                        filledStar:
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      child: Text(
+                        items.title == null ? 'No Review Found' : items.title,
+                        style: TextStyle(fontSize: 12, color: Colors.black45),
+                      ),
+                      padding: EdgeInsets.only(left: 15),
+                    ),
+                    Padding(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          StarDisplayWidget(
+                            value: items.rating == null ? 0 : items.rating,
+                            filledStar:
                             Icon(Icons.star, color: Colors.black, size: 20),
-                        unfilledStar: Icon(Icons.star,
-                            color: CColor.PRIMARYCOLOR, size: 20),
-                      )
-                    ],
-                  ),
-                  padding: EdgeInsets.only(left: 15, top: 10),
-                ),
-                Padding(
-                  child: Text(
-                    items.text1 == null ? '' : items.text1,
-                    style: TextStyle(fontSize: 6, color: Colors.black26),
-                    textAlign: TextAlign.start,
-                  ),
-                  padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
-                )
-              ],
-            ))
+                            unfilledStar: Icon(Icons.star,
+                                color: CColor.PRIMARYCOLOR, size: 20),
+                          )
+                        ],
+                      ),
+                      padding: EdgeInsets.only(left: 15, top: 10),
+                    ),
+                    Padding(
+                      child: Text(
+                        items.text1 == null ? '' : items.text1,
+                        style: TextStyle(fontSize: 6, color: Colors.black26),
+                        textAlign: TextAlign.start,
+                      ),
+                      padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
+                    )
+                  ],
+                ))
           ],
         ));
   }

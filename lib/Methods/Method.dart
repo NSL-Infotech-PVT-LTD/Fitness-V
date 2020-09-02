@@ -2,6 +2,7 @@ import 'package:device_info/device_info.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:volt/AuthScreens/LoginScreen.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
@@ -12,7 +13,6 @@ import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
-
 
 Future<String> getDeviceID(bool isIOS) async {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -39,36 +39,61 @@ Future<bool> isConnectedToInternet() async {
 }
 
 void showDialogBox(context, String title, String message) {
-  showDialog(
+  showCupertinoDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
+        return CupertinoAlertDialog(
           title: Text(title),
-          content: Text(message),
+          content: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Text(message, style: TextStyle(wordSpacing: 1)),
+          ),
           actions: <Widget>[
-            FlatButton(
-              child: const Text('OK'),
-              onPressed: () => Navigator.pop(context),
+            CupertinoDialogAction(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              isDestructiveAction: true,
             ),
           ],
         );
       });
+
+//  showDialog(
+//      context: context,
+//      builder: (context) {
+//        return AlertDialog(
+//          title: Text(title),
+//          content: Text(message),
+//          actions: <Widget>[
+//            FlatButton(
+//              child: const Text('OK'),
+//              onPressed: () => Navigator.pop(context),
+//            ),
+//          ],
+//        );
+//      });
 }
 
 void showDialogRemoveUntil(context, String title, String message) {
-  showDialog(
+  showCupertinoDialog(
       context: context,
-      barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
+        return CupertinoAlertDialog(
           title: Text(title),
-          content: Text(message),
-
+          content: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Text(message),
+          ),
           actions: <Widget>[
-            FlatButton(
-              child: const Text('OK'),
-              onPressed: () => Navigator.pushAndRemoveUntil(
-                  context, ScaleRoute(page: Dashboard()), (r) => false),
+            CupertinoDialogAction(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                    context, ScaleRoute(page: Dashboard()), (r) => false);
+              },
+              isDestructiveAction: true,
             ),
           ],
         );
@@ -96,62 +121,116 @@ void cupertinoDialog(context, String negativeText, String positiveText) {
 }
 
 void exitDialog(context) {
-  showDialog(
+  showCupertinoModalPopup(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text("Alert!"),
-          content: Text(
-              "Are you sure to exit?\nIf you exit, data will be vanished."),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.pop(context),
+        return CupertinoActionSheet(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              "Alert!",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontFamily: open_semi_bold),
             ),
-            FlatButton(
-                child: const Text('Ok'),
-                onPressed: () => {
-                      Navigator.pop(context),
-                      Navigator.pop(context),
-                    }),
+          ),
+          message: Text(
+            "Are you sure to exit?\nIf you exit, data will be vanished.",
+            style: TextStyle(
+                color: Colors.black.withOpacity(.4),
+                fontSize: 14,
+                fontWeight: FontWeight.normal),
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Text("Confirm",
+                  style: TextStyle(
+                      color: Color(0xFFB71C1C),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text("Cancel",
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(.7),
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ],
         );
       });
 }
 
 void logoutDialog(context) {
-  showDialog(
+  showCupertinoModalPopup(
       context: context,
-      barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          title: Text("Logout!"),
-          content: Text("Are you sure, you want to logout."),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.pop(context),
+        return CupertinoActionSheet(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              "Logout!",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontFamily: open_semi_bold),
             ),
-            FlatButton(
-                child: const Text('Ok'),
-                onPressed: () => {
-                      clearedShared(),
-                      Navigator.pushAndRemoveUntil(context,
-                          ScaleRoute(page: LoginScreen()), (r) => false),
-                    }),
+          ),
+          message: Text(
+            "Are you sure, you want to logout.",
+            style: TextStyle(
+                color: Colors.black.withOpacity(.4),
+                fontSize: 14,
+                fontWeight: FontWeight.normal),
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Text("Confirm",
+                  style: TextStyle(
+                      color: Color(0xFFB71C1C),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold)),
+              onPressed: () {
+                clearedShared();
+                Navigator.pushAndRemoveUntil(
+                    context, ScaleRoute(page: LoginScreen()), (r) => false);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text("Cancel",
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(.7),
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ],
         );
       });
 }
 
-Widget whitePlaceHolder(String roleUrl,String imageLink,double height,double width) => FadeInImage.assetNetwork(
+Widget whitePlaceHolder(
+        String roleUrl, String imageLink, double height, double width) =>
+    FadeInImage.assetNetwork(
       placeholder: baseImageAssetsUrl + 'logo_white.png',
-      image: BASE_URL+roleUrl  + imageLink,
+      image: BASE_URL + roleUrl + imageLink,
       fit: BoxFit.cover,
-      height:height,
+      height: height,
     );
 
-Widget blackPlaceHolder(String roleUrl,String imageLink,double height,double width) => FadeInImage.assetNetwork(
+Widget blackPlaceHolder(
+        String roleUrl, String imageLink, double height, double width) =>
+    FadeInImage.assetNetwork(
       placeholder: baseImageAssetsUrl + 'logo_black.png',
       image: BASE_URL + roleUrl + imageLink,
       width: width,
@@ -211,12 +290,20 @@ Widget buildProgressIndicator(bool isLoading) {
 }
 
 ProgressDialog progress(context) {
+  SpinKitFadingCircle(color: Colors.black);
+
   return ProgressDialog(
     context,
     type: ProgressDialogType.Normal,
     isDismissible: true,
   );
 }
+
+Widget showLoading() => Container(
+    height: SizeConfig.screenHeight,
+    color: Color(0xFFE0E0E0).withOpacity(.1),
+    child: Center(child: SpinKitCircle(color: Colors.black87.withOpacity(.5))));
+
 void showProgress(context, String msg) {
   progress(context).style(
       message: msg,
@@ -240,6 +327,7 @@ void showProgress(context, String msg) {
 
   progress(context).show();
 }
+
 void dismissDialog(context) {
   if (progress(context) != null) progress(context).hide();
 }

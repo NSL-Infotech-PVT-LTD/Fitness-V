@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -522,8 +521,6 @@ class UserProfileState extends State<UserProfile> {
                                         DEVICE_TOKEN: deviceTokenValue,
                                       };
 
-                                      print(parms.toString() +
-                                          "------Parameters");
                                       isConnectedToInternet().then((internet) {
                                         showProgress(
                                             context, "Please wait.....");
@@ -543,7 +540,6 @@ class UserProfileState extends State<UserProfile> {
                                               _isEnable = true;
                                               setState(() {});
                                             } else {
-                                              print(response.toString());
                                               var errorMessage = '';
                                               if (response.error != null) {
                                                 errorMessage =

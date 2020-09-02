@@ -33,26 +33,30 @@ class ForgotPasswordState extends State<ForgotPassword> {
           dismissDialog(context);
           if (response.status) {
 
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Check"),
 
-                    content: Text(
-                        "Password reset link sent, please check inbox"),
+            showCupertinoDialog(
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: Text("Check",style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal)),
+                    content: Padding(
+                      padding: const EdgeInsets.only(top:10.0),
+                      child: Text("Password reset link sent, please check inbox",style: TextStyle(color: Colors.black54,fontWeight: FontWeight.normal)),
+                    ),
                     actions: <Widget>[
 
-                      FlatButton(
-                          child: const Text('Ok'),
-                          onPressed: () => {
-                            Navigator.pop(context),
-                            Navigator.pop(context),
-                          }),
+                      CupertinoDialogAction(
+                        child: Text("OK",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        isDestructiveAction: true,
+                      ),
                     ],
                   );
                 });
+
           } else {
             var message = '';
             dismissDialog(context);

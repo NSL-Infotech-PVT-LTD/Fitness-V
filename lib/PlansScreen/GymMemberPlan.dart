@@ -41,7 +41,6 @@ class GymMemberState extends State<GymMemberPlan> {
 
   @override
   void initState() {
-    print("CheckResponse " + widget.response.toString());
     super.initState();
   }
 
@@ -68,8 +67,6 @@ class GymMemberState extends State<GymMemberPlan> {
     }
 
     indexValue = indexValue + 1;
-    print(indexValue);
-    //  print((indexValue++).toString() + " nfkjsdfkds");
     SizeConfig().init(context);
     return Scaffold(
       resizeToAvoidBottomPadding: true,
@@ -261,9 +258,12 @@ class GymMemberState extends State<GymMemberPlan> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: imageLink != null
-                                  ? whitePlaceHolder(IMAGE_URL,imageLink,SizeConfig.screenHeight * .25,0.0)
-                                  : Image.asset(baseImageAssetsUrl + 'gym.png',
-                                      fit: BoxFit.cover,
+                                  ? whitePlaceHolder(IMAGE_URL, imageLink,
+                                      SizeConfig.screenHeight * .25, 0.0)
+                                  : Image.asset(
+                                      baseImageAssetsUrl + 'logo_black.png',
+                                      width: SizeConfig.screenWidth*.6,
+                                      fit: BoxFit.fitWidth,
                                       height: SizeConfig.screenHeight * .25)),
                           Padding(
                             padding: EdgeInsets.fromLTRB(10, 12, 10, 10),

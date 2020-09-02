@@ -509,7 +509,6 @@ class _SpouseTypeState extends State<SpouseType> {
                             DEVICE_TYPE: deviceType,
                             DEVICE_TOKEN:deviceTokenValue,
                           };
-                          print(parms.toString() + "------Parameters");
                           isConnectedToInternet().then((internet) {
                             if (internet != null && internet) {
                               showProgress(context, "Please wait.....");
@@ -525,7 +524,6 @@ class _SpouseTypeState extends State<SpouseType> {
                                 } else {
                                   dismissDialog(context);
 
-                                  print("error" + response.toString());
                                   if (response.error != null)
                                     showDialogBox(
                                         context, "Error!", response.error);
@@ -533,11 +531,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                     errorMessage1 = '';
                                     if (response.errors != null) {
                                       var value = response.errors.toJson();
-                                      print("Error--->" +
-                                          value.keys
-                                              .toSet()
-                                              .contains('email_1')
-                                              .toString());
+
                                       if (value['email'] != null) {
                                         errorMessage = response.errors.email;
                                         setState(() {

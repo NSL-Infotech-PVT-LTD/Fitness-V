@@ -139,7 +139,9 @@ class ProfileState extends State<ProfileScreen> {
         body: SingleChildScrollView(
           child: WillPopScope(
             onWillPop: () {
-              Navigator.pop(context, result);
+
+
+                Navigator.pop(context, result);
               return new Future(() => false);
             },
             child: Column(
@@ -304,36 +306,43 @@ class ProfileState extends State<ProfileScreen> {
                       )),
                 ),
                 myDivider(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => AllBookings()));
-                  },
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            baseImageAssetsUrl + 'bookings.svg',
-                            height: 30,
-                            width: 30,
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text(
-                                'Bookings',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color(0xff8B8B8B), fontSize: 16),
-                              ))
-                        ],
-                      )),
-                ),
-                myDivider(),
-                Container(
+//                GestureDetector(
+//                  onTap: () {
+//                    Navigator.push(
+//                        context,
+//                        new MaterialPageRoute(
+//                            builder: (context) => AllBookings()));
+//                  },
+//                  child: Container(
+//                      padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+//                      child: Row(
+//                        crossAxisAlignment: CrossAxisAlignment.center,
+//                        children: <Widget>[
+//                          SvgPicture.asset(
+//                            baseImageAssetsUrl + 'bookings.svg',
+//                            height: 30,
+//                            width: 30,
+//                          ),
+//                          Padding(
+//                              padding: EdgeInsets.only(left: 20),
+//                              child: Text(
+//                                'Bookings',
+//                                textAlign: TextAlign.center,
+//                                style: TextStyle(
+//                                    color: Color(0xff8B8B8B), fontSize: 16),
+//                              ))
+//                        ],
+//                      )),
+//                ),
+//                myDivider(),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => AllBookings()));
+              },
+              child:Container(
                   padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -342,14 +351,14 @@ class ProfileState extends State<ProfileScreen> {
                       Padding(
                           padding: EdgeInsets.only(left: 20),
                           child: Text(
-                            'Calendar & Booking',
+                            'Bookings',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Color(0xff8B8B8B), fontSize: 16),
                           ))
                     ],
                   ),
-                ),
+                )),
                 myDivider(),
                 GestureDetector(
                     onTap: () {
@@ -424,6 +433,9 @@ class ProfileState extends State<ProfileScreen> {
                 myDivider(),
                 GestureDetector(
                   onTap: () {
+
+
+
                     logoutDialog(context);
                   },
                   child: Container(

@@ -50,7 +50,6 @@ class DashboardState extends State<Dashboard> {
         .then((value) => {imageValue = value})
         .whenComplete(() => setState(() {}));
 
-    print(imageValue.toString() + "jugraj---------");
     setState(() {});
   }
 

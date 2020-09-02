@@ -46,9 +46,7 @@ class LoginState extends State<LoginScreen> {
 
             setString(
                 USER_NAME,
-                response.data.user.first_name +
-                    " " +
-                    response.data.user.last_name);
+                response.data.user.full_name);
             Navigator.pushAndRemoveUntil(
                 context, ScaleRoute(page: Dashboard()), (r) => false);
           } else {

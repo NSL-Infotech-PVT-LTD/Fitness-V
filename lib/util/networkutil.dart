@@ -14,7 +14,6 @@ class NetworkUtil {
   Future<http.Response> get(String url) {
     return http.get(Constants.baseUrl + url).then((http.Response response) {
       final int statusCode = response.statusCode;
-      print(statusCode);
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
         throw new Exception("Error while fetching data");
@@ -27,7 +26,6 @@ class NetworkUtil {
   Future<http.Response> post(context, String url,String auth,
       {Map<String, String> headers, body, encoding}) {
 
-    print(Constants.baseUrl+" ndfjhb" + auth);
 
     return http
         .post(Constants.baseUrl + url,
@@ -39,14 +37,12 @@ class NetworkUtil {
             encoding: encoding)
         .then((http.Response response) {
       if (response == null) {
-        print("ull data");
         throw new Exception("Error while fetching data");
       }
-      print(response.statusCode);
       if (response.statusCode < 200 || response.statusCode > 400) {
 //        var res = response.body as JsonDecoder;
 //             showDialogBox(context, 'Error',res.error.toString());
-//        print(res.toString());
+//
         throw new Exception(response);
       }
 

@@ -98,7 +98,6 @@ class _EventState extends State<Event> {
           .whenComplete(() => dismissDialog(context))
           .catchError((error) {
             setState(() {});
-            print(error.toString());
           })
           .whenComplete(() => dismissDialog(context));
     }
@@ -115,10 +114,7 @@ class _EventState extends State<Event> {
 
       if ((extracted["code"] == 200)) {
         setState(() {
-          print(
-              '---------------------STARTING TO PARSE THE RESPONSE--------------------');
           apiResponse = extracted['data'];
-          //   print(apiResponse);
           myDatapast = apiResponse['data'] as List;
         });
         // TODO: Add code for the No Blocked Users scenario.
@@ -126,11 +122,8 @@ class _EventState extends State<Event> {
         setState(() {});
       }
 
-      //    print(widget.name,);
-      //  print('------------Ended _getEvetsList()-------------');
     }).catchError((error) {
       setState(() {});
-      print(error.toString());
     }).whenComplete(() => dismissDialog(context));
   }
 
@@ -514,23 +507,4 @@ class _EventState extends State<Event> {
   }
 }
 
-void showMyDialog(context, String title, String message) {
-  showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.pop(context);
-//                Navigator.pushReplacement(
-//                    context, SizeRoute(page: ChooseYourWay()));
-              },
-            ),
-          ],
-        );
-      });
-}
+

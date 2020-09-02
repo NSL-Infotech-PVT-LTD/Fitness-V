@@ -42,10 +42,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 
   @override
   Widget build(BuildContext context) {
-//    print(widget.response['id'].toString());
     limit = widget.response['plan_detail'];
-
-//    print("jugraj------>"+widget.response.toString());
     plansList = new List<PlansDetails>();
 
     for (int i = 0; i < limit.length; i++) {
@@ -108,11 +105,12 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: widget.response['image'] != null
-                        ? blackPlaceHolder(IMAGE_URL,
+                        ? blackPlaceHolder(
+                            IMAGE_URL,
                             widget.response['image'],
                             SizeConfig.screenHeight * .25,
                             SizeConfig.screenWidth)
-                        : Image.asset(baseImageAssetsUrl + 'gym.png',
+                        : Image.asset(baseImageAssetsUrl + 'logo_black.png',
                             fit: BoxFit.cover,
                             width: SizeConfig.screenWidth,
                             height: SizeConfig.screenHeight * .25)),

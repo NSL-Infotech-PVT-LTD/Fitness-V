@@ -62,14 +62,12 @@ Widget bottomDialogLog() => CupertinoActionSheet(
           child: Text("Action 1"),
           isDefaultAction: true,
           onPressed: () {
-            print("Action 1 is been clicked");
           },
         ),
         CupertinoActionSheetAction(
           child: Text("Action 2"),
           isDestructiveAction: true,
           onPressed: () {
-            print("Action 2 is been clicked");
           },
         )
       ],

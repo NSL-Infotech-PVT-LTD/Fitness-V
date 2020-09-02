@@ -91,7 +91,6 @@ class AllBookingsState extends State<AllBookings> {
                   tList.add(response.data.data[i]);
 
                 }
-                print("CheckList------>$_modelType");
 
                 setState(() {
                   _isLoading = false;

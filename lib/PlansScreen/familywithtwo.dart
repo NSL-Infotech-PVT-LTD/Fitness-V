@@ -775,7 +775,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                             DEVICE_TYPE: deviceType,
                             DEVICE_TOKEN: deviceTokenValue,
                           };
-                          print(parms.toString() + "------Parameters");
+
                           isConnectedToInternet().then((internet) {
                             if (internet != null && internet) {
                               showProgress(context, "Please wait.....");
@@ -791,7 +791,6 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                 } else {
                                   dismissDialog(context);
 
-                                  print("error" + response.toString());
                                   if (response.error != null)
                                     showDialogBox(
                                         context, "Error!", response.error);
@@ -799,11 +798,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                     var name = '';
                                     if (response.errors != null) {
                                       var value = response.errors.toJson();
-                                      print("Error--->" +
-                                          value.keys
-                                              .toSet()
-                                              .contains('email_1')
-                                              .toString());
+
                                       if (value['email'] != null) {
                                         errorMessage = response.errors.email;
                                         name = result[FIRSTNAME];

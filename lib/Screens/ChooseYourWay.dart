@@ -235,10 +235,8 @@ class ChooseWayState extends State<ChooseYourWay> {
       if (internet != null && internet) {
         showProgress(context, "Loading....");
         getRoles().then((response) {
-          print("CheckBeforSuccess->" + response.toJson().toString());
           dismissDialog(context);
           if (response.status) {
-
             gym_list = response.data.gym_members;
             pool_and_beach_list = response.data.pool_and_beach_members;
             guest_list = response.data.local_guest;
@@ -258,20 +256,24 @@ class ChooseWayState extends State<ChooseYourWay> {
   }
 
   void showMyDialog(context, String title, String message) {
-    showDialog(
+    showCupertinoDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return CupertinoAlertDialog(
             title: Text(title),
-            content: Text(message),
+            content: Padding(
+              padding: const EdgeInsets.only(top:10.0),
+              child: Text(message,style: TextStyle(wordSpacing: 1),),
+            ),
             actions: <Widget>[
-              FlatButton(
-                child: const Text('OK'),
+              CupertinoDialogAction(
+                child: Text("OK"),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pushReplacement(
                       context, SizeRoute(page: ChooseYourWay()));
                 },
+                isDestructiveAction: true,
               ),
             ],
           );
