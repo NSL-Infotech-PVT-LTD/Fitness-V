@@ -101,7 +101,7 @@ class UserProfileState extends State<UserProfile> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -557,7 +557,7 @@ class UserProfileState extends State<UserProfile> {
                                         } else {
                                           showDialogBox(
                                               context,
-                                              'Internet Error',
+                                              internetError,
                                               pleaseCheckInternet);
                                           dismissDialog(context);
                                         }

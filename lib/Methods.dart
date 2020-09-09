@@ -279,7 +279,7 @@ Future<bool> bookingFunction(String auth, context, String model_type,
         }
       });
     } else {
-      showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+      showDialogBox(context, internetError, pleaseCheckInternet);
       dismissDialog(context);
     }
   }).whenComplete(() => dismissDialog(context));

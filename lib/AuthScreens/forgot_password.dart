@@ -72,7 +72,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });

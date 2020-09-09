@@ -10,6 +10,7 @@ import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'package:volt/util/constants.dart';
 
 import '../Methods.dart';
 
@@ -28,7 +29,7 @@ class AllBookingsState extends State<AllBookings> {
   var _trainers = false;
   var _groupClass = false;
   var _events = false;
-  List<CustomBooking> _bookingList;
+  List _bookingList = List();
 
   void setBoolState(String type) {
     _all = false;
@@ -81,7 +82,6 @@ class AllBookingsState extends State<AllBookings> {
             'model_type': _modelType,
           };
           allBookingsApi(auth, parms).then((response) {
-
             if (response.status) {
               if (response.data != null) {
                 _total = response.data.last_page;
@@ -89,26 +89,54 @@ class AllBookingsState extends State<AllBookings> {
 
                 for (int i = 0; i < response.data.data.length; i++) {
                   tList.add(response.data.data[i]);
-
                 }
 
                 setState(() {
                   _isLoading = false;
 
-                  _bookingList = List<CustomBooking>.generate(
-                      tList.length,
-                      (index) =>
+                  for (int index = 0; index < tList.length; index++) {
+                    var name = 'Not Found';
+                    var image = '';
+                    var url = '';
+                    var modelType = '';
 
-                          CustomBooking(
+                    if (tList[index]['model_detail'] != null) {
+                      if (tList[index]['model_type'] == 'events') {
+                        name = tList[index]['model_detail']['name'];
+                        image = tList[index]['model_detail']['image'];
+                        modelType = 'Event';
+                        url = Constants.uploads + Constants.event + "/";
+                      } else if (tList[index]['model_type'] ==
+                          'class_schedules') {
+                        print(tList[index]['model_detail'].toString());
+                        if (tList[index]['model_detail']['class_detail'] !=
+                            null) {
+                          name = tList[index]['model_detail']['class_detail']
+                              ['name'];
+                          image = tList[index]['model_detail']['class_detail']
+                              ['image'];
+                          modelType = 'Class';
+                          url = imageClassUrl;
+                        }
+                      } else {
+                        name = tList[index]['model_detail']['full_name'];
+                        image = tList[index]['model_detail']['image'];
+                        modelType = 'Trainer';
+                        url = trainerUser;
+                      }
+                    }
 
-                          bookingId: tList[index]['id'].toString(),
-                          bookingType: tList[index]['model_type'].toString(),
-                          name:tList[index]['model_type'] == 'events'
-                              ? tList[index]['model_detail']['name']
-                              : tList[index]['model_detail']['full_name'],
-                          imgLink: tList[index]['model_detail']['image'],
-                          bookingDate: tList[index]['created_at'],
-                          serviceHours: tList[index]['hours'].toString()));
+                    print('jugraj===>$name');
+                    _bookingList.add(CustomBooking(
+                        bookingId: tList[index]['id'].toString(),
+                        bookingType: modelType,
+                        name: name,
+                        imgLink: image,
+                        url: url,
+                        bookingDate: tList[index]['created_at'],
+                        serviceHours: tList[index]['hours'].toString()));
+                  }
+
                   _page++;
                 });
               }
@@ -119,7 +147,7 @@ class AllBookingsState extends State<AllBookings> {
           }).whenComplete(() => dismissDialog(context));
         }
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
       }
     });
   }
@@ -461,6 +489,7 @@ class CustomBooking {
   final String serviceHours;
   final String bookingDate;
   final String bookingType;
+  final String url;
 
   const CustomBooking({
     this.bookingId,
@@ -468,6 +497,7 @@ class CustomBooking {
     this.name,
     this.serviceHours,
     this.bookingDate,
+    this.url,
     this.imgLink,
   });
 }
@@ -522,7 +552,7 @@ class BookingView extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  '${customBooking.bookingType == 'events' ? 'Event' : 'Trainer'} Name',
+                                  '${customBooking.bookingType} Name',
                                   style: TextStyle(
                                       color: Colors.black38, fontSize: 10),
                                 ),
@@ -605,7 +635,7 @@ class BookingView extends StatelessWidget {
                                   placeholder:
                                       baseImageAssetsUrl + 'logo_black.png',
                                   image: BASE_URL +
-                                      '${customBooking.bookingType == 'events' ? imageUrlEvent : trainerUser}' +
+                                      customBooking.url +
                                       customBooking.imgLink,
                                   height: SizeConfig.screenHeight * .13,
                                   fit: BoxFit.cover,

@@ -57,7 +57,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
           });
         }
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -153,8 +153,8 @@ class AllTrainersViewState extends State<AllTrainersView> {
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
                               users[index]['expirence'] == null
-                                  ? 'No expirence'
-                                  : ("${users[index]['expirence']} years expirenced"),
+                                  ? 'No experience'
+                                  : ("${users[index]['expirence']} years experienced"),
                               style: TextStyle(
                                   fontSize: 8.5,
                                   fontWeight: FontWeight.bold,

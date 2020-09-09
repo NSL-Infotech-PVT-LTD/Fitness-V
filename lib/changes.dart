@@ -82,6 +82,8 @@ class _EventState extends State<EventClass>
             var extracted = json.decode(response.body);
 
             if ((extracted["code"] == 200)) {
+              print("jugraj==>$extracted['data']");
+
               setState(() {
                 apiResponse = extracted['data'];
 
@@ -182,6 +184,9 @@ class _EventState extends State<EventClass>
                               TextStyle(color: CColor.LightGrey, fontSize: 10),
                         ),
                       ),
+                      SizedBox(
+                        width: SizeConfig.blockSizeHorizontal * 9,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -247,7 +252,7 @@ class _EventState extends State<EventClass>
                                   Container(
                                     padding: EdgeInsets.all(10),
                                     //   color: Colors.red,
-                                    height: SizeConfig.screenHeight * 0.22,
+                                    height: SizeConfig.screenHeight * 0.25,
                                     width: SizeConfig.screenWidth,
                                     child: GestureDetector(
                                         onTap: () {
@@ -267,13 +272,13 @@ class _EventState extends State<EventClass>
                                               Constants.event +
                                               "/" +
                                               myData[index]['image'],
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fill,
                                           //  height: SizeConfig.screenHeight * .25,
                                         )),
                                   ),
                                   Container(
-                                    padding:
-                                        EdgeInsets.only(left: 20, bottom: 20),
+                                    padding: EdgeInsets.only(
+                                        left: 20, bottom: 15, right: 20),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -287,7 +292,7 @@ class _EventState extends State<EventClass>
                                               myData[index]['name'],
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 22.0),
+                                                  fontSize: 12.0),
                                             )),
                                         SizedBox(
                                             width: SizeConfig.screenWidth * 0.2,
@@ -303,12 +308,25 @@ class _EventState extends State<EventClass>
                                             // padding: EdgeInsets.all(20),
                                             alignment: Alignment.topLeft,
                                             child: Text(
-                                              myData[index]['description'],
-                                              maxLines: 2,
+                                              "Location : ${myData[index]['location_detail']['name']}\n"
+                                              "From : ${myData[index]['start_date']}\nTo : ${myData[index]['end_date']}",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 15.0),
+                                                  fontSize: 10.0),
                                             )),
+
+                                        Container(
+                                          margin: EdgeInsets.only(top: 20),
+                                          width: SizeConfig.screenWidth,
+                                          height: 50,
+                                          color: Colors.black45,
+                                          child: Center(
+                                              child: Text(
+                                            'View',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                        )
                                       ],
                                     ),
                                   )
@@ -384,7 +402,7 @@ class _EventState extends State<EventClass>
                                             myDatapast[index]['name'],
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 22.0),
+                                                fontSize: 12.0),
                                           )),
                                       SizedBox(
                                           width: SizeConfig.screenWidth * 0.2,
@@ -400,11 +418,12 @@ class _EventState extends State<EventClass>
                                           // padding: EdgeInsets.all(20),
                                           alignment: Alignment.topLeft,
                                           child: Text(
-                                            myDatapast[index]['description'],
+                                            "Location : ${myDatapast[index]['location_detail']['name']}\n"
+                                            "From : ${myDatapast[index]['start_date']}\nTo : ${myDatapast[index]['end_date']}",
                                             maxLines: 2,
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 15.0),
+                                                fontSize: 10.0),
                                           )),
                                     ],
                                   ),

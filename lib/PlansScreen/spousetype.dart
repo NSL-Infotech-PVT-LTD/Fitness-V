@@ -567,7 +567,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                 }
                               });
                             } else {
-                              showDialogBox(context, 'Internet Error',
+                              showDialogBox(context, internetError,
                                   pleaseCheckInternet);
                               dismissDialog(context);
                             }
@@ -663,7 +663,7 @@ class _SpouseTypeState extends State<SpouseType> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });

@@ -54,7 +54,7 @@ class ProfileState extends State<ProfileScreen> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -80,7 +80,7 @@ class ProfileState extends State<ProfileScreen> {
           }
         }).whenComplete(() => dismissDialog(context));
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -106,7 +106,7 @@ class ProfileState extends State<ProfileScreen> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });

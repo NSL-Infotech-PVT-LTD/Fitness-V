@@ -9,6 +9,8 @@ const recent = 'Recent';
 const updateProfile = 'Update Profile';
 const contactAndAboutVolt = 'Contact & About VOLT';
 const back = 'Back';
+const internetError = 'Internet Error';
+
 const notifications = 'Notifications';
 const groupClasses = 'Group Classes';
 const cart = 'Cart';
@@ -37,7 +39,7 @@ const birthDate = 'Birth Date*';
 const email = 'Email';
 const married = 'Married';
 const single = 'Single';
-const emiratesId = 'Emirates ID*';
+const emiratesId = 'Emirates ID or Passport*';
 const iaccept = 'I Accept';
 const termsofService = ' Terms of Services';
 const designation = 'Designation';

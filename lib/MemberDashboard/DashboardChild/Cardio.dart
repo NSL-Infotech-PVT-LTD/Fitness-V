@@ -60,7 +60,7 @@ class _CardioState extends State<Cardio> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -249,7 +249,7 @@ class _CardioState extends State<Cardio> {
                               Text(
                                   checkList != null && checkList.length > 1
                                       ? checkList[1]['expirence'] +
-                                          ' years experineced'
+                                          ' years experienced'
                                       : '',
                                   style: TextStyle(
                                       fontSize: 7, color: Color(0xffc1c1c1))),
@@ -276,7 +276,7 @@ class _CardioState extends State<Cardio> {
                 child: Padding(
                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: Container(
-                      height: 160,
+                      height: 200,
                       child: ListView.builder(
                         itemBuilder: (context, index) {
                           return Container(
@@ -359,8 +359,18 @@ class RecomendedTrainer extends StatelessWidget {
                       width: 125,
                       height: 110,
                     )
-                  : blackPlaceHolder('uploads/trainer-user/',
-                      trainerClass.imgLink, 110.0, 125.0),
+                  : FadeInImage.assetNetwork(
+                      placeholder: baseImageAssetsUrl + 'logo_black.png',
+                      image: BASE_URL +
+                          'uploads/trainer-user/' +
+                          trainerClass.imgLink,
+                      fit: BoxFit.fill,
+                      width: 150,
+                      height: 150.0,
+                    ),
+
+//              blackPlaceHolder('uploads/trainer-user/',
+//                      trainerClass.imgLink, 110.0, 125.0),
               Padding(
                 padding: EdgeInsets.only(left: 5, top: 5),
                 child: Text(
@@ -372,8 +382,8 @@ class RecomendedTrainer extends StatelessWidget {
                 padding: EdgeInsets.only(left: 5),
                 child: Text(
                   trainerClass.trainerExperience == null
-                      ? 'No expirence'
-                      : trainerClass.trainerExperience + " Years",
+                      ? 'No experience'
+                      : trainerClass.trainerExperience + " years of experience",
                   style: TextStyle(fontSize: 7, color: Color(0xffc1c1c1)),
                 ),
               ),
@@ -382,7 +392,7 @@ class RecomendedTrainer extends StatelessWidget {
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
           elevation: 2,
-          shadowColor: Colors.grey.withOpacity(.2 ),
+          shadowColor: Colors.grey.withOpacity(.2),
         ));
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:volt/GroupClasses/group_classes.dart';
 import 'package:volt/Value/CColor.dart';
@@ -7,7 +6,6 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
-import '../GroupClassses.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -20,7 +18,6 @@ class Home extends StatelessWidget {
             padding: EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
-
                 Row(
                   children: <Widget>[
                     Container(
@@ -79,7 +76,7 @@ class Home extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Image.asset(
-                    baseImageAssetsUrl + 'family.png',
+                    baseImageAssetsUrl + 'dummy.png',
                     height: SizeConfig.blockSizeVertical * 25,
                     width: SizeConfig.blockSizeHorizontal * 90,
                     fit: BoxFit.cover,
@@ -136,7 +133,7 @@ class Home extends StatelessWidget {
                               bottomRight: Radius.circular(7))),
                       child: Center(
                         child: Text(
-                          'Upgrade',
+                          'Register',
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       )),

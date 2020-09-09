@@ -24,7 +24,7 @@ class EventDetailState extends State<EventDetail> {
   String _imageLink;
   String _about = '';
   String _eventName = '';
-  bool _is_booked_by_me = false;
+  bool _isBookedByMe = false;
   String _eventLocation = '';
   String _eventTime = '';
   String auth = '';
@@ -51,7 +51,7 @@ class EventDetailState extends State<EventDetail> {
                 response.data.location_detail != null) {
               _eventName = response.data.name;
               _imageLink = response.data.image;
-              _is_booked_by_me = response.data.is_booked_by_me;
+              _isBookedByMe = response.data.is_booked_by_me;
               _about = response.data.description;
               _eventLocation = response.data.location_detail.location;
               _eventTime = "From : " +
@@ -68,7 +68,7 @@ class EventDetailState extends State<EventDetail> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -77,7 +77,6 @@ class EventDetailState extends State<EventDetail> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
     return Scaffold(
         body: SingleChildScrollView(
             physics: ScrollPhysics(),
@@ -127,7 +126,8 @@ class EventDetailState extends State<EventDetail> {
                       _eventName,
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: textSize14,
+                          fontSize: textSize16,
+                          fontWeight: FontWeight.bold,
                           fontFamily: open_light),
                     ),
                   ),
@@ -186,21 +186,20 @@ class EventDetailState extends State<EventDetail> {
                         width: 150,
                         child: RaisedButton(
                           onPressed: () {
-                            if (!_is_booked_by_me)
+                            if (!_isBookedByMe)
                               bookingFunction(auth, context, eventKey,
                                   widget.id.toString(), '');
                           },
-                          color:
-                              _is_booked_by_me ? Colors.black54 : Colors.black,
+                          color: _isBookedByMe ? Colors.black54 : Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(button_radius)),
                           child: Text(
-                            _is_booked_by_me ? alreadyBooked : book_now,
+                            _isBookedByMe ? alreadyBooked : book_now,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: _is_booked_by_me ? 13 : 16),
+                                fontSize: _isBookedByMe ? 13 : 16),
                           ),
                         ),
                       ),
@@ -212,8 +211,25 @@ class EventDetailState extends State<EventDetail> {
   Widget setImage(String status, String imgLink) => status == recent
       ? ColorFiltered(
           colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
-          child: blackPlaceHolder(imageUrlEvent, imgLink,
-              SizeConfig.screenHeight * .25, SizeConfig.screenWidth))
-      : blackPlaceHolder(imageUrlEvent, imgLink, SizeConfig.screenHeight * .25,
-          SizeConfig.screenWidth);
+          child: FadeInImage.assetNetwork(
+            placeholder: baseImageAssetsUrl + 'logo_black.png',
+            image: BASE_URL + imageUrlEvent + imgLink,
+            width: SizeConfig.screenWidth,
+            fit: BoxFit.cover,
+            height: SizeConfig.screenHeight * .25,
+          ))
+      : FadeInImage.assetNetwork(
+          placeholder: baseImageAssetsUrl + 'logo_black.png',
+          image: BASE_URL + imageUrlEvent + imgLink,
+          fit: BoxFit.cover,
+          width: SizeConfig.screenWidth,
+          height: SizeConfig.screenHeight * .25,
+        );
 }
+// FadeInImage.assetNetwork(
+//      placeholder: baseImageAssetsUrl + 'logo_black.png',
+//      image: BASE_URL + roleUrl + imageLink,
+//      width: width,
+//      fit: BoxFit.cover,
+//      height: height,
+//    );

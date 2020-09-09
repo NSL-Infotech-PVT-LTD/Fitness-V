@@ -106,7 +106,7 @@ class TrainerServiceState extends State<TrainerService> {
                     SizedBox(
                       height: 5,
                     ),
-                    Text('7 years Experineced', style: TextStyle(fontSize: 10)),
+                    Text('7 years experienced', style: TextStyle(fontSize: 10)),
                     Text('1022 Trainees (789 Reviews)',
                         style: TextStyle(fontSize: 10)),
                     Padding(

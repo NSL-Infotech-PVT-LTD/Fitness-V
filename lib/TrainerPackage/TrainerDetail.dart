@@ -22,7 +22,7 @@ class TrainerDetail extends StatefulWidget {
 
 class TrainerDetailState extends State<TrainerDetail>
     with SingleTickerProviderStateMixin {
-  String fullName = '', expirence = '', services = '', about = '', imgLink;
+  String fullName = '', expirence = '', services = '', about = '', certifications = '',specialities = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   bool is_booked_by_me = false;
   TabController controller;
@@ -66,6 +66,8 @@ class TrainerDetailState extends State<TrainerDetail>
               rating = response.data.trainer.rating_avg;
               expirence = response.data.trainer.expirence;
               trainees = response.data.trainer.booking_cnt;
+              certifications = response.data.trainer.certifications;
+              specialities = response.data.trainer.specialities;
               is_booked_by_me = response.data.trainer.is_booked_by_me;
 
               if (response.data.related.length > 0) {
@@ -73,7 +75,7 @@ class TrainerDetailState extends State<TrainerDetail>
 
                 trainerList = List<RecomendedTrainerClass>.generate(
                     response.data.related.length,
-                        (index) => RecomendedTrainerClass(
+                    (index) => RecomendedTrainerClass(
                         trainerName: response.data.related[index]['full_name'],
                         trainerExperience: '',
                         imgLink: response.data.related[index]['image']));
@@ -88,7 +90,7 @@ class TrainerDetailState extends State<TrainerDetail>
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -105,12 +107,12 @@ class TrainerDetailState extends State<TrainerDetail>
             if (response.data != null && response.data.data != null) {
               reviewList = List<Reviews>.generate(
                   response.data.data.length,
-                      (i) => Reviews(
+                  (i) => Reviews(
                       imageUrl: response.data.data[i]['created_by_detail']
-                      ['image'],
+                          ['image'],
                       title: response.data.data[i]['review'],
                       text1:
-                      'Posted on ' + response.data.data[i]['created_at']));
+                          'Posted on ' + response.data.data[i]['created_at']));
               setState(() {});
             }
           } else {
@@ -119,7 +121,7 @@ class TrainerDetailState extends State<TrainerDetail>
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
       }
     });
   }
@@ -205,29 +207,29 @@ class TrainerDetailState extends State<TrainerDetail>
                                 bottom: imgLink == null ? 60 : 6,
                                 child: Padding(
                                     padding:
-                                    EdgeInsets.only(left: 20, right: 20),
+                                        EdgeInsets.only(left: 20, right: 20),
                                     child: imgLink == null
                                         ? Image.asset(
-                                      baseImageAssetsUrl +
-                                          'place_holder.png',
-                                      height:
-                                      SizeConfig.blockSizeVertical *
-                                          15,
-                                    )
+                                            baseImageAssetsUrl +
+                                                'place_holder.png',
+                                            height:
+                                                SizeConfig.blockSizeVertical *
+                                                    15,
+                                          )
                                         : FadeInImage.assetNetwork(
-                                      placeholder: baseImageAssetsUrl +
-                                          'logo_black.png',
-                                      image: BASE_URL +
-                                          'uploads/trainer-user/' +
-                                          imgLink,
+                                            placeholder: baseImageAssetsUrl +
+                                                'logo_black.png',
+                                            image: BASE_URL +
+                                                'uploads/trainer-user/' +
+                                                imgLink,
 //                                    fit: BoxFit.cover,
-                                      width:
-                                      SizeConfig.blockSizeHorizontal *
-                                          50,
-                                      height:
-                                      SizeConfig.blockSizeVertical *
-                                          25,
-                                    )),
+                                            width:
+                                                SizeConfig.blockSizeHorizontal *
+                                                    50,
+                                            height:
+                                                SizeConfig.blockSizeVertical *
+                                                    25,
+                                          )),
                               ),
 //                      SvgPicture.asset(
 //                        baseImageAssetsUrl + 'popular.svg',
@@ -235,8 +237,8 @@ class TrainerDetailState extends State<TrainerDetail>
                             ])),
                         Container(
                             width: SizeConfig.blockSizeHorizontal * 35,
-                            height: SizeConfig.blockSizeVertical * 25,
-                            padding: EdgeInsets.only(top: 18),
+                            height: SizeConfig.blockSizeVertical * 30,
+                            padding: EdgeInsets.only(top: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -262,8 +264,8 @@ class TrainerDetailState extends State<TrainerDetail>
                                 ),
                                 Text(
                                     expirence == null
-                                        ? 'No expirence'
-                                        : expirence + " Years",
+                                        ? 'No experience'
+                                        : expirence + " years of experience",
                                     style: TextStyle(fontSize: 10)),
                                 Text(
                                     trainees.toString() +
@@ -274,7 +276,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       StarDisplayWidget(
                                         value: rating == null
@@ -335,7 +337,7 @@ class TrainerDetailState extends State<TrainerDetail>
                   ],
                 ),
               ),
-              expandedHeight: SizeConfig.blockSizeVertical * 40,
+              expandedHeight: SizeConfig.blockSizeVertical * 43,
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(10.0),
                 // Add this code
@@ -376,147 +378,149 @@ class TrainerDetailState extends State<TrainerDetail>
             children: <Widget>[
               Wrap(
                 children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                        child: Text(
-                          'About Trainer',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                        child: Text(
-                          about == null
-                              ? 'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.'
-                              : about,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black54,
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                          child: Text(
+                            'About Trainer',
+                            style: TextStyle(fontSize: 10),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 20,
-                        ),
-                        child: Divider(
-                          height: .5,
-                          color: CColor.PRIMARYCOLOR,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 20, right: 20),
-                        child: Text(
-                          'Certifications & Specifications',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                        child: Text(
-                          'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.',
-                          style: TextStyle(
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                          child: Text(
+                            about == null
+                                ? 'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.'
+                                : about,
+                            style: TextStyle(
                               fontSize: 12,
                               color: Colors.black54,
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 20,
-                        ),
-                        child: Divider(
-                          height: .5,
-                          color: CColor.PRIMARYCOLOR,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 20, right: 20),
-                        child: Text(
-                          'Specialities',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                        child: Text(
-                          services == null
-                              ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
-                              : services,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black54,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        child: Divider(
-                          height: .5,
-                          color: CColor.PRIMARYCOLOR,
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 20,
+                          ),
+                          child: Divider(
+                            height: .5,
+                            color: CColor.PRIMARYCOLOR,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, bottom: 20),
-                        child: Text(
-                            trainerList.length > 0 ? 'Related Trainers' : '',
-                            style: TextStyle(fontSize: 12)),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, right: 0),
-                          child: Container(
-                            height: 160,
-                            child: ListView.builder(
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  child: RecomendedTrainer(
-                                    trainerClass: trainerList[index],
-                                    callback: () {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) =>
-                                                  TrainerDetail(
-                                                    id: _checkList[index]['id'],
-                                                  )));
-                                    },
-                                  ),
-                                );
-                              },
-                              itemCount:
-                              trainerList == null ? 0 : trainerList.length,
-                              scrollDirection: Axis.horizontal,
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                          child: Text(
+                            'Certifications',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                          child: Text(
+                           certifications!=null?certifications:'',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black54,
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 20,
+                          ),
+                          child: Divider(
+                            height: .5,
+                            color: CColor.PRIMARYCOLOR,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                          child: Text(
+                            'Specialities',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                          child: Text(
+                            specialities == null
+                                ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
+                                : specialities,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
                             ),
-                          )),
-                    ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20, bottom: 20),
+                          child: Divider(
+                            height: .5,
+                            color: CColor.PRIMARYCOLOR,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, bottom: 20),
+                          child: Text(
+                              trainerList.length > 0 ? 'Related Trainers' : '',
+                              style: TextStyle(fontSize: 12)),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(left: 20, right: 0),
+                            child: Container(
+                              height:200,
+                              child: ListView.builder(
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    child: RecomendedTrainer(
+                                      trainerClass: trainerList[index],
+                                      callback: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TrainerDetail(
+                                                      id: _checkList[index]['id'],
+                                                    )));
+                                      },
+                                    ),
+                                  );
+                                },
+                                itemCount:
+                                    trainerList == null ? 0 : trainerList.length,
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            )),
+                      ],
+                    ),
                   )
                 ],
               ),
               reviewList.length > 0
                   ? ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(20),
-                  physics: BouncingScrollPhysics(),
-                  primary: false,
-                  scrollDirection: Axis.vertical,
-                  itemCount: reviewList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: reviewList.length > 0
-                          ? CustomReviews(
-                        items: reviewList[index],
-                      )
-                          : Image.asset(
-                        baseImageAssetsUrl + 'no_reviews.png',
-                        height: 50,
-                        width: 50,
-                      ),
-                    );
-                  })
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(20),
+                      physics: BouncingScrollPhysics(),
+                      primary: false,
+                      scrollDirection: Axis.vertical,
+                      itemCount: reviewList.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: reviewList.length > 0
+                              ? CustomReviews(
+                                  items: reviewList[index],
+                                )
+                              : Image.asset(
+                                  baseImageAssetsUrl + 'no_reviews.png',
+                                  height: 50,
+                                  width: 50,
+                                ),
+                        );
+                      })
                   : Image.asset(baseImageAssetsUrl + 'no_reviews.png'),
             ],
           ),
@@ -557,40 +561,40 @@ class CustomReviews extends StatelessWidget {
             ),
             Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      child: Text(
-                        items.title == null ? 'No Review Found' : items.title,
-                        style: TextStyle(fontSize: 12, color: Colors.black45),
-                      ),
-                      padding: EdgeInsets.only(left: 15),
-                    ),
-                    Padding(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          StarDisplayWidget(
-                            value: items.rating == null ? 0 : items.rating,
-                            filledStar:
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  child: Text(
+                    items.title == null ? 'No Review Found' : items.title,
+                    style: TextStyle(fontSize: 12, color: Colors.black45),
+                  ),
+                  padding: EdgeInsets.only(left: 15),
+                ),
+                Padding(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      StarDisplayWidget(
+                        value: items.rating == null ? 0 : items.rating,
+                        filledStar:
                             Icon(Icons.star, color: Colors.black, size: 20),
-                            unfilledStar: Icon(Icons.star,
-                                color: CColor.PRIMARYCOLOR, size: 20),
-                          )
-                        ],
-                      ),
-                      padding: EdgeInsets.only(left: 15, top: 10),
-                    ),
-                    Padding(
-                      child: Text(
-                        items.text1 == null ? '' : items.text1,
-                        style: TextStyle(fontSize: 6, color: Colors.black26),
-                        textAlign: TextAlign.start,
-                      ),
-                      padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
-                    )
-                  ],
-                ))
+                        unfilledStar: Icon(Icons.star,
+                            color: CColor.PRIMARYCOLOR, size: 20),
+                      )
+                    ],
+                  ),
+                  padding: EdgeInsets.only(left: 15, top: 10),
+                ),
+                Padding(
+                  child: Text(
+                    items.text1 == null ? '' : items.text1,
+                    style: TextStyle(fontSize: 6, color: Colors.black26),
+                    textAlign: TextAlign.start,
+                  ),
+                  padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
+                )
+              ],
+            ))
           ],
         ));
   }

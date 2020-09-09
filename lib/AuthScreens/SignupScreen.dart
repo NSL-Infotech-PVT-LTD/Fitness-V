@@ -647,7 +647,7 @@ class SignupState extends State<SignupScreen> {
                                         } else {
                                           showDialogBox(
                                               context,
-                                              'Internet Error',
+                                              internetError,
                                               pleaseCheckInternet);
                                           dismissDialog(context);
                                         }
@@ -798,7 +798,7 @@ class SignupState extends State<SignupScreen> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });

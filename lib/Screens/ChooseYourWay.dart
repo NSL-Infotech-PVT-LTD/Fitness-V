@@ -247,7 +247,7 @@ class ChooseWayState extends State<ChooseYourWay> {
           }
         }).whenComplete(() => dismissDialog(context));
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
 

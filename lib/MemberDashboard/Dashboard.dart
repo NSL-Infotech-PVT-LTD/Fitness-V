@@ -165,18 +165,10 @@ class DashboardState extends State<Dashboard> {
                     SizedBox(
                       width: 5,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => GroupClasses()));
-                      },
-                      child: Image.asset(
-                        baseImageAssetsUrl + 'logo_black.png',
-                        width: 60,
-                        height: 30,
-                      ),
+                    Image.asset(
+                      baseImageAssetsUrl + 'logo_black.png',
+                      width: 60,
+                      height: 30,
                     ),
                     Spacer(),
                     GestureDetector(

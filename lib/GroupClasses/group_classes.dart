@@ -61,7 +61,7 @@ class GroupClassState extends State<GroupClass> {
           });
         }
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -160,6 +160,11 @@ class GroupClassState extends State<GroupClass> {
                               style: TextStyle(
                                   color: CColor.LightGrey, fontSize: 10),
                             ),
+
+
+                          ),
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 8,
                           ),
                         ],
                       ),
@@ -188,7 +193,7 @@ class GroupClassState extends State<GroupClass> {
                     items: CustomGroupClass(
                         className: users[index]['class_detail']['name'],
                         img: users[index]['class_detail']['image'],
-                        classOwner: users[index]['trainer']['first_name'],
+                        classOwner: users[index]['trainer']!=null?users[index]['trainer']['first_name']:'',
                         classTime: users[index]['class_type'],
                         is_booked_by_me: users[index]['is_booked_by_me'],
                         id: users[index]['id'],
@@ -236,7 +241,7 @@ class CustomGroupState extends StatelessWidget {
         children: <Widget>[
           items.img == null
               ? Image.asset(
-                  baseImageAssetsUrl + 'family.png',
+                  baseImageAssetsUrl + 'logo_black.png',
                   height: SizeConfig.blockSizeVertical * 25,
                   width: SizeConfig.blockSizeHorizontal * 90,
                   fit: BoxFit.cover,
@@ -261,7 +266,6 @@ class CustomGroupState extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               FlatButton.icon(
-
                   onPressed: () {},
                   icon: Icon(
                     Icons.supervised_user_circle,

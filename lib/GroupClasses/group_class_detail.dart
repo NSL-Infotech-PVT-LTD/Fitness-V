@@ -76,7 +76,7 @@ class _DetailState extends State<GroupClassDetail> {
           }
         });
       } else {
-        showDialogBox(context, 'Internet Error', pleaseCheckInternet);
+        showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
     });
@@ -104,7 +104,7 @@ class _DetailState extends State<GroupClassDetail> {
             SizedBox(height: 20),
             classImage == null
                 ? Image.asset(
-                    baseImageAssetsUrl + 'family.png',
+                    baseImageAssetsUrl + 'logo_black.png',
                     height: SizeConfig.blockSizeVertical * 25,
                     width: SizeConfig.screenWidth,
                     fit: BoxFit.cover,

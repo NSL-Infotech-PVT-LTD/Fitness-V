@@ -32,12 +32,16 @@ class UserResponse {
   String status;
   String deleted_at;
   String created_at;
+  String hours;
   String updated_at;
   String birth_date;
+  String specialities;
+  String certifications;
   bool is_booked_by_me;
   CreatedByModel created_by_detail;
   RoleModel role;
   CreatedByModel model_detail;
+  CreatedByModel class_detail;
   List<PlanDetail> plan_detail;
   UserResponse(
     this.id,
@@ -70,15 +74,21 @@ class UserResponse {
     this.updated_at,
     this.plan_detail,
     this.created_by_detail,
+    this.class_detail,
     this.model_detail,
     this.birth_date,
     this.role,
+    this.hours,
+    this.certifications,
+    this.specialities,
     this.is_booked_by_me,
   );
 
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    certifications = json['certifications'];
+    specialities = json['specialities'];
     model_type = json['model_type'];
     location = json['location'];
     expirence = json['expirence'];
@@ -105,9 +115,11 @@ class UserResponse {
     deleted_at = json['deleted_at'];
     created_at = json['created_at'];
     updated_at = json['updated_at'];
+    hours = json['hours'];
     birth_date = json['birth_date'];
     is_booked_by_me = json['is_booked_by_me'];
     created_by_detail = json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
+    class_detail = json['class_detail'] != null ? new CreatedByModel.fromJson(json['class_detail']) : null;
     role = json['role'] != null ? new RoleModel.fromJson(json['role']) : null;
     model_detail = json['model_detail'] != null ? new CreatedByModel.fromJson(json['model_detail']) : null;
     plan_detail = json['plan_detail'];
@@ -118,6 +130,7 @@ class UserResponse {
     data['id'] = this.id;
     data['model_type'] = this.model_type;
     data['name'] = this.name;
+    data['hours'] = this.hours;
     data['location'] = this.location;
     data['description'] = this.description;
     data['expirence'] = this.expirence;
@@ -146,9 +159,13 @@ class UserResponse {
     data['birth_date'] = this.birth_date;
     data['plan_detail'] = this.plan_detail;
     data['is_booked_by_me'] = this.is_booked_by_me;
+    data['specialities'] = this.specialities;
+    data['certifications'] = this.certifications;
 
     if (this.created_by_detail != null) {
       data['created_by_detail'] = this.created_by_detail.toJson();
+    } if (this.class_detail != null) {
+      data['class_detail'] = this.class_detail.toJson();
     }if (this.model_detail != null) {
       data['model_detail'] = this.model_detail.toJson();
     }if (this.role != null) {
