@@ -21,7 +21,7 @@ class BookingConfirmed extends StatefulWidget {
   const BookingConfirmed(
       {this.name,
       this.createdAt,
-      this.image,
+      this.image,   
       this.bookingId,
       this.modelType,
       this.hours});
