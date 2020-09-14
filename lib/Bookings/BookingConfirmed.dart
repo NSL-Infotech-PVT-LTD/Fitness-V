@@ -15,10 +15,16 @@ class BookingConfirmed extends StatefulWidget {
   final String createdAt;
   final String image;
   final String bookingId;
+  final String hours;
   final String modelType;
 
   const BookingConfirmed(
-      {this.name, this.createdAt, this.image, this.bookingId, this.modelType});
+      {this.name,
+      this.createdAt,
+      this.image,
+      this.bookingId,
+      this.modelType,
+      this.hours});
 
   @override
   State<StatefulWidget> createState() => BookingConfirmedState();
@@ -183,7 +189,9 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                       top: 95,
                                       left: 55,
                                       child: Text(
-                                        '--',
+                                        widget.hours != null
+                                            ? "${widget.hours} Hours"
+                                            : '--:--',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,

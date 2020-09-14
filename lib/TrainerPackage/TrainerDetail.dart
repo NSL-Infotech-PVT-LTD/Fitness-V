@@ -22,7 +22,7 @@ class TrainerDetail extends StatefulWidget {
 
 class TrainerDetailState extends State<TrainerDetail>
     with SingleTickerProviderStateMixin {
-  String fullName = '', expirence = '', services = '', about = '', certifications = '',specialities = '', imgLink;
+  String fullName = '', expirence = '', services = '', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   bool is_booked_by_me = false;
   TabController controller;
@@ -66,8 +66,6 @@ class TrainerDetailState extends State<TrainerDetail>
               rating = response.data.trainer.rating_avg;
               expirence = response.data.trainer.expirence;
               trainees = response.data.trainer.booking_cnt;
-              certifications = response.data.trainer.certifications;
-              specialities = response.data.trainer.specialities;
               is_booked_by_me = response.data.trainer.is_booked_by_me;
 
               if (response.data.related.length > 0) {
@@ -376,133 +374,132 @@ class TrainerDetailState extends State<TrainerDetail>
           child: TabBarView(
             controller: controller,
             children: <Widget>[
-              Wrap(
-                children: <Widget>[
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                          child: Text(
-                            'About Trainer',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                          child: Text(
-                            about == null
-                                ? 'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.'
-                                : about,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 20,
-                          ),
-                          child: Divider(
-                            height: .5,
-                            color: CColor.PRIMARYCOLOR,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20, right: 20),
-                          child: Text(
-                            'Certifications',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                          child: Text(
-                           certifications!=null?certifications:'',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
-                                fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 20,
-                          ),
-                          child: Divider(
-                            height: .5,
-                            color: CColor.PRIMARYCOLOR,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, top: 20, right: 20),
-                          child: Text(
-                            'Specialities',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-                          child: Text(
-                            specialities == null
-                                ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
-                                : specialities,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 20, bottom: 20),
-                          child: Divider(
-                            height: .5,
-                            color: CColor.PRIMARYCOLOR,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, bottom: 20),
-                          child: Text(
-                              trainerList.length > 0 ? 'Related Trainers' : '',
-                              style: TextStyle(fontSize: 12)),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 20, right: 0),
-                            child: Container(
-                              height:200,
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    child: RecomendedTrainer(
-                                      trainerClass: trainerList[index],
-                                      callback: () {
-                                        Navigator.pushReplacement(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) =>
-                                                    TrainerDetail(
-                                                      id: _checkList[index]['id'],
-                                                    )));
-                                      },
-                                    ),
-                                  );
-                                },
-                                itemCount:
-                                    trainerList == null ? 0 : trainerList.length,
-                                scrollDirection: Axis.horizontal,
-                              ),
-                            )),
-                      ],
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                      child: Text(
+                        'About Trainer',
+                        style: TextStyle(fontSize: 10),
+                      ),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                      child: Text(
+                        about == null
+                            ? 'Farly has 30 years’ experience in the fitness industry and in body building competitions. Mr. Phil-Asia 2015. Runner Up NABBA universe 2015. Mr. Philippines 2013. Mr. Asia-Pacific 2011.'
+                            : about,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 20,
+                      ),
+                      child: Divider(
+                        height: .5,
+                        color: CColor.PRIMARYCOLOR,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                      child: Text(
+                        'Certifications',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                      child: Text(
+                        'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                            fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 20,
+                      ),
+                      child: Divider(
+                        height: .5,
+                        color: CColor.PRIMARYCOLOR,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                      child: Text(
+                        'Specialities',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                      child: Text(
+                        services == null
+                            ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
+                            : services,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Divider(
+                        height: .5,
+                        color: CColor.PRIMARYCOLOR,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, bottom: 20),
+                      child: Text(
+                          trainerList.length > 0 ? 'Related Trainers' : '',
+                          style: TextStyle(fontSize: 12)),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(left: 20, right: 0,bottom: 20),
+                        child: Container(
+                          height:200,
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              return Container(
+                                child: RecomendedTrainer(
+                                  trainerClass: trainerList[index],
+                                  callback: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                TrainerDetail(
+                                                  id: _checkList[index]['id'],
+                                                )));
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount:
+                                trainerList == null ? 0 : trainerList.length,
+                            scrollDirection: Axis.horizontal,
+                          ),
+                        )),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
               ),
               reviewList.length > 0
                   ? ListView.builder(
-                      shrinkWrap: true,
+                   shrinkWrap: true,
                       padding: EdgeInsets.all(20),
                       physics: BouncingScrollPhysics(),
                       primary: false,

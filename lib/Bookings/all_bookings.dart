@@ -37,6 +37,7 @@ class AllBookingsState extends State<AllBookings> {
     _groupClass = false;
     _events = false;
 
+    _bookingList.clear();
     _page = 1;
     _total = 1;
     _isLoading = false;

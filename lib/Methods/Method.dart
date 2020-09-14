@@ -288,6 +288,20 @@ Widget buildProgressIndicator(bool isLoading) {
     ),
   );
 }
+Widget buildProgressIndicatorCenter(bool isLoading) {
+  return new Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: new Align(
+      alignment: Alignment.center,
+      child: new Opacity(
+        opacity: isLoading ? 1.0 : 00,
+        child: new CircularProgressIndicator(
+          backgroundColor: Colors.black,
+        ),
+      ),
+    ),
+  );
+}
 
 ProgressDialog progress(context) {
   SpinKitFadingCircle(color: Colors.black);

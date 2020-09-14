@@ -252,7 +252,7 @@ class _EventState extends State<EventClass>
                                   Container(
                                     padding: EdgeInsets.all(10),
                                     //   color: Colors.red,
-                                    height: SizeConfig.screenHeight * 0.25,
+                                    height: SizeConfig.screenHeight * 0.35,
                                     width: SizeConfig.screenWidth,
                                     child: GestureDetector(
                                         onTap: () {
@@ -273,7 +273,7 @@ class _EventState extends State<EventClass>
                                               "/" +
                                               myData[index]['image'],
                                           fit: BoxFit.fill,
-                                          //  height: SizeConfig.screenHeight * .25,
+                                          height: SizeConfig.screenHeight * .30,
                                         )),
                                   ),
                                   Container(
@@ -315,17 +315,28 @@ class _EventState extends State<EventClass>
                                                   fontSize: 10.0),
                                             )),
 
-                                        Container(
-                                          margin: EdgeInsets.only(top: 20),
-                                          width: SizeConfig.screenWidth,
-                                          height: 50,
-                                          color: Colors.black45,
-                                          child: Center(
-                                              child: Text(
-                                            'View',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                ScaleRoute(
+                                                    page: EventDetail(
+                                                  id: myData[index]['id'],
+                                                  status: upcoming,
+                                                )));
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(top: 20),
+                                            width: SizeConfig.screenWidth,
+                                            height: 50,
+                                            color: Colors.black45,
+                                            child: Center(
+                                                child: Text(
+                                              'View Detail',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )),
+                                          ),
                                         )
                                       ],
                                     ),
@@ -357,7 +368,7 @@ class _EventState extends State<EventClass>
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   //   color: Colors.red,
-                                  height: SizeConfig.screenHeight * 0.22,
+                                  height: SizeConfig.screenHeight * 0.35,
                                   width: SizeConfig.screenWidth,
                                   child: GestureDetector(
                                       onTap: () {
@@ -425,6 +436,30 @@ class _EventState extends State<EventClass>
                                                 color: Colors.white,
                                                 fontSize: 10.0),
                                           )),
+
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              ScaleRoute(
+                                                  page: EventDetail(
+                                                    id: myDatapast[index]['id'],
+                                                    status: upcoming,
+                                                  )));
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(top: 20),
+                                          width: SizeConfig.screenWidth,
+                                          height: 50,
+                                          color: Colors.black45,
+                                          child: Center(
+                                              child: Text(
+                                                'View Detail',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                        ),
+                                      )
                                     ],
                                   ),
                                 )

@@ -126,8 +126,7 @@ class EventDetailState extends State<EventDetail> {
                       _eventName,
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: textSize16,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
                           fontFamily: open_light),
                     ),
                   ),
@@ -167,7 +166,7 @@ class EventDetailState extends State<EventDetail> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(25.0, 10, 8.0, 10),
+                    padding: const EdgeInsets.fromLTRB(25.0, 10, 25.0, 10),
                     child: Text(
                       _about == null ? loremIpsum : _about,
                       style: TextStyle(
@@ -215,15 +214,15 @@ class EventDetailState extends State<EventDetail> {
             placeholder: baseImageAssetsUrl + 'logo_black.png',
             image: BASE_URL + imageUrlEvent + imgLink,
             width: SizeConfig.screenWidth,
-            fit: BoxFit.cover,
-            height: SizeConfig.screenHeight * .25,
+            fit: BoxFit.fill,
+            height: SizeConfig.screenHeight * .35,
           ))
       : FadeInImage.assetNetwork(
           placeholder: baseImageAssetsUrl + 'logo_black.png',
           image: BASE_URL + imageUrlEvent + imgLink,
-          fit: BoxFit.cover,
+          fit: BoxFit.fill,
           width: SizeConfig.screenWidth,
-          height: SizeConfig.screenHeight * .25,
+          height: SizeConfig.screenHeight * .35,
         );
 }
 // FadeInImage.assetNetwork(

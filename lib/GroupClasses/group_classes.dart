@@ -187,7 +187,7 @@ class GroupClassState extends State<GroupClass> {
             padding: EdgeInsets.symmetric(vertical: 8.0),
             itemBuilder: (BuildContext context, int index) {
               if (index == users.length) {
-                return buildProgressIndicator(isLoading);
+                return buildProgressIndicatorCenter(isLoading);
               } else {
                 return CustomGroupState(
                     items: CustomGroupClass(
