@@ -96,7 +96,7 @@ class GroupClassState extends State<GroupClass> {
     SizeConfig().init(context);
     return Container(
       child: NestedScrollView(
-          controller: _sc,
+        controller: _sc,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
@@ -160,8 +160,6 @@ class GroupClassState extends State<GroupClass> {
                               style: TextStyle(
                                   color: CColor.LightGrey, fontSize: 10),
                             ),
-
-
                           ),
                           SizedBox(
                             width: SizeConfig.blockSizeHorizontal * 8,
@@ -193,11 +191,14 @@ class GroupClassState extends State<GroupClass> {
                     items: CustomGroupClass(
                         className: users[index]['class_detail']['name'],
                         img: users[index]['class_detail']['image'],
-                        classOwner: users[index]['trainer']!=null?users[index]['trainer']['first_name']:'',
+                        classOwner: users[index]['trainer'] != null
+                            ? users[index]['trainer']['first_name']
+                            : '',
                         classTime: users[index]['class_type'],
                         is_booked_by_me: users[index]['is_booked_by_me'],
                         id: users[index]['id'],
-                        leftSeats: users[index]['capacity']));
+                        leftSeats:
+                            users[index]['available_capacity'].toString()));
               }
             },
 //            controller: _sc,
@@ -219,9 +220,9 @@ class CustomGroupClass {
 
   const CustomGroupClass(
       {this.img,
-        this.is_booked_by_me,
-        this.className,
-        this.id,
+      this.is_booked_by_me,
+      this.className,
+      this.id,
       this.classOwner,
       this.classTime,
       this.leftSeats});
@@ -274,14 +275,11 @@ class CustomGroupState extends StatelessWidget {
                   label: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-
                       items.classOwner.toString(),
-
                       style: TextStyle(fontSize: 12),
                     ),
                   )),
               FlatButton.icon(
-
                   onPressed: () {},
                   icon: Icon(
                     Icons.calendar_today,
@@ -303,7 +301,7 @@ class CustomGroupState extends StatelessWidget {
                   label: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      "${items.leftSeats.toString()} Seats Left",
+                      "${items.leftSeats} Seats Left",
                       style: TextStyle(fontSize: 12),
                     ),
                   )),
@@ -316,15 +314,24 @@ class CustomGroupState extends StatelessWidget {
             height: 50,
             child: RaisedButton(
                 onPressed: () {
-                  if(!items.is_booked_by_me)
-                  Navigator.push(context, ScaleRoute(page: GroupClassDetail(id: items.id,)));
+                  if (items.leftSeats != '0' && !items.is_booked_by_me)
+                    Navigator.push(
+                        context,
+                        ScaleRoute(
+                            page: GroupClassDetail(
+                          id: items.id,
+                        )));
                 },
-                color: !items.is_booked_by_me?Colors.black:Colors.black45,
+                color: items.leftSeats != '0' && !items.is_booked_by_me
+                    ? Colors.black
+                    : Colors.black45,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(button_radius)),
                 child: Center(
                   child: Text(
-                    !items.is_booked_by_me?'View Detail':alreadyBooked,
+                    items.leftSeats != '0'
+                        ? !items.is_booked_by_me ? 'View Detail' : alreadyBooked
+                        : 'House Full',
                     style: TextStyle(color: Colors.white),
                   ),
                 )),
