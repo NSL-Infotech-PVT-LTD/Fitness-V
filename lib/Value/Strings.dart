@@ -20,6 +20,7 @@ const your_booking = 'Your Booking';
 const booking_confirmed = 'Booking Confirmed';
 const book_now = 'Book Now';
 const alreadyBooked = 'Already Booked';
+const cancelBooking = 'Cancel Booking';
 const personal_trainer = 'Personal Trainer';
 const forgetPassword = 'Forgot Password ?';
 const firstname = 'First Name';

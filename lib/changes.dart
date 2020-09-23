@@ -444,7 +444,7 @@ class _EventState extends State<EventClass>
                                               ScaleRoute(
                                                   page: EventDetail(
                                                     id: myDatapast[index]['id'],
-                                                    status: upcoming,
+                                                    status: recent,
                                                   )));
                                         },
                                         child: Container(

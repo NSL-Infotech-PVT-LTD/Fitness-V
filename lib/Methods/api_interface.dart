@@ -22,6 +22,7 @@ String termsConditionUrl = BASE_URL + "api/config/terms_and_conditions";
 String updateProfileUrl = BASE_URL + "api/update";
 String bookingUrl = BASE_URL + "api/bookings/store";
 String allBookinsUrl = BASE_URL + "api/bookings";
+String bookingDelete = BASE_URL + "api/booking/delete";
 String getClassesListUrl = BASE_URL + "api/class-schedules";
 String getClassesbyIdUrl = BASE_URL + "api/class-schedule";
 
@@ -35,7 +36,7 @@ String DEVICE_TOKEN = "device_token";
 String ID = "id";
 String trainer_id = "trainer_id";
 String ANDROID = "android";
-String deviceTokenValue= "deviceTokenValue";
+String deviceTokenValue = "deviceTokenValue";
 String DEVICE_TOKEN_VALUE = "value";
 String Authorization = "Authorization";
 String Content_Type = "Content-Type";
@@ -216,6 +217,15 @@ Future<StatusResponse> resetPassword(Map<String, String> parms) async {
 Future<StatusResponse> getEventDetailsApi(
     String userAuth, Map<String, String> parms) async {
   final response = await http.post(eventDetails,
+      headers: header(userAuth), body: jsonEncode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> bookingDeleteApi(
+    String userAuth, Map<String, String> parms) async {
+  final response = await http.post(bookingDelete,
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);

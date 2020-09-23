@@ -29,7 +29,10 @@ class AllBookingsState extends State<AllBookings> {
   var _trainers = false;
   var _groupClass = false;
   var _events = false;
+  var currentIndex;
+
   List _bookingList = List();
+  List _idsList = List();
 
   void setBoolState(String type) {
     _all = false;
@@ -38,6 +41,7 @@ class AllBookingsState extends State<AllBookings> {
     _events = false;
 
     _bookingList.clear();
+    _idsList.clear();
     _page = 1;
     _total = 1;
     _isLoading = false;
@@ -68,6 +72,32 @@ class AllBookingsState extends State<AllBookings> {
     super.dispose();
   }
 
+  void _deleteBooking(String id) async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Cancelling....");
+
+        Map<String, String> parms = {
+          'id': id,
+        };
+        bookingDeleteApi(_auth, parms).then((response) {
+          if (response.status) {
+            if (response.data != null) {
+              print(response.data.message);
+              if (currentIndex != null) _bookingList.removeAt(currentIndex);
+              setState(() {});
+            }
+          } else {
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        }).whenComplete(() => dismissDialog(context));
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
+      }
+    });
+  }
+
   void _getBookings(String auth) async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
@@ -94,6 +124,7 @@ class AllBookingsState extends State<AllBookings> {
 
                 setState(() {
                   _isLoading = false;
+                  _idsList.addAll(tList);
 
                   for (int index = 0; index < tList.length; index++) {
                     var name = 'Not Found';
@@ -127,7 +158,6 @@ class AllBookingsState extends State<AllBookings> {
                       }
                     }
 
-                    print('jugraj===>$name');
                     _bookingList.add(CustomBooking(
                         bookingId: tList[index]['id'].toString(),
                         bookingType: modelType,
@@ -137,6 +167,8 @@ class AllBookingsState extends State<AllBookings> {
                         bookingDate: tList[index]['created_at'],
                         serviceHours: tList[index]['hours'].toString()));
                   }
+
+                  print('jugraj===>${tList[0]['id'].toString()}');
 
                   _page++;
                 });
@@ -444,6 +476,12 @@ class AllBookingsState extends State<AllBookings> {
                               margin: EdgeInsets.all(10),
                               child: BookingView(
                                 customBooking: _bookingList[index],
+                                callBackeDelete: () {
+//                            print("currentid${_idsList[index]['id']}");
+                                currentIndex = index;
+                                  _deleteBooking(
+                                      _idsList[index]['id'].toString());
+                                },
                               ));
                         }
                       },
@@ -505,9 +543,14 @@ class CustomBooking {
 
 class BookingView extends StatelessWidget {
   final VoidCallback callback;
+  final VoidCallback callBackeDelete;
   final CustomBooking customBooking;
 
-  const BookingView({Key key, @required this.customBooking, this.callback})
+  const BookingView(
+      {Key key,
+      @required this.customBooking,
+      this.callBackeDelete,
+      this.callback})
       : super(key: key);
 
   @override
@@ -625,23 +668,49 @@ class BookingView extends StatelessWidget {
                               ],
                             ),
                           ),
-                          customBooking.imgLink == null
-                              ? Image.asset(
-                                  baseImageAssetsUrl + 'logo_black.png',
-                                  width: SizeConfig.screenWidth * .25,
-                                  height: 110,
-                                  fit: BoxFit.fill,
-                                )
-                              : FadeInImage.assetNetwork(
-                                  placeholder:
+                          Column(
+                            children: <Widget>[
+                              customBooking.imgLink == null
+                                  ? Image.asset(
                                       baseImageAssetsUrl + 'logo_black.png',
-                                  image: BASE_URL +
-                                      customBooking.url +
-                                      customBooking.imgLink,
-                                  height: SizeConfig.screenHeight * .13,
-                                  fit: BoxFit.cover,
-                                  width: SizeConfig.screenWidth * .28,
+                                      width: SizeConfig.screenWidth * .25,
+                                      height: 110,
+                                      fit: BoxFit.fill,
+                                    )
+                                  : FadeInImage.assetNetwork(
+                                      placeholder:
+                                          baseImageAssetsUrl + 'logo_black.png',
+                                      image: BASE_URL +
+                                          customBooking.url +
+                                          customBooking.imgLink,
+                                      height: SizeConfig.screenHeight * .13,
+                                      fit: BoxFit.cover,
+                                      width: SizeConfig.screenWidth * .28,
+                                    ),
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: Container(
+                                  margin: EdgeInsets.only(top: padding5),
+                                  height: 40,
+                                  width: 120,
+                                  child: RaisedButton(
+                                    onPressed: callBackeDelete,
+                                    color: Color(0xFFD50000),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            button_radius)),
+                                    child: Text(
+                                      cancelBooking,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10),
+                                    ),
+                                  ),
                                 ),
+                              )
+                            ],
+                          ),
                         ],
                       ),
                     ],

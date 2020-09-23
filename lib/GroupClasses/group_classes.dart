@@ -184,21 +184,28 @@ class GroupClassState extends State<GroupClass> {
             // Add one more item for progress indicator
             padding: EdgeInsets.symmetric(vertical: 8.0),
             itemBuilder: (BuildContext context, int index) {
-              if (index == users.length) {
+              if (index > 0 && index == users.length) {
                 return buildProgressIndicatorCenter(isLoading);
               } else {
-                return CustomGroupState(
-                    items: CustomGroupClass(
-                        className: users[index]['class_detail']['name'],
-                        img: users[index]['class_detail']['image'],
-                        classOwner: users[index]['trainer'] != null
-                            ? users[index]['trainer']['first_name']
-                            : '',
-                        classTime: users[index]['class_type'],
-                        is_booked_by_me: users[index]['is_booked_by_me'],
-                        id: users[index]['id'],
-                        leftSeats:
-                            users[index]['available_capacity'].toString()));
+                return users.length > 0
+                    ? CustomGroupState(
+                        items: CustomGroupClass(
+                            className: users[index]['class_detail']['name'],
+                            img: users[index]['class_detail']['image'],
+                            classOwner: users[index]['trainer'] != null
+                                ? users[index]['trainer']['first_name']
+                                : '',
+                            classTime: users[index]['class_type'],
+                            is_booked_by_me: users[index]['is_booked_by_me'],
+                            id: users[index]['id'],
+                            leftSeats:
+                                users[index]['available_capacity'].toString()))
+                    : Material(
+                        color: Colors.white,
+                        child: Center(
+                          child: Text("No Data Found"),
+                        ),
+                      );
               }
             },
 //            controller: _sc,

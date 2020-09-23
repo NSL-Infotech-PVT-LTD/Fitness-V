@@ -166,7 +166,7 @@ class EventDetailState extends State<EventDetail> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(25.0, 10, 25.0, 10),
+                    padding: const EdgeInsets.fromLTRB(25.0, 10, 25.0, 20),
                     child: Text(
                       _about == null ? loremIpsum : _about,
                       style: TextStyle(
@@ -175,34 +175,70 @@ class EventDetailState extends State<EventDetail> {
                           fontFamily: open_light),
                     ),
                   ),
-                  Visibility(
-                    visible: widget.status != recent,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        margin: EdgeInsets.only(top: padding15),
-                        height: button_height,
-                        width: 150,
-                        child: RaisedButton(
-                          onPressed: () {
-                            if (!_isBookedByMe)
-                              bookingFunction(auth, context, eventKey,
-                                  widget.id.toString(), '');
-                          },
-                          color: _isBookedByMe ? Colors.black54 : Colors.black,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(button_radius)),
-                          child: Text(
-                            _isBookedByMe ? alreadyBooked : book_now,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: _isBookedByMe ? 13 : 16),
+                  Row(
+                    mainAxisAlignment: _isBookedByMe
+                        ? MainAxisAlignment.spaceEvenly
+                        : MainAxisAlignment.center,
+                    children: <Widget>[
+                      Visibility(
+                        visible: widget.status != recent,
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            margin: EdgeInsets.only(top: padding15),
+                            height: button_height,
+                            width: 150,
+                            child: RaisedButton(
+                              onPressed: () {
+                                if (!_isBookedByMe)
+                                  bookingFunction(auth, context, eventKey,
+                                      widget.id.toString(), '');
+                              },
+                              color:
+                                  _isBookedByMe ? Colors.black54 : Colors.black,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(button_radius)),
+                              child: Text(
+                                _isBookedByMe ? alreadyBooked : book_now,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: _isBookedByMe ? 13 : 16),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      Visibility(
+                        visible: widget.status != recent && _isBookedByMe,
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            margin: EdgeInsets.only(top: padding15),
+                            height: button_height,
+                            width: 150,
+                            child: RaisedButton(
+                              onPressed: () {},
+                              color: Color(0xFFD50000),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(button_radius)),
+                              child: Text(
+                                cancelBooking,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
                   )
                 ])));
   }

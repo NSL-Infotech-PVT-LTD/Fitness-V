@@ -13,20 +13,16 @@ import 'package:volt/util/starDisplay.dart';
 
 class TrainerDetail extends StatefulWidget {
   final int id;
-
   TrainerDetail({@required this.id});
-
   @override
   State<StatefulWidget> createState() => TrainerDetailState();
 }
 
-class TrainerDetailState extends State<TrainerDetail>
-    with SingleTickerProviderStateMixin {
-  String fullName = '', expirence = '', services = '', about = '', imgLink;
+class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderStateMixin {
+  String fullName = '', expirence = '', services = '',specialities ='', about = '', imgLink;
   int trainees = 0, reviewsCount = 0;
   bool is_booked_by_me = false;
   TabController controller;
-
   String rating;
   List<Reviews> reviewList = List<Reviews>();
   List<RecomendedTrainerClass> trainerList = List<RecomendedTrainerClass>();
@@ -60,7 +56,8 @@ class TrainerDetailState extends State<TrainerDetail>
             if (response.data != null && response.data.trainer != null) {
               fullName = response.data.trainer.full_name;
               imgLink = response.data.trainer.image;
-              services = response.data.trainer.services;
+              services = response.data.trainer.certifications;
+              specialities = response.data.trainer.specialities;
               about = response.data.trainer.about;
               reviewsCount = response.data.trainer.booking_reviewed_cnt;
               rating = response.data.trainer.rating_avg;
@@ -170,17 +167,17 @@ class TrainerDetailState extends State<TrainerDetail>
                               ),
                             ),
                             Spacer(),
-                            PopupMenuButton<String>(
-                              onSelected: handleClick,
-                              itemBuilder: (BuildContext context) {
-                                return {'Settings'}.map((String choice) {
-                                  return PopupMenuItem<String>(
-                                    value: choice,
-                                    child: Text(choice),
-                                  );
-                                }).toList();
-                              },
-                            ),
+//                            PopupMenuButton<String>(
+//                              onSelected: handleClick,
+//                              itemBuilder: (BuildContext context) {
+//                                return {'Settings'}.map((String choice) {
+//                                  return PopupMenuItem<String>(
+//                                    value: choice,
+//                                    child: Text(choice),
+//                                  );
+//                                }).toList();
+//                              },
+//                            ),
                           ],
                         )),
                     SizedBox(
@@ -205,7 +202,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                 bottom: imgLink == null ? 60 : 6,
                                 child: Padding(
                                     padding:
-                                        EdgeInsets.only(left: 20, right: 20),
+                                        EdgeInsets.only(left: 5, right: 20),
                                     child: imgLink == null
                                         ? Image.asset(
                                             baseImageAssetsUrl +
@@ -290,9 +287,11 @@ class TrainerDetailState extends State<TrainerDetail>
                                   ),
                                   padding: EdgeInsets.only(top: 10),
                                 ),
+
+
                                 Container(
                                   margin: EdgeInsets.only(top: padding15),
-                                  height: button_height,
+                                  height: 45,
                                   width: 150,
                                   child: RaisedButton(
                                     onPressed: () {
@@ -324,14 +323,16 @@ class TrainerDetailState extends State<TrainerDetail>
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: is_booked_by_me ? 13 : 16),
+                                          fontSize: is_booked_by_me ? 10 : 16),
                                     ),
                                   ),
                                 ),
+
                               ],
                             ))
                       ],
                     ),
+
                   ],
                 ),
               ),
@@ -417,7 +418,8 @@ class TrainerDetailState extends State<TrainerDetail>
                     Padding(
                       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
                       child: Text(
-                        'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.',
+                        services==null?
+                        'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.':services,
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
@@ -443,9 +445,9 @@ class TrainerDetailState extends State<TrainerDetail>
                     Padding(
                       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
                       child: Text(
-                        services == null
+                        specialities == null
                             ? 'Body building. Fitness. Strength and Conditioning. Diet and Nutrition. Supplementation. Contest Prep.'
-                            : services,
+                            : specialities,
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.black54,

@@ -14,6 +14,7 @@ class Data {
   String end_date;
   String class_type;
   String capacity;
+  int available_capacity;
   String duration;
   bool is_booked_by_me;
   UserResponse user;
@@ -43,6 +44,7 @@ class Data {
       this.end_date,
       this.class_type,
       this.capacity,
+      this.available_capacity,
       this.duration,
       this.current_page,
       this.user,
@@ -69,6 +71,7 @@ class Data {
     end_date = json['end_date'];
     class_type = json['class_type'];
     capacity = json['capacity'];
+    available_capacity = json['available_capacity'];
     duration = json['duration'];
     id = json['id'];
     last_page = json['last_page'];
@@ -113,6 +116,7 @@ class Data {
     data['end_date'] = this.end_date;
     data['class_type'] = this.class_type;
     data['capacity'] = this.capacity;
+    data['available_capacity'] = this.available_capacity;
     data['duration'] = this.duration;
     data['description'] = this.description;
     data['image'] = this.image;

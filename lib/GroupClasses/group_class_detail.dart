@@ -65,7 +65,7 @@ class _DetailState extends State<GroupClassDetail> {
               startAndEndDate =
                   response.data.start_date + " - " + response.data.end_date;
               recurring = response.data.class_type;
-              seatsLeft = response.data.capacity;
+              seatsLeft = response.data.available_capacity.toString();
               duration = response.data.duration;
               setState(() {});
             }
