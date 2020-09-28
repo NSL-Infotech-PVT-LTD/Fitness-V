@@ -9,4 +9,5 @@ class CColor {
   static Color DividerCOlor = Colors.grey;
   static Color cardcolor = Color(0xffC1C1C1);
   static Color LightGrey = Color(0xff707070);
+  static Color CancelBTN = Color(0xFFD50000).withOpacity(.7);
 }

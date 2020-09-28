@@ -10,6 +10,7 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'package:volt/util/number_format.dart';
 
 import '../Methods.dart';
 import '../Methods/api_interface.dart';
@@ -58,6 +59,21 @@ class SignupState extends State<SignupScreen> {
   var designationController = TextEditingController();
   var emiratesController = TextEditingController();
   var addressController = TextEditingController();
+  List<String> _cities = [
+    'Dubai',
+    'Sharjah',
+    'Abu Dhabi',
+    'Ajman',
+    'Ras al-khaimah',
+//    'Musaffah City',
+//    'AI Fujairah City',
+//    'Khalifah A City',
+//    'Reef AI Fujairah City',
+//    'Bani Yas City',
+//    'Zayed City',
+    'Umm al-Quwain',
+  ];
+  String selectedCity;
 
   bool _isIos;
   String deviceType = '';
@@ -66,8 +82,9 @@ class SignupState extends State<SignupScreen> {
 
   String rolePlanId = "";
   var fromDate;
-  var myDate;
-  var formatter = new DateFormat("yyyy-MM-dd");
+  var myDate, sendDate;
+  var formatter = new DateFormat("dd/MM/yyyy");
+  var sendDateFormat = new DateFormat("yyyy-MM-dd");
 
   Map<String, String> parms;
 
@@ -79,9 +96,7 @@ class SignupState extends State<SignupScreen> {
     return showCupertinoModalPopup(
         context: context,
         builder: (context) {
-          return CupertinoActionSheet(
-
-              actions: <Widget>[
+          return CupertinoActionSheet(actions: <Widget>[
             CupertinoActionSheetAction(
               child: Align(
                   alignment: Alignment.topRight,
@@ -96,7 +111,10 @@ class SignupState extends State<SignupScreen> {
               onPressed: () {
                 Navigator.pop(context);
                 setState(() {
-                  if (myDate != null) fromDate = formatter.format(myDate);
+                  if (myDate != null) {
+                    fromDate = formatter.format(myDate);
+                    sendDate = sendDateFormat.format(myDate);
+                  }
                 });
               },
             ),
@@ -108,7 +126,6 @@ class SignupState extends State<SignupScreen> {
                 maximumDate: new DateTime(2019, 12, 30),
                 minimumYear: 1970,
                 maximumYear: 2019,
-
                 minuteInterval: 1,
                 mode: CupertinoDatePickerMode.date,
                 initialDateTime: DateTime(2018),
@@ -140,7 +157,8 @@ class SignupState extends State<SignupScreen> {
   @override
   void initState() {
     _isIos = Platform.isIOS;
-     deviceType = _isIos ? 'ios' : 'android';
+    deviceType = _isIos ? 'ios' : 'android';
+
     if (widget.editData != null) {
       if (widget.editData.containsKey(FIRSTNAME + "_1")) {
         _setData("_1");
@@ -183,6 +201,7 @@ class SignupState extends State<SignupScreen> {
     designationController.text = widget.editData[DESIGNATION + type];
     emiratesController.text = widget.editData[EMIRATES_ID + type];
     addressController.text = widget.editData[ADDRESS + type];
+    selectedCity = widget.editData[CITY + type];
   }
 
   @override
@@ -356,24 +375,24 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
 
-//                      Row(
-//                        mainAxisAlignment: MainAxisAlignment.start,
-//                        children: <Widget>[
-//                          Text(
-//                            child + '*',
-//                            style: TextStyle(color: Colors.black54),
-//                          ),
-//                          radiobutton('1'),
-//                          radiobutton('2'),
-//                          radiobutton('None'),
-//                        ],
-//                      ),
+                          SizedBox(
+                            height: 10,
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              radiobutton('Male'),
+                              radiobutton('Female'),
+                            ],
+                          ),
                           Padding(
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                WhitelistingTextInputFormatter.digitsOnly
+                                WhitelistingTextInputFormatter.digitsOnly,
+                                CardNumberInputFormatter()
                               ],
                               maxLength: 15,
                               validator: (value) {
@@ -397,7 +416,8 @@ class SignupState extends State<SignupScreen> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
-                                    WhitelistingTextInputFormatter.digitsOnly
+                                    WhitelistingTextInputFormatter.digitsOnly,
+                                    CardNumberInputFormatter()
                                   ],
                                   maxLength: 15,
                                   validator: (value) {
@@ -546,6 +566,40 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
                           Visibility(
+                            visible: widget.formType.isEmpty ? true : false,
+                            child: Padding(
+                                padding: EdgeInsets.only(top: 18),
+                                child: DropdownButton(
+                                  hint: selectedCity == null
+                                      ? Text('Select Emirates')
+                                      : Text(
+                                          selectedCity,
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                  isExpanded: true,
+                                  iconSize: 30.0,
+                                  style: TextStyle(fontSize: 12),
+                                  items: _cities.map(
+                                    (val) {
+                                      return DropdownMenuItem<String>(
+                                        value: val,
+                                        child: Text(
+                                          val,
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (val) {
+                                    setState(
+                                      () {
+                                        selectedCity = val;
+                                      },
+                                    );
+                                  },
+                                )),
+                          ),
+                          Visibility(
                               visible: widget.isSingle,
                               child: checkbox(
                                   iaccept, termsofService, acceptTerms)),
@@ -560,6 +614,12 @@ class SignupState extends State<SignupScreen> {
                                   if (fromDate == null) {
                                     showDialogBox(context, 'Date of Birth',
                                         'Please fill your date of birth');
+                                  } else if (radioItem.isEmpty) {
+                                    showDialogBox(context, 'Gender',
+                                        'Please select gender');
+                                  } else if (selectedCity == null) {
+                                    showDialogBox(context, 'City',
+                                        'Please select your city');
                                   } else if (widget.isSingle && !acceptTerms) {
                                     showDialogBox(context, termsofService,
                                         'Please read & accept our terms of services');
@@ -591,7 +651,7 @@ class SignupState extends State<SignupScreen> {
                                           passwordController.text
                                               .toString()
                                               .trim(),
-                                      BIRTH_DATE + widget.formType: fromDate,
+                                      BIRTH_DATE + widget.formType: sendDate,
 
                                       EMIRATES_ID + widget.formType:
                                           emiratesController.text
@@ -610,9 +670,13 @@ class SignupState extends State<SignupScreen> {
                                       ADDRESS: addressController.text
                                           .toString()
                                           .trim(),
+                                      CITY: selectedCity,
                                       DEVICE_TYPE: deviceType,
+                                      GENDER + widget.formType:
+                                          radioItem.toLowerCase(),
                                       DEVICE_TOKEN: deviceTokenValue,
                                     };
+                                    print("$parms");
 
                                     if (widget.isSingle) {
                                       isConnectedToInternet().then((internet) {
@@ -645,9 +709,7 @@ class SignupState extends State<SignupScreen> {
                                             }
                                           });
                                         } else {
-                                          showDialogBox(
-                                              context,
-                                              internetError,
+                                          showDialogBox(context, internetError,
                                               pleaseCheckInternet);
                                           dismissDialog(context);
                                         }

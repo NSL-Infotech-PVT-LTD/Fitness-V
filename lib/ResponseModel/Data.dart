@@ -4,6 +4,7 @@ class Data {
   String message;
   String token;
   int id;
+  int is_booked_by_me_booking_id;
   int last_page;
   String name;
   String config;
@@ -35,6 +36,7 @@ class Data {
       {this.token,
       this.message,
       this.id,
+      this.is_booked_by_me_booking_id,
       this.last_page,
       this.name,
       this.config,
@@ -74,6 +76,7 @@ class Data {
     available_capacity = json['available_capacity'];
     duration = json['duration'];
     id = json['id'];
+    is_booked_by_me_booking_id = json['is_booked_by_me_booking_id'];
     last_page = json['last_page'];
     is_booked_by_me = json['is_booked_by_me'];
     current_page = json['current_page'];
@@ -109,6 +112,7 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['message'] = this.message;
     data['id'] = this.id;
+    data['is_booked_by_me_booking_id'] = this.is_booked_by_me_booking_id;
     data['last_page'] = this.last_page;
     data['name'] = this.name;
     data['config'] = this.config;

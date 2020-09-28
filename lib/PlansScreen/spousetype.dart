@@ -494,6 +494,7 @@ class _SpouseTypeState extends State<SpouseType> {
                             EMEREGENCY_NUMBER: result[EMEREGENCY_NUMBER],
                             DESIGNATION: result[DESIGNATION],
                             ADDRESS: result[ADDRESS],
+                            GENDER: result[GENDER],
 
                             /**
                              * form 1 details
@@ -506,78 +507,80 @@ class _SpouseTypeState extends State<SpouseType> {
                             PASSWORD + "_1": result1[PASSWORD + "_1"],
                             BIRTH_DATE + "_1": result1[BIRTH_DATE + "_1"],
                             EMIRATES_ID + "_1": result1[EMIRATES_ID + "_1"],
+                            GENDER + "_1": result1[GENDER + "_1"],
                             DEVICE_TYPE: deviceType,
                             DEVICE_TOKEN:deviceTokenValue,
                           };
-                          isConnectedToInternet().then((internet) {
-                            if (internet != null && internet) {
-                              showProgress(context, "Please wait.....");
-
-                              signUpToServer(parms).then((response) {
-                                dismissDialog(context);
-                                if (response.status) {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    ScaleRoute(page: SuccessScreen()),
-                                    (r) => false,
-                                  );
-                                } else {
-                                  dismissDialog(context);
-
-                                  if (response.error != null)
-                                    showDialogBox(
-                                        context, "Error!", response.error);
-                                  else {
-                                    errorMessage1 = '';
-                                    if (response.errors != null) {
-                                      var value = response.errors.toJson();
-
-                                      if (value['email'] != null) {
-                                        errorMessage = response.errors.email;
-                                        setState(() {
-                                          errorMessage1 = response.errors.email;
-                                        });
-                                      } else if (response.errors.email_1 !=
-                                          null) {
-                                        errorMessage = response.errors.email_1;
-                                        setState(() {
-                                          errorMessage1 =
-                                              response.errors.email_1;
-                                        });
-                                      } else if (response.errors.email_2 !=
-                                          null) {
-                                        errorMessage = response.errors.email_2;
-                                        setState(() {
-                                          errorMessage1 =
-                                              response.errors.email_2;
-                                        });
-                                      } else if (response.errors.email_3 !=
-                                          null) {
-                                        errorMessage = response.errors.email_3;
-                                        setState(() {
-                                          errorMessage1 =
-                                              response.errors.email_3;
-                                        });
-                                      }
-
-                                      showDialogBox(
-                                          context, error, errorMessage);
-                                    }
-                                  }
-                                }
-                              });
-                            } else {
-                              showDialogBox(context, internetError,
-                                  pleaseCheckInternet);
-                              dismissDialog(context);
-                            }
-                            dismissDialog(context);
-                          });
-                        } else if (!acceptTerms) {
-                          showDialogBox(context, termsofService,
-                              'Please read & accept our terms of services');
-                        } else {
-                          showDialogBox(context, error, 'Please fill details');
+                          print("bjbfjj$parms");
+//                          isConnectedToInternet().then((internet) {
+//                            if (internet != null && internet) {
+//                              showProgress(context, "Please wait.....");
+//
+//                              signUpToServer(parms).then((response) {
+//                                dismissDialog(context);
+//                                if (response.status) {
+//                                  Navigator.pushAndRemoveUntil(
+//                                    context,
+//                                    ScaleRoute(page: SuccessScreen()),
+//                                    (r) => false,
+//                                  );
+//                                } else {
+//                                  dismissDialog(context);
+//
+//                                  if (response.error != null)
+//                                    showDialogBox(
+//                                        context, "Error!", response.error);
+//                                  else {
+//                                    errorMessage1 = '';
+//                                    if (response.errors != null) {
+//                                      var value = response.errors.toJson();
+//
+//                                      if (value['email'] != null) {
+//                                        errorMessage = response.errors.email;
+//                                        setState(() {
+//                                          errorMessage1 = response.errors.email;
+//                                        });
+//                                      } else if (response.errors.email_1 !=
+//                                          null) {
+//                                        errorMessage = response.errors.email_1;
+//                                        setState(() {
+//                                          errorMessage1 =
+//                                              response.errors.email_1;
+//                                        });
+//                                      } else if (response.errors.email_2 !=
+//                                          null) {
+//                                        errorMessage = response.errors.email_2;
+//                                        setState(() {
+//                                          errorMessage1 =
+//                                              response.errors.email_2;
+//                                        });
+//                                      } else if (response.errors.email_3 !=
+//                                          null) {
+//                                        errorMessage = response.errors.email_3;
+//                                        setState(() {
+//                                          errorMessage1 =
+//                                              response.errors.email_3;
+//                                        });
+//                                      }
+//
+//                                      showDialogBox(
+//                                          context, error, errorMessage);
+//                                    }
+//                                  }
+//                                }
+//                              });
+//                            } else {
+//                              showDialogBox(context, internetError,
+//                                  pleaseCheckInternet);
+//                              dismissDialog(context);
+//                            }
+//                            dismissDialog(context);
+//                          });
+//                        } else if (!acceptTerms) {
+//                          showDialogBox(context, termsofService,
+//                              'Please read & accept our terms of services');
+//                        } else {
+//                          showDialogBox(context, error, 'Please fill details');
                         }
                       },
                       color: Colors.black,

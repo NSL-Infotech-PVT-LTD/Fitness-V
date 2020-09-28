@@ -6,6 +6,7 @@ import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -43,10 +44,17 @@ class LoginState extends State<LoginScreen> {
             setString(roleType, response.data.user.role.name);
             if (response.data != null && response.data.user != null)
               setString(userImage, response.data.user.image);
+            if (response.data.user.role != null) {
+              setString(userPlanImage, response.data.user.role.image);
+              setString(roleName, response.data.user.role.name);
+              setString(roleCategory, response.data.user.role.category);
+              if (response.data.user.role.current_plan != null) {
+                setString(
+                    rolePlan, response.data.user.role.current_plan.role_plan);
+              }
+            }
 
-            setString(
-                USER_NAME,
-                response.data.user.full_name);
+            setString(USER_NAME, response.data.user.full_name);
             Navigator.pushAndRemoveUntil(
                 context, ScaleRoute(page: Dashboard()), (r) => false);
           } else {
@@ -339,7 +347,7 @@ class LoginState extends State<LoginScreen> {
                                     size: 20,
                                   ),
                                   Text(
-                                    'Guest Menu',
+                                    choosePlan,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 12),
@@ -347,7 +355,10 @@ class LoginState extends State<LoginScreen> {
                                 ],
                               ),
                               onPressed: () {
-//
+                                Navigator.pushReplacement(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => ChooseYourWay()));
 //                                  ilder: (context) => Dashboard()));
                               },
                             )

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
@@ -61,14 +62,12 @@ Widget bottomDialogLog() => CupertinoActionSheet(
         CupertinoActionSheetAction(
           child: Text("Action 1"),
           isDefaultAction: true,
-          onPressed: () {
-          },
+          onPressed: () {},
         ),
         CupertinoActionSheetAction(
           child: Text("Action 2"),
           isDestructiveAction: true,
-          onPressed: () {
-          },
+          onPressed: () {},
         )
       ],
     );
@@ -262,7 +261,7 @@ Future<bool> bookingFunction(String auth, context, String model_type,
                 ScaleRoute(
                     page: BookingConfirmed(
                   createdAt: response.data.booking.created_at,
-                      hours: hours,
+                  hours: hours,
                   image: response.data.booking.model_type == 'class_schedules'
                       ? response.data.booking.model_detail.class_detail.image
                       : response.data.booking.model_detail.image,

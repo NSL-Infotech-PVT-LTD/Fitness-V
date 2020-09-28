@@ -20,6 +20,7 @@ class YourBooking extends StatefulWidget {
   final String name;
   final String payment;
   final bool isGroupClass;
+  final bool wantToShowPrice;
 
   const YourBooking(
       {this.id,
@@ -27,6 +28,7 @@ class YourBooking extends StatefulWidget {
       this.serviceHours,
       this.isGroupClass,
       this.name,
+      this.wantToShowPrice,
       this.payment});
 
   @override
@@ -41,6 +43,57 @@ class YourBookingState extends State<YourBooking> {
   void initState() {
     getString(USER_AUTH).then((value) => {auth = value});
     super.initState();
+  }
+  void doYoWantToCntinue() {
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text("Booking confirmation"),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text("Do you want to continue ?",
+                  style: TextStyle(wordSpacing: 1)),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("Yes"),
+                onPressed: () {
+//                  Navigator.pop(context);
+                  bookingFunction(
+                      auth,
+                      context,
+                      "${widget.isGroupClass ? classSchedules : trainerUsers}",
+                      widget.id.toString(),
+                      widget.serviceHours);
+                },
+                isDestructiveAction: false,
+              ),
+              CupertinoDialogAction(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                isDestructiveAction: false,
+              ),
+            ],
+          );
+        });
+
+//  showDialog(
+//      context: context,
+//      builder: (context) {
+//        return AlertDialog(
+//          title: Text(title),
+//          content: Text(message),
+//          actions: <Widget>[
+//            FlatButton(
+//              child: const Text('OK'),
+//              onPressed: () => Navigator.pop(context),
+//            ),
+//          ],
+//        );
+//      });
   }
 
   @override
@@ -68,12 +121,8 @@ class YourBookingState extends State<YourBooking> {
                         width: SizeConfig.blockSizeHorizontal * 90,
                         child: RaisedButton(
                             onPressed: () {
-                              bookingFunction(
-                                  auth,
-                                  context,
-                                  "${widget.isGroupClass ? classSchedules : trainerUsers}",
-                                  widget.id.toString(),
-                                  widget.serviceHours);
+
+                             doYoWantToCntinue();
                             },
                             color: Colors.black,
                             shape: RoundedRectangleBorder(
@@ -82,13 +131,13 @@ class YourBookingState extends State<YourBooking> {
                             child: new RichText(
                                 textAlign: TextAlign.start,
                                 text: TextSpan(
-                                    text: "Proceed to Pay",
+                                    text: widget.wantToShowPrice?"Proceed to Pay":"Proceed to Book",
                                     style: TextStyle(
                                         fontSize: textSize12,
                                         color: Colors.white),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: " ${widget.payment} AED",
+                                          text: widget.wantToShowPrice?" ${widget.payment} AED":"",
                                           style: TextStyle(
                                               fontSize: textSize12,
                                               fontWeight: FontWeight.bold,
@@ -105,12 +154,7 @@ class YourBookingState extends State<YourBooking> {
                         width: 40,
                         child: RaisedButton(
                             onPressed: () {
-                              bookingFunction(
-                                  auth,
-                                  context,
-                                  "${widget.isGroupClass ? classSchedules : trainerUsers}",
-                                  widget.id.toString(),
-                                  widget.serviceHours);
+                              doYoWantToCntinue();
 //                                Navigator.push(context,
 //                                    SizeRoute(page: BookingConfirmed()));
                             },
@@ -118,7 +162,8 @@ class YourBookingState extends State<YourBooking> {
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(button_radius)),
-                            child: Center(
+                            child: Align(
+                              alignment: Alignment.center,
                               child: Icon(
                                 Icons.arrow_forward,
                                 color: Colors.white,

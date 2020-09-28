@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/Methods/Method.dart';
@@ -13,13 +15,21 @@ import 'package:volt/util/starDisplay.dart';
 
 class TrainerDetail extends StatefulWidget {
   final int id;
+
   TrainerDetail({@required this.id});
+
   @override
   State<StatefulWidget> createState() => TrainerDetailState();
 }
 
-class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderStateMixin {
-  String fullName = '', expirence = '', services = '',specialities ='', about = '', imgLink;
+class TrainerDetailState extends State<TrainerDetail>
+    with SingleTickerProviderStateMixin {
+  String fullName = '',
+      expirence = '',
+      services = '',
+      specialities = '',
+      about = '',
+      imgLink;
   int trainees = 0, reviewsCount = 0;
   bool is_booked_by_me = false;
   TabController controller;
@@ -30,6 +40,7 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
   String auth = '';
   var _checkList;
   String _roleType = '';
+  String deleteId = "";
 
   @override
   void initState() {
@@ -41,6 +52,81 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
 
     super.initState();
     controller = TabController(length: 2, vsync: this);
+  }
+
+  void _deleteBooking(String id) async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Cancelling....");
+
+        Map<String, String> parms = {
+          'id': id,
+        };
+        bookingDeleteApi(auth, parms).then((response) {
+          if (response.status) {
+            if (response.data != null) {
+              print(response.data.message);
+              is_booked_by_me = false;
+              setState(() {});
+            }
+          } else {
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        }).whenComplete(() => dismissDialog(context));
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
+      }
+    });
+  }
+
+  void doYoWantToCntinue() {
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text("Booking cancel"),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text("Do you want to continue ?",
+                  style: TextStyle(wordSpacing: 1)),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("Yes"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  if (is_booked_by_me) {
+                    _deleteBooking(deleteId);
+                  }
+                },
+                isDestructiveAction: true,
+              ),
+              CupertinoDialogAction(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                isDestructiveAction: true,
+              ),
+            ],
+          );
+        });
+
+//  showDialog(
+//      context: context,
+//      builder: (context) {
+//        return AlertDialog(
+//          title: Text(title),
+//          content: Text(message),
+//          actions: <Widget>[
+//            FlatButton(
+//              child: const Text('OK'),
+//              onPressed: () => Navigator.pop(context),
+//            ),
+//          ],
+//        );
+//      });
   }
 
   void _getTrainerDetail(String auth) async {
@@ -64,6 +150,8 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
               expirence = response.data.trainer.expirence;
               trainees = response.data.trainer.booking_cnt;
               is_booked_by_me = response.data.trainer.is_booked_by_me;
+              deleteId =
+                  response.data.trainer.is_booked_by_me_booking_id.toString();
 
               if (response.data.related.length > 0) {
                 _checkList = response.data.related;
@@ -106,8 +194,10 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                       imageUrl: response.data.data[i]['created_by_detail']
                           ['image'],
                       title: response.data.data[i]['review'],
-                      text1:
-                          'Posted on ' + response.data.data[i]['created_at']));
+                      text1: 'Posted on ' +
+                          DateFormat("dd/MM/yyyy").format(
+                              DateFormat("yyyy-MM-dd").parse(
+                                  response.data.data[i]['created_at']))));
               setState(() {});
             }
           } else {
@@ -287,8 +377,6 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                                   ),
                                   padding: EdgeInsets.only(top: 10),
                                 ),
-
-
                                 Container(
                                   margin: EdgeInsets.only(top: padding15),
                                   height: 45,
@@ -296,6 +384,7 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                                   child: RaisedButton(
                                     onPressed: () {
                                       if (!is_booked_by_me) {
+                                        print("${widget.id}");
                                         Navigator.push(
                                             context,
                                             new MaterialPageRoute(
@@ -307,10 +396,12 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                                                       isGroupClass: false,
                                                       roleType: _roleType,
                                                     )));
+                                      } else {
+                                        doYoWantToCntinue();
                                       }
                                     },
                                     color: is_booked_by_me
-                                        ? Colors.black54
+                                        ? CColor.CancelBTN
                                         : Colors.black,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
@@ -323,16 +414,14 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: is_booked_by_me ? 10 : 16),
+                                          fontSize: is_booked_by_me ? 8 : 16),
                                     ),
                                   ),
                                 ),
-
                               ],
                             ))
                       ],
                     ),
-
                   ],
                 ),
               ),
@@ -418,8 +507,9 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                     Padding(
                       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
                       child: Text(
-                        services==null?
-                        'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.':services,
+                        services == null
+                            ? 'Personal Trainer REPS Level 2, Stability Ball, Kettle Bell, TRX Suspension training Level 1.'
+                            : services,
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
@@ -468,9 +558,10 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                           style: TextStyle(fontSize: 12)),
                     ),
                     Padding(
-                        padding: EdgeInsets.only(left: 20, right: 0,bottom: 20),
+                        padding:
+                            EdgeInsets.only(left: 20, right: 0, bottom: 20),
                         child: Container(
-                          height:200,
+                          height: 200,
                           child: ListView.builder(
                             itemBuilder: (context, index) {
                               return Container(
@@ -480,8 +571,7 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
                                     Navigator.pushReplacement(
                                         context,
                                         new MaterialPageRoute(
-                                            builder: (context) =>
-                                                TrainerDetail(
+                                            builder: (context) => TrainerDetail(
                                                   id: _checkList[index]['id'],
                                                 )));
                                   },
@@ -501,7 +591,7 @@ class TrainerDetailState extends State<TrainerDetail> with SingleTickerProviderS
               ),
               reviewList.length > 0
                   ? ListView.builder(
-                   shrinkWrap: true,
+                      shrinkWrap: true,
                       padding: EdgeInsets.all(20),
                       physics: BouncingScrollPhysics(),
                       primary: false,

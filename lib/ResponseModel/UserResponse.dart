@@ -4,6 +4,7 @@ import 'package:volt/ResponseModel/role_model.dart';
 
 class UserResponse {
   int id;
+  int is_booked_by_me_booking_id;
   String name;
   String model_type;
   String review;
@@ -22,9 +23,11 @@ class UserResponse {
   String emirates_id;
   String address;
   String email;
+  String gender;
   String designation;
   String category;
   String image;
+  String city;
   String description;
   String params;
   String about;
@@ -45,6 +48,7 @@ class UserResponse {
   List<PlanDetail> plan_detail;
   UserResponse(
     this.id,
+    this.is_booked_by_me_booking_id,
     this.name,
     this.model_type,
     this.location,
@@ -56,6 +60,7 @@ class UserResponse {
     this.expirence,
     this.mobile,
     this.emergency_contact_no,
+    this.gender,
     this.email,
     this.designation,
     this.emirates_id,
@@ -78,6 +83,7 @@ class UserResponse {
     this.model_detail,
     this.birth_date,
     this.role,
+    this.city,
     this.hours,
     this.certifications,
     this.specialities,
@@ -86,7 +92,9 @@ class UserResponse {
 
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    is_booked_by_me_booking_id = json['is_booked_by_me_booking_id'];
     name = json['name'];
+    gender = json['gender'];
     certifications = json['certifications'];
     specialities = json['specialities'];
     model_type = json['model_type'];
@@ -99,6 +107,7 @@ class UserResponse {
     first_name = json['first_name'];
     mobile = json['mobile'];
     emergency_contact_no = json['emergency_contact_no'];
+    city = json['city'];
     email = json['email'];
     designation = json['designation'];
     emirates_id = json['emirates_id'];
@@ -128,6 +137,7 @@ class UserResponse {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['is_booked_by_me_booking_id'] = this.is_booked_by_me_booking_id;
     data['model_type'] = this.model_type;
     data['name'] = this.name;
     data['hours'] = this.hours;
@@ -146,6 +156,7 @@ class UserResponse {
     data['emirates_id'] = this.emirates_id;
     data['address'] = this.address;
     data['middle_name'] = this.middle_name;
+    data['gender'] = this.gender;
     data['last_name'] = this.last_name;
     data['category'] = this.category;
     data['image'] = this.image;
@@ -161,6 +172,7 @@ class UserResponse {
     data['is_booked_by_me'] = this.is_booked_by_me;
     data['specialities'] = this.specialities;
     data['certifications'] = this.certifications;
+    data['city'] = this.city;
 
     if (this.created_by_detail != null) {
       data['created_by_detail'] = this.created_by_detail.toJson();

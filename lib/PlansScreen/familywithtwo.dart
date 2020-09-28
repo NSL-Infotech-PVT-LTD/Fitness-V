@@ -734,6 +734,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                             EMEREGENCY_NUMBER: result[EMEREGENCY_NUMBER],
                             DESIGNATION: result[DESIGNATION],
                             ADDRESS: result[ADDRESS],
+                            GENDER: result[GENDER],
 
                             /**
                              * form 1 details
@@ -746,6 +747,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                             PASSWORD + "_1": result1[PASSWORD + "_1"],
                             BIRTH_DATE + "_1": result1[BIRTH_DATE + "_1"],
                             EMIRATES_ID + "_1": result1[EMIRATES_ID + "_1"],
+                            GENDER + "_1": result1[GENDER + "_1"],
 
                             /**
                              * form 2 details
@@ -759,6 +761,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                             PASSWORD + "_2": result2[PASSWORD + "_2"],
                             BIRTH_DATE + "_2": result2[BIRTH_DATE + "_2"],
                             EMIRATES_ID + "_2": result2[EMIRATES_ID + "_2"],
+                            GENDER + "_2": result2[GENDER + "_2"],
 
                             /**
                              * form 3 details
@@ -772,6 +775,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                             PASSWORD + "_3": result3[PASSWORD + "_3"],
                             BIRTH_DATE + "_3": result3[BIRTH_DATE + "_3"],
                             EMIRATES_ID + "_3": result3[EMIRATES_ID + "_3"],
+                            GENDER + "_3": result3[GENDER + "_3"],
                             DEVICE_TYPE: deviceType,
                             DEVICE_TOKEN: deviceTokenValue,
                           };
@@ -816,7 +820,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                       } else if (response.errors.email_2 !=
                                           null) {
                                         errorMessage = response.errors.email_2;
-                                        name = result2[FIRSTNAME + "_2"];
+                                         name = result2[FIRSTNAME + "_2"];
                                         setState(() {
                                           errorMessage1 =
                                               response.errors.email_2;

@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
@@ -72,6 +73,40 @@ class AllBookingsState extends State<AllBookings> {
     super.dispose();
   }
 
+  void doYoWantToCntinue(String deleteId) {
+    showCupertinoDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text("Booking cancel"),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text("Do you want to continue ?",
+                  style: TextStyle(wordSpacing: 1)),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("Yes"),
+                onPressed: () {
+//
+
+                  _deleteBooking(deleteId);
+                },
+                isDestructiveAction: true,
+              ),
+              CupertinoDialogAction(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                isDestructiveAction: true,
+              ),
+            ],
+          );
+        });
+  }
+
   void _deleteBooking(String id) async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
@@ -86,6 +121,7 @@ class AllBookingsState extends State<AllBookings> {
               print(response.data.message);
               if (currentIndex != null) _bookingList.removeAt(currentIndex);
               setState(() {});
+              Navigator.pop(context);
             }
           } else {
             if (response.error != null)
@@ -127,7 +163,7 @@ class AllBookingsState extends State<AllBookings> {
                   _idsList.addAll(tList);
 
                   for (int index = 0; index < tList.length; index++) {
-                    var name = 'Not Found';
+                    var name = '----';
                     var image = '';
                     var url = '';
                     var modelType = '';
@@ -478,8 +514,8 @@ class AllBookingsState extends State<AllBookings> {
                                 customBooking: _bookingList[index],
                                 callBackeDelete: () {
 //                            print("currentid${_idsList[index]['id']}");
-                                currentIndex = index;
-                                  _deleteBooking(
+                                  currentIndex = index;
+                                  doYoWantToCntinue(
                                       _idsList[index]['id'].toString());
                                 },
                               ));
@@ -602,7 +638,7 @@ class BookingView extends StatelessWidget {
                                 ),
                                 Text(
                                   customBooking.name == null
-                                      ? 'Name not found'
+                                      ? '----'
                                       : customBooking.name,
                                   style: TextStyle(
                                       color: Colors.black,
@@ -691,11 +727,11 @@ class BookingView extends StatelessWidget {
                                 alignment: Alignment.topCenter,
                                 child: Container(
                                   margin: EdgeInsets.only(top: padding5),
-                                  height: 40,
+                                  height: 30,
                                   width: 120,
                                   child: RaisedButton(
                                     onPressed: callBackeDelete,
-                                    color: Color(0xFFD50000),
+                                    color: CColor.CancelBTN,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                             button_radius)),

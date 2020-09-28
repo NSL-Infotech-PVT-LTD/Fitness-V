@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
@@ -28,6 +29,7 @@ class EventDetailState extends State<EventDetail> {
   String _eventLocation = '';
   String _eventTime = '';
   String auth = '';
+  String deleteId = "";
 
   @override
   void initState() {
@@ -52,12 +54,18 @@ class EventDetailState extends State<EventDetail> {
               _eventName = response.data.name;
               _imageLink = response.data.image;
               _isBookedByMe = response.data.is_booked_by_me;
+              deleteId = response.data.is_booked_by_me_booking_id.toString();
               _about = response.data.description;
               _eventLocation = response.data.location_detail.location;
+
+              var startTime = DateFormat("dd/MM/yyyy").format(
+                  DateFormat("yyyy-MM-dd").parse(response.data.start_date));
+              var endTime = DateFormat("dd/MM/yyyy").format(
+                  DateFormat("yyyy-MM-dd").parse(response.data.end_date));
               _eventTime = "From : " +
-                  response.data.start_date +
+                  startTime +
                   "\nTo      : " +
-                  response.data.end_date;
+                  endTime;
 
               setState(() {});
             }
@@ -70,6 +78,87 @@ class EventDetailState extends State<EventDetail> {
       } else {
         showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  void doYoWantToCntinue() {
+    showCupertinoDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title:
+                Text(_isBookedByMe ? "Booking cancel" : "Booking confirmation"),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text("Do you want to continue ?",
+                  style: TextStyle(wordSpacing: 1)),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("Yes"),
+                onPressed: () {
+//
+                  if (!_isBookedByMe) {
+                    var isConfirmed = false;
+                    bookingFunction(
+                            auth, context, eventKey, widget.id.toString(), '')
+                        .then((value) => isConfirmed = value)
+                        .whenComplete(() => {
+                              if (isConfirmed) {_isBookedByMe = true}
+                            });
+                    if (isConfirmed) {
+                      setState(() {});
+                    }
+                  } else {
+                    _deleteBooking(deleteId);
+                  }
+                },
+                isDestructiveAction: true,
+              ),
+              CupertinoDialogAction(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                isDestructiveAction: true,
+              ),
+            ],
+          );
+        });
+  }
+
+  void _deleteBooking(String id) async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Cancelling....");
+
+        Map<String, String> parms = {
+          'id': id,
+        };
+        bookingDeleteApi(auth, parms).then((response) {
+          if (response.status) {
+            if (response.data != null) {
+              print(response.data.message);
+              //
+
+              _isBookedByMe = false;
+              setState(() {});
+              Navigator.pop(context);
+            }
+          } else {
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        }).whenComplete(() => dismissDialog(context));
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
       }
     });
   }
@@ -176,9 +265,7 @@ class EventDetailState extends State<EventDetail> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: _isBookedByMe
-                        ? MainAxisAlignment.spaceEvenly
-                        : MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Visibility(
                         visible: widget.status != recent,
@@ -186,55 +273,30 @@ class EventDetailState extends State<EventDetail> {
                           alignment: Alignment.topCenter,
                           child: Container(
                             margin: EdgeInsets.only(top: padding15),
-                            height: button_height,
+                            height: 45,
                             width: 150,
                             child: RaisedButton(
                               onPressed: () {
-                                if (!_isBookedByMe)
-                                  bookingFunction(auth, context, eventKey,
-                                      widget.id.toString(), '');
+                                doYoWantToCntinue();
                               },
-                              color:
-                                  _isBookedByMe ? Colors.black54 : Colors.black,
+                              color: _isBookedByMe
+                                  ? CColor.CancelBTN
+                                  : Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.circular(button_radius)),
                               child: Text(
                                 _isBookedByMe ? alreadyBooked : book_now,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: _isBookedByMe ? 13 : 16),
+                                    fontSize: _isBookedByMe ? 8 : 16),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Visibility(
-                        visible: widget.status != recent && _isBookedByMe,
-                        child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Container(
-                            margin: EdgeInsets.only(top: padding15),
-                            height: button_height,
-                            width: 150,
-                            child: RaisedButton(
-                              onPressed: () {},
-                              color: Color(0xFFD50000),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(button_radius)),
-                              child: Text(
-                                cancelBooking,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                   SizedBox(

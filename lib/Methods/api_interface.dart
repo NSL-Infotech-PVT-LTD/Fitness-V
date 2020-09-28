@@ -16,7 +16,7 @@ String trainers = BASE_URL + "api/trainer";
 String profile = BASE_URL + "api/get-profile";
 String trainerReviews = BASE_URL + "api/trainer/reviews";
 String eventDetails = BASE_URL + "api/event";
-String privacyUrl = BASE_URL + "api/event";
+String privacyUrl = BASE_URL + "api/config/privacy_policy";
 String aboutUsUrl = BASE_URL + "api/config/about_us";
 String termsConditionUrl = BASE_URL + "api/config/terms_and_conditions";
 String updateProfileUrl = BASE_URL + "api/update";
@@ -56,6 +56,8 @@ String MIDDLENAME = "middle_name";
 String BIRTH_DATE = "birth_date";
 String DESIGNATION = "designation";
 String ADDRESS = "address";
+String CITY = "city";
+String GENDER = "gender";
 String ROLE_ID = "role_id";
 String ROLE_PLAN_ID = "role_plan_id";
 String EMEREGENCY_NUMBER = "emergency_contact_no";
@@ -72,6 +74,10 @@ String trainerUsers = "trainer_users";
 String USER_AUTH = "USER_AUTH";
 String USER_NAME = "USER_NAME";
 String userImage = "userImage";
+String userPlanImage = "userPlanImage";
+String rolePlan = "rolePlan";
+String roleName = "roleName";
+String roleCategory = "roleCategory";
 String USER_EMAIL = "USER_EMAIL";
 String roleType = 'roleType';
 String CONTENT_VALUE = "application/x-www-form-urlencoded";
@@ -184,6 +190,7 @@ Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(parms));
+  print("Signup${response.body}");
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
@@ -194,6 +201,7 @@ Future<StatusResponse> getTermsApi() async {
 
 Future<StatusResponse> getPrivacyApi() async {
   final response = await http.get(privacyUrl);
+  print("Privacy${response.body}");
   return StatusResponse.fromJson(json.decode(response.body));
 }
 

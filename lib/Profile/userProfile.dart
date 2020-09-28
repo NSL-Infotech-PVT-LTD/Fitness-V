@@ -14,6 +14,7 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 import 'package:volt/util/image_picker_dialog.dart';
+import 'package:volt/util/number_format.dart';
 
 import '../Methods.dart';
 
@@ -28,47 +29,104 @@ class UserProfileState extends State<UserProfile> {
   final formKey = GlobalKey<FormState>();
   File _imageFile;
   String image;
+  String city = "City not found";
 
   /// @AuthScreens Controllers
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
   var middletNameController = TextEditingController();
   var mobileController = TextEditingController();
+  var genderController = TextEditingController();
   var emergencyController = TextEditingController();
   var emailController = TextEditingController();
   var dobController = TextEditingController();
   var designationController = TextEditingController();
   var emiratesController = TextEditingController();
   var addressController = TextEditingController();
+  var cityController = TextEditingController();
 
   bool _isIos;
   bool _isEnable = true;
   String deviceType = '';
   String deviceToken = "";
 
-  var fromDate, toDate;
-  var formatter = new DateFormat("yyyy-MM-dd");
+  var fromDate, toDate, sendDate;
+  var formatter = new DateFormat("dd/MM/yyyy");
+  var sendDateFormat = new DateFormat("yyyy-MM-dd");
 
   String auth = '';
+  List<String> _cities = [
+    'Dubai',
+    'Sharjah',
+    'Abu Dhabi',
+    'Ajman',
+    'Ras al Khaimah',
+//    'Musaffah City',
+//    'Al Fujairah City',
+//    'Khalifah A City',
+//    'Reef Al Fujairah City',
+//    'Bani Yas City',
+//    'Zayed City',
+    'Umm al-Quwain',
+  ];
+  String selectedCity;
+  String genderItem = '';
 
   void fromDatePicker() async {
     var order = await getData();
     setState(() {
-      if (order != null) fromDate = formatter.format(order);
+      if (order != null) {
+        fromDate = formatter.format(order);
+        sendDate = sendDateFormat.format(order);
+      }
+      ;
     });
   }
 
   Future<DateTime> getData() {
-    return showDatePicker(
+    return showCupertinoModalPopup(
         context: context,
-        initialDate: DateTime(2019),
-        firstDate: DateTime(1980),
-        lastDate: DateTime(2020),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.fallback(),
-            child: child,
-          );
+        builder: (context) {
+          return CupertinoActionSheet(actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: Text(
+                      "Done",
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  )),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  if (toDate != null) {
+                    fromDate = formatter.format(toDate);
+                    sendDate = sendDateFormat.format(toDate);
+                  }
+                });
+              },
+            ),
+            Container(
+              height: 300.0,
+              color: Colors.white,
+              child: CupertinoDatePicker(
+                use24hFormat: true,
+                maximumDate: new DateTime(2019, 12, 30),
+                minimumYear: 1970,
+                maximumYear: 2019,
+                minuteInterval: 1,
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: DateTime(2018),
+                backgroundColor: Colors.white,
+                onDateTimeChanged: (dateTime) {
+                  toDate = dateTime;
+                },
+              ),
+            ),
+          ]);
         });
   }
 
@@ -90,8 +148,20 @@ class UserProfileState extends State<UserProfile> {
               emailController.text = response.data.user.email;
               designationController.text = response.data.user.designation;
               emiratesController.text = response.data.user.emirates_id;
+              genderController.text = response.data.user.gender;
               addressController.text = response.data.user.address;
-              fromDate = response.data.user.birth_date;
+              DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                  .parse(response.data.user.birth_date);
+
+              fromDate = formatter.format(tempDate);
+              sendDate = sendDateFormat.format(tempDate);
+
+              image = response.data.user.image;
+              if (response.data.user.city != null) {
+                city = response.data.user.city;
+              }
+              cityController.text = city;
+              selectedCity = response.data.user.city;
               setState(() {});
             }
           } else {
@@ -147,6 +217,8 @@ class UserProfileState extends State<UserProfile> {
       if (image == null) {
         return Image.asset(baseImageAssetsUrl + 'circleuser.png');
       } else {
+        setString(userImage, image);
+
         return CircleAvatar(
           radius: 52.0,
           backgroundImage: NetworkImage(BASE_URL + 'uploads/image/' + image),
@@ -200,7 +272,6 @@ class UserProfileState extends State<UserProfile> {
                       baseImageAssetsUrl + 'horizontal.svg',
                       width: SizeConfig.screenWidth,
                     ),
-
                   ),
                   Positioned(
                       left: SizeConfig.screenWidth * .37,
@@ -274,7 +345,7 @@ class UserProfileState extends State<UserProfile> {
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
                                 keyboardType: TextInputType.text,
-                                readOnly: _isEnable,
+                                readOnly: true,
                                 inputFormatters: <TextInputFormatter>[
                                   WhitelistingTextInputFormatter(
                                       RegExp("[a-zA-Z]"))
@@ -286,9 +357,7 @@ class UserProfileState extends State<UserProfile> {
                                   return null;
                                 },
                                 controller: firstNameController,
-                                style: TextStyle(
-                                    color:
-                                        _isEnable ? Colors.grey : Colors.black),
+                                style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
                                     hintText: firstname + '*',
                                     hintStyle: TextStyle(fontSize: textSize12)),
@@ -298,15 +367,13 @@ class UserProfileState extends State<UserProfile> {
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
                                 keyboardType: TextInputType.text,
-                                readOnly: _isEnable,
+                                readOnly: true,
                                 inputFormatters: <TextInputFormatter>[
                                   WhitelistingTextInputFormatter(
                                       RegExp("[a-zA-Z]"))
                                 ],
                                 controller: middletNameController,
-                                style: TextStyle(
-                                    color:
-                                        _isEnable ? Colors.grey : Colors.black),
+                                style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
                                     hintText: midlename,
                                     hintStyle: TextStyle(fontSize: textSize12)),
@@ -316,7 +383,7 @@ class UserProfileState extends State<UserProfile> {
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
                                 keyboardType: TextInputType.text,
-                                readOnly: _isEnable,
+                                readOnly: true,
                                 inputFormatters: <TextInputFormatter>[
                                   WhitelistingTextInputFormatter(
                                       RegExp("[a-zA-Z]"))
@@ -328,38 +395,40 @@ class UserProfileState extends State<UserProfile> {
                                   return null;
                                 },
                                 controller: lastNameController,
-                                style: TextStyle(
-                                    color:
-                                        _isEnable ? Colors.grey : Colors.black),
+                                style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
                                     hintText: lastname + '*',
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
-
-//                      Row(
-//                        mainAxisAlignment: MainAxisAlignment.start,
-//                        children: <Widget>[
-//                          Text(
-//                            child + '*',
-//                            style: TextStyle(color: Colors.black54),
-//                          ),
-//                          radiobutton('1'),
-//                          radiobutton('2'),
-//                          radiobutton('None'),
-//                        ],
-//                      ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: genderController,
+                                style: TextStyle(color: Colors.grey),
+                                decoration: InputDecoration(
+                                    hintText: "Gender",
+                                    hintStyle: TextStyle(fontSize: textSize12)),
+                              ),
+                            ),
                             Padding(
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
-                                readOnly: true,
+                                readOnly: _isEnable,
                                 inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CardNumberInputFormatter()
                                 ],
                                 maxLength: 15,
                                 controller: mobileController,
-                                style: TextStyle(color: Colors.grey),
+                                style: TextStyle(
+                                    color:
+                                        _isEnable ? Colors.grey : Colors.black),
                                 decoration: InputDecoration(
                                     hintText: mobile,
                                     hintStyle: TextStyle(fontSize: textSize12)),
@@ -369,13 +438,16 @@ class UserProfileState extends State<UserProfile> {
                               padding: EdgeInsets.only(top: 8),
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
-                                readOnly: true,
+                                readOnly: _isEnable,
                                 inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CardNumberInputFormatter()
                                 ],
                                 maxLength: 15,
                                 controller: emergencyController,
-                                style: TextStyle(color: Colors.grey),
+                                style: TextStyle(
+                                    color:
+                                        _isEnable ? Colors.grey : Colors.black),
                                 decoration: InputDecoration(
                                     hintText: emergencyContact,
                                     hintStyle: TextStyle(fontSize: textSize12)),
@@ -393,7 +465,6 @@ class UserProfileState extends State<UserProfile> {
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
-
                             Container(
                               margin:
                                   EdgeInsets.only(top: margin30, bottom: 20),
@@ -413,9 +484,7 @@ class UserProfileState extends State<UserProfile> {
                                             : fromDate.toString(),
                                         style: TextStyle(
                                             fontSize: textSize12,
-                                            color: fromDate == null
-                                                ? Colors.grey
-                                                : Colors.grey),
+                                            color: Colors.grey),
                                       )),
                                   Spacer(),
                                   GestureDetector(
@@ -433,7 +502,6 @@ class UserProfileState extends State<UserProfile> {
                                 ],
                               ),
                             ),
-
                             Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
@@ -448,12 +516,11 @@ class UserProfileState extends State<UserProfile> {
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
-
                             Padding(
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
                                 keyboardType: TextInputType.text,
-                                readOnly: _isEnable,
+                                readOnly: true,
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return fieldIsRequired;
@@ -461,9 +528,7 @@ class UserProfileState extends State<UserProfile> {
                                   return null;
                                 },
                                 controller: emiratesController,
-                                style: TextStyle(
-                                    color:
-                                        _isEnable ? Colors.grey : Colors.black),
+                                style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
                                     hintText: emiratesId,
                                     hintStyle: TextStyle(fontSize: textSize12)),
@@ -489,6 +554,63 @@ class UserProfileState extends State<UserProfile> {
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
+                            _isEnable
+                                ? Padding(
+                                    padding: EdgeInsets.only(top: 12),
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.text,
+                                      readOnly: true,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return fieldIsRequired;
+                                        }
+                                        return null;
+                                      },
+                                      controller: cityController,
+                                      style: TextStyle(color: Colors.grey),
+                                      decoration: InputDecoration(
+                                          hintText: address,
+                                          hintStyle:
+                                              TextStyle(fontSize: textSize12)),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.only(top: 18),
+                                    child: DropdownButton(
+                                      hint: selectedCity == null
+                                          ? Text('Select Emirates')
+                                          : Text(
+                                              selectedCity,
+                                              style: TextStyle(
+                                                  fontSize: textSize14,
+                                                  color: _isEnable
+                                                      ? Colors.grey
+                                                      : Colors.black),
+                                            ),
+                                      isExpanded: true,
+                                      iconSize: 30.0,
+                                      style: TextStyle(fontSize: textSize14),
+                                      items: _cities.map(
+                                        (val) {
+                                          return DropdownMenuItem<String>(
+                                            value: val,
+                                            child: Text(
+                                              val,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: textSize14),
+                                            ),
+                                          );
+                                        },
+                                      ).toList(),
+                                      onChanged: (val) {
+                                        setState(
+                                          () {
+                                            selectedCity = val;
+                                          },
+                                        );
+                                      },
+                                    )),
                             Container(
                               margin: EdgeInsets.only(top: padding25),
                               height: button_height,
@@ -497,72 +619,91 @@ class UserProfileState extends State<UserProfile> {
                                 onPressed: () {
                                   if (!_isEnable) {
                                     if (formKey.currentState.validate()) {
-                                      Map<String, String> parms = {
-                                        FIRSTNAME: firstNameController.text
-                                            .toString()
-                                            .trim(),
-                                        MIDDLENAME: middletNameController.text
-                                            .toString()
-                                            .trim(),
-                                        LASTNAME: lastNameController.text
-                                            .toString()
-                                            .trim(),
-                                        BIRTH_DATE: fromDate,
-                                        EMIRATES_ID: emiratesController.text
-                                            .toString()
-                                            .trim(),
-                                        DESIGNATION: designationController.text
-                                            .toString()
-                                            .trim(),
-                                        ADDRESS: addressController.text
-                                            .toString()
-                                            .trim(),
-                                        DEVICE_TYPE: deviceType,
-                                        DEVICE_TOKEN: deviceTokenValue,
-                                      };
-
-                                      isConnectedToInternet().then((internet) {
-                                        showProgress(
-                                            context, "Please wait.....");
-                                        if (internet != null && internet) {
-                                          updateUserProfileApi(
-                                                  auth, _imageFile, parms)
-                                              .then((response) {
+                                      if (selectedCity == null) {
+                                        showDialogBox(context, 'City',
+                                            'Please select your city');
+                                      } else {
+                                        Map<String, String> parms = {
+                                          FIRSTNAME: firstNameController.text
+                                              .toString()
+                                              .trim(),
+                                          MIDDLENAME: middletNameController.text
+                                              .toString()
+                                              .trim(),
+                                          LASTNAME: lastNameController.text
+                                              .toString()
+                                              .trim(),
+                                          BIRTH_DATE: sendDate,
+                                          MOBILE: mobileController.text
+                                              .toString()
+                                              .trim(),
+                                          EMEREGENCY_NUMBER: emergencyController
+                                              .text
+                                              .toString()
+                                              .trim(),
+                                          CITY: selectedCity,
+                                          EMIRATES_ID: emiratesController.text
+                                              .toString()
+                                              .trim(),
+                                          DESIGNATION: designationController
+                                              .text
+                                              .toString()
+                                              .trim(),
+                                          ADDRESS: addressController.text
+                                              .toString()
+                                              .trim(),
+//                                          GENDER: genderItem.toLowerCase(),
+                                          DEVICE_TYPE: deviceType,
+                                          DEVICE_TOKEN: deviceTokenValue,
+                                        };
+                                        print("UpateProfiel$parms");
+                                        isConnectedToInternet()
+                                            .then((internet) {
+                                          showProgress(
+                                              context, "Please wait.....");
+                                          if (internet != null && internet) {
+                                            updateUserProfileApi(
+                                                    auth, _imageFile, parms)
+                                                .then((response) {
+                                              dismissDialog(context);
+                                              if (response.status) {
+                                                if (response.data != null &&
+                                                    response.data.user !=
+                                                        null) {
+                                                  image =
+                                                      response.data.user.image;
+                                                  cityController.text =
+                                                      response.data.user.city;
+                                                  setString(userImage,
+                                                      response.data.user.image);
+                                                }
+                                                _isEnable = true;
+                                                setState(() {});
+                                              } else {
+                                                var errorMessage = '';
+                                                if (response.error != null) {
+                                                  errorMessage =
+                                                      response.error.toString();
+                                                } else if (response.errors !=
+                                                    null) {
+                                                  errorMessage = response
+                                                      .errors.email
+                                                      .toString();
+                                                }
+                                                showDialogBox(context, "Error!",
+                                                    errorMessage);
+                                              }
+                                            });
+                                          } else {
+                                            showDialogBox(
+                                                context,
+                                                internetError,
+                                                pleaseCheckInternet);
                                             dismissDialog(context);
-                                            if (response.status) {
-                                              if (response.data != null &&
-                                                  response.data.user != null) {
-                                                image =
-                                                    response.data.user.image;
-                                                setString(userImage,
-                                                    response.data.user.image);
-                                              }
-                                              _isEnable = true;
-                                              setState(() {});
-                                            } else {
-                                              var errorMessage = '';
-                                              if (response.error != null) {
-                                                errorMessage =
-                                                    response.error.toString();
-                                              } else if (response.errors !=
-                                                  null) {
-                                                errorMessage = response
-                                                    .errors.email
-                                                    .toString();
-                                              }
-                                              showDialogBox(context, "Error!",
-                                                  errorMessage);
-                                            }
-                                          });
-                                        } else {
-                                          showDialogBox(
-                                              context,
-                                              internetError,
-                                              pleaseCheckInternet);
+                                          }
                                           dismissDialog(context);
-                                        }
-                                        dismissDialog(context);
-                                      });
+                                        });
+                                      }
                                     }
                                   }
                                   _isEnable = false;
@@ -589,6 +730,25 @@ class UserProfileState extends State<UserProfile> {
                 ))
           ],
         ),
+      ),
+    );
+  }
+
+  Widget radiobutton(String title) {
+    return Expanded(
+      child: RadioListTile(
+        groupValue: genderItem,
+        activeColor: Colors.black,
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 12),
+        ),
+        value: title,
+        onChanged: (val) {
+          setState(() {
+            genderItem = val;
+          });
+        },
       ),
     );
   }

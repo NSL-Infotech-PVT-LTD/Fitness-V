@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Event/eventDetail.dart';
 import 'package:volt/Methods.dart';
@@ -285,8 +286,6 @@ class _EventState extends State<EventClass>
                                       //    mainAxisAlignment: MainAxisAlignment.start,
                                       children: <Widget>[
                                         Container(
-                                            //      color:Colors.red,
-                                            //   padding: EdgeInsets.only(left:10),
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               myData[index]['name'],
@@ -309,7 +308,8 @@ class _EventState extends State<EventClass>
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               "Location : ${myData[index]['location_detail']['name']}\n"
-                                              "From : ${myData[index]['start_date']}\nTo : ${myData[index]['end_date']}",
+                                              "From : ${DateFormat("dd/MM/yyyy").format(DateFormat("yyyy-MM-dd").parse(myData[index]['start_date']))}\n"
+                                              "To : ${DateFormat("dd/MM/yyyy").format(DateFormat("yyyy-MM-dd").parse(myData[index]['end_date']))}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 10.0),
@@ -327,7 +327,7 @@ class _EventState extends State<EventClass>
                                           },
                                           child: Container(
                                             margin: EdgeInsets.only(top: 20),
-                                            width: SizeConfig.screenWidth,
+                                            width:  SizeConfig.screenWidth*.86,
                                             height: 50,
                                             color: Colors.black45,
                                             child: Center(
@@ -422,42 +422,39 @@ class _EventState extends State<EventClass>
                                             color: Colors.white,
                                             height: 9,
                                           )),
-//                                                  SizedBox(
-//                                                    height: SizeConfig.blockSizeVertical * 3,
-//                                                  ),
                                       Container(
                                           // padding: EdgeInsets.all(20),
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "Location : ${myDatapast[index]['location_detail']['name']}\n"
-                                            "From : ${myDatapast[index]['start_date']}\nTo : ${myDatapast[index]['end_date']}",
-                                            maxLines: 2,
+                                            "From : ${DateFormat("dd/MM/yyyy").format(DateFormat("yyyy-MM-dd").parse(myDatapast[index]['start_date']))}"
+                                            "\nTo : ${DateFormat("dd/MM/yyyy").format(DateFormat("yyyy-MM-dd").parse(myDatapast[index]['end_date']))}",
+                                            maxLines: 3,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10.0),
                                           )),
-
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
                                               context,
                                               ScaleRoute(
                                                   page: EventDetail(
-                                                    id: myDatapast[index]['id'],
-                                                    status: recent,
-                                                  )));
+                                                id: myDatapast[index]['id'],
+                                                status: recent,
+                                              )));
                                         },
                                         child: Container(
                                           margin: EdgeInsets.only(top: 20),
-                                          width: SizeConfig.screenWidth,
+                                          width: SizeConfig.screenWidth*.86,
                                           height: 50,
                                           color: Colors.black45,
                                           child: Center(
                                               child: Text(
-                                                'View Detail',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              )),
+                                            'View Detail',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
                                         ),
                                       )
                                     ],

@@ -144,6 +144,7 @@ class SelectSessionState extends State<SelectSession> {
                               ? SizeConfig.screenWidth * .55
                               : SizeConfig.screenWidth * .72,
                           child: Slider(
+
                               value: valueHolder.toDouble() == 0
                                   ? 1
                                   : valueHolder.toDouble(),
@@ -283,6 +284,7 @@ class SelectSessionState extends State<SelectSession> {
                               builder: (context) => YourBooking(
                                     id: widget.id,
                                     image: widget.image,
+                                    wantToShowPrice: _wantToShowPrice,
                                     isGroupClass: widget.isGroupClass,
                                     name: widget.name,
                                     payment: sendValue().toString(),
@@ -326,7 +328,6 @@ class SelectSessionState extends State<SelectSession> {
         image: BASE_URL +
             "${widget.isGroupClass ? imageClassUrl : trainerUser}" +
             imgLink,
-        fit: BoxFit.cover,
         width: SizeConfig.screenWidth,
         height: 250,
       );

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/GroupClasses/group_classes.dart';
 import 'package:volt/Methods/Method.dart';
@@ -41,8 +42,7 @@ class _DetailState extends State<GroupClassDetail> {
         .then((value) => {auth = value})
         .whenComplete(() => {_getClassDetail(auth)});
 
-    getString(roleType)
-        .then((value) => {_roleType = value});
+    getString(roleType).then((value) => {_roleType = value});
     super.initState();
   }
 
@@ -62,8 +62,13 @@ class _DetailState extends State<GroupClassDetail> {
               className = response.data.class_detail.name;
               classImage = response.data.class_detail.image;
               classDesc = response.data.class_detail.description;
-              startAndEndDate =
-                  response.data.start_date + " - " + response.data.end_date;
+
+              startAndEndDate = DateFormat("dd/MM/yyyy").format(
+                      DateFormat("yyyy-MM-dd")
+                          .parse(response.data.start_date)) +
+                  " - " +
+                  DateFormat("dd/MM/yyyy").format(
+                      DateFormat("yyyy-MM-dd").parse(response.data.end_date));
               recurring = response.data.class_type;
               seatsLeft = response.data.available_capacity.toString();
               duration = response.data.duration;
@@ -380,7 +385,7 @@ class _DetailState extends State<GroupClassDetail> {
                           image: classImage,
                           name: className,
                           isGroupClass: true,
-                              roleType: _roleType,
+                          roleType: _roleType,
                         )));
                   },
                   color: Colors.black,

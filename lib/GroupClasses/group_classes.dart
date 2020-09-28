@@ -23,6 +23,8 @@ class GroupClassState extends State<GroupClass> {
   ScrollController _sc = new ScrollController();
   bool isLoading = false;
   List users = new List();
+  String deleteId = "";
+  int currentIndex = 0;
 
   void _getList(String auth, int index) async {
     isConnectedToInternet().then((internet) {
@@ -42,6 +44,7 @@ class GroupClassState extends State<GroupClass> {
             if (response.status) {
               if (response.data != null && response.data.data.length > 0) {
                 totalPage = response.data.last_page;
+                deleteId = response.data.is_booked_by_me_booking_id.toString();
                 List tList = new List();
                 for (int i = 0; i < response.data.data.length; i++) {
                   tList.add(response.data.data[i]);
@@ -67,10 +70,10 @@ class GroupClassState extends State<GroupClass> {
     });
   }
 
+  String auth = '';
+
   @override
   void initState() {
-    String auth = '';
-
     getString(USER_AUTH)
         .then((value) => {auth = value})
         .whenComplete(() => {_getList(auth, page)});
@@ -89,6 +92,79 @@ class GroupClassState extends State<GroupClass> {
     _sc.dispose();
     page = 1;
     super.dispose();
+  }
+
+  void doYoWantToCntinue(bool _isBookedByMe, String id) {
+    showCupertinoDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title:
+                Text(_isBookedByMe ? "Booking cancel" : "Booking confirmation"),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text("Do you want to continue ?",
+                  style: TextStyle(wordSpacing: 1)),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("Yes"),
+                onPressed: () {
+                  if (!_isBookedByMe) {
+                    var isConfirmed = false;
+                    bookingFunction(auth, context, eventKey, id, '')
+                        .then((value) => isConfirmed = value)
+                        .whenComplete(() => {
+                              if (isConfirmed) {_isBookedByMe = true}
+                            });
+                    if (isConfirmed) {
+                      setState(() {});
+                    }
+                  } else {
+                    _deleteBooking(deleteId);
+                  }
+                },
+                isDestructiveAction: true,
+              ),
+              CupertinoDialogAction(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                isDestructiveAction: true,
+              ),
+            ],
+          );
+        });
+  }
+
+  void _deleteBooking(String id) async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Cancelling....");
+
+        Map<String, String> parms = {
+          'id': id,
+        };
+        bookingDeleteApi(auth, parms).then((response) {
+          if (response.status) {
+            if (response.data != null) {
+              print(response.data.message);
+              //
+              users[currentIndex]['is_booked_by_me'] = false;
+              setState(() {});
+              Navigator.pop(context);
+            }
+          } else {
+            if (response.error != null)
+              showDialogBox(context, "Error!", response.error);
+          }
+        }).whenComplete(() => dismissDialog(context));
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
+      }
+    });
   }
 
   @override
@@ -184,7 +260,7 @@ class GroupClassState extends State<GroupClass> {
             // Add one more item for progress indicator
             padding: EdgeInsets.symmetric(vertical: 8.0),
             itemBuilder: (BuildContext context, int index) {
-              if (index > 0 && index == users.length) {
+              if (index == users.length) {
                 return buildProgressIndicatorCenter(isLoading);
               } else {
                 return users.length > 0
@@ -199,7 +275,26 @@ class GroupClassState extends State<GroupClass> {
                             is_booked_by_me: users[index]['is_booked_by_me'],
                             id: users[index]['id'],
                             leftSeats:
-                                users[index]['available_capacity'].toString()))
+                                users[index]['available_capacity'].toString()),
+                        deleteCallBack: () {
+                          currentIndex = index;
+                          deleteId = users[index]['is_booked_by_me_booking_id']
+                              .toString();
+                          if (users[index]['available_capacity'].toString() !=
+                                  '0' &&
+                              !users[index]['is_booked_by_me']) {
+                            Navigator.push(
+                                context,
+                                ScaleRoute(
+                                    page: GroupClassDetail(
+                                  id: users[index]['id'],
+                                )));
+                          } else {
+                            doYoWantToCntinue(users[index]['is_booked_by_me'],
+                                users[index]['id'].toString());
+                          }
+                        },
+                      )
                     : Material(
                         color: Colors.white,
                         child: Center(
@@ -237,8 +332,10 @@ class CustomGroupClass {
 
 class CustomGroupState extends StatelessWidget {
   final CustomGroupClass items;
+  final VoidCallback deleteCallBack;
 
-  const CustomGroupState({Key key, @required this.items}) : super(key: key);
+  const CustomGroupState({Key key, @required this.items, this.deleteCallBack})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -320,26 +417,22 @@ class CustomGroupState extends StatelessWidget {
           Container(
             height: 50,
             child: RaisedButton(
-                onPressed: () {
-                  if (items.leftSeats != '0' && !items.is_booked_by_me)
-                    Navigator.push(
-                        context,
-                        ScaleRoute(
-                            page: GroupClassDetail(
-                          id: items.id,
-                        )));
-                },
+                onPressed: deleteCallBack,
                 color: items.leftSeats != '0' && !items.is_booked_by_me
                     ? Colors.black
-                    : Colors.black45,
+                    : CColor.CancelBTN,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(button_radius)),
                 child: Center(
                   child: Text(
                     items.leftSeats != '0'
-                        ? !items.is_booked_by_me ? 'View Detail' : alreadyBooked
+                        ? !items.is_booked_by_me
+                            ? 'View Detail'
+                            : 'Already Booked Do you want to cancel ?'
                         : 'House Full',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: !items.is_booked_by_me ? 14 : 10),
                   ),
                 )),
           ),

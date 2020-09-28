@@ -67,6 +67,7 @@ class ProfileState extends State<ProfileScreen> {
 
         getPrivacyApi().then((response) {
           dismissDialog(context);
+
           if (response.status) {
             if (response.data != null) {
               if (response.data.config != null &&
