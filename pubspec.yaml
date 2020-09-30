@@ -43,6 +43,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.7.5
+  flutter_html: ^0.8.2
 
 flutter_icons:
   image_path: "assets/images/app_logo.jpg"

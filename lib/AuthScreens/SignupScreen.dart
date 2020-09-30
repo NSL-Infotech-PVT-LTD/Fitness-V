@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 import 'package:volt/util/number_format.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../Methods.dart';
 import '../Methods/api_interface.dart';
@@ -610,6 +612,8 @@ class SignupState extends State<SignupScreen> {
                             child: RaisedButton(
                               onPressed: () {
 //                                _buildMagnifierScreen();
+
+
                                 if (formKey.currentState.validate()) {
                                   if (fromDate == null) {
                                     showDialogBox(context, 'Date of Birth',
@@ -911,12 +915,7 @@ class SignupState extends State<SignupScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text(msg,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ),
-                            textAlign: TextAlign.center),
+                        child: Html(data:msg),
                       ),
                       SizedBox(
                         height: 50,

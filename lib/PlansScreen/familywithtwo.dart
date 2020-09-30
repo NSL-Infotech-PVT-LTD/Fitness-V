@@ -6,6 +6,7 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../AuthScreens/SignupScreen.dart';
 import '../AuthScreens/SuccessScreen.dart';
@@ -105,10 +106,10 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
     return WillPopScope(
         // ignore: missing_return
         onWillPop: () {
-          if (result != null || result1 != null){
+          if (result != null || result1 != null) {
             exitDialog(context);
             return new Future(() => false);
-          }else{
+          } else {
             Navigator.pop(context);
           }
         },
@@ -820,7 +821,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                       } else if (response.errors.email_2 !=
                                           null) {
                                         errorMessage = response.errors.email_2;
-                                         name = result2[FIRSTNAME + "_2"];
+                                        name = result2[FIRSTNAME + "_2"];
                                         setState(() {
                                           errorMessage1 =
                                               response.errors.email_2;
@@ -844,8 +845,8 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                                 }
                               });
                             } else {
-                              showDialogBox(context, internetError,
-                                  pleaseCheckInternet);
+                              showDialogBox(
+                                  context, internetError, pleaseCheckInternet);
                               dismissDialog(context);
                             }
                             dismissDialog(context);
@@ -911,7 +912,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
               setState(() {
                 acceptTerms = value;
                 if (value) {
-                //  termsBottom('Terms of Services');
+                  //  termsBottom('Terms of Services');
                 }
               });
             },
@@ -942,6 +943,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
       ),
     );
   }
+
   void getTerms() async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
@@ -968,7 +970,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
     });
   }
 
-  void termsBottom(String title,String msg) {
+  void termsBottom(String title, String msg) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -1013,12 +1015,9 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text(msg,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ),
-                            textAlign: TextAlign.center),
+                        child: Html(
+                          data: msg,
+                        ),
                       ),
                       SizedBox(
                         height: 50,

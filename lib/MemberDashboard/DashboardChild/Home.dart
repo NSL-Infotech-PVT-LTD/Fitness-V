@@ -46,48 +46,127 @@ class HomeState extends State<Home> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        SizedBox(
+          height: 15,
+        ),
+//        Container(
+//            padding: EdgeInsets.all(20),
+//            child: Column(
+//              children: <Widget>[
+//                Row(
+//                  children: <Widget>[
+//                    Container(
+//                      decoration: BoxDecoration(boxShadow: [
+//                        BoxShadow(
+//                          color: Color(0xFFE0E0E0),
+//                          blurRadius: 8.0,
+//                        ),
+//                      ]),
+//                      child: SvgPicture.asset(
+//                        baseImageAssetsUrl + 'free.svg',
+//                        height: 23,
+//                        fit: BoxFit.cover,
+//                      ),
+//                    ),
+//                    SizedBox(
+//                      width: 10,
+//                    ),
+//                    Text(
+//                      'Free 1 Day Pass',
+//                      style: TextStyle(fontSize: 12, color: Color(0xff707070)),
+//                    )
+//                  ],
+//                ),
+//                SizedBox(
+//                  height: 20,
+//                ),
+//                Image.asset(
+//                  baseImageAssetsUrl + 'couple.png',
+//                  height: 165,
+//                  width: SizeConfig.blockSizeHorizontal * 90,
+//                  fit: BoxFit.cover,
+//                ),
+//                SizedBox(
+//                  height: 5,
+//                ),
+//              ],
+//            )),
+
         Container(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFFE0E0E0),
-                          blurRadius: 8.0,
-                        ),
-                      ]),
-                      child: SvgPicture.asset(
-                        baseImageAssetsUrl + 'free.svg',
-                        height: 23,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Free 1 Day Pass',
-                      style: TextStyle(fontSize: 12, color: Color(0xff707070)),
-                    )
-                  ],
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.blockSizeVertical * 25,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5))),
+            child: Stack(children: <Widget>[
+              Positioned(
+                bottom: 6,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: _planImage == null
+                      ? Image.asset(
+                    baseImageAssetsUrl + 'logo_black.png',
+                    height: SizeConfig.blockSizeVertical * 25,
+                    width: SizeConfig.blockSizeHorizontal * 90,
+                    fit: BoxFit.cover,
+                  )
+                      : blackPlaceHolder(
+                      baseImageAssetsUrl,
+                      _planImage,
+                      SizeConfig.blockSizeVertical * 25,
+                      SizeConfig.blockSizeHorizontal * 90),
                 ),
-                SizedBox(
-                  height: 20,
+              ),
+              Positioned(
+                bottom: 6,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Image.asset(
+                      'assets/images/gredient.png',
+                      height: SizeConfig.blockSizeVertical * 25,
+                      width: SizeConfig.blockSizeHorizontal * 90,
+                      fit: BoxFit.fill,
+                    )),
+              ),
+              Positioned(
+                bottom: 65,
+                left: 40,
+                child: Text(
+                  "Active Plan",
+                  style: TextStyle(color: Colors.white, fontSize: textSize22),
                 ),
-                Image.asset(
-                  baseImageAssetsUrl + 'couple.png',
-                  height: 165,
-                  width: SizeConfig.blockSizeHorizontal * 90,
-                  fit: BoxFit.cover,
+              ),
+              Positioned(
+                bottom: 45,
+                left: 40,
+                child: Text(
+                  "Plan Name : ${_planName == null || _planName.isEmpty ? "Not found" : _planName}",
+                  style: TextStyle(color: Colors.white, fontSize: textSize14),
                 ),
-                SizedBox(
-                  height: 5,
+              ),
+              Positioned(
+                bottom: 31,
+                left: 40,
+                child: Text(
+                  "Category : ${_roleCategory == null || _roleCategory.isEmpty ? "Not found" : _roleCategory}",
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(.9), fontSize: 10),
                 ),
-              ],
-            )),
+              ),
+              Positioned(
+                bottom: 15,
+                left: 40,
+                child: Text(
+                  "${_rolePlan == null || _rolePlan.isEmpty ? "Not found" : _rolePlan}",
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(.8), fontSize: 10),
+                ),
+              ),
+            ])),
+        SizedBox(
+          height: 15,
+        ),
         Divider(
           height: .5,
           color: CColor.PRIMARYCOLOR,
@@ -184,78 +263,6 @@ class HomeState extends State<Home> {
           height: 20,
         ),
 
-        Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.blockSizeVertical * 25,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    bottomRight: Radius.circular(5))),
-            child: Stack(children: <Widget>[
-              Positioned(
-                bottom: 6,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: _planImage == null
-                      ? Image.asset(
-                          baseImageAssetsUrl + 'logo_black.png',
-                          height: SizeConfig.blockSizeVertical * 25,
-                          width: SizeConfig.blockSizeHorizontal * 90,
-                          fit: BoxFit.cover,
-                        )
-                      : blackPlaceHolder(
-                          baseImageAssetsUrl,
-                          _planImage,
-                          SizeConfig.blockSizeVertical * 25,
-                          SizeConfig.blockSizeHorizontal * 90),
-                ),
-              ),
-              Positioned(
-                bottom: 6,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Image.asset(
-                      'assets/images/gredient.png',
-                      height: SizeConfig.blockSizeVertical * 25,
-                      width: SizeConfig.blockSizeHorizontal * 90,
-                      fit: BoxFit.fill,
-                    )),
-              ),
-              Positioned(
-                bottom: 65,
-                left: 40,
-                child: Text(
-                  "Active Plan",
-                  style: TextStyle(color: Colors.white, fontSize: textSize22),
-                ),
-              ),
-              Positioned(
-                bottom: 45,
-                left: 40,
-                child: Text(
-                  "Plan Name : ${_planName == null || _planName.isEmpty ? "Not found" : _planName}",
-                  style: TextStyle(color: Colors.white, fontSize: textSize14),
-                ),
-              ),
-              Positioned(
-                bottom: 31,
-                left: 40,
-                child: Text(
-                  "Category : ${_roleCategory == null || _roleCategory.isEmpty ? "Not found" : _roleCategory}",
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(.9), fontSize: 10),
-                ),
-              ),
-              Positioned(
-                bottom: 15,
-                left: 40,
-                child: Text(
-                  "${_rolePlan == null || _rolePlan.isEmpty ? "Not found" : _rolePlan}",
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(.8), fontSize: 10),
-                ),
-              ),
-            ])),
 
 //        Container(
 //            padding: EdgeInsets.all(20),

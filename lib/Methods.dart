@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
+import 'package:flutter_html/flutter_html.dart';
+
 
 import 'Bookings/BookingConfirmed.dart';
 import 'Methods/Method.dart';
@@ -118,12 +118,7 @@ void termsBottom(String title, String msg, context) {
                     ),
                     Padding(
                       padding: EdgeInsets.all(20),
-                      child: Text(msg == null ? loremIpsum : msg,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          textAlign: TextAlign.center),
+                      child:Html(data:msg)
                     ),
                     SizedBox(
                       height: 50,

@@ -8,8 +8,8 @@ import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
 import '../AuthScreens/SignupScreen.dart';
-import '../AuthScreens/SuccessScreen.dart';
-import '../Methods.dart';
+import 'package:flutter_html/flutter_html.dart';
+
 import '../Methods/Method.dart';
 import '../Methods/api_interface.dart';
 import '../Value/Strings.dart';
@@ -717,12 +717,7 @@ class _SpouseTypeState extends State<SpouseType> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text(msg,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ),
-                            textAlign: TextAlign.center),
+                        child: Html(data:msg),
                       ),
                       SizedBox(
                         height: 50,
