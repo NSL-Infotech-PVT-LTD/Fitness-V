@@ -359,7 +359,8 @@ class UserProfileState extends State<UserProfile> {
                                 controller: firstNameController,
                                 style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
-                                    hintText: firstname + '*',
+                                    labelText: firstname + '*',
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -375,7 +376,8 @@ class UserProfileState extends State<UserProfile> {
                                 controller: middletNameController,
                                 style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
-                                    hintText: midlename,
+                                    labelText: midlename ,
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -397,7 +399,8 @@ class UserProfileState extends State<UserProfile> {
                                 controller: lastNameController,
                                 style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
-                                    hintText: lastname + '*',
+                                    labelText: lastname + '*',
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -411,7 +414,8 @@ class UserProfileState extends State<UserProfile> {
                                 controller: genderController,
                                 style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
-                                    hintText: "Gender",
+                                    labelText: "Gender",
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -425,12 +429,21 @@ class UserProfileState extends State<UserProfile> {
                                   CardNumberInputFormatter()
                                 ],
                                 maxLength: 15,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return fieldIsRequired;
+                                  } else if (value.length < 9) {
+                                    return 'Please Enter Valid Number';
+                                  }
+                                  return null;
+                                },
                                 controller: mobileController,
                                 style: TextStyle(
                                     color:
                                         _isEnable ? Colors.grey : Colors.black),
                                 decoration: InputDecoration(
-                                    hintText: mobile,
+                                    labelText: mobile,
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -444,12 +457,20 @@ class UserProfileState extends State<UserProfile> {
                                   CardNumberInputFormatter()
                                 ],
                                 maxLength: 15,
-                                controller: emergencyController,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return fieldIsRequired;
+                                  } else if (value.length < 9) {
+                                    return 'Please Enter Valid Number';
+                                  }
+                                  return null;
+                                },   controller: emergencyController,
                                 style: TextStyle(
                                     color:
                                         _isEnable ? Colors.grey : Colors.black),
                                 decoration: InputDecoration(
-                                    hintText: emergencyContact,
+                                    labelText: emergencyContact,
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -461,7 +482,8 @@ class UserProfileState extends State<UserProfile> {
                                 controller: emailController,
                                 style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
-                                    hintText: email + '*',
+                                    labelText: email + '*',
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -502,20 +524,21 @@ class UserProfileState extends State<UserProfile> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 0),
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                readOnly: _isEnable,
-                                controller: designationController,
-                                style: TextStyle(
-                                    color:
-                                        _isEnable ? Colors.grey : Colors.black),
-                                decoration: InputDecoration(
-                                    hintText: designation,
-                                    hintStyle: TextStyle(fontSize: textSize12)),
-                              ),
-                            ),
+//                            Padding(
+//                              padding: EdgeInsets.only(top: 0),
+//                              child: TextFormField(
+//                                keyboardType: TextInputType.text,
+//                                readOnly: _isEnable,
+//                                controller: designationController,
+//                                style: TextStyle(
+//                                    color:
+//                                        _isEnable ? Colors.grey : Colors.black),
+//                                decoration: InputDecoration(
+//                                    labelText: designation,
+//                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+//                                    hintStyle: TextStyle(fontSize: textSize12)),
+//                              ),
+//                            ),
                             Padding(
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
@@ -530,7 +553,8 @@ class UserProfileState extends State<UserProfile> {
                                 controller: emiratesController,
                                 style: TextStyle(color: Colors.grey),
                                 decoration: InputDecoration(
-                                    hintText: emiratesId,
+                                    labelText: emiratesId,
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -550,7 +574,8 @@ class UserProfileState extends State<UserProfile> {
                                     color:
                                         _isEnable ? Colors.grey : Colors.black),
                                 decoration: InputDecoration(
-                                    hintText: address,
+                                    labelText: address,
+                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -569,7 +594,8 @@ class UserProfileState extends State<UserProfile> {
                                       controller: cityController,
                                       style: TextStyle(color: Colors.grey),
                                       decoration: InputDecoration(
-                                          hintText: address,
+                                          labelText: "City",
+                                          labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                           hintStyle:
                                               TextStyle(fontSize: textSize12)),
                                     ),
@@ -645,10 +671,10 @@ class UserProfileState extends State<UserProfile> {
                                           EMIRATES_ID: emiratesController.text
                                               .toString()
                                               .trim(),
-                                          DESIGNATION: designationController
-                                              .text
-                                              .toString()
-                                              .trim(),
+//                                          DESIGNATION: designationController
+//                                              .text
+//                                              .toString()
+//                                              .trim(),
                                           ADDRESS: addressController.text
                                               .toString()
                                               .trim(),

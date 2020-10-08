@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
@@ -652,31 +653,38 @@ class BookingView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          'Service Hours',
-                                          style: TextStyle(
-                                              color: Colors.black38,
-                                              fontSize: 10),
-                                        ),
-                                        Text(
-                                          customBooking.serviceHours == 'null'
-                                              ? '--'
-                                              : '${customBooking.serviceHours == null ? '' : customBooking.serviceHours} Hours',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
+                                    Visibility(
+                                        visible: customBooking.serviceHours !=
+                                            "null",
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'Service Hours',
+                                              style: TextStyle(
+                                                  color: Colors.black38,
+                                                  fontSize: 10),
+                                            ),
+                                            Text(
+                                              customBooking.serviceHours ==
+                                                      'null'
+                                                  ? '--'
+                                                  : '${customBooking.serviceHours == null ? '' : customBooking.serviceHours} Hours',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        )),
                                     SizedBox(
-                                      width: 20,
+                                      width:
+                                          customBooking.serviceHours == 'null'
+                                              ? 0
+                                              : 20,
                                     ),
                                     Column(
                                       mainAxisAlignment:
@@ -691,7 +699,7 @@ class BookingView extends StatelessWidget {
                                               fontSize: 10),
                                         ),
                                         Text(
-                                          customBooking.bookingDate,
+                                          "${DateFormat("dd/MM/yyyy hh:mm a").format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(customBooking.bookingDate))}",
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 14,

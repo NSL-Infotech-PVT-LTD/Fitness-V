@@ -520,7 +520,8 @@ class SignupState extends State<SignupScreen> {
 //                        ],
 //                      ),
                           Visibility(
-                            visible: widget.formType.isEmpty ? true : false,
+//                            visible: widget.formType.isEmpty ? true : false,
+                            visible: false,
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
@@ -668,9 +669,9 @@ class SignupState extends State<SignupScreen> {
                                           .text
                                           .toString()
                                           .trim(),
-                                      DESIGNATION: designationController.text
-                                          .toString()
-                                          .trim(),
+//                                      DESIGNATION: designationController.text
+//                                          .toString()
+//                                          .trim(),
                                       ADDRESS: addressController.text
                                           .toString()
                                           .trim(),

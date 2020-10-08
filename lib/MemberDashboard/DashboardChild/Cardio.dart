@@ -197,7 +197,7 @@ class _CardioState extends State<Cardio> {
                               Text(
                                   checkList != null && checkList.length > 0
                                       ? checkList[0]['expirence'] +
-                                          ' years experineced'
+                                          ' years of experience'
                                       : '',
                                   style: TextStyle(
                                       fontSize: 7, color: Color(0xffc1c1c1))),
@@ -249,7 +249,7 @@ class _CardioState extends State<Cardio> {
                               Text(
                                   checkList != null && checkList.length > 1
                                       ? checkList[1]['expirence'] +
-                                          ' years experienced'
+                                          ' years of experience'
                                       : '',
                                   style: TextStyle(
                                       fontSize: 7, color: Color(0xffc1c1c1))),
@@ -364,7 +364,7 @@ class RecomendedTrainer extends StatelessWidget {
                       image: BASE_URL +
                           'uploads/trainer-user/' +
                           trainerClass.imgLink,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.fitHeight,
                       width: 150,
                       height: 150.0,
                     ),

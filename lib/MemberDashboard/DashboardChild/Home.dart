@@ -106,7 +106,7 @@ class HomeState extends State<Home> {
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: _planImage == null
                       ? Image.asset(
-                    baseImageAssetsUrl + 'logo_black.png',
+                    baseImageAssetsUrl + 'two_lady.jpg',
                     height: SizeConfig.blockSizeVertical * 25,
                     width: SizeConfig.blockSizeHorizontal * 90,
                     fit: BoxFit.cover,

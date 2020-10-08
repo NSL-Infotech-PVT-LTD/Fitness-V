@@ -428,7 +428,7 @@ class CustomGroupState extends StatelessWidget {
                     items.leftSeats != '0'
                         ? !items.is_booked_by_me
                             ? 'View Detail'
-                            : 'Already Booked Do you want to cancel ?'
+                            : 'Already booked! Do you want to cancel?'
                         : 'House Full',
                     style: TextStyle(
                         color: Colors.white,

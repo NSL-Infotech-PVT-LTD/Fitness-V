@@ -154,7 +154,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
                             child: Text(
                               users[index]['expirence'] == null
                                   ? 'No experience'
-                                  : ("${users[index]['expirence']} years experienced"),
+                                  : ("${users[index]['expirence']} years of experience"),
                               style: TextStyle(
                                   fontSize: 8.5,
                                   fontWeight: FontWeight.bold,
