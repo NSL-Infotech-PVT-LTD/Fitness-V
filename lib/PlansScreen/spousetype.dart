@@ -55,8 +55,8 @@ class _SpouseTypeState extends State<SpouseType> {
                 formType: formType,
                 editData: result,
                 isSingle: false,
-                isEmailError:
-                    errorMessage1.contains("email has") ? true : false,
+              isCityTrue: true,
+              isEmailError: errorMessage1.contains("email has") ? true : false,
               )),
     );
 
@@ -71,7 +71,7 @@ class _SpouseTypeState extends State<SpouseType> {
                 formType: formType,
                 editData: result1,
                 isSingle: false,
-                isEmailError: errorMessage1.contains("email 1") ? true : false,
+              isCityTrue: false, isEmailError: errorMessage1.contains("email 1") ? true : false,
               )),
     );
     setState(() {});
@@ -495,7 +495,7 @@ class _SpouseTypeState extends State<SpouseType> {
                             DESIGNATION: result[DESIGNATION],
                             ADDRESS: result[ADDRESS],
                             GENDER: result[GENDER],
-
+                            CITY: result[CITY],
                             /**
                              * form 1 details
                              */

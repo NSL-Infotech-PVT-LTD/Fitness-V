@@ -100,6 +100,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Container(
+
         child: _buildList(),
       ),
       resizeToAvoidBottomPadding: false,
@@ -107,72 +108,76 @@ class AllTrainersViewState extends State<AllTrainersView> {
   }
 
   Widget _buildList() {
-    return
-        GridView.count(
-            crossAxisCount: 2,
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            controller: _sc,
-            children: List.generate(users.length + 1, (index) {
-              if (index == users.length) {
-                return buildProgressIndicator(isLoading);
-              } else {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => TrainerDetail(
-                                  id: users[index]['id'],
-                                )));
-                  },
-                  child: Container(
-                    child: Center(
-                        child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          users[index]['image'] == null
-                              ? Image.asset(
+    return GridView.count(
+        crossAxisCount: 2,
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        controller: _sc,
+        children: List.generate(users.length + 1, (index) {
+          if (index == users.length) {
+            return buildProgressIndicator(isLoading);
+          } else {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => TrainerDetail(
+                              id: users[index]['id'],
+                            )));
+              },
+              child: Container(
+                child: Center(
+                    child: Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      users[index]['image'] == null
+                          ? Image.asset(
+                              baseImageAssetsUrl + 'logo_black.png',
+                              width: SizeConfig.screenWidth / 2,
+                              height: SizeConfig.screenWidth / 2.65,
+                            )
+                          : FadeInImage.assetNetwork(
+                              placeholder:
                                   baseImageAssetsUrl + 'logo_black.png',
-                                  width: SizeConfig.screenWidth / 2,
-                                  height: SizeConfig.screenWidth / 2.65,
-                                )
-                              : blackPlaceHolder(
-                                  'uploads/trainer-user/',
+                              image: BASE_URL +
+                                  'uploads/trainer-user/' +
                                   users[index]['image'],
-                                  SizeConfig.screenWidth / 2.65,
-                                  SizeConfig.screenWidth / 2),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Text(
-                              (users[index]['full_name']),
-                              style: TextStyle(fontSize: 12),
+
+                        width: double.maxFinite,
+                              height: SizeConfig.screenWidth / 2.65,
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Text(
-                              users[index]['expirence'] == null
-                                  ? 'No experience'
-                                  : ("${users[index]['expirence']} years of experience"),
-                              style: TextStyle(
-                                  fontSize: 8.5,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xffc1c1c1)),
-                            ),
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.only(left: 5, top: 5),
+                        child: Text(
+                          (users[index]['full_name']),
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text(
+                          users[index]['expirence'] == null
+                              ? 'No experience'
+                              : ("${users[index]['expirence']} years of experience"),
+                          style: TextStyle(
+                              fontSize: 8.5,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xffc1c1c1)),
+                        ),
+                      ),
+                    ],
+                  ),
 //            semanticContainer: true,
 //            clipBehavior: Clip.antiAliasWithSaveLayer,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3)),
-                      elevation: 2,
-                    )),
-                  ),
-                );
-              }
-            })
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3)),
+                  elevation: 2,
+                )),
+              ),
+            );
+          }
+        })
 
 //        ListView.builder(
 //          itemCount: users.length + 1, // Add one more item for progress indicator
@@ -209,7 +214,6 @@ class AllTrainersViewState extends State<AllTrainersView> {
 //          },
 //          controller: _sc,
 //        ),
-            );
-
+        );
   }
 }

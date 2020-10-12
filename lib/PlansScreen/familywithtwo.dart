@@ -54,6 +54,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                 formType: formType,
                 editData: result,
                 isSingle: false,
+              isCityTrue: true
               )),
     );
 
@@ -68,6 +69,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                 formType: formType,
                 editData: result1,
                 isSingle: false,
+              isCityTrue: false
               )),
     );
     setState(() {});
@@ -81,7 +83,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                 formType: formType,
                 editData: result2,
                 isSingle: false,
-              )),
+              isCityTrue: false )),
     );
     setState(() {});
   }
@@ -94,7 +96,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                 formType: formType,
                 editData: result3,
                 isSingle: false,
-              )),
+              isCityTrue: false  )),
     );
     setState(() {});
   }
@@ -736,6 +738,7 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                             DESIGNATION: result[DESIGNATION],
                             ADDRESS: result[ADDRESS],
                             GENDER: result[GENDER],
+                            CITY: result[CITY],
 
                             /**
                              * form 1 details

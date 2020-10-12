@@ -383,6 +383,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
               page: SignupScreen(
             response: widget.response['plan_detail'],
             planIndex: plan_index,
+            isCityTrue: true,
             type: "member",
             isSingle: true,
             formType: "",

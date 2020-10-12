@@ -165,6 +165,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                                                 response: guest_list,
                                                 type: 'guest',
                                                 formType: "",
+                                                isCityTrue: true,
                                                 isSingle: true,
                                               )))
                                           : showMyDialog(context, 'Error!',
@@ -184,11 +185,11 @@ class ChooseWayState extends State<ChooseYourWay> {
                                               context,
                                               SizeRoute(
                                                   page: SignupScreen(
-                                                response: fairMont_list,
-                                                type: 'guest',
-                                                formType: "",
-                                                isSingle: true,
-                                              )))
+                                                      response: fairMont_list,
+                                                      type: 'guest',
+                                                      formType: "",
+                                                      isSingle: true,
+                                                      isCityTrue: true)))
                                           : showMyDialog(context, 'Error!',
                                               "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
@@ -262,8 +263,11 @@ class ChooseWayState extends State<ChooseYourWay> {
           return CupertinoAlertDialog(
             title: Text(title),
             content: Padding(
-              padding: const EdgeInsets.only(top:10.0),
-              child: Text(message,style: TextStyle(wordSpacing: 1),),
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text(
+                message,
+                style: TextStyle(wordSpacing: 1),
+              ),
             ),
             actions: <Widget>[
               CupertinoDialogAction(

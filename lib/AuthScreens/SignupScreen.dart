@@ -26,6 +26,7 @@ class SignupScreen extends StatefulWidget {
   final String formType;
   final bool isSingle;
   final bool isEmailError;
+  final bool isCityTrue;
 
   final Map<String, String> editData;
 
@@ -35,6 +36,7 @@ class SignupScreen extends StatefulWidget {
       this.type,
       this.formType,
       this.editData,
+      this.isCityTrue,
       this.isEmailError,
       this.isSingle});
 
@@ -619,16 +621,20 @@ class SignupState extends State<SignupScreen> {
                                   if (fromDate == null) {
                                     showDialogBox(context, 'Date of Birth',
                                         'Please fill your date of birth');
-                                  } else if (radioItem.isEmpty) {
+                                  }
+                                  else if (radioItem.isEmpty) {
                                     showDialogBox(context, 'Gender',
                                         'Please select gender');
-                                  } else if (selectedCity == null) {
+                                  }
+                                  else if (widget.isCityTrue && selectedCity == null) {
                                     showDialogBox(context, 'City',
                                         'Please select your city');
-                                  } else if (widget.isSingle && !acceptTerms) {
+                                  }
+                                  else if (widget.isSingle && !acceptTerms) {
                                     showDialogBox(context, termsofService,
                                         'Please read & accept our terms of services');
-                                  } else {
+                                  }
+                                  else {
                                     parms = {
                                       FIRSTNAME + widget.formType:
                                           firstNameController.text
