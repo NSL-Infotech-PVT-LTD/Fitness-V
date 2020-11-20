@@ -100,7 +100,6 @@ class AllTrainersViewState extends State<AllTrainersView> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Container(
-
         child: _buildList(),
       ),
       resizeToAvoidBottomPadding: false,
@@ -129,7 +128,8 @@ class AllTrainersViewState extends State<AllTrainersView> {
                 child: Center(
                     child: Card(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment : CrossAxisAlignment.stretch,
+//                    crossAxisAlignment : CrossAxisAlignment.start,
                     children: <Widget>[
                       users[index]['image'] == null
                           ? Image.asset(
@@ -143,8 +143,8 @@ class AllTrainersViewState extends State<AllTrainersView> {
                               image: BASE_URL +
                                   'uploads/trainer-user/' +
                                   users[index]['image'],
-
-                        width: double.maxFinite,
+                              fit: BoxFit.scaleDown,
+                              width: double.maxFinite,
                               height: SizeConfig.screenWidth / 2.65,
                             ),
                       Padding(

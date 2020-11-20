@@ -70,7 +70,7 @@ class SignupState extends State<SignupScreen> {
     'Ajman',
     'Ras al-khaimah',
 //    'Musaffah City',
-//    'AI Fujairah City',
+   'Fujairah City',
 //    'Khalifah A City',
 //    'Reef AI Fujairah City',
 //    'Bani Yas City',
@@ -128,7 +128,7 @@ class SignupState extends State<SignupScreen> {
               child: CupertinoDatePicker(
                 use24hFormat: true,
                 maximumDate: new DateTime(2019, 12, 30),
-                minimumYear: 1970,
+                minimumYear: 1950,
                 maximumYear: 2019,
                 minuteInterval: 1,
                 mode: CupertinoDatePickerMode.date,

@@ -5,7 +5,6 @@ import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-
 import 'Bookings/BookingConfirmed.dart';
 import 'Methods/Method.dart';
 import 'Value/Dimens.dart';
@@ -117,9 +116,7 @@ void termsBottom(String title, String msg, context) {
                       height: 15,
                     ),
                     Padding(
-                      padding: EdgeInsets.all(20),
-                      child:Html(data:msg)
-                    ),
+                        padding: EdgeInsets.all(20), child: Html(data: msg)),
                     SizedBox(
                       height: 50,
                     ),

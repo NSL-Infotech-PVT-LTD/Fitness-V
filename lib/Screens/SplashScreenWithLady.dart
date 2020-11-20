@@ -4,10 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:volt/Bookings/all_bookings.dart';
-import 'package:volt/GroupClasses/group_classes.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
-import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
@@ -23,6 +20,7 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
 
   @override
   void dispose() {
+    _timer.cancel();
     super.dispose();
   }
 
@@ -46,14 +44,16 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _auth = (prefs.getString(USER_AUTH) ?? '');
+      _timer = Timer(Duration(seconds: 3), () => _moveScreen());
     });
   }
+  Timer _timer;
+
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 3), () => _moveScreen());
-    SizeConfig().init(context);
 
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(

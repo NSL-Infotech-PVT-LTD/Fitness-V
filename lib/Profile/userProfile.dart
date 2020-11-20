@@ -62,7 +62,7 @@ class UserProfileState extends State<UserProfile> {
     'Ajman',
     'Ras al Khaimah',
 //    'Musaffah City',
-//    'Al Fujairah City',
+   'Fujairah City',
 //    'Khalifah A City',
 //    'Reef Al Fujairah City',
 //    'Bani Yas City',
@@ -115,7 +115,7 @@ class UserProfileState extends State<UserProfile> {
               child: CupertinoDatePicker(
                 use24hFormat: true,
                 maximumDate: new DateTime(2019, 12, 30),
-                minimumYear: 1970,
+                minimumYear: 1950,
                 maximumYear: 2019,
                 minuteInterval: 1,
                 mode: CupertinoDatePickerMode.date,
