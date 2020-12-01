@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:volt/AuthScreens/LoginScreen.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/SizeConfig.dart';
-import 'package:volt/Value/Strings.dart';
 
 import '../Methods.dart';
 

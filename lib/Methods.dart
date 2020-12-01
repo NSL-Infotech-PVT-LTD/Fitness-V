@@ -231,10 +231,14 @@ Future<bool> bookingFunction(String auth, context, String model_type,
         "model_id": model_id,
         if (model_type == trainerUsers) "hours": hours,
         if (model_type == classSchedules) "session": hours,
-      };
+      }; 
+      print('Rinku : $parms');
 
       bookingApi(auth, parms).then((response) {
         dismissDialog(context);
+
+        print(response.status); 
+        print(response.error); 
 
         if (response.status) {
           if (response.data != null && response.data.booking != null) {
@@ -335,3 +339,13 @@ class ScaleRoute extends PageRouteBuilder {
           ),
         );
 }
+
+
+// void customBottomSheet({Widget widget, context}) {
+//    showModalBottomSheet(
+//      isScrollControlled: true,
+//      backgroundColor: Colors.transparent,
+//      context: context, builder: (context) {
+//       return  widget;
+//    },);
+// }

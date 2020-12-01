@@ -37,6 +37,7 @@ String ID = "id";
 String trainer_id = "trainer_id";
 String ANDROID = "android";
 String deviceTokenValue = "deviceTokenValue";
+String fireDeviceToken = "deviceTokenValue";
 String DEVICE_TOKEN_VALUE = "value";
 String Authorization = "Authorization";
 String Content_Type = "Content-Type";
@@ -185,6 +186,7 @@ Future<StatusResponse> getRoles() async {
 }
 
 Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
+  
   final response = await http.post(REGISTRATION,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

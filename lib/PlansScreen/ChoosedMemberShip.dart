@@ -139,7 +139,8 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                           items: plansList,
                           index: index,
                           myValue: currentSelectedIndex == index,
-                        ));
+                        ),
+                    );
                   },
                 ),
               ),

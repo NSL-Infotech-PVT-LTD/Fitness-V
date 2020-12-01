@@ -123,6 +123,29 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                   Container(
+                padding:
+                    EdgeInsets.fromLTRB(padding20, padding10, padding30, 0),
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.arrow_back_ios)),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Back',
+                        style: TextStyle(fontSize: textSize20),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+               SizedBox(
+                 height: 12.0,
+               ),
                   Stack(
                     children: <Widget>[
                       Image.asset(

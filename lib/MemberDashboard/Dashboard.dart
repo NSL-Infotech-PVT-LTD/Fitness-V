@@ -1,10 +1,10 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
+import 'package:volt/MemberDashboard/DashboardChild/Home2.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
@@ -16,9 +16,10 @@ import 'package:volt/Value/Strings.dart';
 import 'package:volt/changes.dart';
 import 'package:volt/util/custom_dashboard_appbar.dart';
 
-import 'GroupClassses.dart';
 
 class Dashboard extends StatefulWidget {
+  final role;
+  Dashboard({this.role});
   @override
   State<StatefulWidget> createState() => DashboardState();
 }
@@ -26,7 +27,8 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
   var imageValue;
-  final List<Widget> _children = [Home(), Cardio(), EventClass()];
+  var roleValue;
+   List<Widget>  _children;
 
   void onTabTapped(int index) {
     setState(() {
@@ -39,7 +41,16 @@ class DashboardState extends State<Dashboard> {
     getString(userImage)
         .then((value) => {imageValue = value})
         .whenComplete(() => setState(() {}));
+     
+    getString(roleName)
+        .then((value) => {roleValue = value})
+        .whenComplete(() => setState(() {}));
+     
+     
+     
+    
     super.initState();
+
   }
 
   _navigateAndDisplaySelection(BuildContext context) async {
@@ -56,6 +67,14 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    
+    if(roleValue == 'Local Guest'){
+     _children= [
+      Home(), Cardio(), EventClass()];  
+     } else {
+       _children= [
+      Home2(), Cardio(), EventClass()];
+     }
     SizeConfig().init(context);
     return Scaffold(
         backgroundColor: CColor.WHITE,
@@ -75,6 +94,7 @@ class DashboardState extends State<Dashboard> {
                       height: 20,
                       width: 20,
                     ),
+              // ignore: deprecated_member_use
               title: new Padding(
                   padding: EdgeInsets.only(top: 5),
                   child: _currentIndex == 0
@@ -97,6 +117,7 @@ class DashboardState extends State<Dashboard> {
                       height: 20,
                       width: 20,
                     ),
+              // ignore: deprecated_member_use
               title: new Padding(
                   padding: EdgeInsets.only(top: 5),
                   child: _currentIndex == 1
@@ -119,6 +140,7 @@ class DashboardState extends State<Dashboard> {
                         height: 20,
                         width: 20,
                       ),
+                // ignore: deprecated_member_use
                 title: new Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: _currentIndex == 2
@@ -200,64 +222,6 @@ class DashboardState extends State<Dashboard> {
               )
             : SingleChildScrollView(
                 child: Column(children: <Widget>[
-//                  SizedBox(
-//                    height: topMargin40,
-//                  ),
-//                  Container(
-//                    padding: EdgeInsets.all(20),
-//                    child: Row(
-//                      children: <Widget>[
-//                        GestureDetector(
-//                          onTap: () {
-//                            _navigateAndDisplaySelection(context);
-//                          },
-//                          child: imageValue == null
-//                              ? Image.asset(
-//                                  baseImageAssetsUrl + 'circleuser.png',
-//                                  height: 40,
-//                                  width: 40,
-//                                )
-//                              : CircleAvatar(
-//                                  radius: 25.0,
-//                                  backgroundImage: NetworkImage(
-//                                      BASE_URL + 'uploads/image/' + imageValue),
-//                                  backgroundColor: Colors.transparent,
-//                                ),
-//                        ),
-//                        SizedBox(
-//                          width: 5,
-//                        ),
-//                        GestureDetector(
-//                          onTap: () {
-//                            Navigator.push(
-//                                context,
-//                                new MaterialPageRoute(
-//                                    builder: (context) => GroupClasses()));
-//                          },
-//                          child: Image.asset(
-//                            baseImageAssetsUrl + 'logo_black.png',
-//                            width: 60,
-//                            height: 30,
-//                          ),
-//                        ),
-//                        Spacer(),
-//                        GestureDetector(
-//                            onTap: () {
-//                              Navigator.push(
-//                                  context,
-//                                  new MaterialPageRoute(
-//                                      builder: (context) =>
-//                                          NotificationScreen()));
-//                            },
-//                            child: SvgPicture.asset(
-//                                baseImageAssetsUrl + 'noti_dot.svg'))
-//                      ],
-//                    ),
-//                  ),
-//                  Divider(
-//                    height: .5,
-//                    // color: CColor.PRIMARYCOLOR,
-//                  ),
                   _children[_currentIndex],
                   SizedBox(
                     height: 50,

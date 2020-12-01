@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Event/eventDetail.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
@@ -231,7 +230,7 @@ class _EventState extends State<Event> {
                     //   color: Colors.black,
                     padding: EdgeInsets.all(5),
                     height: myData.length == 0
-                        ? SizeConfig.screenHeight * 0.4
+                        ? SizeConfig.screenHeight * 0.5
                         : SizeConfig.screenHeight * 0.7,
                     child: TabBarView(children: <Widget>[
                       new Column(

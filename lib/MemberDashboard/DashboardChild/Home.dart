@@ -49,50 +49,8 @@ class HomeState extends State<Home> {
         SizedBox(
           height: 15,
         ),
-//        Container(
-//            padding: EdgeInsets.all(20),
-//            child: Column(
-//              children: <Widget>[
-//                Row(
-//                  children: <Widget>[
-//                    Container(
-//                      decoration: BoxDecoration(boxShadow: [
-//                        BoxShadow(
-//                          color: Color(0xFFE0E0E0),
-//                          blurRadius: 8.0,
-//                        ),
-//                      ]),
-//                      child: SvgPicture.asset(
-//                        baseImageAssetsUrl + 'free.svg',
-//                        height: 23,
-//                        fit: BoxFit.cover,
-//                      ),
-//                    ),
-//                    SizedBox(
-//                      width: 10,
-//                    ),
-//                    Text(
-//                      'Free 1 Day Pass',
-//                      style: TextStyle(fontSize: 12, color: Color(0xff707070)),
-//                    )
-//                  ],
-//                ),
-//                SizedBox(
-//                  height: 20,
-//                ),
-//                Image.asset(
-//                  baseImageAssetsUrl + 'couple.png',
-//                  height: 165,
-//                  width: SizeConfig.blockSizeHorizontal * 90,
-//                  fit: BoxFit.cover,
-//                ),
-//                SizedBox(
-//                  height: 5,
-//                ),
-//              ],
-//            )),
 
-        Container(
+  Container(
             width: SizeConfig.screenWidth,
             height: SizeConfig.blockSizeVertical * 25,
             decoration: BoxDecoration(

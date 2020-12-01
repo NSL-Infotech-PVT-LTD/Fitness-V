@@ -99,6 +99,7 @@ class GymMemberState extends State<GymMemberPlan> {
                   ],
                 ),
               ),
+             
               Padding(
                 padding: EdgeInsets.only(top: 10, left: padding50),
                 child: Container(
@@ -132,22 +133,24 @@ class GymMemberState extends State<GymMemberPlan> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         carouselSlider = CarouselSlider(
-                          height: SizeConfig.screenHeight * .9,
-                          initialPage: 1,
-                          enlargeCenterPage: true,
-                          autoPlay: true,
-                          reverse: false,
-                          enableInfiniteScroll: false,
-                          autoPlayInterval: Duration(seconds: 2),
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 2000),
-                          pauseAutoPlayOnTouch: Duration(seconds: 5),
-                          scrollDirection: Axis.horizontal,
-                          onPageChanged: (index) {
-                            setState(() {
-                              _current = index;
-                            });
-                          },
+                          options: CarouselOptions(
+                            height: SizeConfig.screenHeight * .9,
+                            initialPage: 1,
+                            enlargeCenterPage: true,
+                            autoPlay: true,
+                            reverse: false,
+                            enableInfiniteScroll: false,
+                            autoPlayInterval: Duration(seconds: 2),
+                            autoPlayAnimationDuration:
+                                Duration(milliseconds: 2000),
+                            scrollDirection: Axis.horizontal,
+                            
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _current = index;
+                              });
+                            },
+                          ),
                           items: imgList,
                         ),
                         SizedBox(
@@ -262,7 +265,7 @@ class GymMemberState extends State<GymMemberPlan> {
                                       SizeConfig.screenHeight * .25, 0.0)
                                   : Image.asset(
                                       baseImageAssetsUrl + 'logo_black.png',
-                                      width: SizeConfig.screenWidth*.6,
+                                      width: SizeConfig.screenWidth * .6,
                                       fit: BoxFit.fitWidth,
                                       height: SizeConfig.screenHeight * .25)),
                           Padding(

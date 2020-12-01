@@ -221,11 +221,11 @@ class ForgotPasswordState extends State<ForgotPassword> {
                                       height: 50.0,
                                       width: SizeConfig.screenWidth,
                                       decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: <Color>[
-                                            Color(0xff484848),
+                                        gradient:LinearGradient(
+                                          colors: [
+                                             Color(0xff484848),
                                             Color(0xffCCCCCC)
-                                          ],
+                                          ]
                                         ),
                                         color: Color(0xff484848),
                                         borderRadius: BorderRadius.all(

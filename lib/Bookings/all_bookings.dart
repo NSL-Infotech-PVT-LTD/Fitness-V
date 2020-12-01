@@ -612,7 +612,7 @@ class BookingView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            width: SizeConfig.screenWidth * .6,
+                            width: SizeConfig.screenWidth * .56,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -736,7 +736,7 @@ class BookingView extends StatelessWidget {
                                 child: Container(
                                   margin: EdgeInsets.only(top: padding5),
                                   height: 30,
-                                  width: 120,
+                                  width: 110,
                                   child: RaisedButton(
                                     onPressed: callBackeDelete,
                                     color: CColor.CancelBTN,

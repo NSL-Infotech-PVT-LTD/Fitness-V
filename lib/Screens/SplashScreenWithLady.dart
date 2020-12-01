@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:volt/Firebase/FirebaseNotification.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
@@ -34,11 +35,16 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
     }
   }
 
-  @override
+
+ @override
   void initState() {
     super.initState();
-    _loadAuth();
+    
+   FirebaseIn.initNoti(context);
+    _loadAuth();  
   }
+
+  
 
   _loadAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -12,6 +12,7 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'dart:io';
 
 class LoginScreen extends StatefulWidget {
@@ -25,16 +26,17 @@ class LoginState extends State<LoginScreen> {
   bool _validate1 = false;
   bool _validate2 = false;
   final _formKey = GlobalKey<FormState>();
+  var deviceTok='';
 
   void login() async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
         showProgress(context, "Please wait.....");
-
+        print('Device Token $deviceTok');  
         Map<String, String> parms = {
           EMAIL: _emailAddressFieldController.text,
           PASSWORD: _passwordFieldController.text,
-          DEVICE_TOKEN: deviceTokenValue,
+          DEVICE_TOKEN: deviceTok,
           DEVICE_TYPE: deviceType
         };
         getLogin(parms).then((response) {
@@ -45,6 +47,7 @@ class LoginState extends State<LoginScreen> {
             if (response.data != null && response.data.user != null)
               setString(userImage, response.data.user.image);
             if (response.data.user.role != null) {
+              
               setString(userPlanImage, response.data.user.role.image);
               setString(roleName, response.data.user.role.name);
               setString(roleCategory, response.data.user.role.category);
@@ -56,7 +59,7 @@ class LoginState extends State<LoginScreen> {
 
             setString(USER_NAME, response.data.user.full_name);
             Navigator.pushAndRemoveUntil(
-                context, ScaleRoute(page: Dashboard()), (r) => false);
+                context, ScaleRoute(page: Dashboard(role: response.data.user.role.name,)), (r) => false);
           } else {
             dismissDialog(context);
             if (response.error != null)
@@ -80,6 +83,10 @@ class LoginState extends State<LoginScreen> {
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
     super.initState();
+    getString(fireDeviceToken).then((value) {
+      deviceTok = value;
+    }); 
+    
   }
 
   @override
@@ -289,6 +296,7 @@ class LoginState extends State<LoginScreen> {
                             Container(
                               child: RaisedButton(
                                 onPressed: () {
+                                  // print(deviceTok);
                                   if (_emailAddressFieldController
                                       .text.isEmpty) {
                                     setState(() {
@@ -315,7 +323,7 @@ class LoginState extends State<LoginScreen> {
                                   width: SizeConfig.screenWidth,
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
-                                      colors: <Color>[
+                                       colors: [
                                         Color(0xff484848),
                                         Color(0xffCCCCCC)
                                       ],

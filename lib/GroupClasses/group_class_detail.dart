@@ -128,12 +128,15 @@ class _DetailState extends State<GroupClassDetail> {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        className,
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(.7),
-                            fontFamily: open_semi_bold,
-                            fontSize: 20),
+                      Container(
+                        width: SizeConfig.screenWidth * 0.75,
+                        child: Text(
+                          className,
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(.7),
+                              fontFamily: open_semi_bold,
+                              fontSize: SizeConfig.screenWidth * 0.05),
+                        ),
                       )
                     ],
                   ),
@@ -310,7 +313,7 @@ class _DetailState extends State<GroupClassDetail> {
                   Padding(
                     padding: const EdgeInsets.only(left: 35.0, top: 6),
                     child: Text(
-                      '${seatsLeft} SEATS left'.toUpperCase(),
+                      '$seatsLeft SEATS left'.toUpperCase(),
                       maxLines: 3,
                       style: TextStyle(
                           fontFamily: open_semi_bold,
@@ -353,7 +356,7 @@ class _DetailState extends State<GroupClassDetail> {
                   Padding(
                     padding: const EdgeInsets.only(left: 35.0, top: 6),
                     child: Text(
-                      '${duration} min'.toUpperCase(),
+                      '$duration min'.toUpperCase(),
                       maxLines: 3,
                       style: TextStyle(
                           fontFamily: open_semi_bold,

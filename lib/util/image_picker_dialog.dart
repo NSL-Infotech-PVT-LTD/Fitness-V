@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_scaler/flutter_screen_scaler.dart';
 import 'package:volt/Value/Strings.dart';
-import 'dimens_constant.dart';
-import 'round_corner_shape.dart';
 
 class ImagePickerDialog extends StatelessWidget {
   final VoidCallback galleryClick;

@@ -7,6 +7,7 @@ class StatusResponse {
   Data data;
   String error;
   AuthError errors;
+  
 
   StatusResponse(this.status, this.code, this.data, this.error);
 

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 import 'package:volt/util/number_format.dart';
 import 'package:flutter_html/flutter_html.dart';
-
+import 'package:volt/Methods/Pref.dart';
 import '../Methods.dart';
 import '../Methods/api_interface.dart';
 import '../Value/Strings.dart';
@@ -82,7 +81,7 @@ class SignupState extends State<SignupScreen> {
   bool _isIos;
   String deviceType = '';
   String roleId = "";
-  String deviceToken = "";
+  var deviceTok='';
 
   String rolePlanId = "";
   var fromDate;
@@ -173,7 +172,11 @@ class SignupState extends State<SignupScreen> {
       } else {
         _setData("");
       }
+
     }
+    getString(fireDeviceToken).then((value) {
+      deviceTok = value;
+    }); 
     super.initState();
   }
 
@@ -329,6 +332,7 @@ class SignupState extends State<SignupScreen> {
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
+                                // ignore: deprecated_member_use
                                 WhitelistingTextInputFormatter(
                                     RegExp("[a-zA-Z]"))
                               ],
@@ -349,6 +353,7 @@ class SignupState extends State<SignupScreen> {
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
+                                // ignore: deprecated_member_use
                                 WhitelistingTextInputFormatter(
                                     RegExp("[a-zA-Z]"))
                               ],
@@ -363,6 +368,7 @@ class SignupState extends State<SignupScreen> {
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
+                                // ignore: deprecated_member_use
                                 WhitelistingTextInputFormatter(
                                     RegExp("[a-zA-Z]"))
                               ],
@@ -395,6 +401,7 @@ class SignupState extends State<SignupScreen> {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               inputFormatters: [
+                                // ignore: deprecated_member_use
                                 WhitelistingTextInputFormatter.digitsOnly,
                                 CardNumberInputFormatter()
                               ],
@@ -420,6 +427,7 @@ class SignupState extends State<SignupScreen> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
+                                    // ignore: deprecated_member_use
                                     WhitelistingTextInputFormatter.digitsOnly,
                                     CardNumberInputFormatter()
                                   ],
@@ -616,7 +624,7 @@ class SignupState extends State<SignupScreen> {
                               onPressed: () {
 //                                _buildMagnifierScreen();
 
-
+                                // print(deviceTok);
                                 if (formKey.currentState.validate()) {
                                   if (fromDate == null) {
                                     showDialogBox(context, 'Date of Birth',
@@ -685,7 +693,8 @@ class SignupState extends State<SignupScreen> {
                                       DEVICE_TYPE: deviceType,
                                       GENDER + widget.formType:
                                           radioItem.toLowerCase(),
-                                      DEVICE_TOKEN: deviceTokenValue,
+                                      DEVICE_TOKEN: deviceTok,
+                                      "nationality":'India'
                                     };
                                     print("$parms");
 
@@ -694,6 +703,7 @@ class SignupState extends State<SignupScreen> {
                                         showProgress(
                                             context, "Please wait.....");
                                         if (internet != null && internet) {
+                                          print('rinku');
                                           signUpToServer(parms)
                                               .then((response) {
                                             dismissDialog(context);

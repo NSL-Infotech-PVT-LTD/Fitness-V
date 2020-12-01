@@ -5,6 +5,7 @@ class CColor {
   static const Color ACCENTCOLOR = Color(0xFF000000);
   static const Color App_Color = Color(0xFF000000);
   static const Color TRans = Color(0x00000000);
+  // ignore: non_constant_identifier_names
   static Color WHITE = Colors.white;
   static Color DividerCOlor = Colors.grey;
   static Color cardcolor = Color(0xffC1C1C1);

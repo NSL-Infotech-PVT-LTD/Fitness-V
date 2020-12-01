@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -275,6 +273,7 @@ class YourBookingState extends State<YourBooking> {
                                   top: 95,
                                   left: 55,
                                   child: Text(
+                                    // ignore: unrelated_type_equality_checks
                                     '${widget.serviceHours == 0 ? 1 : widget.serviceHours} Hours',
                                     style: TextStyle(
                                         color: Colors.white,
