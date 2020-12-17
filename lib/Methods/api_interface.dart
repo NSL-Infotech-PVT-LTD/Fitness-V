@@ -184,6 +184,20 @@ Future<StatusResponse> getRoles() async {
   );
   return StatusResponse.fromJson(json.decode(response.body));
 }
+  
+  //getChildsRoles 
+  
+  Future<StatusResponse> getChildsRoles(Map<String, String> parms) async {
+  final response = await http.post(
+    ROLE,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: json.encode(parms)
+  );
+  return StatusResponse.fromJson(json.decode(response.body));
+}
+  
 
 Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
   

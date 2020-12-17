@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/AuthScreens/SuccessScreen.dart';
@@ -14,7 +15,6 @@ import 'package:volt/Methods.dart';
 import '../Methods/Method.dart';
 import '../Methods/api_interface.dart';
 import '../Value/Strings.dart';
-import '../Value/Strings.dart';
 
 class SpouseType extends StatefulWidget {
   List response;
@@ -24,7 +24,6 @@ class SpouseType extends StatefulWidget {
   List<String> childValue;
 
   SpouseType({this.response, this.plan_index, this.type, this.roleId});
-
 
   @override
   _SpouseTypeState createState() => _SpouseTypeState();
@@ -40,16 +39,17 @@ class _SpouseTypeState extends State<SpouseType> {
   var errorMessage = '';
   var errorMessage1 = '';
 
-  var chooseChilds= false;
-  int valueNew=-1;
-  List<String> childValue=['1','2','3','4','5','6','7','8','9','10'];
-  List<String> memberName=['Spouse#1','Spouse#2'];
-  int itemCountOfChild = 2;
+  var chooseChilds = false;
+  int valueNew = -1;
+  List<String> childValue = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+  List<String> memberName = ['Spouse#1', 'Spouse#2'];
 
   String rolePlanId = "";
   var result, result1;
 
-  var _scaffoldState=GlobalKey<ScaffoldState>();
+  var _scaffoldState = GlobalKey<ScaffoldState>();
+
+  List<dynamic> stoData = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
   @override
   void initState() {
@@ -58,37 +58,48 @@ class _SpouseTypeState extends State<SpouseType> {
     super.initState();
   }
 
-  _navigateAndDisplaySelection(BuildContext context, String formType) async {
+  _navigateAndDisplaySelection({
+      int index, BuildContext context, String formType ,dynamic chFilledData}) async {
+    
     result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SignupScreen(
+                memberIndex: index,
                 formType: formType,
-                editData: result,
+                // type: widget.type,
+                editData: chFilledData,
                 isSingle: false,
                 isCityTrue: true,
+                
                 isEmailError:
                     errorMessage1.contains("email has") ? true : false,
               )),
     );
 
-    setState(() {});
+    setState(() {
+      if (result != null) {
+        stoData[int.parse(result['memberIndex'])] = result;
+      }
+
+      print('part $stoData');
+    });
   }
 
-  _navigateAndDisplaySelection1(BuildContext context, String formType) async {
-    result1 = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => SignupScreen(
-                formType: formType,
-                editData: result1,
-                isSingle: false,
-                isCityTrue: false,
-                isEmailError: errorMessage1.contains("email 1") ? true : false,
-              )),
-    );
-    setState(() {});
-  }
+  // _navigateAndDisplaySelection1(BuildContext context, String formType) async {
+  //   result1 = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //         builder: (context) => SignupScreen(
+  //               formType: formType,
+  //               editData: result1,
+  //               isSingle: false,
+  //               isCityTrue: false,
+  //               isEmailError: errorMessage1.contains("email 1") ? true : false,
+  //             )),
+  //   );
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -203,204 +214,231 @@ class _SpouseTypeState extends State<SpouseType> {
                     padding: EdgeInsets.all(10),
                   ),
                   Container(
-                    child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 20.0,
-                    ),
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 15.0,
+                        mainAxisSpacing: 15.0,
+                      ),
                       padding: EdgeInsets.all(8.0),
                       itemCount: memberName.length,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                      return  Container(
-                        padding: EdgeInsets.all(10),
-                        height: SizeConfig.screenHeight * 0.20,
-                        width: SizeConfig.screenWidth * 0.40,
-                        decoration: BoxDecoration(
+                        return Container(
+                          padding: EdgeInsets.all(10),
+                          height: SizeConfig.screenHeight * 0.20,
+                          width: SizeConfig.screenWidth * 0.40,
+                          decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: Offset(
-                                    0, 3), // changes position of shadow
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset:
+                                    Offset(1, 1), // changes position of shadow
                               ),
                             ],
                             border: Border.all(
-                              width: errorMessage1.contains("email has")
-                                  ? 2
-                                  : 1.5,
-                              color: errorMessage1.contains("email has")
-                                  ? Colors.red
-                                  : Color(0xFFBDBDBD),
-                            ),
+                                width: 
+                                     stoData[index] != ''
+                                        ? stoData[index]['memberIndex'] ==
+                                                index.toString()
+                                            ? 2.0
+                                            : 1.5
+                                        : 1.5
+                                    ,
+                                color:stoData[index] != ''
+                                        ? stoData[index]['memberIndex'] ==
+                                                index.toString()
+                                            ? Colors.white
+                                            : Color(0xFFBDBDBD)
+                                        : Color(0xFFBDBDBD)
+                                    ),
                             borderRadius: BorderRadius.circular(5.0),
-                            color: result != null
-                                ? Colors.black
-                                : Colors.white),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
-                              //   crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-//                                Padding(
-//                                  padding: EdgeInsets.all(10),
-//                                ),
-                                SizedBox(
-                                  width: SizeConfig.blockSizeHorizontal * 2,
-                                ),
-                                Text(
-                                  result != null
-                                      ? result[FIRSTNAME]
-                                      :  memberName[index],
-                                  style: TextStyle(
-                                    color: result != null
-                                        ? CColor.WHITE
-                                        : Colors.black,
-                                    fontSize: textSize12,
+                            color: stoData[index] != ''
+                                    ? stoData[index]['memberIndex'] ==
+                                            index.toString()
+                                        ? Colors.black
+                                        : Colors.white
+                                    : Colors.white
+                                ,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+//
+                                  SizedBox(
+                                    width: SizeConfig.blockSizeHorizontal * 2,
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: SvgPicture.asset(
-                                    baseImageAssetsUrl + 'user.svg',
-                                    color: result != null
-                                        ? Colors.white
-                                        : Colors.black,
-                                    height: 25,
-                                    width: 25,
+                                  Text(
+                                    
+                                    stoData[index] != ''
+                                              ? stoData[index]['memberIndex'] ==
+                                                      index.toString()
+                                                  ? stoData[index]['memberIndex'] == '0' ? stoData[index][FIRSTNAME].toString().toUpperCase() :
+                                                  stoData[index][FIRSTNAME+'_'+index.toString()].toString().toUpperCase()
+                                                  : memberName[index]
+                                              : memberName[index],
+                                    style: TextStyle(
+                                      color:stoData[index] != ''
+                                              ? stoData[index]['memberIndex'] ==
+                                                      index.toString()
+                                                  ? Colors.white
+                                                  : Colors.black
+                                              : Colors.black
+                                          ,
+                                      fontSize: textSize12,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                margin: EdgeInsets.only(top: padding15),
-                                height: 40,
-                                width: SizeConfig.screenWidth * 0.33,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: result != null
-                                          ? Colors.white
-                                          : Colors.black45,
-                                    )),
-                                child: RaisedButton(
-                                  onPressed: () {
-                                    _navigateAndDisplaySelection(
-                                        context, "");
-                                  },
-                                  color: result != null
-                                      ? Colors.black
-                                      : Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(5.0)),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        'Fill Details',
-                                        style: TextStyle(
-                                            color: result != null
-                                                ? Colors.white
-                                                : Colors.black,
-                                            fontSize: 10),
-                                      ),
-                                      Visibility(
-                                          visible: errorMessage1
-                                              .contains("email has")
-                                              ? true
-                                              : false,
-                                          child: Padding(
-                                            child: Align(
-                                              child: Icon(
-                                                Icons.error,
-                                                color: Colors.red,
-                                                size: 16,
-                                              ),
-                                              alignment: Alignment.center,
-                                            ),
-                                            padding:
-                                            EdgeInsets.only(left: 10),
-                                          )),
-                                    ],
+                                  Spacer(),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: SvgPicture.asset(
+                                      baseImageAssetsUrl + 'user.svg',
+                                      color:stoData[index] != ''
+                                              ? stoData[index]['memberIndex'] ==
+                                                      index.toString()
+                                                  ? Colors.white
+                                                  : Colors.black
+                                              : Colors.black
+                                          ,
+                                      height: 25,
+                                      width: 25,
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      );
-                      },),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: GestureDetector(
+                                  onTap: () {
+                                       
+                                    
+                                      if (stoData[index] != '') {
+                                        if (stoData[index]['memberIndex'] ==
+                                            index.toString()) {
+                                             _navigateAndDisplaySelection(
+                                         index: index,context: context, formType: '',
+                                         chFilledData: stoData[index]
+                                       );   
+                                            } 
+                                      } else {
+                                      _navigateAndDisplaySelection(
+                                         index: index,context: context, formType: '',
+                                       );
+                                    }
+                                  },
+                                  child: Container(
+                                      margin: EdgeInsets.only(top: padding15),
+                                      height: 40,
+                                      width: SizeConfig.screenWidth * 0.33,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          border: Border.all(
+                                            color: Colors.black45,
+                                          ),
+                                          color: Colors.white),
+                                      child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              
+                                                   stoData[index] != ''
+                                                      ? stoData[index][
+                                                                  'memberIndex'] ==
+                                                              index.toString()
+                                                          ? 'View Details'
+                                                          : 'Fill Details'
+                                                      : 'Fill Details'
+                                                  ,
+                                              style: TextStyle(
+                                                  color:
+                                                       stoData[index] != ''
+                                                          ? stoData[index][
+                                                                      'memberIndex'] ==
+                                                                  index
+                                                                      .toString()
+                                                              ? Colors.black
+                                                              : Colors.black
+                                                          : Colors.black
+                                                      ,
+                                                      
+                                                  fontSize: 10),
+                                            )
+                                          ])),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
-
 
                   ///spouse code
 
-
-                  memberName.length > 2 ? Container():   Visibility(
-                    maintainState: true,
-                    maintainAnimation: true,
-                    maintainSize: true,
-                    visible: memberName.length > 2 ? false :true,
-                    child: Center(
-                      child: Container(
-                        margin: EdgeInsets.only(top: padding10),
-                        height: 45,
-                        width: setWidth,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-                              color: Colors.black26,
-                            ),
-                            color: Colors.white),
-                        child: RaisedButton(
-                          onPressed: () {
-                            var count = 0;
-                            // Navigator.popUntil(context, (route) {
-                            //   return count++ == 2;
-                            // });
-                            customBottomSheet(
-                              context: context,
-                              getValue: () {
-                                setState(() {
-                                  // itemCountOfChild +=valueNew;
-                                  // memberName.add
-                                  if(memberName.length > 2) {
-                                    memberName.removeRange(2, memberName.length);
-                                    // for(int i=2; i<memberName.length -1;i++ ){
-                                    //   memberName.removeAt(i);
-                                    // }
-                                  }
-                                  for(int i=1; i<=valueNew + 1;i++ ){
-                                    memberName.add('Child#${i}');
-                                  }
-                                  // print('after');
-                                  // print(memberName);
-                                  chooseChilds =false;
-                                  valueNew = -1;
-                                });
-                                Navigator.pop(context);
-                              },
-                            );
-                          },
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0)),
-                          child: Text(
-                            'Have Child?',
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.only(top: padding10),
+                      height: 45,
+                      width: setWidth,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(
+                            color: Colors.black26,
                           ),
+                          color: Colors.white),
+                      child: RaisedButton(
+                        onPressed: () {
+                          var count = 0;
+                          // Navigator.popUntil(context, (route) {
+                          //   return count++ == 2;
+                          // });
+                          customBottomSheet(
+                            context: context,
+                            getValue: () {
+                              setState(() {
+                                if (memberName.length > 2) {
+                                  memberName.removeRange(2, memberName.length);
+                                }
+
+                                print('part $valueNew');
+                                print('part $stoData');
+
+                                for (int i = (valueNew + 3);
+                                    i < stoData.length;
+                                    i++) {
+                                  stoData[i] = '';
+                                }
+                                print('part1 $stoData');
+                                for (int i = 1; i <= valueNew + 1; i++) {
+                                  memberName.add('Child#$i');
+                                }
+
+                                // print('after');
+                                // print(memberName);
+                                chooseChilds = false;
+                                valueNew = -1;
+                              });
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Text(
+                          'Have Child?',
+                          style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       ),
                     ),
@@ -410,8 +448,7 @@ class _SpouseTypeState extends State<SpouseType> {
                     padding: EdgeInsets.only(left: 10),
                   ),
                   Container(
-                    margin:
-                        EdgeInsets.only(top: padding5, left: 20, right: 20),
+                    margin: EdgeInsets.only(top: padding5, left: 20, right: 20),
                     height: button_height,
                     width: SizeConfig.screenWidth,
                     decoration: BoxDecoration(
@@ -458,75 +495,75 @@ class _SpouseTypeState extends State<SpouseType> {
                             DEVICE_TOKEN: deviceTokenValue,
                           };
                           print("bjbfjj$parms");
-                         isConnectedToInternet().then((internet) {
-                           if (internet != null && internet) {
-                             showProgress(context, "Please wait.....");
+                          isConnectedToInternet().then((internet) {
+                            if (internet != null && internet) {
+                              showProgress(context, "Please wait.....");
 
-                             signUpToServer(parms).then((response) {
-                               dismissDialog(context);
-                               if (response.status) {
-                                 Navigator.pushAndRemoveUntil(
-                                   context,
-                                   ScaleRoute(page: SuccessScreen()),
-                                   (r) => false,
-                                 );
-                               } else {
-                                 dismissDialog(context);
+                              signUpToServer(parms).then((response) {
+                                dismissDialog(context);
+                                if (response.status) {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    ScaleRoute(page: SuccessScreen()),
+                                    (r) => false,
+                                  );
+                                } else {
+                                  dismissDialog(context);
 
-                                 if (response.error != null)
-                                   showDialogBox(
-                                       context, "Error!", response.error);
-                                 else {
-                                   errorMessage1 = '';
-                                   if (response.errors != null) {
-                                     var value = response.errors.toJson();
+                                  if (response.error != null)
+                                    showDialogBox(
+                                        context, "Error!", response.error);
+                                  else {
+                                    errorMessage1 = '';
+                                    if (response.errors != null) {
+                                      var value = response.errors.toJson();
 
-                                     if (value['email'] != null) {
-                                       errorMessage = response.errors.email;
-                                       setState(() {
-                                         errorMessage1 = response.errors.email;
-                                       });
-                                     } else if (response.errors.email_1 !=
-                                         null) {
-                                       errorMessage = response.errors.email_1;
-                                       setState(() {
-                                         errorMessage1 =
-                                             response.errors.email_1;
-                                       });
-                                     } else if (response.errors.email_2 !=
-                                         null) {
-                                       errorMessage = response.errors.email_2;
-                                       setState(() {
-                                         errorMessage1 =
-                                             response.errors.email_2;
-                                       });
-                                     } else if (response.errors.email_3 !=
-                                         null) {
-                                       errorMessage = response.errors.email_3;
-                                       setState(() {
-                                         errorMessage1 =
-                                             response.errors.email_3;
-                                       });
-                                     }
+                                      if (value['email'] != null) {
+                                        errorMessage = response.errors.email;
+                                        setState(() {
+                                          errorMessage1 = response.errors.email;
+                                        });
+                                      } else if (response.errors.email_1 !=
+                                          null) {
+                                        errorMessage = response.errors.email_1;
+                                        setState(() {
+                                          errorMessage1 =
+                                              response.errors.email_1;
+                                        });
+                                      } else if (response.errors.email_2 !=
+                                          null) {
+                                        errorMessage = response.errors.email_2;
+                                        setState(() {
+                                          errorMessage1 =
+                                              response.errors.email_2;
+                                        });
+                                      } else if (response.errors.email_3 !=
+                                          null) {
+                                        errorMessage = response.errors.email_3;
+                                        setState(() {
+                                          errorMessage1 =
+                                              response.errors.email_3;
+                                        });
+                                      }
 
-                                     showDialogBox(
-                                         context, error, errorMessage);
-                                   }
-                                 }
-                               }
-                             });
-                           } else {
-                             showDialogBox(context, internetError,
-                                 pleaseCheckInternet);
-                             dismissDialog(context);
-                           }
-                           dismissDialog(context);
-                         });
-                       } else if (!acceptTerms) {
-                         showDialogBox(context, termsofService,
-                             'Please read & accept our terms of services');
-                       } else {
-                         showDialogBox(context, error, 'Please fill details');
+                                      showDialogBox(
+                                          context, error, errorMessage);
+                                    }
+                                  }
+                                }
+                              });
+                            } else {
+                              showDialogBox(
+                                  context, internetError, pleaseCheckInternet);
+                              dismissDialog(context);
+                            }
+                            dismissDialog(context);
+                          });
+                        } else if (!acceptTerms) {
+                          showDialogBox(context, termsofService,
+                              'Please read & accept our terms of services');
+                        } else {
+                          showDialogBox(context, error, 'Please fill details');
                         }
                       },
                       color: Colors.black,
@@ -720,8 +757,173 @@ class _SpouseTypeState extends State<SpouseType> {
         });
   }
 
+  void customBottomSheet({context, VoidCallback getValue}) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return Container(
+          height: SizeConfig.screenHeight * 0.7,
+          color: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(10.0),
+                topRight: const Radius.circular(10.0),
+              ),
+            ),
+            child: Container(
+                padding: EdgeInsets.only(
+                    top: SizeConfig.screenHeight * 0.04,
+                    left: SizeConfig.screenWidth * 0.05,
+                    right: SizeConfig.screenWidth * 0.05,
+                    bottom: SizeConfig.screenHeight * 0.025),
+                child: StatefulBuilder(
+                  builder: (context, setState) {
+                    return TranslationAnimatedWidget(
+                      enabled: chooseChilds,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.bounceOut,
+                      values: [
+                        Offset(0, 40), // disabled value value
+                        Offset(0, 20), //intermediate value
+                        Offset(0, 0)
+                      ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Have Child?',
+                                    style: TextStyle(
+                                        fontFamily: 'regular',
+                                        fontSize:
+                                            SizeConfig.screenHeight * 0.027,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    'Choose No. of child(s) you have.',
+                                    style: TextStyle(
+                                        fontSize:
+                                            SizeConfig.screenHeight * 0.018,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: SvgPicture.asset(
+                                      'assets/icons/close_icon.svg'))
+                            ],
+                          ),
+                          
+                          SizedBox(
+                            height: 15.0,
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.all(0.0),
+                              itemCount: childValue.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                    splashColor: Colors.black,
+                                    onTap: () {
+                                      setState(() {
+                                        valueNew = index;
+                                      });
+                                      if (valueNew == index) {
+                                        setState(() {
+                                          chooseChilds = true;
+                                        });
+                                      }
+                                    },
+                                    child: selectChild(
+                                        childValue[index], valueNew, index));
+                              },
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: SizeConfig.screenHeight * 0.015),
+                            child: TranslationAnimatedWidget(
+                                enabled: chooseChilds,
+                                duration: Duration(milliseconds: 700),
+                                curve: Curves.easeIn,
+                                values: [
+                                  Offset(0, 180), // disabled value value
+                                  Offset(0, 100), //intermediate value
+                                  Offset(0, 0)
+                                ],
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: getValue,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 35.0,
+                                                vertical: 10.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            child: Text(
+                                              'Update Plan',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding:EdgeInsets.only(top: 10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              
+                                            },
+                                            child: Container(
+                                              child: Text(
+                                                'back to plans?',
+                                                style: TextStyle(
+                                                    color: Colors.black, decoration: TextDecoration.underline),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )),
+          ),
+        );
+      },
+    );
+  }
 
- Widget selectChild(String qunVal, int myValue,int currentIndex){
+  Widget selectChild(String qunVal, int myValue, int currentIndex) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
@@ -735,285 +937,24 @@ class _SpouseTypeState extends State<SpouseType> {
                     '1200 AED For $qunVal Child',
                     style: TextStyle(fontFamily: open_light, fontSize: 14),
                   ),
-
                 ],
               ),
               Spacer(),
-
               Container(
                 height: 20.0,
                 width: 20.0,
-                decoration: new BoxDecoration(
-//                  color: widget.myValue ? Colors.black : Colors.transparent,
-                  image: DecorationImage(
-                      image: myValue==currentIndex
-                          ? AssetImage(
-                        baseImageAssetsUrl + 'tick.png',
-                      )
-                          : AssetImage(baseImageAssetsUrl + '')),
-
-                  border: new Border.all(
-                      width: 1.0,
-                      color: myValue==currentIndex ? Colors.transparent : Colors.grey),
-                  borderRadius:
-                  const BorderRadius.all(const Radius.circular(2.0)),
-                ),
+                child: myValue == currentIndex
+                    ? ScaleAnimatedWidget(
+                        duration: Duration(milliseconds: 150),
+                        enabled: myValue == currentIndex,
+                        child:
+                            SvgPicture.asset('assets/icons/icon_selected.svg'))
+                    : SvgPicture.asset('assets/icons/icon_unselected.svg'),
               ),
             ],
           )
         ],
       ),
     );
-
- }
-
-
- Widget childCard(){
-   return Container(
-     padding: EdgeInsets.all(10),
-     height: SizeConfig.screenHeight * 0.20,
-     width: SizeConfig.screenWidth * 0.40,
-     decoration: BoxDecoration(
-         boxShadow: [
-           BoxShadow(
-             color: Colors.grey.withOpacity(0.3),
-             spreadRadius: 5,
-             blurRadius: 7,
-             offset: Offset(
-                 0, 3), // changes position of shadow
-           ),
-         ],
-         border: Border.all(
-           width: errorMessage1.contains("email has")
-               ? 2
-               : 1.5,
-           color: errorMessage1.contains("email has")
-               ? Colors.red
-               : Color(0xFFBDBDBD),
-         ),
-         borderRadius: BorderRadius.circular(5.0),
-         color: result != null
-             ? Colors.black
-             : Colors.white),
-     child: Column(
-       mainAxisAlignment: MainAxisAlignment.center,
-       children: <Widget>[
-         Row(
-           //   crossAxisAlignment: CrossAxisAlignment.start,
-           mainAxisAlignment: MainAxisAlignment.start,
-           children: <Widget>[
-//                                Padding(
-//                                  padding: EdgeInsets.all(10),
-//                                ),
-             SizedBox(
-               width: SizeConfig.blockSizeHorizontal * 2,
-             ),
-             Text(
-               result != null
-                   ? result[FIRSTNAME]
-                   : 'Spouse#1',
-               style: TextStyle(
-                 color: result != null
-                     ? CColor.WHITE
-                     : Colors.black,
-                 fontSize: textSize12,
-               ),
-             ),
-             Spacer(),
-             Container(
-               padding: EdgeInsets.all(10),
-               child: SvgPicture.asset(
-                 baseImageAssetsUrl + 'user.svg',
-                 color: result != null
-                     ? Colors.white
-                     : Colors.black,
-                 height: 25,
-                 width: 25,
-               ),
-             ),
-           ],
-         ),
-         Align(
-           alignment: Alignment.bottomCenter,
-           child: Container(
-             margin: EdgeInsets.only(top: padding15),
-             height: 40,
-             width: SizeConfig.screenWidth * 0.33,
-             decoration: BoxDecoration(
-                 borderRadius:
-                 BorderRadius.circular(5.0),
-                 border: Border.all(
-                   color: result != null
-                       ? Colors.white
-                       : Colors.black45,
-                 )),
-             child: RaisedButton(
-               onPressed: () {
-                 _navigateAndDisplaySelection(
-                     context, "");
-               },
-               color: result != null
-                   ? Colors.black
-                   : Colors.white,
-               shape: RoundedRectangleBorder(
-                   borderRadius:
-                   BorderRadius.circular(5.0)),
-               child: Row(
-                 crossAxisAlignment:
-                 CrossAxisAlignment.center,
-                 mainAxisAlignment:
-                 MainAxisAlignment.center,
-                 children: <Widget>[
-                   Text(
-                     'Fill Details',
-                     style: TextStyle(
-                         color: result != null
-                             ? Colors.white
-                             : Colors.black,
-                         fontSize: 10),
-                   ),
-                   Visibility(
-                       visible: errorMessage1
-                           .contains("email has")
-                           ? true
-                           : false,
-                       child: Padding(
-                         child: Align(
-                           child: Icon(
-                             Icons.error,
-                             color: Colors.red,
-                             size: 16,
-                           ),
-                           alignment: Alignment.center,
-                         ),
-                         padding:
-                         EdgeInsets.only(left: 10),
-                       )),
-                 ],
-               ),
-             ),
-           ),
-         )
-       ],
-     ),
-   );
- }
-
-  void customBottomSheet({context,VoidCallback getValue}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      context: context, builder: (context) {
-      return  Container(
-        height: SizeConfig.screenHeight * 0.6,
-        color: Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(10.0),
-              topRight: const Radius.circular(10.0),
-            ),
-          ),
-          child: Container(
-              padding: EdgeInsets.only(
-                  top: SizeConfig.screenHeight * 0.08,
-                  left: SizeConfig.screenWidth * 0.05,
-                  right: SizeConfig.screenWidth * 0.05,
-                  bottom: SizeConfig.screenHeight * 0.05),
-              child: StatefulBuilder(
-                builder: (context, setState) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Visibility(
-                            maintainSize: true,
-                            maintainAnimation: true,
-                            maintainState: true,
-                            visible: chooseChilds,
-                            child: GestureDetector(
-                              onTap: getValue,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 10.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Text('Add', style: TextStyle(
-                                    color: Colors.white
-                                ),),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset('assets/icons/close_icon.svg'))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Have Child?', style: TextStyle(
-                              fontFamily: 'regular',
-                              fontSize: SizeConfig.screenHeight * 0.027,
-                              fontWeight: FontWeight.bold
-                          ),),
-                          Text('Choose No. of child(s) you have.', style: TextStyle(
-                              fontSize: SizeConfig.screenHeight * 0.018,
-                              fontWeight: FontWeight.normal
-                          ),),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 25.0,
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.all(0.0),
-                          itemCount: childValue.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                                splashColor: Colors.black,
-                                onTap: () {
-                                  setState(() {
-                                    valueNew=index;
-
-                                  });
-                                  if(valueNew == index){
-                                    setState(() {
-                                      chooseChilds = true;
-                                    });
-
-                                  }
-                                }
-                                ,child: selectChild(childValue[index],valueNew,index));
-
-                          },
-                        ),
-                      ),
-
-                    ],
-                  );
-
-                },
-              )
-          ),
-        ),
-      );
-    },);
   }
-
-
 }
-
-
-
-

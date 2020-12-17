@@ -26,7 +26,7 @@ class SignupScreen extends StatefulWidget {
   final bool isSingle;
   final bool isEmailError;
   final bool isCityTrue;
-
+  final int memberIndex;
   final Map<String, String> editData;
 
   SignupScreen(
@@ -34,6 +34,7 @@ class SignupScreen extends StatefulWidget {
       this.planIndex,
       this.type,
       this.formType,
+      this.memberIndex,
       this.editData,
       this.isCityTrue,
       this.isEmailError,
@@ -163,16 +164,17 @@ class SignupState extends State<SignupScreen> {
     deviceType = _isIos ? 'ios' : 'android';
 
     if (widget.editData != null) {
-      if (widget.editData.containsKey(FIRSTNAME + "_1")) {
-        _setData("_1");
-      } else if (widget.editData.containsKey(FIRSTNAME + "_2")) {
-        _setData("_2");
-      } else if (widget.editData.containsKey(FIRSTNAME + "_3")) {
-        _setData("_3");
-      } else {
-        _setData("");
-      }
-
+      print('mydata ${widget.editData}');
+      // if (widget.editData.containsKey(FIRSTNAME + "_1")) {
+      //   _setData("_1");
+      // } else if (widget.editData.containsKey(FIRSTNAME + "_2")) {
+      //   _setData("_2");
+      // } else if (widget.editData.containsKey(FIRSTNAME + "_3")) {
+      //   _setData("_3");
+      // } else {
+      //   _setData("");
+      // }
+      _setData(widget.memberIndex.toString());
     }
     getString(fireDeviceToken).then((value) {
       deviceTok = value;
@@ -196,19 +198,35 @@ class SignupState extends State<SignupScreen> {
 //  }
 //
 
-  _setData(String type) {
-    firstNameController.text = widget.editData[FIRSTNAME + type];
-    middletNameController.text = widget.editData[MIDDLENAME + type];
-    lastNameController.text = widget.editData[LASTNAME + type];
-    mobileController.text = widget.editData[MOBILE + type];
-    emergencyController.text = widget.editData[EMEREGENCY_NUMBER + type];
-    emailController.text = widget.editData[EMAIL + type];
-    passwordController.text = widget.editData[PASSWORD + type];
-    fromDate = widget.editData[BIRTH_DATE + type];
-    designationController.text = widget.editData[DESIGNATION + type];
-    emiratesController.text = widget.editData[EMIRATES_ID + type];
-    addressController.text = widget.editData[ADDRESS + type];
-    selectedCity = widget.editData[CITY + type];
+  _setData(String ind) {
+    if(ind == '0'){
+      firstNameController.text = widget.editData[FIRSTNAME];
+    middletNameController.text = widget.editData[MIDDLENAME];
+    lastNameController.text = widget.editData[LASTNAME];
+    mobileController.text = widget.editData[MOBILE];
+    emergencyController.text = widget.editData[EMEREGENCY_NUMBER];
+    emailController.text = widget.editData[EMAIL];
+    passwordController.text = widget.editData[PASSWORD];
+    fromDate = widget.editData[BIRTH_DATE];
+    designationController.text = widget.editData[DESIGNATION];
+    emiratesController.text = widget.editData[EMIRATES_ID];
+    addressController.text = widget.editData[ADDRESS];
+    selectedCity = widget.editData[CITY];
+    } else {
+      firstNameController.text = widget.editData[FIRSTNAME +'_'+ ind];
+    middletNameController.text = widget.editData[MIDDLENAME +'_'+ ind];
+    lastNameController.text = widget.editData[LASTNAME +'_'+ ind];
+    mobileController.text = widget.editData[MOBILE +'_'+ ind];
+    emergencyController.text = widget.editData[EMEREGENCY_NUMBER +'_'+ ind];
+    emailController.text = widget.editData[EMAIL +'_'+ ind];
+    passwordController.text = widget.editData[PASSWORD +'_'+ ind];
+    fromDate = widget.editData[BIRTH_DATE + ind];
+    designationController.text = widget.editData[DESIGNATION +'_'+ ind];
+    emiratesController.text = widget.editData[EMIRATES_ID +'_'+ ind];
+    addressController.text = widget.editData[ADDRESS +'_'+ ind];
+    selectedCity = widget.editData[CITY +'_'+ ind];
+    }
+    
   }
 
   @override
@@ -643,36 +661,38 @@ class SignupState extends State<SignupScreen> {
                                         'Please read & accept our terms of services');
                                   }
                                   else {
-                                    parms = {
-                                      FIRSTNAME + widget.formType:
+                                  if(widget.memberIndex == 0) {
+                                      parms = {
+                                      "memberIndex":widget.memberIndex.toString(),
+                                      FIRSTNAME:
                                           firstNameController.text
                                               .toString()
                                               .trim(),
-                                      MIDDLENAME + widget.formType:
+                                      MIDDLENAME:
                                           middletNameController.text
                                               .toString()
                                               .trim(),
-                                      LASTNAME + widget.formType:
+                                      LASTNAME:
                                           lastNameController.text
                                               .toString()
                                               .trim(),
 //                                  CHILD: radioItem.toString(),
-                                      MOBILE + widget.formType: mobileController
+                                      MOBILE: mobileController
                                           .text
                                           .toString()
                                           .trim(),
 
-                                      EMAIL + widget.formType: emailController
+                                      EMAIL: emailController
                                           .text
                                           .toString()
                                           .trim(),
-                                      PASSWORD + widget.formType:
+                                      PASSWORD:
                                           passwordController.text
                                               .toString()
                                               .trim(),
-                                      BIRTH_DATE + widget.formType: sendDate,
+                                      BIRTH_DATE: sendDate,
 
-                                      EMIRATES_ID + widget.formType:
+                                      EMIRATES_ID:
                                           emiratesController.text
                                               .toString()
                                               .trim(),
@@ -691,11 +711,70 @@ class SignupState extends State<SignupScreen> {
                                           .trim(),
                                       CITY: selectedCity,
                                       DEVICE_TYPE: deviceType,
-                                      GENDER + widget.formType:
+                                      GENDER:
                                           radioItem.toLowerCase(),
                                       DEVICE_TOKEN: deviceTok,
                                       "nationality":'India'
                                     };
+                                   
+                                  } else{
+                                      parms = {
+                                      "memberIndex":widget.memberIndex.toString(),
+                                      FIRSTNAME +'_'+ widget.memberIndex.toString():
+                                          firstNameController.text
+                                              .toString()
+                                              .trim(),
+                                      MIDDLENAME +'_'+ widget.memberIndex.toString():
+                                          middletNameController.text
+                                              .toString()
+                                              .trim(),
+                                      LASTNAME +'_'+ widget.memberIndex.toString():
+                                          lastNameController.text
+                                              .toString()
+                                              .trim(),
+//                                  CHILD: radioItem.toString(),
+                                      MOBILE +'_'+ widget.memberIndex.toString(): mobileController
+                                          .text
+                                          .toString()
+                                          .trim(),
+
+                                      EMAIL +'_'+ widget.memberIndex.toString(): emailController
+                                          .text
+                                          .toString()
+                                          .trim(),
+                                      PASSWORD +'_'+ widget.memberIndex.toString():
+                                          passwordController.text
+                                              .toString()
+                                              .trim(),
+                                      BIRTH_DATE +'_'+ widget.memberIndex.toString(): sendDate,
+
+                                      EMIRATES_ID +'_'+ widget.memberIndex.toString():
+                                          emiratesController.text
+                                              .toString()
+                                              .trim(),
+                                      ROLE_ID: roleId,
+                                      ROLE_PLAN_ID: rolePlanId,
+
+                                      EMEREGENCY_NUMBER +'_'+ widget.memberIndex.toString() : emergencyController
+                                          .text
+                                          .toString()
+                                          .trim(),
+//                                      DESIGNATION: designationController.text
+//                                          .toString()
+//                                          .trim(),
+                                      ADDRESS +'_'+ widget.memberIndex.toString(): addressController.text
+                                          .toString()
+                                          .trim(),
+                                      CITY +'_'+ widget.memberIndex.toString(): selectedCity,
+                                      DEVICE_TYPE: deviceType,
+                                      GENDER +'_'+ widget.memberIndex.toString():
+                                          radioItem.toLowerCase(),
+                                      DEVICE_TOKEN: deviceTok,
+                                      "nationality":'India'
+                                    };
+                                  
+                                  }
+                                  
                                     print("$parms");
 
                                     if (widget.isSingle) {
@@ -738,6 +817,7 @@ class SignupState extends State<SignupScreen> {
                                       });
                                     } else {
                                       Navigator.pop(context, parms);
+                                      print(parms);
                                     }
                                   }
                                 }

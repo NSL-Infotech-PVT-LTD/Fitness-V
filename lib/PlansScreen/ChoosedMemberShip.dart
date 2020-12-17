@@ -10,6 +10,8 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+import 'package:animated_widgets/animated_widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../Methods/api_interface.dart';
 import '../Value/SizeConfig.dart';
 
@@ -124,7 +126,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                   scrollDirection: Axis.vertical,
                   itemCount: plansList.length,
                   itemBuilder: (context, index) {
-                    return InkWell(
+                    return GestureDetector(
                         onTap: () {
                           plan_index = index;
 
@@ -357,7 +359,8 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
   }
 
   checkRoll() {
-    if (widget.response['category'].toString() == 'Couple') {
+    print('check ${widget.response['category'].toString()}');
+    if (widget.response['category'].toString().toLowerCase() == 'couple') {
       Navigator.push(
           context,
           new MaterialPageRoute(
@@ -367,7 +370,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                     type: "member",
                     roleId: widget.response['id'].toString(),
                   )));
-    } else if (widget.response['category'].toString() == 'Family with 2') {
+    } else if (widget.response['category'].toString().toLowerCase() == 'family_with_2') {
       Navigator.push(
           context,
           new MaterialPageRoute(
@@ -444,21 +447,13 @@ class PlansState extends State<CustomPlansDetails> {
               Container(
                 height: 20.0,
                 width: 20.0,
-                decoration: new BoxDecoration(
-//                  color: widget.myValue ? Colors.black : Colors.transparent,
-                  image: DecorationImage(
-                      image: widget.myValue
-                          ? AssetImage(
-                              baseImageAssetsUrl + 'tick.png',
-                            )
-                          : AssetImage(baseImageAssetsUrl + '')),
+                child: widget.myValue ? ScaleAnimatedWidget(
+                        duration: Duration(milliseconds: 150),
+                        enabled: widget.myValue,
+                        child:
+                            SvgPicture.asset('assets/icons/icon_selected.svg'))
+                    : SvgPicture.asset('assets/icons/icon_unselected.svg'),
 
-                  border: new Border.all(
-                      width: 1.0,
-                      color: widget.myValue ? Colors.transparent : Colors.grey),
-                  borderRadius:
-                      const BorderRadius.all(const Radius.circular(2.0)),
-                ),
               ),
 //              Switch(
 //                value: widget.myValue,
