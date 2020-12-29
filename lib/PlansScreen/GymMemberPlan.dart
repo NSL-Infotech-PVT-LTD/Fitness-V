@@ -13,8 +13,9 @@ import 'package:volt/Value/Strings.dart';
 // ignore: must_be_immutable
 class GymMemberPlan extends StatefulWidget {
   List response;
+  final gymMembers;
 
-  GymMemberPlan({this.response});
+  GymMemberPlan({this.response, this.gymMembers});
 
   @override
   State<StatefulWidget> createState() => GymMemberState();
@@ -42,6 +43,7 @@ class GymMemberState extends State<GymMemberPlan> {
   @override
   void initState() {
     super.initState();
+    print("che"+widget.gymMembers);
   }
 
   @override
@@ -58,11 +60,9 @@ class GymMemberState extends State<GymMemberPlan> {
           (j) => PlansDetails(
               fee_type: value[j]['fee_type'], fee: value[j]['fee'].toString()));
 
-      imgList.add(cardView(
-          widget.response[i]['image'],
+      imgList.add(cardView(widget.response[i]['image'],
           widget.response[i]['category'],
-          widget.response[i]['name'],
-          plansList,
+          widget.response[i]['name'], plansList,
           widget.response[i]));
     }
 
@@ -111,7 +111,7 @@ class GymMemberState extends State<GymMemberPlan> {
               Padding(
                 padding: EdgeInsets.only(top: 10, left: 60, right: 60),
                 child: Text(
-                    'Selection of one plan Atleast is important to proceed in Gym Membership.',
+                    'Selection of one plan At least is important to proceed in Gym Membership.',
                     style: TextStyle(fontSize: textSize10, color: Colors.grey)),
               ),
               Container(
@@ -231,8 +231,7 @@ class GymMemberState extends State<GymMemberPlan> {
     );
   }
 
-  Widget cardView(String imageLink, String planType, String planDetail,
-      List plans, response) {
+  Widget cardView(String imageLink, String planType, String planDetail, List plans, response) {
     return Container(
         margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
         decoration: BoxDecoration(
@@ -273,7 +272,7 @@ class GymMemberState extends State<GymMemberPlan> {
                             child: Row(
                               children: <Widget>[
                                 Text(
-                                  planType,
+                                  planType == "single"?"Single":planType == "couple"?"Couple":planType == "family_with_2"?"Family":planType,
                                   style: TextStyle(
                                       fontSize: textSize16,
                                       fontWeight: FontWeight.bold),
@@ -315,19 +314,17 @@ class GymMemberState extends State<GymMemberPlan> {
                         children: <Widget>[
                           checkbox("Free", ' Group Classes', signle, 0),
                           checkbox("Pay For", ' Personal Trainer', couple, 1),
-                          checkbox("Pay For", ' Pool & Beaches', family, 2),
+                       //   checkbox("Pay For", ' Pool & Beaches', family, 2),
                         ],
                       ),
                     ),
                     Padding(
                         padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
                         child: fullWidthButton(
-                            context,
-                            choosePlan,
-                            SizeConfig.screenWidth,
-                            FontWeight.bold,
+                            context, choosePlan, SizeConfig.screenWidth, FontWeight.bold,
                             ChooseMemberShip(
                               response: response,
+                              gymMembers: widget.gymMembers,
                             )))
                   ],
                 ),
@@ -376,7 +373,7 @@ class CustomPlansDetails extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Text(
-              items.fee_type,
+              items.fee_type == "quarterly"?"3 months":items.fee_type == "half_yearly"?"6 months":items.fee_type == "yearly"?"Annual":items.fee_type,
               style: TextStyle(
                   fontSize: textSize12, fontWeight: FontWeight.normal),
             ),

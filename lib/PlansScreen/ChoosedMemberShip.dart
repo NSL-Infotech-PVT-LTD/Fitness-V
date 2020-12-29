@@ -9,7 +9,6 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
-
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../Methods/api_interface.dart';
@@ -17,8 +16,9 @@ import '../Value/SizeConfig.dart';
 
 class ChooseMemberShip extends StatefulWidget {
   var response;
+  final gymMembers;
 
-  ChooseMemberShip({this.response});
+  ChooseMemberShip({this.response, this.gymMembers});
 
   @override
   State<StatefulWidget> createState() => ChooseMemberShipState();
@@ -39,8 +39,16 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
     isSwitched6Months = false;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    print("chek " + widget.gymMembers);
+  }
+
   List<PlansDetails> plansList;
   List limit;
+  String planIdS;
+  String rolePlanIdS;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +59,8 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
       plansList.add(PlansDetails(
           fee_type: limit[i]['fee_type'],
           fee: limit[i]['fee'].toString(),
+          planId: limit[i]['id'].toString(),
+          rolePlanId: limit[i]['role_id'].toString(),
           choosePlan: false));
     }
 
@@ -99,7 +109,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
               Padding(
                 padding: EdgeInsets.only(top: 10, left: 60, right: 60),
                 child: Text(
-                    'Selection of one plan Atleast is important to proceed in Gym Membership.',
+                    'Selection of one plan At least is important to proceed in Gym Membership.',
                     style: TextStyle(fontSize: textSize10, color: Colors.grey)),
               ),
               Padding(
@@ -127,21 +137,23 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                   itemCount: plansList.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        onTap: () {
-                          plan_index = index;
+                      onTap: () {
+                        plan_index = index;
 
-                          setState(() {
-                            currentSelectedIndex = index;
+                        setState(() {
+                          currentSelectedIndex = index;
+                          planIdS = plansList[index].planId.toString();
+                          rolePlanIdS = plansList[index].rolePlanId.toString();
 //                            plansList.forEach(
 //                                (element) => element.choosePlan = false);
 //                            plansList[index].choosePlan = true;
-                          });
-                        },
-                        child: CustomPlansDetails(
-                          items: plansList,
-                          index: index,
-                          myValue: currentSelectedIndex == index,
-                        ),
+                        });
+                      },
+                      child: CustomPlansDetails(
+                        items: plansList,
+                        index: index,
+                        myValue: currentSelectedIndex == index,
+                      ),
                     );
                   },
                 ),
@@ -321,7 +333,6 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 //                        Navigator.pushReplacement(
 //                            context,
 //                            new MaterialPageRoute(builder: (context) =>FamilyWithTwo()));     //SpouseType()));
-
                         currentSelectedIndex == -1
                             ? showDialogBox(context, "Choose Plan Alert",
                                 'Please choose your plan type')
@@ -339,7 +350,6 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                       ),
                     ),
                   )
-
 //                fullWidthButton(
 //                context,
 //                'Proceed',
@@ -368,19 +378,34 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                     response: widget.response['plan_detail'],
                     plan_index: plan_index,
                     type: "member",
-                    roleId: widget.response['id'].toString(),
+                    roleId: rolePlanIdS,
+                    rolePlanIds: planIdS,
+                    memberCount: widget.response['member'] != null
+                        ? widget.response['member']
+                        : 0,
+                    gym_members: widget.gymMembers,
                   )));
-    } else if (widget.response['category'].toString().toLowerCase() == 'family_with_2') {
+    } else if (widget.response['category'].toString().toLowerCase() ==
+        'family_with_2') {
       Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => FamilyWithTwo(
+              builder: (context) => SpouseType(
                     response: widget.response['plan_detail'],
                     plan_index: plan_index,
                     type: "member",
-                    roleId: widget.response['id'].toString(),
+                    roleId: rolePlanIdS,
+                    rolePlanIds: planIdS,
+                memberCount: widget.response['member'] != null
+                    ? widget.response['member']
+                    : 0,
+                    gym_members: widget.gymMembers,
                   )));
     } else {
+      //  plansList.forEach((element) {
+      //   print(element.planId[0]);
+      // });
+
       Navigator.push(
           context,
           ScaleRoute(
@@ -391,6 +416,8 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
             type: "member",
             isSingle: true,
             formType: "",
+            roleId: planIdS,
+            rolePlanId: rolePlanIdS,
           )));
     }
   }
@@ -399,9 +426,12 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 class PlansDetails {
   final String fee_type;
   final String fee;
+  final String planId;
+  final String rolePlanId;
   bool choosePlan;
 
-  PlansDetails({this.fee_type, this.fee, this.choosePlan});
+  PlansDetails(
+      {this.fee_type, this.fee, this.choosePlan, this.planId, this.rolePlanId});
 }
 
 class CustomPlansDetails extends StatefulWidget {
@@ -421,40 +451,47 @@ class PlansState extends State<CustomPlansDetails> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(40, 5, 40, 25),
-      child: Column(
+      child: Row(
         children: <Widget>[
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    widget.items[widget.index].fee_type,
-                    style: TextStyle(fontFamily: open_light, fontSize: 14),
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Text(widget.items[widget.index].fee + ' AED',
-                      style: TextStyle(
-                          fontFamily: openBold,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold)),
-                ],
+              Text(
+                widget.items[widget.index].fee_type,
+                style: TextStyle(fontFamily: open_light, fontSize: 14),
               ),
-              Spacer(),
-
-              Container(
-                height: 20.0,
-                width: 20.0,
-                child: widget.myValue ? ScaleAnimatedWidget(
-                        duration: Duration(milliseconds: 150),
-                        enabled: widget.myValue,
-                        child:
-                            SvgPicture.asset('assets/icons/icon_selected.svg'))
-                    : SvgPicture.asset('assets/icons/icon_unselected.svg'),
-
+              SizedBox(
+                height: 3,
               ),
+              Text(widget.items[widget.index].fee + ' AED',
+                  style: TextStyle(
+                      fontFamily: openBold,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold)),
+              // Text(widget.items[widget.index].planId.toString() + ' AED',
+              //     style: TextStyle(
+              //         fontFamily: openBold,
+              //         fontSize: 12,
+              //         fontWeight: FontWeight.bold)),
+              // Text(widget.items[widget.index].rolePlanId.toString() + ' AED',
+              //     style: TextStyle(
+              //         fontFamily: openBold,
+              //         fontSize: 12,
+              //         fontWeight: FontWeight.bold)),
+            ],
+          ),
+          Spacer(),
+
+          Container(
+            height: 20.0,
+            width: 20.0,
+            child: widget.myValue
+                ? ScaleAnimatedWidget(
+                    duration: Duration(milliseconds: 150),
+                    enabled: widget.myValue,
+                    child: SvgPicture.asset('assets/icons/icon_selected.svg'))
+                : SvgPicture.asset('assets/icons/icon_unselected.svg'),
+          ),
 //              Switch(
 //                value: widget.myValue,
 //                activeTrackColor: Colors.black26,
@@ -473,8 +510,6 @@ class PlansState extends State<CustomPlansDetails> {
 //                  });
 //                },
 //              ),
-            ],
-          )
         ],
       ),
     );

@@ -27,7 +27,6 @@ class AllTrainersViewState extends State<AllTrainersView> {
           setState(() {
             isLoading = true;
           });
-
           Map<String, String> parms = {
             SEARCH: '',
             LIMIT: '10',
@@ -66,13 +65,10 @@ class AllTrainersViewState extends State<AllTrainersView> {
   @override
   void initState() {
     String auth = '';
-
     getString(USER_AUTH)
         .then((value) => {auth = value})
         .whenComplete(() => {_getList(auth, page)});
-
     super.initState();
-
     _sc.addListener(() {
       if (_sc.position.pixels == _sc.position.maxScrollExtent) {
         if (page <= totalPage) _getList(auth, page);
@@ -121,6 +117,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
                     context,
                     new MaterialPageRoute(
                         builder: (context) => TrainerDetail(
+                          fromForm: false,
                               id: users[index]['id'],
                             )));
               },
@@ -135,14 +132,9 @@ class AllTrainersViewState extends State<AllTrainersView> {
                           ? Image.asset(
                               baseImageAssetsUrl + 'logo_black.png',
                               width: SizeConfig.screenWidth / 2,
-                              height: SizeConfig.screenWidth / 2.65,
-                            )
-                          : FadeInImage.assetNetwork(
-                              placeholder:
-                                  baseImageAssetsUrl + 'logo_black.png',
-                              image: BASE_URL +
-                                  'uploads/trainer-user/' +
-                                  users[index]['image'],
+                              height: SizeConfig.screenWidth / 2.65,) : FadeInImage.assetNetwork(
+                              placeholder: baseImageAssetsUrl + 'logo_black.png',
+                              image: BASE_URL + 'uploads/trainer-user/' + users[index]['image'],
                               fit: BoxFit.scaleDown,
                               width: double.maxFinite,
                               height: SizeConfig.screenWidth / 2.65,

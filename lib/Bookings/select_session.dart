@@ -144,7 +144,6 @@ class SelectSessionState extends State<SelectSession> {
                               ? SizeConfig.screenWidth * .55
                               : SizeConfig.screenWidth * .72,
                           child: Slider(
-
                               value: valueHolder.toDouble() == 0
                                   ? 1
                                   : valueHolder.toDouble(),
@@ -249,7 +248,7 @@ class SelectSessionState extends State<SelectSession> {
                                 BorderRadius.all(Radius.circular(16))),
                         child: Center(
                             child: Text(
-                          '${sendValue()} $aed',
+                          '${sendValue()} $aed ',
                           style: TextStyle(color: Colors.white),
                         )),
                       ),
@@ -288,9 +287,7 @@ class SelectSessionState extends State<SelectSession> {
                                     isGroupClass: widget.isGroupClass,
                                     name: widget.name,
                                     payment: sendValue().toString(),
-                                    serviceHours: valueHolder == 0
-                                        ? 1.toString()
-                                        : valueHolder.toString(),
+                                    serviceHours: valueHolder == 0 ? 1.toString() : valueHolder.toString(),
                                   )));
                     },
                     child: Text(

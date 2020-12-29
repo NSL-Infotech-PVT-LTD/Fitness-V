@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:volt/AuthScreens/SignupScreen.dart';
 import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/Methods/Method.dart';
@@ -15,8 +16,9 @@ import 'package:volt/util/starDisplay.dart';
 
 class TrainerDetail extends StatefulWidget {
   final int id;
+  final bool fromForm;
 
-  TrainerDetail({@required this.id});
+  TrainerDetail({@required this.id, this.fromForm});
 
   @override
   State<StatefulWidget> createState() => TrainerDetailState();
@@ -30,6 +32,7 @@ class TrainerDetailState extends State<TrainerDetail>
       specialities = '',
       about = '',
       imgLink;
+  int valueHolder = 0;
   int trainees = 0, reviewsCount = 0;
   bool is_booked_by_me = false;
   TabController controller;
@@ -70,8 +73,8 @@ class TrainerDetailState extends State<TrainerDetail>
               setState(() {});
             }
           } else {
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null) ;
+            showDialogBox(context, "Error!", response.error);
           }
         }).whenComplete(() => dismissDialog(context));
       } else {
@@ -150,12 +153,12 @@ class TrainerDetailState extends State<TrainerDetail>
               expirence = response.data.trainer.expirence;
               trainees = response.data.trainer.booking_cnt;
               is_booked_by_me = response.data.trainer.is_booked_by_me;
+              print("isALready $is_booked_by_me");
               deleteId =
                   response.data.trainer.is_booked_by_me_booking_id.toString();
 
               if (response.data.related.length > 0) {
                 _checkList = response.data.related;
-
                 trainerList = List<RecomendedTrainerClass>.generate(
                     response.data.related.length,
                     (index) => RecomendedTrainerClass(
@@ -164,7 +167,7 @@ class TrainerDetailState extends State<TrainerDetail>
                         imgLink: response.data.related[index]['image']));
               }
               _getTrainerReview();
-              setState(() {});
+              setState((){});
             }
           } else {
             dismissDialog(context);
@@ -381,41 +384,237 @@ class TrainerDetailState extends State<TrainerDetail>
                                   margin: EdgeInsets.only(top: padding15),
                                   height: 45,
                                   width: 150,
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      if (!is_booked_by_me) {
-                                        print("${widget.id}");
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SelectSession(
-                                                      id: widget.id,
-                                                      image: imgLink,
-                                                      name: fullName,
-                                                      isGroupClass: false,
-                                                      roleType: _roleType,
-                                                    )));
-                                      } else {
-                                        doYoWantToCntinue();
-                                      }
-                                    },
-                                    color: is_booked_by_me
-                                        ? CColor.CancelBTN
-                                        : Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            button_radius)),
-                                    child: Text(
-                                      is_booked_by_me
-                                          ? alreadyBooked
-                                          : book_now,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: is_booked_by_me ? 8 : 16),
-                                    ),
+                                  child:Visibility(
+                                    visible:!widget.fromForm,
+                                    child: RaisedButton(
+                                            onPressed: () {
+                                             if(!is_booked_by_me){
+                                               Navigator.push(context, MaterialPageRoute(builder: (builder)=>SelectSession(
+                                                 id: widget.id,
+                                                 image: imgLink,
+                                                 isGroupClass: false,
+                                                 name: fullName,
+                                                 roleType: _roleType,
+                                               )));
+                                             }
+                                             // else{
+                                             //   showModalBottomSheet<void>(
+                                             //     context: context,
+                                             //     builder: (BuildContext context) {
+                                             //       return StatefulBuilder(builder:
+                                             //           (BuildContext context,
+                                             //           StateSetter setState
+                                             //           /*You can rename this!*/) {
+                                             //         return Container(
+                                             //           height: 400,
+                                             //           color: Colors.white,
+                                             //           child: Center(
+                                             //             child: Column(
+                                             //               mainAxisAlignment:
+                                             //               MainAxisAlignment
+                                             //                   .start,
+                                             //               children: <Widget>[
+                                             //                 FlatButton(
+                                             //                   onPressed: () =>
+                                             //                       Navigator.pop(
+                                             //                           context),
+                                             //                   child: Row(
+                                             //                     children: [
+                                             //                       Icon(Icons
+                                             //                           .arrow_back_ios),
+                                             //                       Text("Back"),
+                                             //                     ],
+                                             //                   ),
+                                             //                 ),
+                                             //                 const Text(
+                                             //                     'Choose Your Personal Trainer'),
+                                             //                 const Text(
+                                             //                     'Session (in Hours)',
+                                             //                     style: TextStyle(
+                                             //                         color: Colors
+                                             //                             .grey)),
+                                             //                 Padding(
+                                             //                   padding:
+                                             //                   const EdgeInsets
+                                             //                       .only(
+                                             //                       left: 25.0,
+                                             //                       right: 25,
+                                             //                       top: 0,
+                                             //                       bottom: 10),
+                                             //                   child: Row(
+                                             //                     children: <
+                                             //                         Widget>[
+                                             //                       new RichText(
+                                             //                           textAlign:
+                                             //                           TextAlign
+                                             //                               .start,
+                                             //                           text: TextSpan(
+                                             //                               text:
+                                             //                               "Session",
+                                             //                               style: TextStyle(
+                                             //                                   fontSize:
+                                             //                                   textSize12,
+                                             //                                   color: Colors
+                                             //                                       .black),
+                                             //                               children: <
+                                             //                                   TextSpan>[
+                                             //                                 TextSpan(
+                                             //                                     text: "\n(In hour)",
+                                             //                                     style: TextStyle(fontSize: textSize8, fontWeight: FontWeight.bold, color: Colors.black45))
+                                             //                               ])),
+                                             //                       Column(
+                                             //                         crossAxisAlignment:
+                                             //                         CrossAxisAlignment
+                                             //                             .start,
+                                             //                         mainAxisAlignment:
+                                             //                         MainAxisAlignment
+                                             //                             .spaceEvenly,
+                                             //                         children: <
+                                             //                             Widget>[
+                                             //                           Container(
+                                             //                             margin: EdgeInsets.only(
+                                             //                                 left:
+                                             //                                 10,
+                                             //                                 top:
+                                             //                                 50),
+                                             //                             width: SizeConfig
+                                             //                                 .screenWidth *
+                                             //                                 .68,
+                                             //                             child: Slider(
+                                             //                                 value: valueHolder.toDouble() == 0 ? 4 : valueHolder.toDouble(),
+                                             //                                 min: 4,
+                                             //                                 max: 12,
+                                             //                                 divisions: 4,
+                                             //                                 activeColor: Colors.black,
+                                             //                                 inactiveColor: Colors.grey,
+                                             //                                 label: '${valueHolder.round() == 0 ? 4 : valueHolder.round()}',
+                                             //                                 onChanged: (double newValue) {
+                                             //                                   setState(() {
+                                             //                                     print(newValue.round());
+                                             //                                     valueHolder = newValue.round() == 10 ? 12 : newValue.round();
+                                             //                                   });
+                                             //                                 },
+                                             //                                 semanticFormatterCallback: (double newValue) {
+                                             //                                   return '${newValue.round()}';
+                                             //                                 }),
+                                             //                           ),
+                                             //                           Container(
+                                             //                             margin: EdgeInsets.only(
+                                             //                                 left:
+                                             //                                 20),
+                                             //                             width: SizeConfig
+                                             //                                 .screenWidth *
+                                             //                                 .68,
+                                             //                             child:
+                                             //                             Row(
+                                             //                               mainAxisAlignment:
+                                             //                               MainAxisAlignment.spaceEvenly,
+                                             //                               children: <
+                                             //                                   Widget>[
+                                             //                                 Container(
+                                             //                                   width:
+                                             //                                   SizeConfig.screenWidth * .17,
+                                             //                                   child:
+                                             //                                   Text(
+                                             //                                     '4',
+                                             //                                     style: TextStyle(color: Colors.black),
+                                             //                                   ),
+                                             //                                 ),
+                                             //                                 Container(
+                                             //                                   width:
+                                             //                                   SizeConfig.screenWidth * .17,
+                                             //                                   child:
+                                             //                                   Text(
+                                             //                                     '6',
+                                             //                                     style: TextStyle(color: Colors.black),
+                                             //                                   ),
+                                             //                                 ),
+                                             //                                 Container(
+                                             //                                   width:
+                                             //                                   SizeConfig.screenWidth * .17,
+                                             //                                   child:
+                                             //                                   Text(
+                                             //                                     '8',
+                                             //                                     style: TextStyle(color: Colors.black),
+                                             //                                   ),
+                                             //                                 ),
+                                             //                                 Visibility(
+                                             //                                   visible: /* widget.isGroupClass */ true,
+                                             //                                   child:
+                                             //                                   Container(
+                                             //                                     width: SizeConfig.screenWidth * .17,
+                                             //                                     child: Text(
+                                             //                                       '12',
+                                             //                                       textAlign: TextAlign.end,
+                                             //                                       style: TextStyle(color: Colors.black),
+                                             //                                     ),
+                                             //                                   ),
+                                             //                                 ),
+                                             //                               ],
+                                             //                             ),
+                                             //                           ),
+                                             //                         ],
+                                             //                       ),
+                                             //                     ],
+                                             //                   ),
+                                             //                 ),
+                                             //                 Container(
+                                             //                   // width: 100,
+                                             //                   child: RaisedButton(
+                                             //                     color:
+                                             //                     Colors.black,
+                                             //                     onPressed: () {
+                                             //                       Navigator.pop(
+                                             //                           context);
+                                             //                       Navigator.pop(
+                                             //                           context);
+                                             //                       Navigator.pop(
+                                             //                           context,"abc");
+                                             //
+                                             //                       print("${widget.id}    ${valueHolder}");
+                                             //                     },
+                                             //                     textColor:
+                                             //                     Colors.white,
+                                             //                     padding:
+                                             //                     const EdgeInsets
+                                             //                         .all(0.0),
+                                             //                     child: Text(
+                                             //                         'Done',
+                                             //                         style: TextStyle(
+                                             //                             fontSize:
+                                             //                             15,
+                                             //                             color: Colors
+                                             //                                 .white)),
+                                             //                   ),
+                                             //                 ),
+                                             //               ],
+                                             //             ),
+                                             //           ),
+                                             //         );
+                                             //       });
+                                             //     },
+                                             //   );
+                                             // }
+                                            },
+                                            color: is_booked_by_me
+                                                ? CColor.CancelBTN
+                                                : Colors.black,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        button_radius)),
+                                            child: Text(
+                                              is_booked_by_me
+                                                  ? alreadyBooked
+                                                  : book_now,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      is_booked_by_me ? 8 : 16),
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ],
@@ -544,6 +743,9 @@ class TrainerDetailState extends State<TrainerDetail>
                         ),
                       ),
                     ),
+                    Column(
+                      children: [],
+                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 20, bottom: 20),
                       child: Divider(
@@ -551,38 +753,46 @@ class TrainerDetailState extends State<TrainerDetail>
                         color: CColor.PRIMARYCOLOR,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, bottom: 20),
-                      child: Text(
-                          trainerList.length > 0 ? 'Related Trainers' : '',
-                          style: TextStyle(fontSize: 12)),
+                    Visibility(
+                      visible: !widget.fromForm,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20, bottom: 20),
+                        child: Text(
+                            trainerList.length > 0 ? 'Related Trainers' : '',
+                            style: TextStyle(fontSize: 12)),
+                      ),
                     ),
-                    Padding(
-                        padding:
-                            EdgeInsets.only(left: 20, right: 0, bottom: 20),
-                        child: Container(
-                          height: 200,
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return Container(
-                                child: RecomendedTrainer(
-                                  trainerClass: trainerList[index],
-                                  callback: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) => TrainerDetail(
-                                                  id: _checkList[index]['id'],
-                                                )));
-                                  },
-                                ),
-                              );
-                            },
-                            itemCount:
-                                trainerList == null ? 0 : trainerList.length,
-                            scrollDirection: Axis.horizontal,
-                          ),
-                        )),
+                    Visibility(
+                      visible: !widget.fromForm,
+                      child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 20, right: 0, bottom: 20),
+                          child: Container(
+                            height: 200,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: RecomendedTrainer(
+                                    trainerClass: trainerList[index],
+                                    callback: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TrainerDetail(
+                                                    fromForm: false,
+                                                    id: _checkList[index]['id'],
+                                                  )));
+                                    },
+                                  ),
+                                );
+                              },
+                              itemCount:
+                                  trainerList == null ? 0 : trainerList.length,
+                              scrollDirection: Axis.horizontal,
+                            ),
+                          )),
+                    ),
                     SizedBox(
                       height: 20,
                     )

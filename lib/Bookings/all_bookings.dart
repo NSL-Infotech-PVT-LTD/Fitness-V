@@ -205,7 +205,7 @@ class AllBookingsState extends State<AllBookings> {
                         serviceHours: tList[index]['hours'].toString()));
                   }
 
-                  print('jugraj===>${tList[0]['id'].toString()}');
+                  // print('jugraj===>${tList[0]['id'].toString()}');
 
                   _page++;
                 });
@@ -698,12 +698,16 @@ class BookingView extends StatelessWidget {
                                               color: Colors.black38,
                                               fontSize: 10),
                                         ),
-                                        Text(
-                                          "${DateFormat("dd/MM/yyyy hh:mm a").format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(customBooking.bookingDate))}",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500),
+                                        SizedBox(
+                                          width: SizeConfig.screenWidth*0.30,
+                                          child: Text(
+                                            "${DateFormat("dd/MM/yyyy hh:mm a").format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(customBooking.bookingDate))}",
+                                            overflow: TextOverflow.fade,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -748,7 +752,7 @@ class BookingView extends StatelessWidget {
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 10),
+                                          fontSize: 9),
                                     ),
                                   ),
                                 ),

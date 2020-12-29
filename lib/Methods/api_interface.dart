@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:volt/ResponseModel/StatusResponse.dart';
+import 'package:volt/Methods/gymModal.dart';
 
 String LOGIN = BASE_URL + "api/login";
 String ROLE = BASE_URL + "api/roles";
@@ -13,8 +14,12 @@ String GETPROFILE = BASE_URL + "api/get-profile";
 String RESET_PASSWORD = BASE_URL + "api/reset-password";
 String getTrainersList = BASE_URL + "api/trainers";
 String trainers = BASE_URL + "api/trainer";
-String profile = BASE_URL + "api/get-profile";
 String trainerReviews = BASE_URL + "api/trainer/reviews";
+String getTrainersListRegister = BASE_URL + "api/register/trainers";
+String trainersRegister = BASE_URL + "api/register/trainer";
+String trainerReviewsRegister = BASE_URL + "api/register/trainer/reviews";
+String profile = BASE_URL + "api/get-profile";
+
 String eventDetails = BASE_URL + "api/event";
 String privacyUrl = BASE_URL + "api/config/privacy_policy";
 String aboutUsUrl = BASE_URL + "api/config/about_us";
@@ -35,6 +40,7 @@ String DEVICE_TOKEN = "device_token";
 
 String ID = "id";
 String trainer_id = "trainer_id";
+String trainer_slot = "trainer_slot";
 String ANDROID = "android";
 String deviceTokenValue = "deviceTokenValue";
 String fireDeviceToken = "deviceTokenValue";
@@ -56,6 +62,10 @@ String LASTNAME = "last_name";
 String MIDDLENAME = "middle_name";
 String BIRTH_DATE = "birth_date";
 String DESIGNATION = "designation";
+String workplace = "workplace";
+String nationality = "nationality";
+String about_us = "about_us";
+String marital_status = "marital_status";
 String ADDRESS = "address";
 String CITY = "city";
 String GENDER = "gender";
@@ -70,9 +80,11 @@ String EMIRATES_ID = "emirates_id";
 String eventKey = "events";
 String classSchedules = "class_schedules";
 String trainerUsers = "trainer_users";
+String trainerIds = "trainer_users";
 
 //user data
 String USER_AUTH = "USER_AUTH";
+String Image_Path = BASE_URL + "/public/uploads/trainer-user/";
 String USER_NAME = "USER_NAME";
 String userImage = "userImage";
 String userPlanImage = "userPlanImage";
@@ -107,7 +119,10 @@ Future<StatusResponse> getLogin(Map<String, String> parms) async {
 
 Future<StatusResponse> getTrainersListApi(
     String auth, Map<String, String> parms) async {
-  final response = await http.post(getTrainersList,
+  final response = await http.post(
+      auth != null && auth.isNotEmpty
+          ? getTrainersListRegister
+          : getTrainersList,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -149,7 +164,8 @@ Future<StatusResponse> getGroupClassDetailApi(
 
 Future<StatusResponse> getTrainersDetailApi(
     String auth, Map<String, String> parms) async {
-  final response = await http.post(trainers,
+  final response = await http.post(
+      auth != null && auth.isNotEmpty ? trainersRegister : trainers,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -184,23 +200,32 @@ Future<StatusResponse> getRoles() async {
   );
   return StatusResponse.fromJson(json.decode(response.body));
 }
-  
-  //getChildsRoles 
-  
-  Future<StatusResponse> getChildsRoles(Map<String, String> parms) async {
+
+Future<gymMember> gRoles(param) async {
   final response = await http.post(
     ROLE,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: json.encode(parms)
+    body: json.encode(param),
   );
+  print("gymMembership${response.body}");
+
+  return gymMember.fromJson(json.decode(response.body));
+}
+
+//getChildsRoles
+
+Future<StatusResponse> getChildsRoles(Map<String, String> parms) async {
+  final response = await http.post(ROLE,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(parms));
   return StatusResponse.fromJson(json.decode(response.body));
 }
-  
 
 Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
-  
   final response = await http.post(REGISTRATION,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -269,8 +294,14 @@ Future<StatusResponse> bookingApi(
 
 Future<StatusResponse> getTrainerReviewsApi(
     String userAuth, Map<String, String> parms) async {
-  final response = await http.post(trainerReviews,
-      headers: header(userAuth), body: jsonEncode(parms));
+  final response = await http.post(
+      userAuth != null && userAuth.isNotEmpty
+          ? trainerReviewsRegister
+          : trainerReviews,
+      headers: header(userAuth),
+      body: jsonEncode(parms));
+
+  print(userAuth);
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
 

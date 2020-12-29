@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:animated_widgets/widgets/scale_animated.dart';
+import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+//import 'package:volt/Methods/getTrainersModal.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -14,20 +17,25 @@ import '../Methods.dart';
 import '../Methods/Method.dart';
 import '../Methods/api_interface.dart';
 import '../Value/Strings.dart';
+import 'package:volt/Methods/gymModal.dart';
+
+
 
 class FamilyWithTwo extends StatefulWidget {
+  final gym_member;
   List response;
   String type = "";
   int plan_index = 0;
   String roleId = "";
 
-  FamilyWithTwo({this.response, this.plan_index, this.type, this.roleId});
+  FamilyWithTwo({this.response, this.plan_index, this.type, this.roleId, String rolePlanId, this.gym_member});
 
   @override
   _FamilyWithTwoState createState() => _FamilyWithTwoState();
 }
 
 class _FamilyWithTwoState extends State<FamilyWithTwo> {
+  List<String> childValue = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
   bool acceptTerms = false;
   double setWidth;
   bool _isIos;
@@ -37,8 +45,15 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
   var errorMessage = '';
   var errorMessage1 = '';
   String rolePlanId = "";
-  var result, result1, result2, result3;
+  // List<Map<String, dynamic>> result = [];
 
+  var result, result1, result2, result3;
+  List<Data> data = [];
+  int valueNew = -1;
+  int childValueCount = 0;
+  List<String> memberName = ['Spouse#1', 'Spouse#2'];
+  var chooseChilds = false;
+  var rolePlanFee = null;
   @override
   void initState() {
     _isIos = Platform.isIOS;
@@ -75,6 +90,433 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
     setState(() {});
   }
 
+  void customBottomSheet({context, VoidCallback getValue, List<Data> data}) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return Container(
+          height: SizeConfig.screenHeight * 0.7,
+          color: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(10.0),
+                topRight: const Radius.circular(10.0),
+              ),
+            ),
+            child: Container(
+                padding: EdgeInsets.only(
+                    top: SizeConfig.screenHeight * 0.04,
+                    left: SizeConfig.screenWidth * 0.05,
+                    right: SizeConfig.screenWidth * 0.05,
+                    bottom: SizeConfig.screenHeight * 0.025),
+                child: StatefulBuilder(
+                  builder: (context, StateSetter setState) {
+                    return TranslationAnimatedWidget(
+                      enabled: chooseChilds,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.bounceOut,
+                      values: [
+                        Offset(0, 40), // disabled value value
+                        Offset(0, 20), //intermediate value
+                        Offset(0, 0)
+                      ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Extra Child?',
+                                    style: TextStyle(
+                                        fontFamily: 'regular',
+                                        fontSize:
+                                        SizeConfig.screenHeight * 0.027,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    'Choose No. of child(s) you have.',
+                                    style: TextStyle(
+                                        fontSize:
+                                        SizeConfig.screenHeight * 0.018,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: SvgPicture.asset(
+                                      'assets/icons/close_icon.svg'))
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15.0,
+                          ),
+
+                          Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.all(0.0),
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                    splashColor: Colors.black,
+                                    onTap: () {
+                                      setState(() {
+                                        //  widget.response[widget.plan_index]['fee_type']
+                                        childValueCount =
+                                            data[index].member - 2;
+                                        roleId = data[index].id.toString();
+
+                                        rolePlanId = widget
+                                            .response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .monthly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .monthly
+                                            .id
+                                            .toString()
+                                            : widget.response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .quarterly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .quarterly
+                                            .id
+                                            .toString()
+                                            : widget.response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .halfYearly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .halfYearly
+                                            .id
+                                            .toString()
+                                            : widget.response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .yearly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .yearly
+                                            .id
+                                            .toString()
+                                            : "Something Wrong";
+
+                                        rolePlanFee = widget
+                                            .response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .monthly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .monthly
+                                            .fee
+                                            .toString()
+                                            : widget.response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .quarterly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .quarterly
+                                            .fee
+                                            .toString()
+                                            : widget.response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .halfYearly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .halfYearly
+                                            .fee
+                                            .toString()
+                                            : widget.response[widget.plan_index]
+                                        ['fee_type'] ==
+                                            data[index]
+                                                .plans
+                                                .yearly
+                                                .feeType
+                                            ? data[index]
+                                            .plans
+                                            .yearly
+                                            .fee
+                                            .toString()
+                                            : "Something Wrong";
+                                        valueNew = index;
+
+                                        print("rolePlanId " + rolePlanId.toString());
+                                        print("roleId " + roleId.toString());
+                                        print("fee " + rolePlanFee.toString());
+                                      });
+                                      if (valueNew == index) {
+                                        setState(() {
+                                          chooseChilds = true;
+                                          //     valueNew = data[index].member-2;
+                                        });
+                                      }
+                                    },
+                                    child: selectChild(childValue[index], valueNew, index));
+                              },
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: SizeConfig.screenHeight * 0.015),
+                            child: TranslationAnimatedWidget(
+                                enabled: chooseChilds,
+                                duration: Duration(milliseconds: 700),
+                                curve: Curves.easeIn,
+                                values: [
+                                  Offset(0, 180), // disabled value value
+                                  Offset(0, 100), //intermediate value
+                                  Offset(0, 0)
+                                ],
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: getValue,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 35.0,
+                                                vertical: 10.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius:
+                                              BorderRadius.circular(5.0),
+                                            ),
+                                            child: Text(
+                                              'Update Plan',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              child: Text(
+                                                'back to plans?',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )),
+          ),
+        );
+      },
+    );
+  }
+  Widget selectChild(String qunVal, int myValue, int currentIndex) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  //widget.response[widget.plan_index]['fee_type']
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'monthly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                              MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelMonthly}',
+                            style:
+                            TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'quarterly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                              MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelQuarterly}',
+                            style:
+                            TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'half_yearly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                              MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelHalfYearly}',
+                            style:
+                            TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'yearly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                              MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelYearly}',
+                            style:
+                            TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  //Text(' ${data[currentIndex].plans.halfYearly.fee}{} AED ${data[currentIndex].label}',//${data[currentIndex].planDetail[currentIndex].fee
+                  //),
+                ],
+              ),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'monthly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelMonthly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'quarterly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelQuarterly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'half_yearly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelHalfYearly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'yearly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelYearly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
+              Spacer(),
+              Container(
+                height: 20.0,
+                width: 20.0,
+                child: myValue == currentIndex
+                    ? ScaleAnimatedWidget(
+                    duration: Duration(milliseconds: 150),
+                    enabled: myValue == currentIndex,
+                    child:
+                    SvgPicture.asset('assets/icons/icon_selected.svg'))
+                    : SvgPicture.asset('assets/icons/icon_unselected.svg'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  List<dynamic> stoData = ['', '', '', '', '', '', '', '', '', '', '', ''];
+  getMemberShipData() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+        Map<String, String> param = {
+          "type": widget.gym_member.toString(),
+          "user_with_child_only": "true",
+        };
+        gRoles(param).then((response) {
+          if (response.status) {
+            if (response.data != null) {
+              print("newData" + response.data.toString());
+              dismissDialog(context);
+              setState(() {
+                data = response.data;
+              });
+            }
+            setState(() {});
+          } else {
+            dismissDialog(context);
+          }
+        }).whenComplete(() {
+          setState(() {
+            customBottomSheet(
+              data: data,
+              context: context,
+              getValue: () {
+                setState(() {
+                  valueNew = childValueCount;
+                  var myLength = valueNew + 2;
+                  print("$childValueCount   $myLength");
+                  if (result.length < myLength) {
+                    for (int i = result.length; i < myLength; i++) {
+                      result.add({});
+                    }
+                  } else {
+                    for (int i = result.length; i > myLength; i--) {
+                      result.removeAt(i - 1);
+                    }
+                  }
+                  print("vikas $result");
+
+                  if (memberName.length > 2) {
+                    memberName.removeRange(2, memberName.length);
+                  }
+                  // print('part $valueNew');
+                  // print('part $stoData');
+                  //
+                  for (int i = (valueNew + 3); i < stoData.length; i++) {
+                    stoData[i] = '';
+                  }
+                  // print('part1 $stoData');
+                  for (int i = 1; i <= valueNew; i++) {
+                    memberName.add('Child#$i');
+                  }
+                  // // print('after');
+                  // // print(memberName);
+                  chooseChilds = false;
+                  valueNew = -1;
+                });
+                Navigator.pop(context);
+              },
+            );
+          });
+        });
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
   _navigateAndDisplaySelection2(BuildContext context, String formType) async {
     result2 = await Navigator.push(
       context,
@@ -469,252 +911,286 @@ class _FamilyWithTwoState extends State<FamilyWithTwo> {
                   ),
                   Column(
                     children: <Widget>[
+                      Visibility(
+                        visible: true,
+                        child: Center(
+                          child: Container(
+                            margin: EdgeInsets.only(top: padding10),
+                            height: 45,
+                            width: setWidth,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(
+                                  color: Colors.black26,
+                                ),
+                                color: Colors.white),
+                            child: RaisedButton(
+                              onPressed: () {
+                                getMemberShipData();
+                                var count = 0;
+                                // Navigator.popUntil(context, (route) {
+                                //   return count++ == 2;
+                                // });
+                              },
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              child: Text(
+                                'Extra Child?',
+                                style: TextStyle(color: Colors.black, fontSize: 12),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                            height: SizeConfig.screenHeight * 0.20,
-                            width: SizeConfig.screenWidth * 0.40,
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                              color:
-                                  result2 != null ? Colors.black : Colors.white,
-                              border: Border.all(
-                                width:
-                                    errorMessage1.contains("email 2") ? 2 : 1.5,
-                                color: errorMessage1.contains("email 2")
-                                    ? Colors.red
-                                    : Colors.black26,
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Row(
-                                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: SizeConfig.blockSizeHorizontal * 2,
-                                    ),
-                                    Text(
-                                      result2 != null
-                                          ? result2[FIRSTNAME + "_2"]
-                                          : 'Child#1',
-                                      style: TextStyle(
-                                        color: result2 != null
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: textSize12,
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: SvgPicture.asset(
-                                        baseImageAssetsUrl + 'user.svg',
-                                        color: result2 != null
-                                            ? Colors.white
-                                            : Colors.black,
-                                        height: 25,
-                                        width: 25,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: padding15),
-                                  height: 40,
-                                  width: SizeConfig.screenWidth * 0.33,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      border: Border.all(
-                                        color: result2 != null
-                                            ? Colors.white
-                                            : Colors.black45,
-                                      )),
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      _navigateAndDisplaySelection2(
-                                          context, "_2");
-                                    },
-                                    color: result2 != null
-                                        ? Colors.black
-                                        : Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0)),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          'Fill Details',
-                                          style: TextStyle(
-                                              color: result2 != null
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontSize: 10),
-                                        ),
-                                        Visibility(
-                                            visible: errorMessage1
-                                                    .contains("email 2")
-                                                ? true
-                                                : false,
-                                            child: Padding(
-                                              child: Align(
-                                                child: Icon(
-                                                  Icons.error,
-                                                  color: Colors.red,
-                                                  size: 16,
-                                                ),
-                                                alignment: Alignment.center,
-                                              ),
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          //Comment Code
+                          // Container(
+                          //   height: SizeConfig.screenHeight * 0.20,
+                          //   width: SizeConfig.screenWidth * 0.40,
+                          //   padding: EdgeInsets.all(10),
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(5.0),
+                          //     boxShadow: [
+                          //       BoxShadow(
+                          //         color: Colors.grey.withOpacity(0.3),
+                          //         spreadRadius: 5,
+                          //         blurRadius: 7,
+                          //         offset: Offset(
+                          //             0, 3), // changes position of shadow
+                          //       ),
+                          //     ],
+                          //     color:
+                          //         result2 != null ? Colors.black : Colors.white,
+                          //     border: Border.all(
+                          //       width:
+                          //           errorMessage1.contains("email 2") ? 2 : 1.5,
+                          //       color: errorMessage1.contains("email 2")
+                          //           ? Colors.red
+                          //           : Colors.black26,
+                          //     ),
+                          //   ),
+                          //   child: Column(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: <Widget>[
+                          //       Row(
+                          //         //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //         mainAxisAlignment: MainAxisAlignment.start,
+                          //         children: <Widget>[
+                          //           SizedBox(
+                          //             width: SizeConfig.blockSizeHorizontal * 2,
+                          //           ),
+                          //           Text(
+                          //             result2 != null
+                          //                 ? result2[FIRSTNAME + "_2"]
+                          //                 : 'Child#1',
+                          //             style: TextStyle(
+                          //               color: result2 != null
+                          //                   ? Colors.white
+                          //                   : Colors.black,
+                          //               fontSize: textSize12,
+                          //             ),
+                          //           ),
+                          //           Spacer(),
+                          //           Container(
+                          //             padding: EdgeInsets.all(10),
+                          //             child: SvgPicture.asset(
+                          //               baseImageAssetsUrl + 'user.svg',
+                          //               color: result2 != null
+                          //                   ? Colors.white
+                          //                   : Colors.black,
+                          //               height: 25,
+                          //               width: 25,
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //       Container(
+                          //         margin: EdgeInsets.only(top: padding15),
+                          //         height: 40,
+                          //         width: SizeConfig.screenWidth * 0.33,
+                          //         decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.circular(5.0),
+                          //             border: Border.all(
+                          //               color: result2 != null
+                          //                   ? Colors.white
+                          //                   : Colors.black45,
+                          //             )),
+                          //         child: RaisedButton(
+                          //           onPressed: () {
+                          //             _navigateAndDisplaySelection2(
+                          //                 context, "_2");
+                          //           },
+                          //           color: result2 != null
+                          //               ? Colors.black
+                          //               : Colors.white,
+                          //           shape: RoundedRectangleBorder(
+                          //               borderRadius:
+                          //                   BorderRadius.circular(5.0)),
+                          //           child: Row(
+                          //             crossAxisAlignment:
+                          //                 CrossAxisAlignment.center,
+                          //             mainAxisAlignment:
+                          //                 MainAxisAlignment.center,
+                          //             children: <Widget>[
+                          //               Text(
+                          //                 'Fill Details',
+                          //                 style: TextStyle(
+                          //                     color: result2 != null
+                          //                         ? Colors.white
+                          //                         : Colors.black,
+                          //                     fontSize: 10),
+                          //               ),
+                          //               Visibility(
+                          //                   visible: errorMessage1
+                          //                           .contains("email 2")
+                          //                       ? true
+                          //                       : false,
+                          //                   child: Padding(
+                          //                     child: Align(
+                          //                       child: Icon(
+                          //                         Icons.error,
+                          //                         color: Colors.red,
+                          //                         size: 16,
+                          //                       ),
+                          //                       alignment: Alignment.center,
+                          //                     ),
+                          //                     padding:
+                          //                         EdgeInsets.only(left: 10),
+                          //                   )),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           Padding(
                             padding: EdgeInsets.all(10),
                           ),
-                          Container(
-                            height: SizeConfig.screenHeight * 0.20,
-                            width: SizeConfig.screenWidth * 0.40,
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                              color:
-                                  result3 != null ? Colors.black : Colors.white,
-                              border: Border.all(
-                                width:
-                                    errorMessage1.contains("email 3") ? 2 : 1.5,
-                                color: errorMessage1.contains("email 3")
-                                    ? Colors.red
-                                    : Colors.black26,
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Row(
-                                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: SizeConfig.blockSizeHorizontal * 2,
-                                    ),
-                                    Text(
-                                      result3 != null
-                                          ? result3[FIRSTNAME + "_3"]
-                                          : 'Child#2',
-                                      style: TextStyle(
-                                        color: result3 != null
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: textSize12,
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: SvgPicture.asset(
-                                        baseImageAssetsUrl + 'user.svg',
-                                        color: result3 != null
-                                            ? Colors.white
-                                            : Colors.black,
-                                        height: 25,
-                                        width: 25,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: padding15),
-                                  height: 40,
-                                  width: SizeConfig.screenWidth * 0.33,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      border: Border.all(
-                                        color: result3 != null
-                                            ? Colors.white
-                                            : Colors.black45,
-                                      )),
-                                  child: RaisedButton(
-                                    onPressed: () {
-                                      _navigateAndDisplaySelection3(
-                                          context, "_3");
-                                    },
-                                    color: result3 != null
-                                        ? Colors.black
-                                        : Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0)),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          'Fill Details',
-                                          style: TextStyle(
-                                              color: result3 != null
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontSize: 10),
-                                        ),
-                                        Visibility(
-                                            visible: errorMessage1
-                                                    .contains("email 3")
-                                                ? true
-                                                : false,
-                                            child: Padding(
-                                              child: Align(
-                                                child: Icon(
-                                                  Icons.error,
-                                                  color: Colors.red,
-                                                  size: 16,
-                                                ),
-                                                alignment: Alignment.center,
-                                              ),
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          //CommentCode
+                          // Container(
+                          //   height: SizeConfig.screenHeight * 0.20,
+                          //   width: SizeConfig.screenWidth * 0.40,
+                          //   padding: EdgeInsets.all(10),
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(5.0),
+                          //     boxShadow: [
+                          //       BoxShadow(
+                          //         color: Colors.grey.withOpacity(0.3),
+                          //         spreadRadius: 5,
+                          //         blurRadius: 7,
+                          //         offset: Offset(
+                          //             0, 3), // changes position of shadow
+                          //       ),
+                          //     ],
+                          //     color:
+                          //         result3 != null ? Colors.black : Colors.white,
+                          //     border: Border.all(
+                          //       width:
+                          //           errorMessage1.contains("email 3") ? 2 : 1.5,
+                          //       color: errorMessage1.contains("email 3")
+                          //           ? Colors.red
+                          //           : Colors.black26,
+                          //     ),
+                          //   ),
+                          //   child: Column(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: <Widget>[
+                          //       Row(
+                          //         //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //         mainAxisAlignment: MainAxisAlignment.start,
+                          //         children: <Widget>[
+                          //           SizedBox(
+                          //             width: SizeConfig.blockSizeHorizontal * 2,
+                          //           ),
+                          //           Text(
+                          //             result3 != null
+                          //                 ? result3[FIRSTNAME + "_3"]
+                          //                 : 'Child#2',
+                          //             style: TextStyle(
+                          //               color: result3 != null
+                          //                   ? Colors.white
+                          //                   : Colors.black,
+                          //               fontSize: textSize12,
+                          //             ),
+                          //           ),
+                          //           Spacer(),
+                          //           Container(
+                          //             padding: EdgeInsets.all(10),
+                          //             child: SvgPicture.asset(
+                          //               baseImageAssetsUrl + 'user.svg',
+                          //               color: result3 != null
+                          //                   ? Colors.white
+                          //                   : Colors.black,
+                          //               height: 25,
+                          //               width: 25,
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //       Container(
+                          //         margin: EdgeInsets.only(top: padding15),
+                          //         height: 40,
+                          //         width: SizeConfig.screenWidth * 0.33,
+                          //         decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.circular(5.0),
+                          //             border: Border.all(
+                          //               color: result3 != null
+                          //                   ? Colors.white
+                          //                   : Colors.black45,
+                          //             )),
+                          //         child: RaisedButton(
+                          //           onPressed: () {
+                          //             _navigateAndDisplaySelection3(
+                          //                 context, "_3");
+                          //           },
+                          //           color: result3 != null
+                          //               ? Colors.black
+                          //               : Colors.white,
+                          //           shape: RoundedRectangleBorder(
+                          //               borderRadius:
+                          //                   BorderRadius.circular(5.0)),
+                          //           child: Row(
+                          //             crossAxisAlignment:
+                          //                 CrossAxisAlignment.center,
+                          //             mainAxisAlignment:
+                          //                 MainAxisAlignment.center,
+                          //             children: <Widget>[
+                          //               Text(
+                          //                 'Fill Details',
+                          //                 style: TextStyle(
+                          //                     color: result3 != null
+                          //                         ? Colors.white
+                          //                         : Colors.black,
+                          //                     fontSize: 10),
+                          //               ),
+                          //               Visibility(
+                          //                   visible: errorMessage1
+                          //                           .contains("email 3")
+                          //                       ? true
+                          //                       : false,
+                          //                   child: Padding(
+                          //                     child: Align(
+                          //                       child: Icon(
+                          //                         Icons.error,
+                          //                         color: Colors.red,
+                          //                         size: 16,
+                          //                       ),
+                          //                       alignment: Alignment.center,
+                          //                     ),
+                          //                     padding:
+                          //                         EdgeInsets.only(left: 10),
+                          //                   )),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                       SizedBox(

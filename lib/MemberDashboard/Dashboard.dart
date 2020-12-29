@@ -68,13 +68,13 @@ class DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     
-    if(roleValue == 'Local Guest'){
+    // if(roleValue == 'Local Guest'){
      _children= [
       Home(), Cardio(), EventClass()];  
-     } else {
-       _children= [
-      Home2(), Cardio(), EventClass()];
-     }
+     // } else {
+     //   _children= [
+     //  Home2(), Cardio(), EventClass()];
+     // }
     SizeConfig().init(context);
     return Scaffold(
         backgroundColor: CColor.WHITE,

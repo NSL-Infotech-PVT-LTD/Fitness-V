@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/AuthScreens/SuccessScreen.dart';
+import 'package:volt/Screens/view_personal_trainer.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -15,15 +18,30 @@ import 'package:volt/Methods.dart';
 import '../Methods/Method.dart';
 import '../Methods/api_interface.dart';
 import '../Value/Strings.dart';
+import 'package:volt/Methods/gymModal.dart';
+import 'package:http/http.dart' as http;
 
 class SpouseType extends StatefulWidget {
+  final roleIds;
+  final rolePlanIds;
   List response;
   String type = "";
+  int memberCount = 0;
+  final gym_members;
   int plan_index = 0;
-  String roleId = "";
+  var roleId;
+
   List<String> childValue;
 
-  SpouseType({this.response, this.plan_index, this.type, this.roleId});
+  SpouseType(
+      {this.response,
+      this.plan_index,
+      this.type,
+      this.roleId,
+      this.gym_members,
+      this.memberCount,
+      this.roleIds,
+      this.rolePlanIds});
 
   @override
   _SpouseTypeState createState() => _SpouseTypeState();
@@ -34,18 +52,28 @@ class _SpouseTypeState extends State<SpouseType> {
   double setWidth;
   bool _isIos;
   String deviceType = '';
-  String roleId = "";
+  var roleId;
+
   String deviceToken = "";
   var errorMessage = '';
   var errorMessage1 = '';
-
+  List<Data> data = [];
   var chooseChilds = false;
   int valueNew = -1;
+  int childValueCount = 0;
+  var price = 0;
+  var newprice;
+  var Totalprice = 0;
   List<String> childValue = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
   List<String> memberName = ['Spouse#1', 'Spouse#2'];
 
-  String rolePlanId = "";
-  var result, result1;
+  var rolePlanId;
+
+  var rolePlanFee = null;
+  List<Map<String, dynamic>> result = [];
+  var myResult;
+  int index = 0;
+  var totalMoney;
 
   var _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -53,34 +81,164 @@ class _SpouseTypeState extends State<SpouseType> {
 
   @override
   void initState() {
+    print("ch" + widget.rolePlanIds.toString());
+    print("chP " + widget.roleId.toString());
+    childValueCount = widget.memberCount - 2;
+    for (int i = 0; i < widget.memberCount; i++) {
+      result.add({});
+    }
+    valueNew = childValueCount;
+    var myLength = valueNew + 2;
+    print("$childValueCount   $myLength");
+    if (result.length < myLength) {
+      for (int i = result.length; i < myLength; i++) {
+        result.add({});
+      }
+    } else {
+      for (int i = result.length; i > myLength; i--) {
+        result.removeAt(i - 1);
+      }
+    }
+    print("vikas $result");
+
+    if (memberName.length > 2) {
+      memberName.removeRange(2, memberName.length);
+    }
+    // print('part $valueNew');
+    // print('part $stoData');
+    //
+    for (int i = (valueNew + 3); i < stoData.length; i++) {
+      stoData[i] = '';
+    }
+    // print('part1 $stoData');
+    for (int i = 1; i <= valueNew; i++) {
+      memberName.add('Child#$i');
+    }
+
+    print(result);
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
     super.initState();
+    print(widget.gym_members);
   }
 
-  _navigateAndDisplaySelection({
-      int index, BuildContext context, String formType ,dynamic chFilledData}) async {
-    
-    result = await Navigator.push(
+  getMemberShipData() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+        Map<String, String> param = {
+          "type": widget.gym_members.toString(),
+          "user_with_child_only": "true",
+        };
+        gRoles(param).then((response) {
+          if (response.status) {
+            if (response.data != null) {
+              print("newData" + response.data.toString());
+              dismissDialog(context);
+              setState(() {
+                data = response.data;
+              });
+            }
+            setState(() {});
+          } else {
+            dismissDialog(context);
+          }
+        }).whenComplete(() {
+          setState(() {
+            customBottomSheet(
+              data: data,
+              context: context,
+              getValue: () {
+                setState(() {
+                  valueNew = childValueCount;
+                  var myLength = valueNew + 2;
+                  print("$childValueCount   $myLength");
+                  if (result.length < myLength) {
+                    for (int i = result.length; i < myLength; i++) {
+                      result.add({});
+                    }
+                  } else {
+                    for (int i = result.length; i > myLength; i--) {
+                      result.removeAt(i - 1);
+                    }
+                  }
+                  print("vikas $result");
+
+                  if (memberName.length > 2) {
+                    memberName.removeRange(2, memberName.length);
+                  }
+                  // print('part $valueNew');
+                  // print('part $stoData');
+                  //
+                  for (int i = (valueNew + 3); i < stoData.length; i++) {
+                    stoData[i] = '';
+                  }
+                  // print('part1 $stoData');
+                  for (int i = 1; i <= valueNew; i++) {
+                    memberName.add('Child#$i');
+                  }
+                  // // print('after');
+                  // // print(memberName);
+                  chooseChilds = false;
+                  valueNew = -1;
+                });
+                Navigator.pop(context);
+              },
+            );
+          });
+        });
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
+
+  _navigateAndDisplaySelection(
+      {int ind,
+      BuildContext context,
+      String formType,
+      Map<String, String> chFilledData,
+      roleSId,
+      rolePanId}) async {
+    print("current Index $ind");
+    this.index = ind;
+    myResult = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SignupScreen(
+                rolePlanId: widget.rolePlanIds,
+                roleId: widget.roleId,
                 memberIndex: index,
                 formType: formType,
                 // type: widget.type,
                 editData: chFilledData,
                 isSingle: false,
                 isCityTrue: true,
-                
                 isEmailError:
                     errorMessage1.contains("email has") ? true : false,
               )),
     );
 
     setState(() {
-      if (result != null) {
-        stoData[int.parse(result['memberIndex'])] = result;
+      if (myResult != null) {
+        // price = myResult['trainerPrice'];
+
+        result[index] = myResult;
+
+        print("fsdfsdf${result.length}");
+        Totalprice = 0;
+        result.forEach((element) {
+          print("element['trainerPrice']  ${element['trainerPrice']}");
+          Totalprice = Totalprice +
+              int.parse(
+                  "${element['trainerPrice'] != null && element['trainerPrice'] != "null" ? (element['trainerPrice']) : 0}");
+        });
+        print("jugraj $Totalprice");
       }
+      // if (result.length>0) {
+      //   stoData[int.parse(result[index]['memberIndex'])] = result;
+      // }
 
       print('part $stoData');
     });
@@ -103,12 +261,12 @@ class _SpouseTypeState extends State<SpouseType> {
 
   @override
   Widget build(BuildContext context) {
-    rolePlanId = widget.response[widget.plan_index]['id'].toString();
+    //  rolePlanId = widget.response[widget.plan_index]['id'].toString();
 
     return WillPopScope(
         // ignore: missing_return
         onWillPop: () {
-          if (result != null || result1 != null) {
+          if (result != null) {
             exitDialog(context);
             return new Future(() => false);
           } else {
@@ -183,9 +341,8 @@ class _SpouseTypeState extends State<SpouseType> {
                               padding: EdgeInsets.only(
                                   right: padding25, top: padding20),
                               child: Text(
-                                couple +
-                                    widget.response[widget.plan_index]
-                                        ['fee_type'],
+                                //couple +
+                                widget.response[widget.plan_index]['fee_type'],
                                 style: TextStyle(
                                   color: CColor.WHITE,
                                   fontSize: textSize10,
@@ -195,14 +352,28 @@ class _SpouseTypeState extends State<SpouseType> {
                             Container(
                               color: Colors.black,
                               padding: EdgeInsets.only(right: padding25),
-                              child: Text(
-                                aed +
-                                    widget.response[widget.plan_index]['fee']
-                                        .toString(),
-                                style: TextStyle(
-                                  color: CColor.WHITE,
-                                  fontSize: textSize18,
-                                ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    aed +
+                                        "${rolePlanFee != null ? rolePlanFee.toString() : widget.response[widget.plan_index]['fee']}",
+                                    // aed + "${rolePlanFee != null ? rolePlanFee.toString() : widget.response[widget.plan_index]['fee']} ${Totalprice != null ?  Totalprice.toString() : ""}",
+                                    style: TextStyle(
+                                      color: CColor.WHITE,
+                                      fontSize: textSize18,
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: Totalprice != 0,
+                                    child: Text(
+                                      " + ${Totalprice.toString()}",
+                                      style: TextStyle(
+                                        color: CColor.WHITE,
+                                        fontSize: textSize18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -240,29 +411,25 @@ class _SpouseTypeState extends State<SpouseType> {
                               ),
                             ],
                             border: Border.all(
-                                width: 
-                                     stoData[index] != ''
-                                        ? stoData[index]['memberIndex'] ==
-                                                index.toString()
-                                            ? 2.0
-                                            : 1.5
-                                        : 1.5
-                                    ,
-                                color:stoData[index] != ''
-                                        ? stoData[index]['memberIndex'] ==
-                                                index.toString()
-                                            ? Colors.white
-                                            : Color(0xFFBDBDBD)
-                                        : Color(0xFFBDBDBD)
-                                    ),
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: stoData[index] != ''
-                                    ? stoData[index]['memberIndex'] ==
+                                width: result[index].isNotEmpty
+                                    ? result[index]['memberIndex'] ==
                                             index.toString()
-                                        ? Colors.black
-                                        : Colors.white
+                                        ? 2.0
+                                        : 1.5
+                                    : 1.5,
+                                color: result[index].isNotEmpty
+                                    ? result[index]['memberIndex'] ==
+                                            index.toString()
+                                        ? Colors.white
+                                        : Color(0xFFBDBDBD)
+                                    : Color(0xFFBDBDBD)),
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: result[index].isNotEmpty
+                                ? result[index]['memberIndex'] ==
+                                        index.toString()
+                                    ? Colors.black
                                     : Colors.white
-                                ,
+                                : Colors.white,
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -276,22 +443,28 @@ class _SpouseTypeState extends State<SpouseType> {
                                     width: SizeConfig.blockSizeHorizontal * 2,
                                   ),
                                   Text(
-                                    
-                                    stoData[index] != ''
-                                              ? stoData[index]['memberIndex'] ==
-                                                      index.toString()
-                                                  ? stoData[index]['memberIndex'] == '0' ? stoData[index][FIRSTNAME].toString().toUpperCase() :
-                                                  stoData[index][FIRSTNAME+'_'+index.toString()].toString().toUpperCase()
-                                                  : memberName[index]
-                                              : memberName[index],
+                                    result[index].isNotEmpty
+                                        ? result[index]['memberIndex'] ==
+                                                index.toString()
+                                            ? result[index]['memberIndex'] ==
+                                                    '0'
+                                                ? result[index][FIRSTNAME]
+                                                    .toString()
+                                                    .toUpperCase()
+                                                : result[index][FIRSTNAME +
+                                                        '_' +
+                                                        index.toString()]
+                                                    .toString()
+                                                    .toUpperCase()
+                                            : memberName[index]
+                                        : memberName[index],
                                     style: TextStyle(
-                                      color:stoData[index] != ''
-                                              ? stoData[index]['memberIndex'] ==
-                                                      index.toString()
-                                                  ? Colors.white
-                                                  : Colors.black
+                                      color: result[index].isNotEmpty
+                                          ? result[index]['memberIndex'] ==
+                                                  index.toString()
+                                              ? Colors.white
                                               : Colors.black
-                                          ,
+                                          : Colors.black,
                                       fontSize: textSize12,
                                     ),
                                   ),
@@ -300,13 +473,12 @@ class _SpouseTypeState extends State<SpouseType> {
                                     padding: EdgeInsets.all(10),
                                     child: SvgPicture.asset(
                                       baseImageAssetsUrl + 'user.svg',
-                                      color:stoData[index] != ''
-                                              ? stoData[index]['memberIndex'] ==
-                                                      index.toString()
-                                                  ? Colors.white
-                                                  : Colors.black
+                                      color: result[index].isNotEmpty
+                                          ? result[index]['memberIndex'] ==
+                                                  index.toString()
+                                              ? Colors.white
                                               : Colors.black
-                                          ,
+                                          : Colors.black,
                                       height: 25,
                                       width: 25,
                                     ),
@@ -317,21 +489,31 @@ class _SpouseTypeState extends State<SpouseType> {
                                 alignment: Alignment.bottomCenter,
                                 child: GestureDetector(
                                   onTap: () {
-                                       
-                                    
-                                      if (stoData[index] != '') {
-                                        if (stoData[index]['memberIndex'] ==
-                                            index.toString()) {
-                                             _navigateAndDisplaySelection(
-                                         index: index,context: context, formType: '',
-                                         chFilledData: stoData[index]
-                                       );   
-                                            } 
-                                      } else {
-                                      _navigateAndDisplaySelection(
-                                         index: index,context: context, formType: '',
-                                       );
-                                    }
+                                    //   print("ffsjbjfb ${result[index]}");
+                                    // if (stoData[index] != '') {
+                                    //   if (stoData[index]['memberIndex'] ==
+                                    //       index.toString()) {
+                                    //     _navigateAndDisplaySelection(
+                                    //         index: index,
+                                    //         context: context,
+                                    //
+                                    //         formType: '',
+                                    //         chFilledData: result[index]);
+                                    //   }
+                                    // } else {
+                                    _navigateAndDisplaySelection(
+                                        ind: index,
+                                        context: context,
+                                        chFilledData: result[index].isNotEmpty
+                                            ? result[index]
+                                            : null,
+                                        formType: '',
+                                        // rolePanId: rolePlanId.toString(),
+                                        // roleSId: roleId.toString());
+                                        rolePanId:
+                                            widget.rolePlanIds.toString(),
+                                        roleSId: widget.roleIds.toString());
+                                    // }
                                   },
                                   child: Container(
                                       margin: EdgeInsets.only(top: padding15),
@@ -351,27 +533,21 @@ class _SpouseTypeState extends State<SpouseType> {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
-                                              
-                                                   stoData[index] != ''
+                                              stoData[index] != ''
+                                                  ? stoData[index]
+                                                              ['memberIndex'] ==
+                                                          index.toString()
+                                                      ? 'View Details'
+                                                      : 'Fill Details'
+                                                  : 'Fill Details',
+                                              style: TextStyle(
+                                                  color: stoData[index] != ''
                                                       ? stoData[index][
                                                                   'memberIndex'] ==
                                                               index.toString()
-                                                          ? 'View Details'
-                                                          : 'Fill Details'
-                                                      : 'Fill Details'
-                                                  ,
-                                              style: TextStyle(
-                                                  color:
-                                                       stoData[index] != ''
-                                                          ? stoData[index][
-                                                                      'memberIndex'] ==
-                                                                  index
-                                                                      .toString()
-                                                              ? Colors.black
-                                                              : Colors.black
+                                                          ? Colors.black
                                                           : Colors.black
-                                                      ,
-                                                      
+                                                      : Colors.black,
                                                   fontSize: 10),
                                             )
                                           ])),
@@ -386,59 +562,34 @@ class _SpouseTypeState extends State<SpouseType> {
 
                   ///spouse code
 
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.only(top: padding10),
-                      height: 45,
-                      width: setWidth,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(
-                            color: Colors.black26,
+                  Visibility(
+                    visible: widget.memberCount > 2,
+                    child: Center(
+                      child: Container(
+                        margin: EdgeInsets.only(top: padding10),
+                        height: 45,
+                        width: setWidth,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        child: RaisedButton(
+                          onPressed: () {
+                            getMemberShipData();
+                            //    var count = 0;
+                            // Navigator.popUntil(context, (route) {
+                            //   return count++ == 2;
+                            // });
+                          },
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                          child: Text(
+                            'Extra Child?',
+                            style: TextStyle(color: Colors.black, fontSize: 12),
                           ),
-                          color: Colors.white),
-                      child: RaisedButton(
-                        onPressed: () {
-                          var count = 0;
-                          // Navigator.popUntil(context, (route) {
-                          //   return count++ == 2;
-                          // });
-                          customBottomSheet(
-                            context: context,
-                            getValue: () {
-                              setState(() {
-                                if (memberName.length > 2) {
-                                  memberName.removeRange(2, memberName.length);
-                                }
-
-                                print('part $valueNew');
-                                print('part $stoData');
-
-                                for (int i = (valueNew + 3);
-                                    i < stoData.length;
-                                    i++) {
-                                  stoData[i] = '';
-                                }
-                                print('part1 $stoData');
-                                for (int i = 1; i <= valueNew + 1; i++) {
-                                  memberName.add('Child#$i');
-                                }
-
-                                // print('after');
-                                // print(memberName);
-                                chooseChilds = false;
-                                valueNew = -1;
-                              });
-                              Navigator.pop(context);
-                            },
-                          );
-                        },
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                        child: Text(
-                          'Have Child?',
-                          style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       ),
                     ),
@@ -458,44 +609,69 @@ class _SpouseTypeState extends State<SpouseType> {
                         color: Colors.white),
                     child: RaisedButton(
                       onPressed: () {
-                        if (result != null && result1 != null && acceptTerms) {
-                          Map<String, String> parms = {
-                            /**
-                             * single form detail
-                             */
+                        bool formCheck = false;
+                        // for(int i=0; i<result.length;i++)
+                        //   {
+                        //     if(result[i]['memberIndex']==i.toString())
+                        //       {
+                        //         print(i);
+                        //         print("Empty______________");
+                        //         break;
+                        //       }
+                        //   }
+                        /**
+                         * single form detail
+                         */
+                        result.forEach((element) {
+                          if (element.isEmpty) {
+                            formCheck = false;
+                            return;
+                          } else {
+                            formCheck = true;
+                          }
+                        });
 
-                            FIRSTNAME: result[FIRSTNAME],
-                            MIDDLENAME: result[MIDDLENAME],
-                            LASTNAME: result[LASTNAME],
-                            MOBILE: result[MOBILE],
-                            EMAIL: result[EMAIL],
-                            PASSWORD: result[PASSWORD],
-                            BIRTH_DATE: result[BIRTH_DATE],
-                            EMIRATES_ID: result[EMIRATES_ID],
-                            ROLE_ID: widget.roleId,
-                            ROLE_PLAN_ID: rolePlanId,
-                            EMEREGENCY_NUMBER: result[EMEREGENCY_NUMBER],
-                            DESIGNATION: result[DESIGNATION],
-                            ADDRESS: result[ADDRESS],
-                            GENDER: result[GENDER],
-                            CITY: result[CITY],
-                            /**
-                             * form 1 details
-                             */
-                            FIRSTNAME + "_1": result1[FIRSTNAME + "_1"],
-                            MIDDLENAME + "_1": result1[MIDDLENAME + "_1"],
-                            LASTNAME + "_1": result1[LASTNAME + "_1"],
-                            MOBILE + "_1": result1[MOBILE + "_1"],
-                            EMAIL + "_1": result1[EMAIL + "_1"],
-                            PASSWORD + "_1": result1[PASSWORD + "_1"],
-                            BIRTH_DATE + "_1": result1[BIRTH_DATE + "_1"],
-                            EMIRATES_ID + "_1": result1[EMIRATES_ID + "_1"],
-                            GENDER + "_1": result1[GENDER + "_1"],
-                            DEVICE_TYPE: deviceType,
-                            DEVICE_TOKEN: deviceTokenValue,
-                          };
-                          print("bjbfjj$parms");
+                        if (result != null && formCheck && acceptTerms) {
+                          Map<String, String> parms = {};
+                for (int index = 0; index < result.length; index++) {
+                  parms[FIRSTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
+                  parms[MIDDLENAME + "${index == 0 ? "" : "_$index"}"] = result[index][MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
+                  parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][LASTNAME + "${index == 0 ? "" : "_$index"}"];
+                  parms[MOBILE + "${index == 0 ? "" : "_$index"}"] = result[index][MOBILE + "${index == 0 ? "" : "_$index"}"];
+                  parms[EMAIL + "${index == 0 ? "" : "_$index"}"] = result[index][EMAIL + "${index == 0 ? "" : "_$index"}"];
+                  parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] = result[index][PASSWORD + "${index == 0 ? "" : "_$index"}"];
+                  parms[BIRTH_DATE + "${index == 0 ? "" : "_$index"}"] = result[index][BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
+                  parms[EMIRATES_ID + "${index == 0 ? "" : "_$index"}"] = result[index][EMIRATES_ID + "${index == 0 ? "" : "_$index"}"];
+                  parms[GENDER + "${index == 0 ? "" : "_$index"}"] = result[index][GENDER + "${index == 0 ? "" : "_$index"}"];
+                  parms[trainer_id + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_id + "${index == 0 ? "" : "_$index"}"];
+                  parms[trainer_slot + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_slot + "${index == 0 ? "" : "_$index"}"];
+                  if (index == 0) parms[EMEREGENCY_NUMBER] = result[index][EMEREGENCY_NUMBER];
+                  if (index == 0) parms[DESIGNATION] = result[index][DESIGNATION];
+                  if (index == 0) parms[ADDRESS] = result[index][ADDRESS];
+                  if (index == 0) parms[CITY] = result[index][CITY];
+                  if (index == 0) parms[nationality] = result[index][nationality];
+                  if (index == 0) parms[workplace] = result[index][workplace];
+                  if (index == 0) parms[marital_status] = result[index][marital_status];
+                  if (index == 0) parms[about_us] = result[index][about_us];
+                  parms[DEVICE_TYPE] = deviceType;
+                  parms[DEVICE_TOKEN] = deviceTokenValue;
+                  parms[ROLE_ID] = widget.roleId.toString();
+                  parms[ROLE_PLAN_ID] = widget.rolePlanIds.toString();
+                }
+                          print("vikasssss===${parms}");
+                          // FIRSTNAME: result[index][FIRSTNAME],
+                          // MIDDLENAME: result[index][MIDDLENAME],
+                          // LASTNAME: result[index][LASTNAME],
+                          // MOBILE: result[index][MOBILE],
+                          // EMAIL: result[index][EMAIL],
+                          // PASSWORD: result[index][PASSWORD],
+                          // BIRTH_DATE: result[index][BIRTH_DATE],
+                          // EMIRATES_ID: result[index][EMIRATES_ID],
+                          /**
+                           * form 1 details
+                           */
                           isConnectedToInternet().then((internet) {
+                            print("AllParam" + parms.toString());
                             if (internet != null && internet) {
                               showProgress(context, "Please wait.....");
 
@@ -563,9 +739,11 @@ class _SpouseTypeState extends State<SpouseType> {
                           showDialogBox(context, termsofService,
                               'Please read & accept our terms of services');
                         } else {
-                          showDialogBox(context, error, 'Please fill details');
+                          showDialogBox(
+                              context, error, 'please fill all details');
                         }
                       },
+                      /** from end Api**/
                       color: Colors.black,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0.0)),
@@ -757,7 +935,7 @@ class _SpouseTypeState extends State<SpouseType> {
         });
   }
 
-  void customBottomSheet({context, VoidCallback getValue}) {
+  void customBottomSheet({context, VoidCallback getValue, List<Data> data}) {
     showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -781,7 +959,7 @@ class _SpouseTypeState extends State<SpouseType> {
                     right: SizeConfig.screenWidth * 0.05,
                     bottom: SizeConfig.screenHeight * 0.025),
                 child: StatefulBuilder(
-                  builder: (context, setState) {
+                  builder: (context, StateSetter setState) {
                     return TranslationAnimatedWidget(
                       enabled: chooseChilds,
                       duration: Duration(milliseconds: 500),
@@ -801,7 +979,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Have Child?',
+                                    'Extra Child?',
                                     style: TextStyle(
                                         fontFamily: 'regular',
                                         fontSize:
@@ -825,24 +1003,127 @@ class _SpouseTypeState extends State<SpouseType> {
                                       'assets/icons/close_icon.svg'))
                             ],
                           ),
-                          
                           SizedBox(
                             height: 15.0,
                           ),
                           Expanded(
                             child: ListView.builder(
                               padding: EdgeInsets.all(0.0),
-                              itemCount: childValue.length,
+                              itemCount: data.length,
                               itemBuilder: (context, index) {
                                 return InkWell(
                                     splashColor: Colors.black,
                                     onTap: () {
                                       setState(() {
+                                        //  widget.response[widget.plan_index]['fee_type']
+                                        childValueCount =
+                                            data[index].member - 2;
+                                        roleId = data[index].id.toString();
+
+                                        rolePlanId = widget
+                                                        .response[widget.plan_index]
+                                                    ['fee_type'] ==
+                                                data[index]
+                                                    .plans
+                                                    .monthly
+                                                    .feeType
+                                            ? data[index]
+                                                .plans
+                                                .monthly
+                                                .id
+                                                .toString()
+                                            : widget.response[widget.plan_index]
+                                                        ['fee_type'] ==
+                                                    data[index]
+                                                        .plans
+                                                        .quarterly
+                                                        .feeType
+                                                ? data[index]
+                                                    .plans
+                                                    .quarterly
+                                                    .id
+                                                    .toString()
+                                                : widget.response[widget.plan_index]
+                                                            ['fee_type'] ==
+                                                        data[index]
+                                                            .plans
+                                                            .halfYearly
+                                                            .feeType
+                                                    ? data[index]
+                                                        .plans
+                                                        .halfYearly
+                                                        .id
+                                                        .toString()
+                                                    : widget.response[widget.plan_index]
+                                                                ['fee_type'] ==
+                                                            data[index]
+                                                                .plans
+                                                                .yearly
+                                                                .feeType
+                                                        ? data[index]
+                                                            .plans
+                                                            .yearly
+                                                            .id
+                                                            .toString()
+                                                        : "Something Wrong";
+
+                                        rolePlanFee = widget
+                                                        .response[widget.plan_index]
+                                                    ['fee_type'] ==
+                                                data[index]
+                                                    .plans
+                                                    .monthly
+                                                    .feeType
+                                            ? data[index]
+                                                .plans
+                                                .monthly
+                                                .fee
+                                                .toString()
+                                            : widget.response[widget.plan_index]
+                                                        ['fee_type'] ==
+                                                    data[index]
+                                                        .plans
+                                                        .quarterly
+                                                        .feeType
+                                                ? data[index]
+                                                    .plans
+                                                    .quarterly
+                                                    .fee
+                                                    .toString()
+                                                : widget.response[widget.plan_index]
+                                                            ['fee_type'] ==
+                                                        data[index]
+                                                            .plans
+                                                            .halfYearly
+                                                            .feeType
+                                                    ? data[index]
+                                                        .plans
+                                                        .halfYearly
+                                                        .fee
+                                                        .toString()
+                                                    : widget.response[widget.plan_index]
+                                                                ['fee_type'] ==
+                                                            data[index]
+                                                                .plans
+                                                                .yearly
+                                                                .feeType
+                                                        ? data[index]
+                                                            .plans
+                                                            .yearly
+                                                            .fee
+                                                            .toString()
+                                                        : "Something Wrong";
                                         valueNew = index;
+
+                                        print("rolePlanId " +
+                                            rolePlanId.toString());
+                                        print("roleId " + roleId.toString());
+                                        print("fee " + rolePlanFee.toString());
                                       });
                                       if (valueNew == index) {
                                         setState(() {
                                           chooseChilds = true;
+                                          //     valueNew = data[index].member-2;
                                         });
                                       }
                                     },
@@ -852,7 +1133,8 @@ class _SpouseTypeState extends State<SpouseType> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: SizeConfig.screenHeight * 0.015),
+                            margin: EdgeInsets.only(
+                                top: SizeConfig.screenHeight * 0.015),
                             child: TranslationAnimatedWidget(
                                 enabled: chooseChilds,
                                 duration: Duration(milliseconds: 700),
@@ -889,20 +1171,22 @@ class _SpouseTypeState extends State<SpouseType> {
                                       ],
                                     ),
                                     Padding(
-                                      padding:EdgeInsets.only(top: 10.0),
+                                      padding: EdgeInsets.only(top: 10.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              
+                                              Navigator.pop(context);
                                             },
                                             child: Container(
                                               child: Text(
                                                 'back to plans?',
                                                 style: TextStyle(
-                                                    color: Colors.black, decoration: TextDecoration.underline),
+                                                    color: Colors.black,
+                                                    decoration: TextDecoration
+                                                        .underline),
                                               ),
                                             ),
                                           ),
@@ -933,12 +1217,63 @@ class _SpouseTypeState extends State<SpouseType> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    '1200 AED For $qunVal Child',
-                    style: TextStyle(fontFamily: open_light, fontSize: 14),
-                  ),
+                  //widget.response[widget.plan_index]['fee_type']
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'monthly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelMonthly}',
+                            style:
+                                TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'quarterly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelQuarterly}',
+                            style:
+                                TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'half_yearly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelHalfYearly}',
+                            style:
+                                TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  Visibility(
+                      visible: widget.response[widget.plan_index]['fee_type'] ==
+                          'yearly',
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.80),
+                          child: Text(
+                            '${data[currentIndex].priceLabelYearly}',
+                            style:
+                                TextStyle(fontFamily: open_light, fontSize: 14),
+                          ))),
+                  //Text(' ${data[currentIndex].plans.halfYearly.fee}{} AED ${data[currentIndex].label}',//${data[currentIndex].planDetail[currentIndex].fee
+                  //),
                 ],
               ),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'monthly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelMonthly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'quarterly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelQuarterly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'half_yearly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelHalfYearly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
+              // Visibility(visible:widget.response[widget.plan_index]['fee_type'] == 'yearly',child: ConstrainedBox(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.80),child: Text('${data[currentIndex].priceLabelYearly}',style: TextStyle(fontFamily: open_light, fontSize: 14),))),
               Spacer(),
               Container(
                 height: 20.0,
@@ -952,7 +1287,7 @@ class _SpouseTypeState extends State<SpouseType> {
                     : SvgPicture.asset('assets/icons/icon_unselected.svg'),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

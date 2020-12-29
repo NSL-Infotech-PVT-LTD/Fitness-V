@@ -10,6 +10,8 @@ const updateProfile = 'Update Profile';
 const contactAndAboutVolt = 'Contact & About VOLT';
 const back = 'Back';
 const internetError = 'Internet Error';
+const durationOfStay = 'duration_of_stay';
+const hotelNo = 'hotel_room_no';
 
 const notifications = 'Notifications';
 const groupClasses = 'Group Classes';

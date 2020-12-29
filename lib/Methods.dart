@@ -232,7 +232,6 @@ Future<bool> bookingFunction(String auth, context, String model_type,
         if (model_type == trainerUsers) "hours": hours,
         if (model_type == classSchedules) "session": hours,
       }; 
-      print('Rinku : $parms');
 
       bookingApi(auth, parms).then((response) {
         dismissDialog(context);

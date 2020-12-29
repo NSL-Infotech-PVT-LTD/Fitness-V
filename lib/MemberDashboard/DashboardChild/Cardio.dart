@@ -166,6 +166,7 @@ class _CardioState extends State<Cardio> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) => TrainerDetail(
+                                          fromForm: false,
                                               id: checkList[0]['id'],
                                             )));
                               }
@@ -218,8 +219,9 @@ class _CardioState extends State<Cardio> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) => TrainerDetail(
+                                          fromForm: false,
                                               id: checkList[1]['id'],
-                                            )));
+                                        )));
                               }
                             }
                           },
@@ -287,6 +289,7 @@ class _CardioState extends State<Cardio> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) => TrainerDetail(
+                                          fromForm: false,
                                               id: checkList[index + 2]['id'],
                                             )));
                               },

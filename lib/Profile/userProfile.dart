@@ -115,7 +115,7 @@ class UserProfileState extends State<UserProfile> {
               child: CupertinoDatePicker(
                 use24hFormat: true,
                 maximumDate: new DateTime(2019, 12, 30),
-                minimumYear: 1950,
+                minimumYear: 1920,
                 maximumYear: 2019,
                 minuteInterval: 1,
                 mode: CupertinoDatePickerMode.date,

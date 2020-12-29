@@ -26,19 +26,21 @@ class LoginState extends State<LoginScreen> {
   bool _validate1 = false;
   bool _validate2 = false;
   final _formKey = GlobalKey<FormState>();
-  var deviceTok='';
+  String deviceTok='';
 
   void login() async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
         showProgress(context, "Please wait.....");
-        print('Device Token $deviceTok');  
+        print('Device Token $deviceTok');
+
         Map<String, String> parms = {
           EMAIL: _emailAddressFieldController.text,
           PASSWORD: _passwordFieldController.text,
-          DEVICE_TOKEN: deviceTok,
+          DEVICE_TOKEN: deviceTok!=null?deviceTok:"dfksnfkjdsnkf",
           DEVICE_TYPE: deviceType
         };
+        print("$parms");
         getLogin(parms).then((response) {
           dismissDialog(context);
           if (response.status) {
@@ -135,13 +137,13 @@ class LoginState extends State<LoginScreen> {
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            Text(
-                              localGuest,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: textSize16,
-                                  fontFamily: open_light),
-                            ),
+                            // Text(
+                            //   localGuest,
+                            //   style: TextStyle(
+                            //       color: Colors.white,
+                            //       fontSize: textSize16,
+                            //       fontFamily: open_light),
+                            // ),
                             SizedBox(
                               height: 100,
                             ),
