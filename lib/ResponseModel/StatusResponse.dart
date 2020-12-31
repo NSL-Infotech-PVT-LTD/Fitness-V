@@ -11,7 +11,7 @@ class StatusResponse {
 
   StatusResponse(this.status, this.code, this.data, this.error);
 
-  StatusResponse.fromJson(Map<String, dynamic> json) {
+  StatusResponse.fromJson(Map<String, dynamic> json,) {
     status = json['status'];
     code = json['code'];
     print("==========> "+json['data'] .toString());

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/Methods.dart';
+import 'package:volt/Methods/Pref.dart';
+import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/Methods/notificationList.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -12,6 +15,21 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class NotificationState extends State<NotificationScreen> {
+  String auth = '';
+  // StatusResponse obj;
+
+  @override
+  void initState() {
+    getString(USER_AUTH).then((value) => {auth = value}).whenComplete(() => {
+          getNotificationList(auth)
+              .then((value) => print("Notification" + value.data.toString()))
+              .whenComplete(() {
+
+          })
+        });
+    super.initState();
+  }
+
   final notificationList = List<CustomNoti>.generate(
       8, (i) => CustomNoti(title: 'Group Class on Thursday ,24 Jan ,11.00AM'));
 
@@ -49,7 +67,7 @@ class NotificationState extends State<NotificationScreen> {
                   children: <Widget>[
                     Card(
                       elevation: 5,
-                      color:Color(0xFFE9E9E9),
+                      color: Color(0xFFE9E9E9),
                       child: Container(
                         height: 40,
                         padding: EdgeInsets.only(left: padding15),

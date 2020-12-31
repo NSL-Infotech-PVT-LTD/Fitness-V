@@ -1,4 +1,6 @@
 
+import 'package:volt/Methods/gymModal.dart';
+
 class HaveChildData {
     HaveChildData({
         this.status,

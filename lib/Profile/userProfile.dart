@@ -44,6 +44,7 @@ class UserProfileState extends State<UserProfile> {
   var emiratesController = TextEditingController();
   var addressController = TextEditingController();
   var cityController = TextEditingController();
+  var nationalityController = TextEditingController();
 
   bool _isIos;
   bool _isEnable = true;
@@ -79,7 +80,6 @@ class UserProfileState extends State<UserProfile> {
         fromDate = formatter.format(order);
         sendDate = sendDateFormat.format(order);
       }
-      ;
     });
   }
 
@@ -149,7 +149,10 @@ class UserProfileState extends State<UserProfile> {
               designationController.text = response.data.user.designation;
               emiratesController.text = response.data.user.emirates_id;
               genderController.text = response.data.user.gender;
+              genderItem =  response.data.user.gender;
               addressController.text = response.data.user.address;
+              nationalityController.text = response.data.user.nationality;
+
               DateTime tempDate = new DateFormat("yyyy-MM-dd")
                   .parse(response.data.user.birth_date);
 
@@ -407,7 +410,7 @@ class UserProfileState extends State<UserProfile> {
                             SizedBox(
                               height: 10,
                             ),
-                            Padding(
+                            _isEnable?Padding(
                               padding: EdgeInsets.only(top: 8),
                               child: TextFormField(
                                 readOnly: true,
@@ -418,6 +421,11 @@ class UserProfileState extends State<UserProfile> {
                                     labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
+                            ):Row(children: [
+                              radiobutton("male"),
+                              SizedBox(width: MediaQuery.of(context).size.width * 0.15,),
+                              radiobutton("female"),
+                            ],
                             ),
                             Padding(
                               padding: EdgeInsets.only(top: 12),
@@ -570,15 +578,44 @@ class UserProfileState extends State<UserProfile> {
                                   return null;
                                 },
                                 controller: addressController,
-                                style: TextStyle(
-                                    color:
-                                        _isEnable ? Colors.grey : Colors.black),
+                                style: TextStyle(color: _isEnable ? Colors.grey : Colors.black),
                                 decoration: InputDecoration(
                                     labelText: address,
                                     labelStyle: TextStyle(fontSize: 12,color: Colors.black),
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
+
+                            _isEnable ?Padding(
+                              padding: EdgeInsets.only(top: 12),
+                              child: TextFormField(
+                                readOnly: true,
+                                keyboardType: TextInputType.text,
+                                controller: nationalityController,
+                                style: TextStyle(color: _isEnable ? Colors.grey : Colors.black),
+
+                                  decoration: InputDecoration(
+                                      labelText: "Nationality",
+                                      labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                      hintStyle: TextStyle(fontSize: textSize12)),
+
+                              ),
+                            ):Padding(
+                              padding: EdgeInsets.only(top: 12),
+                              child: TextFormField(
+                                readOnly: false,
+                                keyboardType: TextInputType.text,
+                                controller: nationalityController,
+                                style: TextStyle(color: _isEnable ? Colors.grey : Colors.black),
+                                decoration: InputDecoration(
+
+                                      labelText: "Nationality",
+                                      labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                      hintStyle: TextStyle(fontSize: textSize12)),
+
+                              ),
+                            ),
+
                             _isEnable
                                 ? Padding(
                                     padding: EdgeInsets.only(top: 12),
@@ -650,35 +687,23 @@ class UserProfileState extends State<UserProfile> {
                                             'Please select your city');
                                       } else {
                                         Map<String, String> parms = {
-                                          FIRSTNAME: firstNameController.text
-                                              .toString()
-                                              .trim(),
-                                          MIDDLENAME: middletNameController.text
-                                              .toString()
-                                              .trim(),
-                                          LASTNAME: lastNameController.text
-                                              .toString()
-                                              .trim(),
+                                          FIRSTNAME: firstNameController.text.toString().trim(),
+                                          MIDDLENAME: middletNameController.text.toString().trim(),
+                                          LASTNAME: lastNameController.text.toString().trim(),
                                           BIRTH_DATE: sendDate,
-                                          MOBILE: mobileController.text
-                                              .toString()
-                                              .trim(),
-                                          EMEREGENCY_NUMBER: emergencyController
-                                              .text
-                                              .toString()
-                                              .trim(),
+                                          MOBILE: mobileController.text.toString().trim(),
+                                          EMEREGENCY_NUMBER: emergencyController.text.toString().trim(),
                                           CITY: selectedCity,
-                                          EMIRATES_ID: emiratesController.text
-                                              .toString()
-                                              .trim(),
+                                          EMIRATES_ID: emiratesController.text.toString().trim(),
+                                          Nationality:nationalityController.text,
 //                                          DESIGNATION: designationController
-//                                              .text
+//                                            .text
 //                                              .toString()
 //                                              .trim(),
                                           ADDRESS: addressController.text
                                               .toString()
                                               .trim(),
-//                                          GENDER: genderItem.toLowerCase(),
+                                         GENDER: genderItem.toLowerCase(),
                                           DEVICE_TYPE: deviceType,
                                           DEVICE_TOKEN: deviceTokenValue,
                                         };
@@ -688,20 +713,17 @@ class UserProfileState extends State<UserProfile> {
                                           showProgress(
                                               context, "Please wait.....");
                                           if (internet != null && internet) {
-                                            updateUserProfileApi(
-                                                    auth, _imageFile, parms)
+                                            updateUserProfileApi(auth, _imageFile, parms)
                                                 .then((response) {
                                               dismissDialog(context);
                                               if (response.status) {
                                                 if (response.data != null &&
-                                                    response.data.user !=
-                                                        null) {
-                                                  image =
-                                                      response.data.user.image;
-                                                  cityController.text =
-                                                      response.data.user.city;
-                                                  setString(userImage,
-                                                      response.data.user.image);
+                                                    response.data.user != null) {
+
+                                                  image = response.data.user.image;
+                                                  cityController.text = response.data.user.city;
+
+                                                  setString(userImage, response.data.user.image);
                                                 }
                                                 _isEnable = true;
                                                 setState(() {});
@@ -772,10 +794,14 @@ class UserProfileState extends State<UserProfile> {
         value: title,
         onChanged: (val) {
           setState(() {
+            print(val);
             genderItem = val;
+            genderController.text = genderItem;
+
           });
         },
       ),
     );
   }
 }
+

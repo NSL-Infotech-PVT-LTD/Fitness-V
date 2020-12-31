@@ -6,6 +6,7 @@ class UserResponse {
   int id;
   int is_booked_by_me_booking_id;
   String name;
+  String nationality;
   String model_type;
   String review;
   int rating;
@@ -49,6 +50,7 @@ class UserResponse {
   UserResponse(
     this.id,
     this.is_booked_by_me_booking_id,
+    this.nationality,
     this.name,
     this.model_type,
     this.location,
@@ -92,6 +94,7 @@ class UserResponse {
 
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    nationality = json['nationality'];
     is_booked_by_me_booking_id = json['is_booked_by_me_booking_id'];
     name = json['name'];
     gender = json['gender'];
@@ -139,6 +142,7 @@ class UserResponse {
     data['id'] = this.id;
     data['is_booked_by_me_booking_id'] = this.is_booked_by_me_booking_id;
     data['model_type'] = this.model_type;
+    data['nationality'] = this.nationality;
     data['name'] = this.name;
     data['hours'] = this.hours;
     data['location'] = this.location;
@@ -176,7 +180,7 @@ class UserResponse {
 
     if (this.created_by_detail != null) {
       data['created_by_detail'] = this.created_by_detail.toJson();
-    } if (this.class_detail != null) {
+    }  if (this.class_detail != null) {
       data['class_detail'] = this.class_detail.toJson();
     }if (this.model_detail != null) {
       data['model_detail'] = this.model_detail.toJson();

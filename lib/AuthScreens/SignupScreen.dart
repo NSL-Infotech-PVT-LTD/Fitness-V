@@ -1,5 +1,5 @@
 import 'dart:io';
-//import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,6 +62,7 @@ class SignupState extends State<SignupScreen> {
   String radioItemMarital = '';
   bool acceptTerms = false;
   final formKey = GlobalKey<FormState>();
+  File file;
 
   /// @AuthScreens Controllers
   var firstNameController = TextEditingController();
@@ -191,8 +192,8 @@ class SignupState extends State<SignupScreen> {
    if (widget.type != null)print("form type "+widget.type);
     rolePlanId = widget.rolePlanId;
     roleId = widget.roleId;
-    print("dataNew " + rolePlanId.toString());
-    print("dataNew " + roleId.toString());
+    print("panId " + rolePlanId.toString());
+    print("roleId " + roleId.toString());
     print("check index " + widget.editData.toString());
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
@@ -282,7 +283,7 @@ class SignupState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<File> file;
+
     //[{id: 1, fee: 250, fee_type: Monthly, role_id: 1, role_plan: Monthly: AED 250},
     // {id: 2, fee: 1700, fee_type: Quarterly, role_id: 1, role_plan: Quarterly: AED 1700},
     // {id: 3, fee: 3200, fee_type: Half yearly, role_id: 1, role_plan: Half yearly: AED 3200},
@@ -305,6 +306,7 @@ class SignupState extends State<SignupScreen> {
         }
       }
     }
+
     SizeConfig().init(context);
     return WillPopScope(
         onWillPop: () {
@@ -765,57 +767,56 @@ class SignupState extends State<SignupScreen> {
                                   },
                                 )),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                height: mediaHeight * 0.07,
-                                width: mediaHeight * 0.30,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black,
+                          SizedBox(height:20),
+                          Visibility(
+                            visible: (widget.memberIndex == 0  && widget.type != "guest") || widget.type == "fairMont",
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  height: MediaQuery.of(context).size.height * 0.07,
+                                  width: MediaQuery.of(context).size.width * 0.50,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Center(
+                                    child: file == null ? Text('Choose File to Upload') : Text("Files Selected"),
+                                  ),
                                 ),
-                                child: Center(
-                                  child: file == null
-                                      ? Text('Choose File to Upload')
-                                      : Text("Files Selected"),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.06,
                                 ),
-                              ),
-                              SizedBox(
-                                width: mediaWidth * 0.06,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  height: MediaQuery.of(context).size.height * 0.06,
+                                  width: MediaQuery.of(context).size.width * 0.15,
+                                  child: RaisedButton.icon(
+                                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                                    onPressed: () {
+                                      setState(() async {
+                                      FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                                        if (result != null) {
+                                          setState((){
+                                            file =File(result.files.single.path);});
+                                           print("file Select "+file.toString());
+                                        }
+                                      });
+                                    },
+                                    icon: Center(child: Icon(Icons.filter)),
+                                    label: Text(""),
+                                  ),
                                 ),
-                                height: mediaHeight * 0.06,
-                                width: mediaWidth * 0.15,
-                                child: RaisedButton.icon(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 2, vertical: 2),
-                                  onPressed: () {
-                                    setState(() async {
-                                    //  FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true);
-                                      if (result != null) {
-                                        setState(() {
-                                          // file = result.paths
-                                          //     .map((path) => File(path))
-                                          //     .toList();
-                                        });
-                                      }
-                                    });
-                                  },
-                                  icon: Center(child: Icon(Icons.filter)),
-                                  label: Text(""),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
 
                           Visibility(
-                          visible:widget.type != 'fairMont',
+                          visible:widget.type != 'fairMont' && widget.type != 'guest',
                             child: Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: Row(
@@ -907,7 +908,8 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
                           // Visibility(
-                          //   visible: widget.formType.isEmpty ? true : false,
+                          //   visible: widget.form
+                          //   Type.isEmpty ? true : false,
                           //   child: Padding(
                           //       padding: EdgeInsets.only(top: 18),
                           //       child: DropdownButton(
@@ -996,6 +998,7 @@ class SignupState extends State<SignupScreen> {
                     showDialogBox(context, termsofService, 'Please read & accept our terms of services');
                   } else
                     {if (widget.memberIndex == 0 || widget.memberIndex == null) {
+
                     print("check form chekc2");
                     parms = {
                       "trainerPrice": result != null && result.length > 2 ? result[2].toString() : "0",
@@ -1009,8 +1012,10 @@ class SignupState extends State<SignupScreen> {
                       PASSWORD: passwordController.text.toString().trim(),
                       BIRTH_DATE: sendDate,
                       EMIRATES_ID: emiratesController.text.toString().trim(),
-                      if (widget.isSingle)ROLE_ID: rolePlanId.toString(),
-                      if (widget.isSingle && roleId != null)ROLE_PLAN_ID: roleId.toString(),
+                      if (widget.isSingle && widget.type == "guest")ROLE_ID: 8.toString(),//rolePlanId.toString(),
+                      if (widget.isSingle && widget.type != "fairMont" && widget.type != "guest")ROLE_ID:rolePlanId.toString() ,//rolePlanId.toString(),
+                      if (widget.isSingle && widget.type == "fairMont")ROLE_ID: 9.toString(),//rolePlanId.toString(),
+                      if (widget.isSingle && roleId != null)ROLE_PLAN_ID:roleId.toString(),
                       EMEREGENCY_NUMBER: emergencyController.text.toString().trim(),
                       DESIGNATION: designationController.text.toString().trim(),
                       ADDRESS: addressController.text.toString().trim(),
@@ -1026,6 +1031,7 @@ class SignupState extends State<SignupScreen> {
                       trainer_slot : result != null ? result[1].toString() : "",
                       if(widget.type == 'fairMont') durationOfStay: durationController.text,
                       if(widget.type == 'fairMont') hotelNo: hotelController.text,
+
                     };
                     print("vikas 0=====>${parms.toString()}");
                   }
@@ -1065,20 +1071,47 @@ class SignupState extends State<SignupScreen> {
                   }
                 }
                   if (widget.isSingle) {
-
-                                      // print("vikas 1=====>${parms.toString()}");
+                                      // print("vikas 1=====>${file.path.toString()}");
 
                                       isConnectedToInternet().then((internet) {
                                        showProgress(context, "Please wait.....");
                                         if (internet != null && internet) {
-                                          signUpToServer(parms)
+
+                                          widget.type == 'fairMont' || widget.type == 'guest'? signupWithouImage( parms)
                                               .then((response) {
                                             dismissDialog(context);
                                             if (response.status) {
                                               Navigator.pushAndRemoveUntil(
                                                 context,
                                                 ScaleRoute(
-                                                    page: SuccessScreen()),
+                                                    page: SuccessScreen()
+                                                ),
+                                                    (r) => false,
+                                              );
+                                            } else {
+                                              var errorMessage = '';
+                                              if (response.error != null) {
+                                                errorMessage =
+                                                    response.error.toString();
+                                              } else if (response.errors !=
+                                                  null) {
+                                                errorMessage = response
+                                                    .errors.email
+                                                    .toString();
+                                              }
+                                              showDialogBox(context, "Error!",
+                                                  errorMessage);
+                                            }
+                                          }):
+                                          signUpToServer(file: file,parms: parms,type:widget.type)
+                                              .then((response) {
+                                            dismissDialog(context);
+                                            if (response.status) {
+                                              Navigator.pushAndRemoveUntil(
+                                                context,
+                                                ScaleRoute(
+                                                    page: SuccessScreen()
+                                                ),
                                                 (r) => false,
                                               );
                                             } else {
@@ -1105,7 +1138,7 @@ class SignupState extends State<SignupScreen> {
                                       });
                                     } else {
                                       print("Vikas  ${parms.toString()}");
-                                      Navigator.pop(context, parms);
+                                      Navigator.pop(context, [parms,file]);
                                     }
                                   }else{
                 print("Something went wrong");

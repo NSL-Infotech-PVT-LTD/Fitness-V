@@ -4,8 +4,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/Methods/gymModal.dart';
+
+import 'notificationList.dart';
 
 String LOGIN = BASE_URL + "api/login";
 String ROLE = BASE_URL + "api/roles";
@@ -30,6 +33,7 @@ String allBookinsUrl = BASE_URL + "api/bookings";
 String bookingDelete = BASE_URL + "api/booking/delete";
 String getClassesListUrl = BASE_URL + "api/class-schedules";
 String getClassesbyIdUrl = BASE_URL + "api/class-schedule";
+String NortificationList = BASE_URL + "api/notification/list";
 
 String CUSTOMER_ID = "";
 
@@ -77,6 +81,7 @@ String MOBILE = "mobile";
 String EMAIL = "email";
 String PASSWORD = "password";
 String EMIRATES_ID = "emirates_id";
+String Nationality = "nationality";
 String eventKey = "events";
 String classSchedules = "class_schedules";
 String trainerUsers = "trainer_users";
@@ -103,6 +108,7 @@ String imageUrlEvent = "uploads/events/";
 String MORE_IMAGE_URL = "uploads/product/images/";
 String BARCODE_URL = "uploads/product/barcode/";
 String trainerUser = "uploads/trainer-user/";
+
 String imageClassUrl = "uploads/class/";
 //flutter build apk --release --target-platform=android-arm64
 Future<StatusResponse> getLogin(Map<String, String> parms) async {
@@ -112,6 +118,7 @@ Future<StatusResponse> getLogin(Map<String, String> parms) async {
       },
       body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
+  //print(response.body)
   var map = Map<String, dynamic>.from(jsonData);
 
   return StatusResponse.fromJson(map);
@@ -128,6 +135,7 @@ Future<StatusResponse> getTrainersListApi(
         'Authorization': auth
       },
       body: jsonEncode(parms));
+  print("Tranier " + response.body);
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
 
@@ -191,6 +199,20 @@ Future<StatusResponse> getProfileDetailApi(String auth) async {
   return StatusResponse.fromJson(map);
 }
 
+Future<StatusResponse> notification(String auth) async {
+  final response = await http.post(
+    NortificationList,
+    headers: <String, String>{
+      'Authorization': auth
+    },
+  );
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return StatusResponse.fromJson(map);
+}
+
+
 Future<StatusResponse> getRoles() async {
   final response = await http.post(
     ROLE,
@@ -225,14 +247,58 @@ Future<StatusResponse> getChildsRoles(Map<String, String> parms) async {
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
-Future<StatusResponse> signUpToServer(Map<String, String> parms) async {
+Future<StatusResponse> signupWithouImage(Map<String, String> parms) async {
   final response = await http.post(REGISTRATION,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(parms));
-  print("Signup${response.body}");
-  return StatusResponse.fromJson(json.decode(response.body));
+      body: json.encode(parms));
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return StatusResponse.fromJson(map);
+}
+
+Future<StatusResponse> signUpToServer(
+    {File file, Map<String, String> parms, String type}) async {
+  final postUri = Uri.parse(REGISTRATION);
+  http.MultipartRequest request = http.MultipartRequest('POST', postUri);
+  Map<String, String> headers = {
+    'Content-Type': 'application/json; charset=UTF-8'
+  };
+
+  request.fields.addAll(parms);
+  request.headers.addAll(headers);
+  if (file != null) {
+    http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'image', file.path); //returns a Future<MultipartFile>
+    request.files.add(multipartFile);
+  }
+
+  var streamedResponse = await request.send();
+  var response = await http.Response.fromStream(streamedResponse);
+  print("ApiResponse====>${response.body}");
+
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+  return StatusResponse.fromJson(map);
+
+  // final postUri = Uri.parse(REGISTRATION);
+  // http.MultipartRequest request = http.MultipartRequest('POST', postUri);
+  // Map<String, String> headers = {'Content-Type': 'application/json; charset=UTF-8',};
+  // request.headers.addAll(headers);
+  // request.fields.addAll(parms);
+  // print("new file"+ files.toString());
+  // String fileName = files.path.split("/").last;
+  // var stream = new http.ByteStream(Stream.castFrom(files.openRead()));
+  // http.MultipartFile multipartFile = await http.MultipartFile('image',stream, 1, filename:fileName);
+  // request.files.add(multipartFile);
+  // var streamedResponse = await request.send();
+  // var response = await http.Response.fromStream(streamedResponse);
+  // print("check Status" + response.body.toString());
+  // final jsonData = json.decode(response.body);
+  // var map = Map<String, dynamic>.from(jsonData);
+  // return StatusResponse.fromJson(map);
 }
 
 Future<StatusResponse> getTermsApi() async {
@@ -285,8 +351,9 @@ Future<StatusResponse> bookingApi(
     String userAuth, Map<String, String> parms) async {
   final response = await http.post(bookingUrl,
       headers: header(userAuth), body: jsonEncode(parms));
-
+  print("Booking " + response.body);
   final jsonData = json.decode(response.body);
+
   var map = Map<String, dynamic>.from(jsonData);
 
   return StatusResponse.fromJson(map);

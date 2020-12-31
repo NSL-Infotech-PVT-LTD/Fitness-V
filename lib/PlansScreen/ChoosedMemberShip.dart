@@ -457,7 +457,7 @@ class PlansState extends State<CustomPlansDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                widget.items[widget.index].fee_type,
+      widget.items[widget.index].fee_type == "quarterly"?"3 Months":widget.items[widget.index].fee_type == "half_yearly"?"6 Months":widget.items[widget.index].fee_type == "yearly"?"Annual":widget.items[widget.index].fee_type,
                 style: TextStyle(fontFamily: open_light, fontSize: 14),
               ),
               SizedBox(

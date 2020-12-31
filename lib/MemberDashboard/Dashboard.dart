@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,10 +15,11 @@ import 'package:volt/Value/Strings.dart';
 import 'package:volt/changes.dart';
 import 'package:volt/util/custom_dashboard_appbar.dart';
 
-
 class Dashboard extends StatefulWidget {
   final role;
+
   Dashboard({this.role});
+
   @override
   State<StatefulWidget> createState() => DashboardState();
 }
@@ -28,29 +28,32 @@ class DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
   var imageValue;
   var roleValue;
-   List<Widget>  _children;
+  List<Widget> _children;
 
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+      print("_currentIndex $_currentIndex");
+
     });
   }
+
+  var roleId = "";
 
   @override
   void initState() {
     getString(userImage)
         .then((value) => {imageValue = value})
         .whenComplete(() => setState(() {}));
-     
+
     getString(roleName)
         .then((value) => {roleValue = value})
         .whenComplete(() => setState(() {}));
-     
-     
-     
-    
-    super.initState();
+    getString("roleId")
+        .then((value) => {roleId = value})
+        .whenComplete(() => setState(() {}));
 
+    super.initState();
   }
 
   _navigateAndDisplaySelection(BuildContext context) async {
@@ -67,21 +70,70 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    
-    // if(roleValue == 'Local Guest'){
-     _children= [
-      Home(), Cardio(), EventClass()];  
-     // } else {
-     //   _children= [
-     //  Home2(), Cardio(), EventClass()];
-     // }
+    if (roleId == '8' || roleId == '9') {
+      _children = [Home(), EventClass()];
+    } else {
+      _children = [Home(), Cardio(), EventClass()];
+    }
     SizeConfig().init(context);
     return Scaffold(
         backgroundColor: CColor.WHITE,
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: onTabTapped,
-          items: <BottomNavigationBarItem>[
+          items:  roleId == "8" || roleId == "9"?
+          <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: _currentIndex == 0
+                  ? new SvgPicture.asset(
+                baseImageAssetsUrl + 'home_dark.svg',
+                height: 20,
+                width: 20,
+              )
+                  : new SvgPicture.asset(
+                baseImageAssetsUrl + 'in_home.svg',
+                height: 20,
+                width: 20,
+              ),
+              // ignore: deprecated_member_use
+              title: new Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: _currentIndex == 0
+                      ? Text('Home',
+                      style: TextStyle(
+                          fontSize: textSize10,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600))
+                      : Text(
+                    'Home',
+                    style: TextStyle(fontSize: textSize10),
+                  )),
+            ),
+            BottomNavigationBarItem(
+                icon: _currentIndex == 1
+                    ? SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
+                    height: 20, width: 20)
+                    : new SvgPicture.asset(
+                  baseImageAssetsUrl + 'in_cardio.svg',
+                  height: 20,
+                  width: 20,
+                ),
+                // ignore: deprecated_member_use
+                title: new Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: _currentIndex == 1
+                        ? Text(
+                      'Events',
+                      style: TextStyle(
+                          fontSize: textSize10,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    )
+                        : Text(
+                      'Events',
+                      style: TextStyle(fontSize: textSize10),
+                    )))
+          ]:<BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: _currentIndex == 0
                   ? new SvgPicture.asset(
@@ -132,29 +184,40 @@ class DashboardState extends State<Dashboard> {
                         )),
             ),
             BottomNavigationBarItem(
-                icon: _currentIndex == 2
-                    ? SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
-                        height: 20, width: 20)
-                    : new SvgPicture.asset(
+                icon: roleId == "8" || roleId == "9"
+                    ? new SvgPicture.asset(
                         baseImageAssetsUrl + 'in_cardio.svg',
                         height: 20,
                         width: 20,
-                      ),
+                      )
+                    : _currentIndex == 2
+                        ? SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
+                            height: 20, width: 20)
+                        : new SvgPicture.asset(
+                            baseImageAssetsUrl + 'in_cardio.svg',
+                            height: 20,
+                            width: 20,
+                          ),
                 // ignore: deprecated_member_use
                 title: new Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: _currentIndex == 2
+                    child: roleId == "8" || roleId == "9"
                         ? Text(
                             'Events',
-                            style: TextStyle(
-                                fontSize: textSize10,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                          )
-                        : Text(
-                            'Events',
                             style: TextStyle(fontSize: textSize10),
-                          )))
+                          )
+                        : _currentIndex == 2
+                            ? Text(
+                                'Events',
+                                style: TextStyle(
+                                    fontSize: textSize10,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              )
+                            : Text(
+                                'Events',
+                                style: TextStyle(fontSize: textSize10),
+                              )))
           ],
         ),
         appBar: CustomAppBar(
@@ -174,16 +237,16 @@ class DashboardState extends State<Dashboard> {
                       },
                       child: imageValue == null
                           ? Image.asset(
-                        baseImageAssetsUrl + 'circleuser.png',
-                        height: 40,
-                        width: 40,
-                      )
+                              baseImageAssetsUrl + 'circleuser.png',
+                              height: 40,
+                              width: 40,
+                            )
                           : CircleAvatar(
-                        radius: 25.0,
-                        backgroundImage: NetworkImage(
-                            BASE_URL + 'uploads/image/' + imageValue),
-                        backgroundColor: Colors.transparent,
-                      ),
+                              radius: 25.0,
+                              backgroundImage: NetworkImage(
+                                  BASE_URL + 'uploads/image/' + imageValue),
+                              backgroundColor: Colors.transparent,
+                            ),
                     ),
                     SizedBox(
                       width: 5,
@@ -199,8 +262,7 @@ class DashboardState extends State<Dashboard> {
                           Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) =>
-                                      NotificationScreen()));
+                                  builder: (context) => NotificationScreen()));
                         },
                         child: SvgPicture.asset(
                             baseImageAssetsUrl + 'noti_dot.svg'))
@@ -211,70 +273,65 @@ class DashboardState extends State<Dashboard> {
                 height: .5,
                 // color: CColor.PRIMARYCOLOR,
               ),
-
             ],
-
           ),
         ),
-        body: _currentIndex == 2
-            ? Container(
-                child: _children[_currentIndex],
-              )
-            : SingleChildScrollView(
-                child: Column(children: <Widget>[
-                  _children[_currentIndex],
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 25, bottom: 0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Image.asset(
-                            baseImageAssetsUrl + 'logo_black.png',
-                            height: 90,
-                            color: Color(0xff8B8B8B),
-                            width: 120,
-                          ),
-                        ),
+        body: roleId == "8" || roleId == "9" ? Container(child: _children[_currentIndex],): _currentIndex == 2 ? Container(child: _children[_currentIndex],) : SingleChildScrollView(
+                    child: Column(children: <Widget>[
+                      _children[_currentIndex],
+                      SizedBox(
+                        height: 50,
                       ),
-                      Spacer(),
-                      Padding(
-                        padding: EdgeInsets.only(left: 25, bottom: 0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: SvgPicture.asset(
-                            baseImageAssetsUrl + 'vector_lady.svg',
-                            height: 90,
-                            width: 120,
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 25, bottom: 0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset(
+                                baseImageAssetsUrl + 'logo_black.png',
+                                height: 90,
+                                color: Color(0xff8B8B8B),
+                                width: 120,
+                              ),
+                            ),
                           ),
-                        ),
+                          Spacer(),
+                          Padding(
+                            padding: EdgeInsets.only(left: 25, bottom: 0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: SvgPicture.asset(
+                                baseImageAssetsUrl + 'vector_lady.svg',
+                                height: 90,
+                                width: 120,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 40, bottom: 10),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              volt_rights,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color(0xff8B8B8B),
+                                  fontSize: 8,
+                                  fontStyle: FontStyle.italic,
+                                  fontFamily: open_italic),
+                            )),
                       ),
                       SizedBox(
-                        width: 20,
+                        height: 50,
                       )
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 40, bottom: 10),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          volt_rights,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Color(0xff8B8B8B),
-                              fontSize: 8,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: open_italic),
-                        )),
-                  ),
-                  SizedBox(
-                    height: 50,
+                    ]),
                   )
-                ]),
-              ));
+    );
   }
 }

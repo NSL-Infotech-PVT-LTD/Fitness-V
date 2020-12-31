@@ -57,7 +57,7 @@ class _SpouseTypeState extends State<SpouseType> {
   String deviceToken = "";
   var errorMessage = '';
   var errorMessage1 = '';
-  List<Data> data = [];
+  List<dynamic> data = [];
   var chooseChilds = false;
   int valueNew = -1;
   int childValueCount = 0;
@@ -224,7 +224,7 @@ class _SpouseTypeState extends State<SpouseType> {
       if (myResult != null) {
         // price = myResult['trainerPrice'];
 
-        result[index] = myResult;
+        result[index] = myResult[0];
 
         print("fsdfsdf${result.length}");
         Totalprice = 0;
@@ -342,7 +342,21 @@ class _SpouseTypeState extends State<SpouseType> {
                                   right: padding25, top: padding20),
                               child: Text(
                                 //couple +
-                                widget.response[widget.plan_index]['fee_type'],
+                                // widget.response[widget.plan_index]['fee_type'],
+                                widget.response[widget.plan_index]
+                                            ['fee_type'] ==
+                                        "quarterly"
+                                    ? "3 Months"
+                                    : widget.response[widget.plan_index]
+                                                ['fee_type'] ==
+                                            "half_yearly"
+                                        ? "6 Months"
+                                        : widget.response[widget.plan_index]
+                                                    ['fee_type'] ==
+                                                "yearly"
+                                            ? "Annual"
+                                            : widget.response[widget.plan_index]
+                                                ['fee_type'],
                                 style: TextStyle(
                                   color: CColor.WHITE,
                                   fontSize: textSize10,
@@ -411,20 +425,20 @@ class _SpouseTypeState extends State<SpouseType> {
                               ),
                             ],
                             border: Border.all(
-                                width: result[index].isNotEmpty
+                                width:result[index]!=null&& result[index].isNotEmpty
                                     ? result[index]['memberIndex'] ==
                                             index.toString()
                                         ? 2.0
                                         : 1.5
                                     : 1.5,
-                                color: result[index].isNotEmpty
+                                color: result[index]!=null&& result[index].isNotEmpty
                                     ? result[index]['memberIndex'] ==
                                             index.toString()
                                         ? Colors.white
                                         : Color(0xFFBDBDBD)
                                     : Color(0xFFBDBDBD)),
                             borderRadius: BorderRadius.circular(5.0),
-                            color: result[index].isNotEmpty
+                            color: result[index]!=null&& result[index].isNotEmpty
                                 ? result[index]['memberIndex'] ==
                                         index.toString()
                                     ? Colors.black
@@ -443,7 +457,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                     width: SizeConfig.blockSizeHorizontal * 2,
                                   ),
                                   Text(
-                                    result[index].isNotEmpty
+                                    result[index]!=null&& result[index].isNotEmpty
                                         ? result[index]['memberIndex'] ==
                                                 index.toString()
                                             ? result[index]['memberIndex'] ==
@@ -459,7 +473,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                             : memberName[index]
                                         : memberName[index],
                                     style: TextStyle(
-                                      color: result[index].isNotEmpty
+                                      color:result[index]!=null&&  result[index].isNotEmpty
                                           ? result[index]['memberIndex'] ==
                                                   index.toString()
                                               ? Colors.white
@@ -473,7 +487,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                     padding: EdgeInsets.all(10),
                                     child: SvgPicture.asset(
                                       baseImageAssetsUrl + 'user.svg',
-                                      color: result[index].isNotEmpty
+                                      color: result[index]!=null&& result[index].isNotEmpty
                                           ? result[index]['memberIndex'] ==
                                                   index.toString()
                                               ? Colors.white
@@ -504,7 +518,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                     _navigateAndDisplaySelection(
                                         ind: index,
                                         context: context,
-                                        chFilledData: result[index].isNotEmpty
+                                        chFilledData:result[index]!=null&&  result[index].isNotEmpty
                                             ? result[index]
                                             : null,
                                         formType: '',
@@ -633,31 +647,68 @@ class _SpouseTypeState extends State<SpouseType> {
 
                         if (result != null && formCheck && acceptTerms) {
                           Map<String, String> parms = {};
-                for (int index = 0; index < result.length; index++) {
-                  parms[FIRSTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
-                  parms[MIDDLENAME + "${index == 0 ? "" : "_$index"}"] = result[index][MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
-                  parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][LASTNAME + "${index == 0 ? "" : "_$index"}"];
-                  parms[MOBILE + "${index == 0 ? "" : "_$index"}"] = result[index][MOBILE + "${index == 0 ? "" : "_$index"}"];
-                  parms[EMAIL + "${index == 0 ? "" : "_$index"}"] = result[index][EMAIL + "${index == 0 ? "" : "_$index"}"];
-                  parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] = result[index][PASSWORD + "${index == 0 ? "" : "_$index"}"];
-                  parms[BIRTH_DATE + "${index == 0 ? "" : "_$index"}"] = result[index][BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
-                  parms[EMIRATES_ID + "${index == 0 ? "" : "_$index"}"] = result[index][EMIRATES_ID + "${index == 0 ? "" : "_$index"}"];
-                  parms[GENDER + "${index == 0 ? "" : "_$index"}"] = result[index][GENDER + "${index == 0 ? "" : "_$index"}"];
-                  parms[trainer_id + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_id + "${index == 0 ? "" : "_$index"}"];
-                  parms[trainer_slot + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_slot + "${index == 0 ? "" : "_$index"}"];
-                  if (index == 0) parms[EMEREGENCY_NUMBER] = result[index][EMEREGENCY_NUMBER];
-                  if (index == 0) parms[DESIGNATION] = result[index][DESIGNATION];
-                  if (index == 0) parms[ADDRESS] = result[index][ADDRESS];
-                  if (index == 0) parms[CITY] = result[index][CITY];
-                  if (index == 0) parms[nationality] = result[index][nationality];
-                  if (index == 0) parms[workplace] = result[index][workplace];
-                  if (index == 0) parms[marital_status] = result[index][marital_status];
-                  if (index == 0) parms[about_us] = result[index][about_us];
-                  parms[DEVICE_TYPE] = deviceType;
-                  parms[DEVICE_TOKEN] = deviceTokenValue;
-                  parms[ROLE_ID] = widget.roleId.toString();
-                  parms[ROLE_PLAN_ID] = widget.rolePlanIds.toString();
-                }
+                          for (int index = 0; index < result.length; index++) {
+                            parms[FIRSTNAME +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
+                            parms[MIDDLENAME +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
+                            parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] =
+                                result[index][LASTNAME +
+                                    "${index == 0 ? "" : "_$index"}"];
+                            parms[MOBILE + "${index == 0 ? "" : "_$index"}"] =
+                                result[index]
+                                    [MOBILE + "${index == 0 ? "" : "_$index"}"];
+                            parms[EMAIL + "${index == 0 ? "" : "_$index"}"] =
+                                result[index]
+                                    [EMAIL + "${index == 0 ? "" : "_$index"}"];
+                            parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] =
+                                result[index][PASSWORD +
+                                    "${index == 0 ? "" : "_$index"}"];
+                            parms[BIRTH_DATE +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
+                            parms[EMIRATES_ID +
+                                    "${index == 0 ? "" : "_$index"}"] =
+                                result[index][EMIRATES_ID +
+                                    "${index == 0 ? "" : "_$index"}"];
+                            parms[GENDER + "${index == 0 ? "" : "_$index"}"] =
+                                result[index]
+                                    [GENDER + "${index == 0 ? "" : "_$index"}"];
+                            parms[trainer_id +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [trainer_id + "${index == 0 ? "" : "_$index"}"];
+                            parms[trainer_slot +
+                                    "${index == 0 ? "" : "_$index"}"] =
+                                result[index][trainer_slot +
+                                    "${index == 0 ? "" : "_$index"}"];
+                            if (index == 0)
+                              parms[EMEREGENCY_NUMBER] =
+                                  result[index][EMEREGENCY_NUMBER];
+                            if (index == 0)
+                              parms[DESIGNATION] = result[index][DESIGNATION];
+                            if (index == 0)
+                              parms[ADDRESS] = result[index][ADDRESS];
+                            if (index == 0) parms[CITY] = result[index][CITY];
+                            if (index == 0)
+                              parms[nationality] = result[index][nationality];
+                            if (index == 0)
+                              parms[workplace] = result[index][workplace];
+                            if (index == 0)
+                              parms[marital_status] =
+                                  result[index][marital_status];
+                            if (index == 0)
+                              parms[about_us] = result[index][about_us];
+                            parms[DEVICE_TYPE] = deviceType;
+                            parms[DEVICE_TOKEN] = deviceTokenValue;
+                            parms[ROLE_ID] = widget.roleId.toString();
+                            parms[ROLE_PLAN_ID] = widget.rolePlanIds.toString();
+                          }
                           print("vikasssss===${parms}");
                           // FIRSTNAME: result[index][FIRSTNAME],
                           // MIDDLENAME: result[index][MIDDLENAME],
@@ -675,7 +726,8 @@ class _SpouseTypeState extends State<SpouseType> {
                             if (internet != null && internet) {
                               showProgress(context, "Please wait.....");
 
-                              signUpToServer(parms).then((response) {
+                              signUpToServer(parms: parms, file: myResult[1])
+                                  .then((response) {
                                 dismissDialog(context);
                                 if (response.status) {
                                   Navigator.pushAndRemoveUntil(
@@ -1014,107 +1066,59 @@ class _SpouseTypeState extends State<SpouseType> {
                                 return InkWell(
                                     splashColor: Colors.black,
                                     onTap: () {
+                                      print(
+                                          "print ander  ${widget.response[widget.plan_index]['fee_type']}");
+                                      if (data[index].plans.monthly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.monthly.feeType) {
+                                        if (data[index].plans.monthly.feeType != null) {
+                                          setState(() {
+                                            rolePlanId = data[index].plans.monthly.id.toString();
+                                            rolePlanFee = data[index].plans.monthly.fee
+                                                .toString();
+                                            print("rolePlanId " + rolePlanId);
+                                            print("rolePlanFee " + rolePlanFee);
+                                          });
+                                        }
+                                      } else if (data[index].plans.quarterly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType) {
+                                        if (
+                                            data[index].plans.quarterly.feeType != null) {
+                                          //
+                                          setState(() {
+                                            rolePlanId = data[index].plans.quarterly.id.toString();
+                                            rolePlanFee = data[index].plans.quarterly.fee.toString();
+                                            print("rolePlanId " + rolePlanId);
+                                            print("rolePlanFee " + rolePlanFee);
+                                          });
+                                        }
+                                      } else if (data[index].plans.halfYearly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.halfYearly.feeType) {
+
+                                        if (data[index].plans.halfYearly.feeType != null) {
+                                          setState(() {
+                                            rolePlanId = data[index].plans.halfYearly.id.toString();
+                                            rolePlanFee = data[index].plans.halfYearly.fee.toString();
+                                            print("rolePlanId " + rolePlanId);
+                                            print("rolePlanFee " + rolePlanFee);
+                                          });
+                                        }
+                                      } else if (data[index].plans.yearly != null && widget.response[widget.plan_index]['fee_type'] ==data[index].plans.yearly.feeType) {
+                                        if (data[index].plans.yearly.feeType != null) {
+                                          setState(() {
+                                            rolePlanId = data[index].plans.yearly.id.toString();
+                                            rolePlanFee = data[index].plans.yearly.fee.toString();
+                                            print("rolePlanId " + rolePlanId);
+                                            print("rolePlanFee " + rolePlanFee);
+                                          });
+                                        }
+                                      } else {
+                                        print("Null values");
+                                      }
+
                                       setState(() {
                                         //  widget.response[widget.plan_index]['fee_type']
-                                        childValueCount =
-                                            data[index].member - 2;
+                                        childValueCount = data[index].member != null ? data[index].member - 2 : 0;
                                         roleId = data[index].id.toString();
-
-                                        rolePlanId = widget
-                                                        .response[widget.plan_index]
-                                                    ['fee_type'] ==
-                                                data[index]
-                                                    .plans
-                                                    .monthly
-                                                    .feeType
-                                            ? data[index]
-                                                .plans
-                                                .monthly
-                                                .id
-                                                .toString()
-                                            : widget.response[widget.plan_index]
-                                                        ['fee_type'] ==
-                                                    data[index]
-                                                        .plans
-                                                        .quarterly
-                                                        .feeType
-                                                ? data[index]
-                                                    .plans
-                                                    .quarterly
-                                                    .id
-                                                    .toString()
-                                                : widget.response[widget.plan_index]
-                                                            ['fee_type'] ==
-                                                        data[index]
-                                                            .plans
-                                                            .halfYearly
-                                                            .feeType
-                                                    ? data[index]
-                                                        .plans
-                                                        .halfYearly
-                                                        .id
-                                                        .toString()
-                                                    : widget.response[widget.plan_index]
-                                                                ['fee_type'] ==
-                                                            data[index]
-                                                                .plans
-                                                                .yearly
-                                                                .feeType
-                                                        ? data[index]
-                                                            .plans
-                                                            .yearly
-                                                            .id
-                                                            .toString()
-                                                        : "Something Wrong";
-
-                                        rolePlanFee = widget
-                                                        .response[widget.plan_index]
-                                                    ['fee_type'] ==
-                                                data[index]
-                                                    .plans
-                                                    .monthly
-                                                    .feeType
-                                            ? data[index]
-                                                .plans
-                                                .monthly
-                                                .fee
-                                                .toString()
-                                            : widget.response[widget.plan_index]
-                                                        ['fee_type'] ==
-                                                    data[index]
-                                                        .plans
-                                                        .quarterly
-                                                        .feeType
-                                                ? data[index]
-                                                    .plans
-                                                    .quarterly
-                                                    .fee
-                                                    .toString()
-                                                : widget.response[widget.plan_index]
-                                                            ['fee_type'] ==
-                                                        data[index]
-                                                            .plans
-                                                            .halfYearly
-                                                            .feeType
-                                                    ? data[index]
-                                                        .plans
-                                                        .halfYearly
-                                                        .fee
-                                                        .toString()
-                                                    : widget.response[widget.plan_index]
-                                                                ['fee_type'] ==
-                                                            data[index]
-                                                                .plans
-                                                                .yearly
-                                                                .feeType
-                                                        ? data[index]
-                                                            .plans
-                                                            .yearly
-                                                            .fee
-                                                            .toString()
-                                                        : "Something Wrong";
+                                        // rolePlanId = widget.response[widget.plan_index]['fee_type'] == data[index].plans.monthly.feeType ? data[index].plans.monthly.id.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType ? data[index].plans.quarterly.id.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.halfYearly.feeType ? data[index].plans.halfYearly.id.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.yearly.feeType ? data[index].plans.yearly.id.toString() : "Something Wrong";
+                                        // rolePlanFee = widget.response[widget.plan_index]['fee_type'] == data[index].plans.monthly.feeType ? data[index].plans.monthly.fee.toString(): widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType ? data[index].plans.quarterly.fee.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.halfYearly.feeType ? data[index].plans.halfYearly.fee.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.yearly.feeType ? data[index].plans.yearly.fee.toString() : "Something Wrong";
                                         valueNew = index;
-
                                         print("rolePlanId " +
                                             rolePlanId.toString());
                                         print("roleId " + roleId.toString());

@@ -52,6 +52,7 @@ class LoginState extends State<LoginScreen> {
               
               setString(userPlanImage, response.data.user.role.image);
               setString(roleName, response.data.user.role.name);
+              setString("roleId", response.data.user.role.id.toString());
               setString(roleCategory, response.data.user.role.category);
               if (response.data.user.role.current_plan != null) {
                 setString(
