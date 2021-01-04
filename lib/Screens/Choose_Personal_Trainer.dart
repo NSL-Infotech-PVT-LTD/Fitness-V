@@ -165,7 +165,10 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                       physics: ScrollPhysics(),
                       itemBuilder: (context, i) {
                         return ListTile(
-                            leading: users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo_black.png',)
+                            leading: users[i]['image'] == null
+                                ? Image.asset(
+                                    baseImageAssetsUrl + 'logo_black.png',
+                                  )
                                 : FadeInImage.assetNetwork(
                                     placeholder:
                                         baseImageAssetsUrl + 'logo_black.png',

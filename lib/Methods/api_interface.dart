@@ -86,6 +86,8 @@ String eventKey = "events";
 String classSchedules = "class_schedules";
 String trainerUsers = "trainer_users";
 String trainerIds = "trainer_users";
+String trainerData = "trainerData";
+
 
 //user data
 String USER_AUTH = "USER_AUTH";

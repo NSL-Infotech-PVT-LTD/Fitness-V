@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -255,6 +256,8 @@ class SignupState extends State<SignupScreen> {
       addressController.text = widget.editData[ADDRESS];
       selectedCity = widget.editData[CITY];
       selectedTrainer = widget.editData[trainerIds];
+      result =jsonDecode(widget.editData[trainerData+ '_' + ind]);
+
       // durationController.text = widget.editData[durationOfStay];
       // hotelController.text = widget.editData[hotelNo];
      // selectedTrainer = widget.editData[trainerIds + '_' + ind];
@@ -276,6 +279,9 @@ class SignupState extends State<SignupScreen> {
       addressController.text = widget.editData[ADDRESS + '_' + ind];
       selectedCity = widget.editData[CITY + '_' + ind];
       selectedTrainer = widget.editData[trainerIds + '_' + ind];
+      print("frdsfd ${jsonDecode(widget.editData[trainerData+ '_' + ind])}");
+      result =jsonDecode(widget.editData[trainerData+ '_' + ind]) as List;
+
       // durationController.text = widget.editData[durationOfStay];
       // hotelController.text = widget.editData[hotelNo];
     }
@@ -799,7 +805,7 @@ class SignupState extends State<SignupScreen> {
                                     padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                                     onPressed: () {
                                       setState(() async {
-                                      FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                                      FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false,type: FileType.custom,allowedExtensions: ['jpg', 'png', 'HEIC']);
                                         if (result != null) {
                                           setState((){
                                             file =File(result.files.single.path);});
@@ -873,9 +879,8 @@ class SignupState extends State<SignupScreen> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            result != null
-                                                ? result[0]["expirence"]
-                                                : "7 Years Experienced",
+                                            result != null ? "${result[0]["expirence"]} Years Experienced"
+                                                : "0 Years Experienced",
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
@@ -896,10 +901,22 @@ class SignupState extends State<SignupScreen> {
                                         ],
                                       ),
                                     ),
-                                    Spacer(),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset("assets/images/vector.png"),
+                                   // Spacer(),
+                                    SizedBox(width:MediaQuery.of(context).size.width * 0.04),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.15 ,
+                                      height: MediaQuery.of(context).size.height * 0.20,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: result == null ? Image.asset(baseImageAssetsUrl + 'logo_black.png',)
+                                            : FadeInImage.assetNetwork(
+                                          placeholder:
+                                          baseImageAssetsUrl + 'logo_black.png',
+                                          image: BASE_URL +
+                                              'uploads/trainer-user/' +
+                                              result[0]['image'],
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -1028,6 +1045,7 @@ class SignupState extends State<SignupScreen> {
                       about_us: aboutUsController.text,
                       trainer_id : result != null ? result[0]["id"].toString() : "",
                       trainer_slot : result != null ? result[1].toString() : "",
+                      trainerData : jsonEncode(result.toString()),
                       if(widget.type == 'fairMont') durationOfStay: durationController.text,
                       if(widget.type == 'fairMont') hotelNo: hotelController.text,
 
@@ -1052,6 +1070,7 @@ class SignupState extends State<SignupScreen> {
                       DESIGNATION: designationController.text.toString().trim(),
                       trainer_id + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': result != null ? result[0]["id"].toString() : "",
                       trainer_slot + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': result != null ? result[1].toString() : "",
+                      trainerData  + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}':result != null ? jsonEncode(result.toString()) : "",
                       ADDRESS + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': addressController.text.toString().trim(),
                       CITY: selectedCity,
                       DEVICE_TYPE: deviceType,
