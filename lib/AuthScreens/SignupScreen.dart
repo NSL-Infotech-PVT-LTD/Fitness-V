@@ -256,7 +256,7 @@ class SignupState extends State<SignupScreen> {
       addressController.text = widget.editData[ADDRESS];
       selectedCity = widget.editData[CITY];
       selectedTrainer = widget.editData[trainerIds];
-      result =jsonDecode(widget.editData[trainerData+ '_' + ind]);
+     // result =jsonDecode(widget.editData[trainerData+ '_' + ind]);
 
       // durationController.text = widget.editData[durationOfStay];
       // hotelController.text = widget.editData[hotelNo];
@@ -280,7 +280,7 @@ class SignupState extends State<SignupScreen> {
       selectedCity = widget.editData[CITY + '_' + ind];
       selectedTrainer = widget.editData[trainerIds + '_' + ind];
       print("frdsfd ${jsonDecode(widget.editData[trainerData+ '_' + ind])}");
-      result =jsonDecode(widget.editData[trainerData+ '_' + ind]) as List;
+      //result =jsonDecode(widget.editData[trainerData+ '_' + ind]) as List;
 
       // durationController.text = widget.editData[durationOfStay];
       // hotelController.text = widget.editData[hotelNo];
@@ -654,7 +654,7 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
-                                keyboardType: TextInputType.text,
+                                keyboardType: TextInputType.number,
                                 controller: durationController,
                                 decoration: InputDecoration(
                                     hintText: "Duration of Stay",

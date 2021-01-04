@@ -1171,6 +1171,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                           GestureDetector(
                                             onTap: () {
                                               Navigator.pop(context);
+                                              Navigator.pop(context);
                                             },
                                             child: Container(
                                               child: Text(
