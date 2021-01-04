@@ -13,32 +13,38 @@ class NotificationScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => NotificationState();
 }
-
+NotificationList obj;
 class NotificationState extends State<NotificationScreen> {
   String auth = '';
+  bool isLoading = true;
   // StatusResponse obj;
 
   @override
   void initState() {
+    isLoading = true;
     getString(USER_AUTH).then((value) => {auth = value}).whenComplete(() => {
-          getNotificationList(auth)
-              .then((value) => print("Notification" + value.data.toString()))
+      notification(auth)
+          .then((value) => obj = value )
               .whenComplete(() {
-
+setState(() {
+  isLoading = false;
+});
           })
         });
     super.initState();
   }
 
-  final notificationList = List<CustomNoti>.generate(
-      8, (i) => CustomNoti(title: 'Group Class on Thursday ,24 Jan ,11.00AM'));
-
+  List<CustomNoti> notificationList = List<CustomNoti>();
   @override
   Widget build(BuildContext context) {
+    notificationList  = List<CustomNoti>.generate(
+        obj.data.data.length, (i) => CustomNoti(title:obj.data.data.length == 0 ? "No Data Found":obj.data.data[i].body.toString().replaceAll("_", " ").toLowerCase().replaceAll("body.","")));
+
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: CColor.WHITE,
-      body: SingleChildScrollView(
+      body: isLoading?
+      Center(child: CircularProgressIndicator(backgroundColor: Colors.black87)):SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -60,39 +66,37 @@ class NotificationState extends State<NotificationScreen> {
                 ),
               ),
             ),
-            DefaultTabController(
-                length: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Card(
-                      elevation: 5,
-                      color: Color(0xFFE9E9E9),
-                      child: Container(
-                        height: 40,
-                        padding: EdgeInsets.only(left: padding15),
-                        width: SizeConfig.screenWidth,
-                        child: TabBar(
-                          tabs: [
-                            Tab(
-                                icon: Text(
-                              today,
-                              style: TextStyle(fontSize: textSize16),
-                            )),
-                            Tab(
-                                icon: Text(recent,
-                                    style: TextStyle(fontSize: textSize16))),
-                          ],
-                          isScrollable: true,
-                          indicatorColor: Colors.black,
-                          labelColor: Color(0xFF474747),
-                          unselectedLabelColor: Color(0xFFC1C1C1),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: TabBarView(
+            // DefaultTabController(
+            //     length: 2,
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: <Widget>[
+            //         Card(
+            //           elevation: 5,
+            //           color: Color(0xFFE9E9E9),
+            //           child: Container(
+            //             height: 40,
+            //             padding: EdgeInsets.only(left: padding15),
+            //             width: SizeConfig.screenWidth,
+            //             child: TabBar(
+            //               tabs: [
+            //                 Tab(
+            //                     icon: Text(
+            //                   today,
+            //                   style: TextStyle(fontSize: textSize16),
+            //                 )),
+            //                 Tab(
+            //                     icon: Text(recent,
+            //                         style: TextStyle(fontSize: textSize16))),
+            //               ],
+            //               isScrollable: true,
+            //               indicatorColor: Colors.black,
+            //               labelColor: Color(0xFF474747),
+            //               unselectedLabelColor: Color(0xFFC1C1C1),
+            //             ),
+            //           ),
+            //         ),
+                    !isLoading &&notificationList.length>0? Column(
                         children: <Widget>[
                           Container(
                             height: MediaQuery.of(context).size.height,
@@ -113,33 +117,29 @@ class NotificationState extends State<NotificationScreen> {
                                   );
                                 }),
                           ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 1,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                physics: const NeverScrollableScrollPhysics(),
-                                primary: false,
-                                itemCount: notificationList.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    child: CustomNotiView(
-                                      customNoti: notificationList[index],
-                                      color: Color(0xFFC1C1C1),
-                                      titleColor: Color(0xFFC1C1C1),
-                                    ),
-                                  );
-                                }),
-                          ),
+                          // Container(
+                          //   height: MediaQuery.of(context).size.height * 1,
+                          //   child: ListView.builder(
+                          //       shrinkWrap: true,
+                          //       scrollDirection: Axis.vertical,
+                          //       physics: const NeverScrollableScrollPhysics(),
+                          //       primary: false,
+                          //       itemCount: notificationList.length,
+                          //       itemBuilder: (context, index) {
+                          //         return Container(
+                          //           child: CustomNotiView(
+                          //             customNoti: notificationList[index],
+                          //             color: Color(0xFFC1C1C1),
+                          //             titleColor: Color(0xFFC1C1C1),
+                          //           ),
+                          //         );
+                          //       }),
+                          // ),
                         ],
-                      ),
-                    )
+                      ): Container(
+                      height: MediaQuery.of(context).size.height*0.7,child:Center(child: Text("No Data Found"),))
                   ],
-                )),
-          ],
-        ),
-      ),
-    );
+                )));
   }
 }
 

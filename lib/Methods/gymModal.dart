@@ -319,8 +319,6 @@
 //     return reverseMap;
 //   }
 // }
-
-
 class gymMember {
   bool status;
   int code;
@@ -358,11 +356,11 @@ class Data {
   String category;
   int member;
   String image;
-  String params;
+  Null params;
   String status;
   String createdAt;
   String updatedAt;
-  String deletedAt;
+  Null deletedAt;
   Plans plans;
   String priceLabelMonthly;
   String priceLabelQuarterly;
@@ -397,7 +395,7 @@ class Data {
     type = json['type'];
     category = json['category'];
     member = json['member'];
-    image = json['image'] != null?json['image']:"";
+    image = json['image'];
     params = json['params'];
     status = json['status'];
     createdAt = json['created_at'];
@@ -445,31 +443,25 @@ class Data {
 }
 
 class Plans {
-  Monthly monthly;
-  Monthly quarterly;
-  Monthly halfYearly;
-  Monthly yearly;
+  Quarterly quarterly;
+  Quarterly halfYearly;
+  Quarterly yearly;
 
-  Plans({this.monthly, this.quarterly, this.halfYearly, this.yearly});
+  Plans({this.quarterly, this.halfYearly, this.yearly});
 
   Plans.fromJson(Map<String, dynamic> json) {
-    monthly =
-    json['monthly'] != null ? new Monthly.fromJson(json['monthly']) : null;
     quarterly = json['quarterly'] != null
-        ? new Monthly.fromJson(json['quarterly'])
+        ? new Quarterly.fromJson(json['quarterly'])
         : null;
     halfYearly = json['half_yearly'] != null
-        ? new Monthly.fromJson(json['half_yearly'])
+        ? new Quarterly.fromJson(json['half_yearly'])
         : null;
     yearly =
-    json['yearly'] != null ? new Monthly.fromJson(json['yearly']) : null;
+    json['yearly'] != null ? new Quarterly.fromJson(json['yearly']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.monthly != null) {
-      data['monthly'] = this.monthly.toJson();
-    }
     if (this.quarterly != null) {
       data['quarterly'] = this.quarterly.toJson();
     }
@@ -483,17 +475,19 @@ class Plans {
   }
 }
 
-class Monthly {
+class Quarterly {
   int id;
   int fee;
   String feeType;
+  int roleId;
 
-  Monthly({this.id, this.fee, this.feeType});
+  Quarterly({this.id, this.fee, this.feeType, this.roleId});
 
-  Monthly.fromJson(Map<String, dynamic> json) {
+  Quarterly.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     fee = json['fee'];
     feeType = json['fee_type'];
+    roleId = json['role_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -501,6 +495,7 @@ class Monthly {
     data['id'] = this.id;
     data['fee'] = this.fee;
     data['fee_type'] = this.feeType;
+    data['role_id'] = this.roleId;
     return data;
   }
 }

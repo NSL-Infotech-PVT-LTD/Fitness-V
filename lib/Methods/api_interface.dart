@@ -199,7 +199,7 @@ Future<StatusResponse> getProfileDetailApi(String auth) async {
   return StatusResponse.fromJson(map);
 }
 
-Future<StatusResponse> notification(String auth) async {
+Future<NotificationList> notification(String auth) async {
   final response = await http.post(
     NortificationList,
     headers: <String, String>{
@@ -209,7 +209,7 @@ Future<StatusResponse> notification(String auth) async {
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
 
-  return StatusResponse.fromJson(map);
+  return NotificationList.fromJson(map);
 }
 
 

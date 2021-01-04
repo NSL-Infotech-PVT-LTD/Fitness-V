@@ -107,7 +107,7 @@ class HomeState extends State<Home> {
                 bottom: 31,
                 left: 40,
                 child: Text(
-                  "Category : ${_roleCategory == null || _roleCategory.isEmpty ? "Not found" : _roleCategory}",
+                  _roleCategory != null && _roleCategory.isNotEmpty?"Category : $_roleCategory":"",
                   style: TextStyle(
                       color: Colors.white.withOpacity(.9), fontSize: 10),
                 ),
@@ -116,7 +116,7 @@ class HomeState extends State<Home> {
                 bottom: 15,
                 left: 40,
                 child: Text(
-                  "${_rolePlan == null || _rolePlan.isEmpty ? "Not found" : _rolePlan}",
+                  "${_rolePlan == null || _rolePlan.isEmpty ? "" : _rolePlan}",
                   style: TextStyle(
                       color: Colors.white.withOpacity(.8), fontSize: 10),
                 ),

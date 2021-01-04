@@ -1,308 +1,350 @@
+
 class NotificationList {
+  NotificationList({
+    this.status,
+    this.code,
+    this.data,
+  });
+
   bool status;
   int code;
   Data data;
 
-  NotificationList({this.status, this.code, this.data});
+  factory NotificationList.fromJson(Map<String, dynamic> json) => NotificationList(
+    status: json["status"],
+    code: json["code"],
+    data: Data.fromJson(json["data"]),
+  );
 
-  NotificationList.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    code = json['code'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['code'] = this.code;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "code": code,
+    "data": data.toJson(),
+  };
 }
 
 class Data {
+  Data({
+    this.currentPage,
+    this.data,
+    this.firstPageUrl,
+    this.from,
+    this.lastPage,
+    this.lastPageUrl,
+    this.nextPageUrl,
+    this.path,
+    this.perPage,
+    this.prevPageUrl,
+    this.to,
+    this.total,
+  });
+
   int currentPage;
-  List<Data> data;
+  List<Datum> data;
   String firstPageUrl;
   int from;
   int lastPage;
   String lastPageUrl;
-  Null nextPageUrl;
+  dynamic nextPageUrl;
   String path;
   int perPage;
-  Null prevPageUrl;
+  dynamic prevPageUrl;
   int to;
   int total;
 
-  Data(
-      {this.currentPage,
-        this.data,
-        this.firstPageUrl,
-        this.from,
-        this.lastPage,
-        this.lastPageUrl,
-        this.nextPageUrl,
-        this.path,
-        this.perPage,
-        this.prevPageUrl,
-        this.to,
-        this.total});
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    currentPage: json["current_page"],
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    firstPageUrl: json["first_page_url"],
+    from: json["from"],
+    lastPage: json["last_page"],
+    lastPageUrl: json["last_page_url"],
+    nextPageUrl: json["next_page_url"],
+    path: json["path"],
+    perPage: json["per_page"],
+    prevPageUrl: json["prev_page_url"],
+    to: json["to"],
+    total: json["total"],
+  );
 
-  Data.fromJson(Map<String, dynamic> json) {
-    currentPage = json['current_page'];
-    if (json['data'] != null) {
-      data = new List<Data>();
-      json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
-      });
-    }
-    firstPageUrl = json['first_page_url'];
-    from = json['from'];
-    lastPage = json['last_page'];
-    lastPageUrl = json['last_page_url'];
-    nextPageUrl = json['next_page_url'];
-    path = json['path'];
-    perPage = json['per_page'];
-    prevPageUrl = json['prev_page_url'];
-    to = json['to'];
-    total = json['total'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['current_page'] = this.currentPage;
-    if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
-    }
-    data['first_page_url'] = this.firstPageUrl;
-    data['from'] = this.from;
-    data['last_page'] = this.lastPage;
-    data['last_page_url'] = this.lastPageUrl;
-    data['next_page_url'] = this.nextPageUrl;
-    data['path'] = this.path;
-    data['per_page'] = this.perPage;
-    data['prev_page_url'] = this.prevPageUrl;
-    data['to'] = this.to;
-    data['total'] = this.total;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "current_page": currentPage,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "first_page_url": firstPageUrl,
+    "from": from,
+    "last_page": lastPage,
+    "last_page_url": lastPageUrl,
+    "next_page_url": nextPageUrl,
+    "path": path,
+    "per_page": perPage,
+    "prev_page_url": prevPageUrl,
+    "to": to,
+    "total": total,
+  };
 }
 
-class Data {
+class Datum {
+  Datum({
+    this.id,
+    this.title,
+    this.body,
+    this.message,
+    this.targetId,
+    this.createdBy,
+    this.isRead,
+    this.params,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.bookingDetail,
+    this.customerDetail,
+  });
+
   int id;
-  String title;
-  String body;
-  String message;
+  Title title;
+  Body body;
+  Message message;
   int targetId;
   int createdBy;
   String isRead;
-  Null params;
+  dynamic params;
   String status;
-  String createdAt;
-  String updatedAt;
-  Null deletedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
+  dynamic deletedAt;
   BookingDetail bookingDetail;
   CustomerDetail customerDetail;
 
-  Data(
-      {this.id,
-        this.title,
-        this.body,
-        this.message,
-        this.targetId,
-        this.createdBy,
-        this.isRead,
-        this.params,
-        this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.bookingDetail,
-        this.customerDetail});
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    id: json["id"],
+    title: titleValues.map[json["title"]],
+    body: bodyValues.map[json["body"]],
+    message: messageValues.map[json["message"]],
+    targetId: json["target_id"],
+    createdBy: json["created_by"],
+    isRead: json["is_read"],
+    params: json["params"],
+    status: json["status"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+    deletedAt: json["deleted_at"],
+    bookingDetail: BookingDetail.fromJson(json["booking_detail"]),
+    customerDetail: CustomerDetail.fromJson(json["customer_detail"]),
+  );
 
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    body = json['body'];
-    message = json['message'];
-    targetId = json['target_id'];
-    createdBy = json['created_by'];
-    isRead = json['is_read'];
-    params = json['params'];
-    status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
-    bookingDetail = json['booking_detail'] != null
-        ? new BookingDetail.fromJson(json['booking_detail'])
-        : null;
-    customerDetail = json['customer_detail'] != null
-        ? new CustomerDetail.fromJson(json['customer_detail'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['body'] = this.body;
-    data['message'] = this.message;
-    data['target_id'] = this.targetId;
-    data['created_by'] = this.createdBy;
-    data['is_read'] = this.isRead;
-    data['params'] = this.params;
-    data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
-    if (this.bookingDetail != null) {
-      data['booking_detail'] = this.bookingDetail.toJson();
-    }
-    if (this.customerDetail != null) {
-      data['customer_detail'] = this.customerDetail.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": titleValues.reverse[title],
+    "body": bodyValues.reverse[body],
+    "message": messageValues.reverse[message],
+    "target_id": targetId,
+    "created_by": createdBy,
+    "is_read": isRead,
+    "params": params,
+    "status": status,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+    "deleted_at": deletedAt,
+    "booking_detail": bookingDetail.toJson(),
+    "customer_detail": customerDetail.toJson(),
+  };
 }
+
+enum Body { BOOKING_CONFIRMATION }
+
+final bodyValues = EnumValues({
+  "Booking confirmation": Body.BOOKING_CONFIRMATION
+});
 
 class BookingDetail {
+  BookingDetail({
+    this.targetId,
+    this.targetModel,
+    this.dataType,
+  });
+
   int targetId;
-  String targetModel;
-  String dataType;
+  DataType targetModel;
+  DataType dataType;
 
-  BookingDetail({this.targetId, this.targetModel, this.dataType});
+  factory BookingDetail.fromJson(Map<String, dynamic> json) => BookingDetail(
+    targetId: json["target_id"],
+    targetModel: dataTypeValues.map[json["target_model"]],
+    dataType: dataTypeValues.map[json["data_type"]],
+  );
 
-  BookingDetail.fromJson(Map<String, dynamic> json) {
-    targetId = json['target_id'];
-    targetModel = json['target_model'];
-    dataType = json['data_type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['target_id'] = this.targetId;
-    data['target_model'] = this.targetModel;
-    data['data_type'] = this.dataType;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "target_id": targetId,
+    "target_model": dataTypeValues.reverse[targetModel],
+    "data_type": dataTypeValues.reverse[dataType],
+  };
 }
+
+enum DataType { BOOKING }
+
+final dataTypeValues = EnumValues({
+  "Booking": DataType.BOOKING
+});
 
 class CustomerDetail {
+  CustomerDetail({
+    this.id,
+    this.firstName,
+    this.middleName,
+    this.lastName,
+    this.image,
+    this.role,
+    this.fullName,
+  });
+
   int id;
-  String firstName;
-  String middleName;
-  String lastName;
-  String image;
+  FirstName firstName;
+  MiddleName middleName;
+  LastName lastName;
+  Image image;
   Role role;
-  String fullName;
+  FullName fullName;
 
-  CustomerDetail(
-      {this.id,
-        this.firstName,
-        this.middleName,
-        this.lastName,
-        this.image,
-        this.role,
-        this.fullName});
+  factory CustomerDetail.fromJson(Map<String, dynamic> json) => CustomerDetail(
+    id: json["id"],
+    firstName: firstNameValues.map[json["first_name"]],
+    middleName: middleNameValues.map[json["middle_name"]],
+    lastName: lastNameValues.map[json["last_name"]],
+    image: imageValues.map[json["image"]],
+    role: Role.fromJson(json["role"]),
+    fullName: fullNameValues.map[json["full_name"]],
+  );
 
-  CustomerDetail.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    firstName = json['first_name'];
-    middleName = json['middle_name'];
-    lastName = json['last_name'];
-    image = json['image'];
-    role = json['role'] != null ? new Role.fromJson(json['role']) : null;
-    fullName = json['full_name'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['first_name'] = this.firstName;
-    data['middle_name'] = this.middleName;
-    data['last_name'] = this.lastName;
-    data['image'] = this.image;
-    if (this.role != null) {
-      data['role'] = this.role.toJson();
-    }
-    data['full_name'] = this.fullName;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "first_name": firstNameValues.reverse[firstName],
+    "middle_name": middleNameValues.reverse[middleName],
+    "last_name": lastNameValues.reverse[lastName],
+    "image": imageValues.reverse[image],
+    "role": role.toJson(),
+    "full_name": fullNameValues.reverse[fullName],
+  };
 }
 
+enum FirstName { JUGRAJ }
+
+final firstNameValues = EnumValues({
+  "jugraj": FirstName.JUGRAJ
+});
+
+enum FullName { JUGRAJ_ABC_SINGH }
+
+final fullNameValues = EnumValues({
+  "jugraj abc singh": FullName.JUGRAJ_ABC_SINGH
+});
+
+enum Image { THE_1602764393_JPG }
+
+final imageValues = EnumValues({
+  "1602764393.jpg": Image.THE_1602764393_JPG
+});
+
+enum LastName { SINGH }
+
+final lastNameValues = EnumValues({
+  "singh": LastName.SINGH
+});
+
+enum MiddleName { ABC }
+
+final middleNameValues = EnumValues({
+  "abc": MiddleName.ABC
+});
+
 class Role {
-  String name;
+  Role({
+    this.name,
+    this.id,
+    this.image,
+    this.category,
+    this.plans,
+    this.priceLabelMonthly,
+    this.priceLabelQuarterly,
+    this.priceLabelHalfYearly,
+    this.priceLabelYearly,
+    this.permission,
+    this.currentPlan,
+    this.actionDate,
+  });
+
+  Name name;
   int id;
-  Null image;
-  Null category;
-  List<Null> plans;
+  dynamic image;
+  dynamic category;
+  List<dynamic> plans;
   String priceLabelMonthly;
   String priceLabelQuarterly;
   String priceLabelHalfYearly;
   String priceLabelYearly;
-  List<Null> permission;
-  Null currentPlan;
-  String actionDate;
+  List<dynamic> permission;
+  dynamic currentPlan;
+  DateTime actionDate;
 
-  Role(
-      {this.name,
-        this.id,
-        this.image,
-        this.category,
-        this.plans,
-        this.priceLabelMonthly,
-        this.priceLabelQuarterly,
-        this.priceLabelHalfYearly,
-        this.priceLabelYearly,
-        this.permission,
-        this.currentPlan,
-        this.actionDate});
+  factory Role.fromJson(Map<String, dynamic> json) => Role(
+    name: nameValues.map[json["name"]],
+    id: json["id"],
+    image: json["image"],
+    category: json["category"],
+    plans: List<dynamic>.from(json["plans"].map((x) => x)),
+    priceLabelMonthly: json["price_label_monthly"],
+    priceLabelQuarterly: json["price_label_quarterly"],
+    priceLabelHalfYearly: json["price_label_half_yearly"],
+    priceLabelYearly: json["price_label_yearly"],
+    permission: List<dynamic>.from(json["permission"].map((x) => x)),
+    currentPlan: json["current_plan"],
+    actionDate: DateTime.parse(json["action_date"]),
+  );
 
-  Role.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    id = json['id'];
-    image = json['image'];
-    category = json['category'];
-    if (json['plans'] != null) {
-      plans = new List<Null>();
-      json['plans'].forEach((v) {
-        plans.add(new Null.fromJson(v));
-      });
-    }
-    priceLabelMonthly = json['price_label_monthly'];
-    priceLabelQuarterly = json['price_label_quarterly'];
-    priceLabelHalfYearly = json['price_label_half_yearly'];
-    priceLabelYearly = json['price_label_yearly'];
-    if (json['permission'] != null) {
-      permission = new List<Null>();
-      json['permission'].forEach((v) {
-        permission.add(new Null.fromJson(v));
-      });
-    }
-    currentPlan = json['current_plan'];
-    actionDate = json['action_date'];
-  }
+  Map<String, dynamic> toJson() => {
+    "name": nameValues.reverse[name],
+    "id": id,
+    "image": image,
+    "category": category,
+    "plans": List<dynamic>.from(plans.map((x) => x)),
+    "price_label_monthly": priceLabelMonthly,
+    "price_label_quarterly": priceLabelQuarterly,
+    "price_label_half_yearly": priceLabelHalfYearly,
+    "price_label_yearly": priceLabelYearly,
+    "permission": List<dynamic>.from(permission.map((x) => x)),
+    "current_plan": currentPlan,
+    "action_date": actionDate.toIso8601String(),
+  };
+}
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['id'] = this.id;
-    data['image'] = this.image;
-    data['category'] = this.category;
-    if (this.plans != null) {
-      data['plans'] = this.plans.map((v) => v.toJson()).toList();
+enum Name { LOCAL_GUEST }
+
+final nameValues = EnumValues({
+  "Local Guest": Name.LOCAL_GUEST
+});
+
+enum Message { TARGET_ID_1_TARGET_MODEL_BOOKING_DATA_TYPE_BOOKING }
+
+final messageValues = EnumValues({
+  "{\"target_id\":1,\"target_model\":\"Booking\",\"data_type\":\"Booking\"}": Message.TARGET_ID_1_TARGET_MODEL_BOOKING_DATA_TYPE_BOOKING
+});
+
+enum Title { CONFIRMED }
+
+final titleValues = EnumValues({
+  "Confirmed": Title.CONFIRMED
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    if (reverseMap == null) {
+      reverseMap = map.map((k, v) => new MapEntry(v, k));
     }
-    data['price_label_monthly'] = this.priceLabelMonthly;
-    data['price_label_quarterly'] = this.priceLabelQuarterly;
-    data['price_label_half_yearly'] = this.priceLabelHalfYearly;
-    data['price_label_yearly'] = this.priceLabelYearly;
-    if (this.permission != null) {
-      data['permission'] = this.permission.map((v) => v.toJson()).toList();
-    }
-    data['current_plan'] = this.currentPlan;
-    data['action_date'] = this.actionDate;
-    return data;
+    return reverseMap;
   }
 }

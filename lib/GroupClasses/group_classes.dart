@@ -23,6 +23,7 @@ class GroupClassState extends State<GroupClass> {
   ScrollController _sc = new ScrollController();
   bool isLoading = false;
   List users = new List();
+  int checkLength = 0;
   String deleteId = "";
   int currentIndex = 0;
 
@@ -41,6 +42,13 @@ class GroupClassState extends State<GroupClass> {
           };
           getGroupClassListApi(auth, parms).then((response) {
             dismissDialog(context);
+            setState(() {
+              checkLength = response.data.data.length;
+              isLoading = false;
+            });
+
+            //  buildProgressIndicatorCenter(isLoading);
+
             if (response.status) {
               if (response.data != null && response.data.data.length > 0) {
                 totalPage = response.data.last_page;
@@ -101,7 +109,7 @@ class GroupClassState extends State<GroupClass> {
         builder: (context) {
           return CupertinoAlertDialog(
             title:
-                Text(_isBookedByMe ? "Booking cancel" : "Booking confirmation"),
+            Text(_isBookedByMe ? "Booking cancel" : "Booking confirmation"),
             content: Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Text("Do you want to continue ?",
@@ -115,9 +123,10 @@ class GroupClassState extends State<GroupClass> {
                     var isConfirmed = false;
                     bookingFunction(auth, context, eventKey, id, '')
                         .then((value) => isConfirmed = value)
-                        .whenComplete(() => {
-                              if (isConfirmed) {_isBookedByMe = true}
-                            });
+                        .whenComplete(() =>
+                    {
+                      if (isConfirmed) {_isBookedByMe = true}
+                    });
                     if (isConfirmed) {
                       setState(() {});
                     }
@@ -256,53 +265,65 @@ class GroupClassState extends State<GroupClass> {
         body: Material(
           color: Colors.white,
           child: ListView.builder(
-            itemCount: users.length + 1,
-            // Add one more item for progress indicator
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            itemBuilder: (BuildContext context, int index) {
-              if (index == users.length) {
-                return buildProgressIndicatorCenter(isLoading);
-              } else {
-                return users.length > 0
-                    ? CustomGroupState(
-                        items: CustomGroupClass(
-                            className: users[index]['class_detail']['name'],
-                            img: users[index]['class_detail']['image'],
-                            classOwner: users[index]['trainer'] != null
-                                ? users[index]['trainer']['first_name']
-                                : '',
-                            classTime: users[index]['class_type'],
-                            is_booked_by_me: users[index]['is_booked_by_me'],
-                            id: users[index]['id'],
-                            leftSeats:
-                                users[index]['available_capacity'].toString()),
-                        deleteCallBack: () {
-                          currentIndex = index;
-                          deleteId = users[index]['is_booked_by_me_booking_id']
-                              .toString();
-                          if (users[index]['available_capacity'].toString() !=
-                                  '0' &&
-                              !users[index]['is_booked_by_me']) {
-                            Navigator.push(
-                                context,
-                                ScaleRoute(
-                                    page: GroupClassDetail(
-                                  id: users[index]['id'],
-                                )));
-                          } else {
-                            doYoWantToCntinue(users[index]['is_booked_by_me'],
-                                users[index]['id'].toString());
-                          }
-                        },
-                      )
-                    : Material(
-                        color: Colors.white,
+              itemCount: users.length + 1,
+              // Add one more item for progress indicator
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              itemBuilder: (BuildContext context, int index) {
+                  if (index == users.length) {
+                    if(isLoading)
+                    return buildProgressIndicatorCenter(isLoading);
+                    else {
+                      buildProgressIndicatorCenter(isLoading);
+                      return  Material(
                         child: Center(
-                          child: Text("No Data Found"),
+                          child: Text("No Data Found",style: TextStyle(color:Colors.black),),
                         ),
                       );
+                    }
+                  }
+                  else {
+                    return checkLength > 0 && users.length > 0
+                        ? CustomGroupState(
+                      items: CustomGroupClass(
+                          className: users[index]['class_detail']['name'],
+                          img: users[index]['class_detail']['image'],
+                          classOwner: users[index]['trainer'] != null
+                              ? users[index]['trainer']['first_name']
+                              : '',
+                          classTime: users[index]['class_type'],
+                          is_booked_by_me: users[index]['is_booked_by_me'],
+                          id: users[index]['id'],
+                          leftSeats:
+                          users[index]['available_capacity'].toString()),
+                      deleteCallBack: () {
+                        currentIndex = index;
+                        deleteId = users[index]['is_booked_by_me_booking_id']
+                            .toString();
+                        if (users[index]['available_capacity'].toString() !=
+                            '0' &&
+                            !users[index]['is_booked_by_me']) {
+                          Navigator.push(
+                              context,
+                              ScaleRoute(
+                                  page: GroupClassDetail(
+                                    id: users[index]['id'],
+                                  )));
+                        } else {
+                          doYoWantToCntinue(users[index]['is_booked_by_me'],
+                              users[index]['id'].toString());
+                        }
+                      },
+                    )
+                        : Material(
+                      child: Center(
+                        child: Text("No Data Found", style: TextStyle(
+                            color: Colors.black),),
+                      ),
+                    );
+                  }
+
+
               }
-            },
 //            controller: _sc,
           ),
         ),
@@ -320,14 +341,13 @@ class CustomGroupClass {
   final String leftSeats;
   final bool is_booked_by_me;
 
-  const CustomGroupClass(
-      {this.img,
-      this.is_booked_by_me,
-      this.className,
-      this.id,
-      this.classOwner,
-      this.classTime,
-      this.leftSeats});
+  const CustomGroupClass({this.img,
+    this.is_booked_by_me,
+    this.className,
+    this.id,
+    this.classOwner,
+    this.classTime,
+    this.leftSeats});
 }
 
 class CustomGroupState extends StatelessWidget {
@@ -346,16 +366,16 @@ class CustomGroupState extends StatelessWidget {
         children: <Widget>[
           items.img == null
               ? Image.asset(
-                  baseImageAssetsUrl + 'logo_black.png',
-                  height: SizeConfig.blockSizeVertical * 25,
-                  width: SizeConfig.blockSizeHorizontal * 90,
-                  fit: BoxFit.cover,
-                )
+            baseImageAssetsUrl + 'logo_black.png',
+            height: SizeConfig.blockSizeVertical * 25,
+            width: SizeConfig.blockSizeHorizontal * 90,
+            fit: BoxFit.cover,
+          )
               : blackPlaceHolder(
-                  imageClassUrl,
-                  items.img,
-                  SizeConfig.blockSizeVertical * 25,
-                  SizeConfig.blockSizeHorizontal * 90),
+              imageClassUrl,
+              items.img,
+              SizeConfig.blockSizeVertical * 25,
+              SizeConfig.blockSizeHorizontal * 90),
           SizedBox(
             height: 20,
           ),
@@ -427,8 +447,8 @@ class CustomGroupState extends StatelessWidget {
                   child: Text(
                     items.leftSeats != '0'
                         ? !items.is_booked_by_me
-                            ? 'View Detail'
-                            : 'Already booked! Do you want to cancel?'
+                        ? 'View Detail'
+                        : 'Already booked! Do you want to cancel?'
                         : 'House Full',
                     style: TextStyle(
                         color: Colors.white,

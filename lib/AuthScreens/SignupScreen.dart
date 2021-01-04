@@ -769,7 +769,7 @@ class SignupState extends State<SignupScreen> {
                           ),
                           SizedBox(height:20),
                           Visibility(
-                            visible: (widget.memberIndex == 0  && widget.type != "guest") || widget.type == "fairMont",
+                            visible: (widget.memberIndex == 0  && widget.type != "guest") || widget.type == "fairMont" || widget.isSingle ,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
@@ -899,8 +899,7 @@ class SignupState extends State<SignupScreen> {
                                     Spacer(),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                          "assets/images/vector.png"),
+                                      child: Image.asset("assets/images/vector.png"),
                                     ),
                                   ],
                                 ),

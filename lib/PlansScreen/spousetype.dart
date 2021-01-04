@@ -53,6 +53,7 @@ class _SpouseTypeState extends State<SpouseType> {
   bool _isIos;
   String deviceType = '';
   var roleId;
+  bool isApiHit = false;
 
   String deviceToken = "";
   var errorMessage = '';
@@ -60,6 +61,7 @@ class _SpouseTypeState extends State<SpouseType> {
   List<dynamic> data = [];
   var chooseChilds = false;
   int valueNew = -1;
+  int selectChildIndex = -1;
   int childValueCount = 0;
   var price = 0;
   var newprice;
@@ -70,6 +72,7 @@ class _SpouseTypeState extends State<SpouseType> {
   var rolePlanId;
 
   var rolePlanFee = null;
+  var roleIdrole ;
   List<Map<String, dynamic>> result = [];
   var myResult;
   int index = 0;
@@ -121,6 +124,50 @@ class _SpouseTypeState extends State<SpouseType> {
     super.initState();
     print(widget.gym_members);
   }
+  childPopUp(){
+
+      customBottomSheet(
+        data: data,
+        context: context,
+        getValue: () {
+          setState(() {
+            valueNew = childValueCount;
+            var myLength = valueNew + 2;
+            print("$childValueCount   $myLength");
+            if (result.length < myLength) {
+              for (int i = result.length; i < myLength; i++) {
+                result.add({});
+              }
+            } else {
+              for (int i = result.length; i > myLength; i--) {
+                result.removeAt(i - 1);
+              }
+            }
+            print("vikas $result");
+
+            if (memberName.length > 2) {
+              memberName.removeRange(2, memberName.length);
+            }
+            // print('part $valueNew');
+            // print('part $stoData');
+            //
+            for (int i = (valueNew + 3); i < stoData.length; i++) {
+              stoData[i] = '';
+            }
+            // print('part1 $stoData');
+            for (int i = 1; i <= valueNew; i++) {
+              memberName.add('Child#$i');
+            }
+            // // print('after');
+            // // print(memberName);
+            chooseChilds = false;
+            valueNew = -1;
+          });
+          Navigator.pop(context);
+        },
+      );
+
+  }
 
   getMemberShipData() async {
     isConnectedToInternet().then((internet) {
@@ -133,9 +180,11 @@ class _SpouseTypeState extends State<SpouseType> {
         gRoles(param).then((response) {
           if (response.status) {
             if (response.data != null) {
+
               print("newData" + response.data.toString());
               dismissDialog(context);
               setState(() {
+                isApiHit = true;
                 data = response.data;
               });
             }
@@ -144,48 +193,7 @@ class _SpouseTypeState extends State<SpouseType> {
             dismissDialog(context);
           }
         }).whenComplete(() {
-          setState(() {
-            customBottomSheet(
-              data: data,
-              context: context,
-              getValue: () {
-                setState(() {
-                  valueNew = childValueCount;
-                  var myLength = valueNew + 2;
-                  print("$childValueCount   $myLength");
-                  if (result.length < myLength) {
-                    for (int i = result.length; i < myLength; i++) {
-                      result.add({});
-                    }
-                  } else {
-                    for (int i = result.length; i > myLength; i--) {
-                      result.removeAt(i - 1);
-                    }
-                  }
-                  print("vikas $result");
-
-                  if (memberName.length > 2) {
-                    memberName.removeRange(2, memberName.length);
-                  }
-                  // print('part $valueNew');
-                  // print('part $stoData');
-                  //
-                  for (int i = (valueNew + 3); i < stoData.length; i++) {
-                    stoData[i] = '';
-                  }
-                  // print('part1 $stoData');
-                  for (int i = 1; i <= valueNew; i++) {
-                    memberName.add('Child#$i');
-                  }
-                  // // print('after');
-                  // // print(memberName);
-                  chooseChilds = false;
-                  valueNew = -1;
-                });
-                Navigator.pop(context);
-              },
-            );
-          });
+         childPopUp();
         });
       } else {
         showDialogBox(context, internetError, pleaseCheckInternet);
@@ -591,7 +599,12 @@ class _SpouseTypeState extends State<SpouseType> {
                             color: Colors.white),
                         child: RaisedButton(
                           onPressed: () {
+                            if(!isApiHit)
                             getMemberShipData();
+                            else{
+                              childPopUp();
+
+                            }
                             //    var count = 0;
                             // Navigator.popUntil(context, (route) {
                             //   return count++ == 2;
@@ -648,66 +661,32 @@ class _SpouseTypeState extends State<SpouseType> {
                         if (result != null && formCheck && acceptTerms) {
                           Map<String, String> parms = {};
                           for (int index = 0; index < result.length; index++) {
-                            parms[FIRSTNAME +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
-                            parms[MIDDLENAME +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
-                            parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] =
-                                result[index][LASTNAME +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            parms[MOBILE + "${index == 0 ? "" : "_$index"}"] =
-                                result[index]
-                                    [MOBILE + "${index == 0 ? "" : "_$index"}"];
-                            parms[EMAIL + "${index == 0 ? "" : "_$index"}"] =
-                                result[index]
-                                    [EMAIL + "${index == 0 ? "" : "_$index"}"];
-                            parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] =
-                                result[index][PASSWORD +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            parms[BIRTH_DATE +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
-                            parms[EMIRATES_ID +
-                                    "${index == 0 ? "" : "_$index"}"] =
-                                result[index][EMIRATES_ID +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            parms[GENDER + "${index == 0 ? "" : "_$index"}"] =
-                                result[index]
-                                    [GENDER + "${index == 0 ? "" : "_$index"}"];
-                            parms[trainer_id +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [trainer_id + "${index == 0 ? "" : "_$index"}"];
-                            parms[trainer_slot +
-                                    "${index == 0 ? "" : "_$index"}"] =
-                                result[index][trainer_slot +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            if (index == 0)
-                              parms[EMEREGENCY_NUMBER] =
-                                  result[index][EMEREGENCY_NUMBER];
-                            if (index == 0)
-                              parms[DESIGNATION] = result[index][DESIGNATION];
-                            if (index == 0)
-                              parms[ADDRESS] = result[index][ADDRESS];
+                            parms[FIRSTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
+                            parms[MIDDLENAME + "${index == 0 ? "" : "_$index"}"] = result[index][MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
+                            parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][LASTNAME + "${index == 0 ? "" : "_$index"}"];
+                            parms[MOBILE + "${index == 0 ? "" : "_$index"}"] = result[index][MOBILE + "${index == 0 ? "" : "_$index"}"];
+                            parms[EMAIL + "${index == 0 ? "" : "_$index"}"] = result[index][EMAIL + "${index == 0 ? "" : "_$index"}"];
+                            parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] = result[index][PASSWORD + "${index == 0 ? "" : "_$index"}"];
+                            parms[BIRTH_DATE +"${index == 0 ? "" : "_$index"}"] = result[index][BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
+                            parms[EMIRATES_ID + "${index == 0 ? "" : "_$index"}"] = result[index][EMIRATES_ID + "${index == 0 ? "" : "_$index"}"];
+                            parms[GENDER + "${index == 0 ? "" : "_$index"}"] = result[index][GENDER + "${index == 0 ? "" : "_$index"}"];
+                            parms[trainer_id + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_id + "${index == 0 ? "" : "_$index"}"];
+                            parms[trainer_slot + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_slot + "${index == 0 ? "" : "_$index"}"];
+                            if (index == 0)parms[EMEREGENCY_NUMBER] = result[index][EMEREGENCY_NUMBER];
+                            if (index == 0) parms[DESIGNATION] = result[index][DESIGNATION];
+                            if (index == 0) parms[ADDRESS] = result[index][ADDRESS];
                             if (index == 0) parms[CITY] = result[index][CITY];
+                            if (index == 0) parms[nationality] = result[index][nationality];
+                            if (index == 0) parms[workplace] = result[index][workplace];
+                            if (index == 0) parms[marital_status] = result[index][marital_status];
                             if (index == 0)
-                              parms[nationality] = result[index][nationality];
-                            if (index == 0)
-                              parms[workplace] = result[index][workplace];
-                            if (index == 0)
-                              parms[marital_status] =
-                                  result[index][marital_status];
-                            if (index == 0)
-                              parms[about_us] = result[index][about_us];
+
+                            parms[about_us] = result[index][about_us];
                             parms[DEVICE_TYPE] = deviceType;
                             parms[DEVICE_TOKEN] = deviceTokenValue;
-                            parms[ROLE_ID] = widget.roleId.toString();
-                            parms[ROLE_PLAN_ID] = widget.rolePlanIds.toString();
+
+                            parms[ROLE_ID] =roleIdrole != null?roleIdrole.toString() :widget.roleId.toString();
+                            parms[ROLE_PLAN_ID] = rolePlanId != null?rolePlanId.toString():widget.rolePlanIds.toString();
                           }
                           print("vikasssss===${parms}");
                           // FIRSTNAME: result[index][FIRSTNAME],
@@ -786,7 +765,8 @@ class _SpouseTypeState extends State<SpouseType> {
                               dismissDialog(context);
                             }
                             dismissDialog(context);
-                          });
+                          }
+                         );
                         } else if (!acceptTerms) {
                           showDialogBox(context, termsofService,
                               'Please read & accept our terms of services');
@@ -1068,23 +1048,26 @@ class _SpouseTypeState extends State<SpouseType> {
                                     onTap: () {
                                       print(
                                           "print ander  ${widget.response[widget.plan_index]['fee_type']}");
-                                      if (data[index].plans.monthly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.monthly.feeType) {
-                                        if (data[index].plans.monthly.feeType != null) {
-                                          setState(() {
-                                            rolePlanId = data[index].plans.monthly.id.toString();
-                                            rolePlanFee = data[index].plans.monthly.fee
-                                                .toString();
-                                            print("rolePlanId " + rolePlanId);
-                                            print("rolePlanFee " + rolePlanFee);
-                                          });
-                                        }
-                                      } else if (data[index].plans.quarterly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType) {
+                                      // if (data[index].plans[""] != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.monthly.feeType) {
+                                      //   if (data[index].plans.monthly.feeType != null) {
+                                      //     setState(() {
+                                      //       rolePlanId = data[index].plans.monthly.id.toString();
+                                      //       rolePlanFee = data[index].plans.monthly.fee
+                                      //           .toString();
+                                      //       print("rolePlanId " + rolePlanId);
+                                      //       print("rolePlanFee " + rolePlanFee);
+                                      //     });
+                                      //   }
+                                      // } else
+                                        if (data[index].plans.quarterly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType) {
                                         if (
                                             data[index].plans.quarterly.feeType != null) {
                                           //
                                           setState(() {
                                             rolePlanId = data[index].plans.quarterly.id.toString();
                                             rolePlanFee = data[index].plans.quarterly.fee.toString();
+                                            roleIdrole = data[index].plans.quarterly.roleId.toString();
+
                                             print("rolePlanId " + rolePlanId);
                                             print("rolePlanFee " + rolePlanFee);
                                           });
@@ -1095,6 +1078,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                           setState(() {
                                             rolePlanId = data[index].plans.halfYearly.id.toString();
                                             rolePlanFee = data[index].plans.halfYearly.fee.toString();
+                                            roleIdrole = data[index].plans.quarterly.roleId.toString();
+
                                             print("rolePlanId " + rolePlanId);
                                             print("rolePlanFee " + rolePlanFee);
                                           });
@@ -1104,6 +1089,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                           setState(() {
                                             rolePlanId = data[index].plans.yearly.id.toString();
                                             rolePlanFee = data[index].plans.yearly.fee.toString();
+                                            roleIdrole = data[index].plans.quarterly.roleId.toString();
+
                                             print("rolePlanId " + rolePlanId);
                                             print("rolePlanFee " + rolePlanFee);
                                           });
@@ -1113,6 +1100,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                       }
 
                                       setState(() {
+                                        selectChildIndex = index;
                                         //  widget.response[widget.plan_index]['fee_type']
                                         childValueCount = data[index].member != null ? data[index].member - 2 : 0;
                                         roleId = data[index].id.toString();
@@ -1132,7 +1120,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                       }
                                     },
                                     child: selectChild(
-                                        childValue[index], valueNew, index));
+                                        childValue[index], selectChildIndex, index));
                               },
                             ),
                           ),
@@ -1212,6 +1200,8 @@ class _SpouseTypeState extends State<SpouseType> {
   }
 
   Widget selectChild(String qunVal, int myValue, int currentIndex) {
+    print("$myValue fsdkhjkh $currentIndex");
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
