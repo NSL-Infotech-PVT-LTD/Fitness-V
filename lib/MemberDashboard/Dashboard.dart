@@ -15,7 +15,7 @@ import 'package:volt/Value/Strings.dart';
 import 'package:volt/changes.dart';
 import 'package:volt/util/custom_dashboard_appbar.dart';
 
-class Dashboard extends StatefulWidget {
+class  Dashboard extends StatefulWidget {
   final role;
 
   Dashboard({this.role});

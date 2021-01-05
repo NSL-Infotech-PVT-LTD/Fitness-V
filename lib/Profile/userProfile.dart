@@ -271,7 +271,8 @@ class UserProfileState extends State<UserProfile> {
               child: Stack(
                 children: <Widget>[
                   Positioned(
-                    child: SvgPicture.asset(
+                    child:
+                    SvgPicture.asset(
                       baseImageAssetsUrl + 'horizontal.svg',
                       width: SizeConfig.screenWidth,
                     ),

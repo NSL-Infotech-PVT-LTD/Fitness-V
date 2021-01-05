@@ -19,6 +19,8 @@ class HomeState extends State<Home> {
   String _rolePlan = "";
   String _planName = "";
   String _roleCategory = "";
+  String textFind ;
+  List result;
 
   void initState() {
     getString(roleName)
@@ -31,7 +33,14 @@ class HomeState extends State<Home> {
 
     getString(rolePlan)
         .then((value) => {_rolePlan = value})
-        .whenComplete(() => setState(() {}));
+        .whenComplete(() => setState(() {
+
+       result = _rolePlan.split(":");
+      print("print "+ result[0]);
+
+      //_rolePlan == "quarterly"?"3 months":_rolePlane == "half_yearly"?"6 months":_rolePlan == "yearly"?"Annual":_rolePlan,
+
+    }));
 
     getString(roleCategory)
         .then((value) => {_roleCategory = value})
@@ -116,7 +125,8 @@ class HomeState extends State<Home> {
                 bottom: 15,
                 left: 40,
                 child: Text(
-                  "${_rolePlan == null || _rolePlan.isEmpty ? "" : _rolePlan}",
+
+                  "${_rolePlan == null || _rolePlan.isEmpty ? "" : result[0].toString() == "quarterly"?"3 months : ${result[1].toString()}":result[0].toString() == "half_yearly"?"6 months : ${result[1].toString()}":result[0].toString() == "yearly"?"Annual : ${result[1].toString()}":_rolePlan}",
                   style: TextStyle(
                       color: Colors.white.withOpacity(.8), fontSize: 10),
                 ),

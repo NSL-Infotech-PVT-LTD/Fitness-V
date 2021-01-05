@@ -273,12 +273,12 @@ class GroupClassState extends State<GroupClass> {
                     if(isLoading)
                     return buildProgressIndicatorCenter(isLoading);
                     else {
-                      buildProgressIndicatorCenter(isLoading);
-                      return  Material(
-                        child: Center(
-                          child: Text("No Data Found",style: TextStyle(color:Colors.black),),
-                        ),
-                      );
+                     return buildProgressIndicatorCenter(isLoading);
+                      // return  Material(
+                      //   child: Center(
+                      //     child: Text("No Data Found",style: TextStyle(color:Colors.black),),
+                      //   ),
+                      // );
                     }
                   }
                   else {

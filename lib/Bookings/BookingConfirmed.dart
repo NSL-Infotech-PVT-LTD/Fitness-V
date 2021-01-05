@@ -285,12 +285,13 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                               ),
                               SizedBox(height: 30),
                               Text(
-                                booking_confirmed,
+                                  booking_confirmed_bottom,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 24, color: Color(0xff2e2e2e)),
                               ),
                               Text(
-                                'You may check your booking in BOOKINGs.',
+                                'You may check your booking in BOOKINGS.',
                                 style: TextStyle(
                                     fontSize: 10, color: Color(0xff707070)),
                               )

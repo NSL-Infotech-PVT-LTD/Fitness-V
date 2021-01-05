@@ -89,6 +89,18 @@ String trainerIds = "trainer_users";
 String trainerData = "trainerData";
 
 
+String tName = "tName";
+String tExp = "tExp";
+String tTrainess = "tTrainess";
+String tReview = "tReview";
+String tSession = "tSession";
+String tPrice = "tPrice";
+String tBooking = "tBooking";
+String tId = "tId";
+String tSlot = "tSlot";
+var timage = "image";
+
+
 //user data
 String USER_AUTH = "USER_AUTH";
 String Image_Path = BASE_URL + "/public/uploads/trainer-user/";

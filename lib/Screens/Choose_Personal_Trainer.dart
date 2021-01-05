@@ -173,8 +173,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                     placeholder:
                                         baseImageAssetsUrl + 'logo_black.png',
                                     image: BASE_URL +
-                                        'uploads/trainer-user/' +
-                                        users[i]['image'],
+                                        'uploads/trainer-user/' + users[i]['image'],
                                   ),
                             trailing: _myRadioButton(
                               title: "",
