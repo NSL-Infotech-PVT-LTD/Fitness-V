@@ -103,7 +103,7 @@ class Datum {
 
   int id;
   Title title;
-  Body body;
+  String body;
   Message message;
   int targetId;
   int createdBy;
@@ -119,7 +119,7 @@ class Datum {
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     title: titleValues.map[json["title"]],
-    body: bodyValues.map[json["body"]],
+    body:json["body"],
     message: messageValues.map[json["message"]],
     targetId: json["target_id"],
     createdBy: json["created_by"],
@@ -136,7 +136,7 @@ class Datum {
   Map<String, dynamic> toJson() => {
     "id": id,
     "title": titleValues.reverse[title],
-    "body": bodyValues.reverse[body],
+    "body": body,
     "message": messageValues.reverse[message],
     "target_id": targetId,
     "created_by": createdBy,
@@ -151,11 +151,7 @@ class Datum {
   };
 }
 
-enum Body { BOOKING_CONFIRMATION }
 
-final bodyValues = EnumValues({
-  "Booking confirmation": Body.BOOKING_CONFIRMATION
-});
 
 class BookingDetail {
   BookingDetail({
@@ -263,7 +259,7 @@ class Role {
     this.id,
     this.image,
     this.category,
-    this.plans,
+    // this.plans,
     this.priceLabelMonthly,
     this.priceLabelQuarterly,
     this.priceLabelHalfYearly,
@@ -277,7 +273,7 @@ class Role {
   int id;
   dynamic image;
   dynamic category;
-  List<dynamic> plans;
+  // List<dynamic> plans;
   String priceLabelMonthly;
   String priceLabelQuarterly;
   String priceLabelHalfYearly;
@@ -291,7 +287,7 @@ class Role {
     id: json["id"],
     image: json["image"],
     category: json["category"],
-    plans: List<dynamic>.from(json["plans"].map((x) => x)),
+    // plans: List<dynamic>.from(json["plans"].map((x) => x)),
     priceLabelMonthly: json["price_label_monthly"],
     priceLabelQuarterly: json["price_label_quarterly"],
     priceLabelHalfYearly: json["price_label_half_yearly"],
@@ -306,7 +302,7 @@ class Role {
     "id": id,
     "image": image,
     "category": category,
-    "plans": List<dynamic>.from(plans.map((x) => x)),
+    // "plans": List<dynamic>.from(plans.map((x) => x)),
     "price_label_monthly": priceLabelMonthly,
     "price_label_quarterly": priceLabelQuarterly,
     "price_label_half_yearly": priceLabelHalfYearly,

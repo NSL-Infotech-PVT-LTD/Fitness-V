@@ -209,8 +209,8 @@ Future<NotificationList> notification(String auth) async {
     },
   );
   final jsonData = json.decode(response.body);
+  print("jsonData"+jsonData.toString());
   var map = Map<String, dynamic>.from(jsonData);
-
   return NotificationList.fromJson(map);
 }
 

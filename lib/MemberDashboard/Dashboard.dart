@@ -264,8 +264,7 @@ class DashboardState extends State<Dashboard> {
                               new MaterialPageRoute(
                                   builder: (context) => NotificationScreen()));
                         },
-                        child: SvgPicture.asset(
-                            baseImageAssetsUrl + 'noti_dot.svg'))
+                        child: SvgPicture.asset(baseImageAssetsUrl + 'noti_dot.svg'))
                   ],
                 ),
               ),
