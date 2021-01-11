@@ -21,6 +21,7 @@ class AllBookings extends StatefulWidget {
   State<StatefulWidget> createState() => AllBookingsState();
 }
 
+
 class AllBookingsState extends State<AllBookings> {
   int _page = 1;
   int _total = 1;
@@ -175,15 +176,11 @@ class AllBookingsState extends State<AllBookings> {
                         image = tList[index]['model_detail']['image'];
                         modelType = 'Event';
                         url = Constants.uploads + Constants.event + "/";
-                      } else if (tList[index]['model_type'] ==
-                          'class_schedules') {
+                      } else if (tList[index]['model_type'] == 'class_schedules') {
                         print(tList[index]['model_detail'].toString());
-                        if (tList[index]['model_detail']['class_detail'] !=
-                            null) {
-                          name = tList[index]['model_detail']['class_detail']
-                              ['name'];
-                          image = tList[index]['model_detail']['class_detail']
-                              ['image'];
+                        if (tList[index]['model_detail']['class_detail'] != null) {
+                          name = tList[index]['model_detail']['class_detail']['name'];
+                          image = tList[index]['model_detail']['class_detail']['image'];
                           modelType = 'Class';
                           url = imageClassUrl;
                         }
@@ -202,11 +199,12 @@ class AllBookingsState extends State<AllBookings> {
                         imgLink: image,
                         url: url,
                         bookingDate: tList[index]['created_at'],
-                        serviceHours: tList[index]['hours'].toString()));
+                        serviceHours: tList[index]['hours'].toString(),
+                        status: tList[index]['status'].toString(),
+                        paymentStatus: tList[index]['payment_status'].toString(),
+                    ));
                   }
-
                   // print('jugraj===>${tList[0]['id'].toString()}');
-
                   _page++;
                 });
               }
@@ -372,9 +370,9 @@ class AllBookingsState extends State<AllBookings> {
                               ),
                               margin: EdgeInsets.all(10.0),
                               decoration: BoxDecoration(
-                                  color:
-                                      _events ? Colors.black : Colors.black26,
-                                  shape: BoxShape.circle))),
+                                  color: _events ? Colors.black : Colors.black26,
+                                  shape: BoxShape.circle))
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -566,8 +564,11 @@ class CustomBooking {
   final String bookingDate;
   final String bookingType;
   final String url;
+  final String status;
+  final String paymentStatus;
 
   const CustomBooking({
+    this.paymentStatus,
     this.bookingId,
     this.bookingType,
     this.name,
@@ -575,6 +576,7 @@ class CustomBooking {
     this.bookingDate,
     this.url,
     this.imgLink,
+    this.status,
   });
 }
 
@@ -618,10 +620,38 @@ class BookingView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
+                                  'Status ',
+                                  style: TextStyle(
+                                      color: Colors.black38, fontSize: 10),
+                                ),
+                                Text(
+                                  "${customBooking.status == "0"?"Pending":"Confirm"}",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Payment Status ',
+                                  style: TextStyle(
+                                      color: Colors.black38, fontSize: 10),
+                                ),
+                                SizedBox(width: 20),
+                                Text(
+                                  customBooking.paymentStatus.toUpperCase(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
                                   'Booking ID',
                                   style: TextStyle(
                                       color: Colors.black38, fontSize: 10),
                                 ),
+                                SizedBox(width: 20),
                                 Text(
                                   customBooking.bookingId,
                                   style: TextStyle(
@@ -716,6 +746,8 @@ class BookingView extends StatelessWidget {
                               ],
                             ),
                           ),
+
+
                           Column(
                             children: <Widget>[
                               customBooking.imgLink == null
@@ -740,13 +772,12 @@ class BookingView extends StatelessWidget {
                                 child: Container(
                                   margin: EdgeInsets.only(top: padding5),
                                   height: 30,
-                                  width: 110,
+                                  width: 120,
                                   child: RaisedButton(
                                     onPressed: callBackeDelete,
                                     color: CColor.CancelBTN,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            button_radius)),
+                                        borderRadius: BorderRadius.circular(button_radius)),
                                     child: Text(
                                       cancelBooking,
                                       style: TextStyle(

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/Choose_Personal_Trainer.dart';
-import 'package:volt/Screens/view_personal_trainer.dart';
-import 'package:volt/TrainerPackage/all_trainer.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -38,6 +35,7 @@ class SignupScreen extends StatefulWidget {
   final Map<String, String> editData;
   final String roleId;
   final String rolePlanId;
+   var profileImage;
 
   static MyInheritedData of(BuildContext context) =>
       context.inheritFromWidgetOfExactType(MyInheritedData) as MyInheritedData;
@@ -52,7 +50,9 @@ class SignupScreen extends StatefulWidget {
     this.isEmailError,
     this.isSingle,
     this.roleId,
-    this.rolePlanId});
+    this.rolePlanId,
+    this.profileImage,
+  });
 
   @override
   State<StatefulWidget> createState() => SignupState();
@@ -238,7 +238,10 @@ class SignupState extends State<SignupScreen> {
 //
   _setData(String ind) {
     print("kjhrfikrhf ${widget.editData}  $ind");
+
     if (ind == '0') {
+      result = [];
+      file = widget.profileImage ;
       firstNameController.text = widget.editData[FIRSTNAME];
       radioItem = widget.editData[CHILD];
       fromDate = widget.editData[BIRTH_DATE];
@@ -259,13 +262,24 @@ class SignupState extends State<SignupScreen> {
       addressController.text = widget.editData[ADDRESS];
       selectedCity = widget.editData[CITY];
       selectedTrainer = widget.editData[trainerIds];
+
+       nameTrainer = widget.editData[tName];
+       yearsExpTrainer = widget.editData[tExp];
+       traineesBookedTrainer = widget.editData[tTrainess];
+       reviewTrainer = widget.editData[tReview];
+       priceTrainer = widget.editData[tPrice].toString();
+       imageTrainer = widget.editData[timage];
+       sessionSlotTrainer = widget.editData[trainer_slot];
+       idTrainer = widget.editData[trainer_id];
+
       // result =jsonDecode(widget.editData[trainerData+ '_' + ind]);
 
       // durationController.text = widget.editData[durationOfStay];
       // hotelController.text = widget.editData[hotelNo];
       // selectedTrainer = widget.editData[trainerIds + '_' + ind];
-
+      print("price " + priceTrainer.toString());
     } else {
+      result = [];
       firstNameController.text = widget.editData[FIRSTNAME + '_' + ind];
       radioItem = widget.editData[CHILD + '_' + ind];
       fromDate = widget.editData[BIRTH_DATE + '_' + ind];
@@ -283,6 +297,15 @@ class SignupState extends State<SignupScreen> {
       selectedCity = widget.editData[CITY + '_' + ind];
       selectedTrainer = widget.editData[trainerIds + '_' + ind];
       print("frdsfd ${jsonDecode(widget.editData[trainerData + '_' + ind])}");
+      nameTrainer = widget.editData[tName+ '_' + ind];
+      yearsExpTrainer = widget.editData[tExp+ '_' + ind];
+      traineesBookedTrainer = widget.editData[tTrainess+ '_' + ind];
+      reviewTrainer = widget.editData[tReview+ '_' + ind];
+      priceTrainer = widget.editData["trainerPrice"].toString();
+      imageTrainer = widget.editData[timage+ '_' + ind];
+      sessionSlotTrainer = widget.editData[trainer_slot+ '_' + ind];
+      idTrainer = widget.editData[trainer_id+ '_' + ind];
+
       //result =jsonDecode(widget.editData[trainerData+ '_' + ind]) as List;
 
       // durationController.text = widget.editData[durationOfStay];
@@ -314,11 +337,36 @@ class SignupState extends State<SignupScreen> {
         }
       }
     }
+    Future<bool> _onWillPop() async {
+      return (await showDialog(
+        context: context,
+        builder: (context) => new AlertDialog(
+          title: new Text('Are you sure to exit?'),
+          content: new Text('kindly save your  details  otherwise some data will be vanished'),
+          actions: <Widget>[
+            new FlatButton(
+              onPressed: () => Navigator.pop(context),
+              child: new Text('Cancel'),
+            ),
+            new FlatButton(
+              onPressed: () {
 
+                parms = {};
+                Navigator.pop(context);
+                Navigator.of(context).pop();
+      },
+              child: new Text('Confirm',style: TextStyle(color:Colors.red,fontWeight: FontWeight.bold),),
+            ),
+          ],
+        ),
+      )) ?? false;
+    }
     SizeConfig().init(context);
     return WillPopScope(
         onWillPop: () {
-          Navigator.pop(context, widget.editData);
+         _onWillPop();
+          //Navigator.p
+          // op(context, widget.editData);
           return new Future(() => false);
         },
         child: Form(
@@ -820,8 +868,8 @@ class SignupState extends State<SignupScreen> {
                                   ),
                                   child: Center(
                                     child: file == null ? Text(
-                                        'Choose File to Upload') : Text(
-                                        "Files Selected"),
+                                        'Choose Photo to Upload') : Text(
+                                        "Photo Selected"),
                                   ),
                                 ),
                                 SizedBox(
@@ -868,7 +916,7 @@ class SignupState extends State<SignupScreen> {
                                   InkWell(
                                     onTap: () =>
                                         _navigateAndDisplaySelection(context),
-                                    child: result != null
+                                    child:result != null&&result.length>0
                                         ? Text(
                                       "Change",
                                       style:
@@ -891,7 +939,7 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
                           Visibility(
-                            visible: result != null,
+                            visible:result != null&&result.length>0,
                             child: Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: Card(
@@ -908,7 +956,7 @@ class SignupState extends State<SignupScreen> {
                                         children: [
                                           Text(
                                             result != null
-                                                ? result[0]["full_name"]
+                                                ? nameTrainer
                                                 : "Farley Willth",
                                             style: TextStyle(
                                                 color: Colors.black,
@@ -916,31 +964,30 @@ class SignupState extends State<SignupScreen> {
                                           ),
                                           Text(
                                             result != null
-                                                ? "${result[0]["expirence"]} Years Experienced"
+                                                ? "${yearsExpTrainer} Years Experienced"
                                                 : "0 Years Experienced",
                                             style:
                                             TextStyle(color: Colors.grey),
                                           ),
                                           Text(
                                               "${result != null
-                                                  ? result[0]["booking_cnt"]
+                                                  ? traineesBookedTrainer
                                                   : "0"} Trainees (${result !=
                                                   null
-                                                  ? result[0]["booking_reviewed_cnt"]
+                                                  ?  reviewTrainer
                                                   : "0"} Reviews)",
                                               style: TextStyle(
                                                   color: Colors.grey)),
                                           Text(
                                               "Session Period - ${result != null
-                                                  ? result[1]
+                                                  ? sessionSlotTrainer
                                                   : "0"} Hours",
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.bold)),
                                           Text(
-                                              "Trainer Price -  ${result !=
-                                                  null && result.length > 2
-                                                  ? result[2].toString()
+                                              "Trainer Price -  ${result != null
+                                                  ? priceTrainer.toString()
                                                   : "0"} AED",
                                               style: TextStyle(
                                                   color: Colors.black,
@@ -972,7 +1019,7 @@ class SignupState extends State<SignupScreen> {
                                           baseImageAssetsUrl + 'logo_black.png',
                                           image: BASE_URL +
                                               'uploads/trainer-user/' +
-                                              result[0]['image'],
+                                              imageTrainer,
                                         ),
                                       ),
                                     ),
@@ -981,6 +1028,7 @@ class SignupState extends State<SignupScreen> {
                               ),
                             ),
                           ),
+
                           // Visibility(
                           //   visible: widget.form
                           //   Type.isEmpty ? true : false,
@@ -1122,37 +1170,29 @@ class SignupState extends State<SignupScreen> {
                                             widget.type == "fairMont")ROLE_ID: 9
                                             .toString(),
                                         //rolePlanId.toString(),
-                                        if (widget.isSingle &&
-                                            roleId != null)ROLE_PLAN_ID: roleId
-                                            .toString(),
-                                        EMEREGENCY_NUMBER: emergencyController
-                                            .text.toString().trim(),
-                                        DESIGNATION: designationController.text
-                                            .toString().trim(),
-                                        ADDRESS: addressController.text
-                                            .toString().trim(),
+                                        if (widget.isSingle && roleId != null)ROLE_PLAN_ID: roleId.toString(),
+                                        EMEREGENCY_NUMBER: emergencyController.text.toString().trim(),
+                                        DESIGNATION: designationController.text.toString().trim(),
+                                        ADDRESS: addressController.text.toString().trim(),
                                         CITY: selectedCity,
                                         DEVICE_TYPE: deviceType,
                                         GENDER: radioItem.toLowerCase(),
                                         DEVICE_TOKEN: "deviceTok",
                                         nationality: nationalityController.text,
                                         workplace: workPlaceController.text,
-                                        marital_status: radioItemMarital
-                                            .toLowerCase(),
+                                        marital_status: radioItemMarital.toLowerCase(),
                                         about_us: aboutUsController.text,
-                                        trainer_id: result != null
-                                            ? result[0]["id"].toString()
-                                            : "",
-                                        trainer_slot: result != null ? result[1]
-                                            .toString() : "",
-                                        trainerData: jsonEncode(
-                                            result.toString()),
-                                        if(widget.type ==
-                                            'fairMont') durationOfStay: durationController
-                                            .text,
-                                        if(widget.type ==
-                                            'fairMont') hotelNo: hotelController
-                                            .text,
+                                        trainer_id: result != null ? idTrainer : "",
+                                        trainer_slot: result != null ? sessionSlotTrainer : "",
+                                        trainerData: jsonEncode(result.toString()),
+                                        if(widget.type == 'fairMont') durationOfStay: durationController.text,
+                                        if(widget.type == 'fairMont') hotelNo: hotelController.text,
+                                        tName: nameTrainer,
+                                        tExp: yearsExpTrainer,
+                                        tTrainess: traineesBookedTrainer,
+                                        tReview: reviewTrainer,
+                                        tPrice: priceTrainer.toString(),
+                                        timage: imageTrainer,
 
                                       };
                                       print("vikas 0=====>${parms.toString()}");
@@ -1165,103 +1205,38 @@ class SignupState extends State<SignupScreen> {
                                             .toString() : "0",
                                         "memberIndex": widget.memberIndex
                                             .toString(),
-                                        FIRSTNAME + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': firstNameController
-                                            .text.toString().trim(),
+                                        FIRSTNAME + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': firstNameController.text.toString().trim(),
                                         //first_name_1
-                                        MIDDLENAME + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': middletNameController
-                                            .text.toString().trim(),
-                                        LASTNAME + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': lastNameController
-                                            .text.toString().trim(),
-                                        CHILD + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': radioItem,
-                                        MOBILE + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': mobileController
-                                            .text.toString().trim(),
-                                        EMAIL + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': emailController
-                                            .text.toString().trim(),
-                                        PASSWORD + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': passwordController
-                                            .text.toString().trim(),
-                                        BIRTH_DATE + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': sendDate,
-                                        EMIRATES_ID + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': emiratesController
-                                            .text.toString().trim(),
-                                        EMEREGENCY_NUMBER: emergencyController
-                                            .text.toString().trim(),
-                                        DESIGNATION: designationController.text
-                                            .toString().trim(),
-                                        trainer_id + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': result != null
-                                            ? result[0]["id"].toString()
-                                            : "",
-                                        trainer_slot +
-                                            '${widget.memberIndex == 0
-                                                ? ""
-                                                : "_${widget
-                                                .memberIndex}"}': result != null
-                                            ? result[1].toString()
-                                            : "",
-                                        trainerData + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': result != null
-                                            ? jsonEncode(result.toString())
-                                            : "",
-                                        ADDRESS + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': addressController
-                                            .text.toString().trim(),
+                                        MIDDLENAME + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': middletNameController.text.toString().trim(),
+                                        LASTNAME + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': lastNameController.text.toString().trim(),
+                                        CHILD + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': radioItem,
+                                        MOBILE + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': mobileController.text.toString().trim(),
+                                        EMAIL + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': emailController.text.toString().trim(),
+                                        PASSWORD + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': passwordController.text.toString().trim(),
+                                        BIRTH_DATE + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': sendDate,
+                                        EMIRATES_ID + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': emiratesController.text.toString().trim(),
+                                        EMEREGENCY_NUMBER: emergencyController.text.toString().trim(),
+                                        DESIGNATION: designationController.text.toString().trim(),
+                                        trainer_id + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': result != null ? idTrainer : "",
+                                        trainer_slot + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': result != null ? sessionSlotTrainer : "",
+                                        trainerData + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': result != null ? jsonEncode(result.toString()) : "",
+                                        ADDRESS + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': addressController.text.toString().trim(),
                                         CITY: selectedCity,
                                         DEVICE_TYPE: deviceType,
-                                        GENDER + '${widget.memberIndex == 0
-                                            ? ""
-                                            : "_${widget
-                                            .memberIndex}"}': radioItem
-                                            .toLowerCase(),
+                                        GENDER + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': radioItem.toLowerCase(),
                                         DEVICE_TOKEN: "deviceTok",
-                                        if (widget.memberIndex ==
-                                            0)nationality: nationalityController
-                                            .text,
-                                        if (widget.memberIndex ==
-                                            0) workplace: workPlaceController
-                                            .text,
-                                        if (widget.memberIndex ==
-                                            0)marital_status: radioItemMarital
-                                            .toLowerCase(),
-                                        if (widget.memberIndex ==
-                                            0)about_us: aboutUsController.text,
-                                        if(widget.type ==
-                                            'fairMont') durationOfStay: durationController
-                                            .text,
-                                        if(widget.type ==
-                                            'fairMont') hotelNo: hotelController
-                                            .text,
+                                        if (widget.memberIndex == 0)nationality: nationalityController.text,
+                                        if (widget.memberIndex == 0) workplace: workPlaceController.text,
+                                        if (widget.memberIndex == 0)marital_status: radioItemMarital.toLowerCase(),
+                                        if (widget.memberIndex == 0)about_us: aboutUsController.text,
+                                        if(widget.type == 'fairMont') durationOfStay: durationController.text,
+                                        if(widget.type == 'fairMont') hotelNo: hotelController.text,
+                                        tName + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': nameTrainer,
+                                        tExp  + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': yearsExpTrainer,
+                                        tTrainess  + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': traineesBookedTrainer,
+                                        tReview  + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': reviewTrainer,
+                                        tPrice  + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': priceTrainer.toString(),
+                                        timage  + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': imageTrainer,
                                         //  if ( widget.type)about_us: aboutUsController.text,
                                         //    if (widget.memberIndex == 0)about_us: aboutUsController.text,
                                       };
@@ -1271,7 +1246,6 @@ class SignupState extends State<SignupScreen> {
                                   }
                                   if (widget.isSingle) {
                                     // print("vikas 1=====>${file.path.toString()}");
-
                                     isConnectedToInternet().then((internet) {
                                       showProgress(context, "Please wait.....");
                                       if (internet != null && internet) {
@@ -1406,10 +1380,8 @@ class SignupState extends State<SignupScreen> {
       child: RadioListTile(
         groupValue: radioItemMarital,
         activeColor: Colors.black,
-        title: Text(
-          title,
-          style: TextStyle(fontSize: 12),
-        ),
+        title: Text(title, style: TextStyle(fontSize: 12),),
+
         value: title,
         onChanged: (val) {
           setState(() {
@@ -1599,6 +1571,15 @@ class SignupState extends State<SignupScreen> {
   }
 
   List result;
+  String nameTrainer="";
+  String yearsExpTrainer="";
+  String traineesBookedTrainer="";
+  String reviewTrainer="";
+  String priceTrainer="";
+  String imageTrainer="";
+  String sessionSlotTrainer="";
+  String idTrainer="";
+
 
   _navigateAndDisplaySelection(BuildContext context) async {
     // Navigator.push returns a Future that completes after calling
@@ -1611,11 +1592,20 @@ class SignupState extends State<SignupScreen> {
 
     if (result != null) {
       print("$result");
+       nameTrainer = result[0]["full_name"];
+       yearsExpTrainer = result[0]["expirence"];
+       traineesBookedTrainer = result[0]["booking_cnt"].toString();
+       reviewTrainer = result[0]["booking_reviewed_cnt"].toString();
+       sessionSlotTrainer = result[1].toString();
+       priceTrainer = result[2].toString();
+       imageTrainer = result[0]['image'];
+       idTrainer = result[0]["id"].toString();
     }
     setState(() {});
   }
 
   Future<void> _showMyDialog() async {
+
     return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!

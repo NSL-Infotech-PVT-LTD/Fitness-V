@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -72,9 +73,10 @@ class _SpouseTypeState extends State<SpouseType> {
   var rolePlanId;
 
   var rolePlanFee = null;
-  var roleIdrole ;
+  var roleIdrole;
+
   List<Map<String, dynamic>> result = [];
-  var myResult;
+  List myResult;
   int index = 0;
   var totalMoney;
 
@@ -124,49 +126,48 @@ class _SpouseTypeState extends State<SpouseType> {
     super.initState();
     print(widget.gym_members);
   }
-  childPopUp(){
 
-      customBottomSheet(
-        data: data,
-        context: context,
-        getValue: () {
-          setState(() {
-            valueNew = childValueCount;
-            var myLength = valueNew + 2;
-            print("$childValueCount   $myLength");
-            if (result.length < myLength) {
-              for (int i = result.length; i < myLength; i++) {
-                result.add({});
-              }
-            } else {
-              for (int i = result.length; i > myLength; i--) {
-                result.removeAt(i - 1);
-              }
+  childPopUp() {
+    customBottomSheet(
+      data: data,
+      context: context,
+      getValue: () {
+        setState(() {
+          valueNew = childValueCount;
+          var myLength = valueNew + 2;
+          print("$childValueCount   $myLength");
+          if (result.length < myLength) {
+            for (int i = result.length; i < myLength; i++) {
+              result.add({});
             }
-            print("vikas $result");
+          } else {
+            for (int i = result.length; i > myLength; i--) {
+              result.removeAt(i - 1);
+            }
+          }
+          print("vikas $result");
 
-            if (memberName.length > 2) {
-              memberName.removeRange(2, memberName.length);
-            }
-            // print('part $valueNew');
-            // print('part $stoData');
-            //
-            for (int i = (valueNew + 3); i < stoData.length; i++) {
-              stoData[i] = '';
-            }
-            // print('part1 $stoData');
-            for (int i = 1; i <= valueNew; i++) {
-              memberName.add('Child#$i');
-            }
-            // // print('after');
-            // // print(memberName);
-            chooseChilds = false;
-            valueNew = -1;
-          });
-          Navigator.pop(context);
-        },
-      );
-
+          if (memberName.length > 2) {
+            memberName.removeRange(2, memberName.length);
+          }
+          // print('part $valueNew');
+          // print('part $stoData');
+          //
+          for (int i = (valueNew + 3); i < stoData.length; i++) {
+            stoData[i] = '';
+          }
+          // print('part1 $stoData');
+          for (int i = 1; i <= valueNew; i++) {
+            memberName.add('Child#$i');
+          }
+          // // print('after');
+          // // print(memberName);
+          chooseChilds = false;
+          valueNew = -1;
+        });
+        Navigator.pop(context);
+      },
+    );
   }
 
   getMemberShipData() async {
@@ -180,7 +181,6 @@ class _SpouseTypeState extends State<SpouseType> {
         gRoles(param).then((response) {
           if (response.status) {
             if (response.data != null) {
-
               print("newData" + response.data.toString());
               dismissDialog(context);
               setState(() {
@@ -193,7 +193,7 @@ class _SpouseTypeState extends State<SpouseType> {
             dismissDialog(context);
           }
         }).whenComplete(() {
-         childPopUp();
+          childPopUp();
         });
       } else {
         showDialogBox(context, internetError, pleaseCheckInternet);
@@ -211,21 +211,23 @@ class _SpouseTypeState extends State<SpouseType> {
       rolePanId}) async {
     print("current Index $ind");
     this.index = ind;
+
     myResult = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => SignupScreen(
-                rolePlanId: widget.rolePlanIds,
-                roleId: widget.roleId,
-                memberIndex: index,
-                formType: formType,
-                // type: widget.type,
-                editData: chFilledData,
-                isSingle: false,
-                isCityTrue: true,
-                isEmailError:
-                    errorMessage1.contains("email has") ? true : false,
-              )),
+              rolePlanId: widget.rolePlanIds,
+              roleId: widget.roleId,
+              memberIndex: index,
+              formType: formType,
+              // type: widget.type,
+              editData: chFilledData,
+              isSingle: false,
+              isCityTrue: true,
+              isEmailError: errorMessage1.contains("email has") ? true : false,
+              profileImage: myResult != null && myResult.length > 1
+                  ? myResult[1]
+                  : null)),
     );
 
     setState(() {
@@ -234,15 +236,13 @@ class _SpouseTypeState extends State<SpouseType> {
 
         result[index] = myResult[0];
 
-        print("fsdfsdf${result.length}");
+        print("fsdfsdf${myResult.length}");
         Totalprice = 0;
         result.forEach((element) {
-          print("element['trainerPrice']  ${element['trainerPrice']}");
           Totalprice = Totalprice +
               int.parse(
                   "${element['trainerPrice'] != null && element['trainerPrice'] != "null" ? (element['trainerPrice']) : 0}");
         });
-        print("jugraj $Totalprice");
       }
       // if (result.length>0) {
       //   stoData[int.parse(result[index]['memberIndex'])] = result;
@@ -433,20 +433,23 @@ class _SpouseTypeState extends State<SpouseType> {
                               ),
                             ],
                             border: Border.all(
-                                width:result[index]!=null&& result[index].isNotEmpty
+                                width: result[index] != null &&
+                                        result[index].isNotEmpty
                                     ? result[index]['memberIndex'] ==
                                             index.toString()
                                         ? 2.0
                                         : 1.5
                                     : 1.5,
-                                color: result[index]!=null&& result[index].isNotEmpty
+                                color: result[index] != null &&
+                                        result[index].isNotEmpty
                                     ? result[index]['memberIndex'] ==
                                             index.toString()
                                         ? Colors.white
                                         : Color(0xFFBDBDBD)
                                     : Color(0xFFBDBDBD)),
                             borderRadius: BorderRadius.circular(5.0),
-                            color: result[index]!=null&& result[index].isNotEmpty
+                            color: result[index] != null &&
+                                    result[index].isNotEmpty
                                 ? result[index]['memberIndex'] ==
                                         index.toString()
                                     ? Colors.black
@@ -465,7 +468,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                     width: SizeConfig.blockSizeHorizontal * 2,
                                   ),
                                   Text(
-                                    result[index]!=null&& result[index].isNotEmpty
+                                    result[index] != null &&
+                                            result[index].isNotEmpty
                                         ? result[index]['memberIndex'] ==
                                                 index.toString()
                                             ? result[index]['memberIndex'] ==
@@ -481,7 +485,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                             : memberName[index]
                                         : memberName[index],
                                     style: TextStyle(
-                                      color:result[index]!=null&&  result[index].isNotEmpty
+                                      color: result[index] != null &&
+                                              result[index].isNotEmpty
                                           ? result[index]['memberIndex'] ==
                                                   index.toString()
                                               ? Colors.white
@@ -495,7 +500,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                     padding: EdgeInsets.all(10),
                                     child: SvgPicture.asset(
                                       baseImageAssetsUrl + 'user.svg',
-                                      color: result[index]!=null&& result[index].isNotEmpty
+                                      color: result[index] != null &&
+                                              result[index].isNotEmpty
                                           ? result[index]['memberIndex'] ==
                                                   index.toString()
                                               ? Colors.white
@@ -526,7 +532,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                     _navigateAndDisplaySelection(
                                         ind: index,
                                         context: context,
-                                        chFilledData:result[index]!=null&&  result[index].isNotEmpty
+                                        chFilledData: result[index] != null &&
+                                                result[index].isNotEmpty
                                             ? result[index]
                                             : null,
                                         formType: '',
@@ -599,11 +606,10 @@ class _SpouseTypeState extends State<SpouseType> {
                             color: Colors.white),
                         child: RaisedButton(
                           onPressed: () {
-                            if(!isApiHit)
-                            getMemberShipData();
-                            else{
+                            if (!isApiHit)
+                              getMemberShipData();
+                            else {
                               childPopUp();
-
                             }
                             //    var count = 0;
                             // Navigator.popUntil(context, (route) {
@@ -661,32 +667,71 @@ class _SpouseTypeState extends State<SpouseType> {
                         if (result != null && formCheck && acceptTerms) {
                           Map<String, String> parms = {};
                           for (int index = 0; index < result.length; index++) {
-                            parms[FIRSTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
-                            parms[MIDDLENAME + "${index == 0 ? "" : "_$index"}"] = result[index][MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
-                            parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] = result[index][LASTNAME + "${index == 0 ? "" : "_$index"}"];
-                            parms[MOBILE + "${index == 0 ? "" : "_$index"}"] = result[index][MOBILE + "${index == 0 ? "" : "_$index"}"];
-                            parms[EMAIL + "${index == 0 ? "" : "_$index"}"] = result[index][EMAIL + "${index == 0 ? "" : "_$index"}"];
-                            parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] = result[index][PASSWORD + "${index == 0 ? "" : "_$index"}"];
-                            parms[BIRTH_DATE +"${index == 0 ? "" : "_$index"}"] = result[index][BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
-                            parms[EMIRATES_ID + "${index == 0 ? "" : "_$index"}"] = result[index][EMIRATES_ID + "${index == 0 ? "" : "_$index"}"];
-                            parms[GENDER + "${index == 0 ? "" : "_$index"}"] = result[index][GENDER + "${index == 0 ? "" : "_$index"}"];
-                            parms[trainer_id + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_id + "${index == 0 ? "" : "_$index"}"];
-                            parms[trainer_slot + "${index == 0 ? "" : "_$index"}"] = result[index][trainer_slot + "${index == 0 ? "" : "_$index"}"];
-                            if (index == 0)parms[EMEREGENCY_NUMBER] = result[index][EMEREGENCY_NUMBER];
-                            if (index == 0) parms[DESIGNATION] = result[index][DESIGNATION];
-                            if (index == 0) parms[ADDRESS] = result[index][ADDRESS];
-                            if (index == 0) parms[CITY] = result[index][CITY];
-                            if (index == 0) parms[nationality] = result[index][nationality];
-                            if (index == 0) parms[workplace] = result[index][workplace];
-                            if (index == 0) parms[marital_status] = result[index][marital_status];
+                            parms[FIRSTNAME +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
+                            parms[MIDDLENAME +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
+                            parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] =
+                                result[index][LASTNAME +
+                                    "${index == 0 ? "" : "_$index"}"];
+                            parms[MOBILE + "${index == 0 ? "" : "_$index"}"] =
+                                result[index]
+                                    [MOBILE + "${index == 0 ? "" : "_$index"}"];
+                            parms[EMAIL + "${index == 0 ? "" : "_$index"}"] =
+                                result[index]
+                                    [EMAIL + "${index == 0 ? "" : "_$index"}"];
+                            parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] =
+                                result[index][PASSWORD +
+                                    "${index == 0 ? "" : "_$index"}"];
+                            parms[BIRTH_DATE +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
+                            parms[EMIRATES_ID +
+                                    "${index == 0 ? "" : "_$index"}"] =
+                                result[index][EMIRATES_ID +
+                                    "${index == 0 ? "" : "_$index"}"];
+                            parms[GENDER + "${index == 0 ? "" : "_$index"}"] =
+                                result[index]
+                                    [GENDER + "${index == 0 ? "" : "_$index"}"];
+                            parms[trainer_id +
+                                "${index == 0 ? "" : "_$index"}"] = result[
+                                    index]
+                                [trainer_id + "${index == 0 ? "" : "_$index"}"];
+                            parms[trainer_slot +
+                                    "${index == 0 ? "" : "_$index"}"] =
+                                result[index][trainer_slot +
+                                    "${index == 0 ? "" : "_$index"}"];
                             if (index == 0)
-
-                            parms[about_us] = result[index][about_us];
+                              parms[EMEREGENCY_NUMBER] =
+                                  result[index][EMEREGENCY_NUMBER];
+                            if (index == 0)
+                              parms[DESIGNATION] = result[index][DESIGNATION];
+                            if (index == 0)
+                              parms[ADDRESS] = result[index][ADDRESS];
+                            if (index == 0) parms[CITY] = result[index][CITY];
+                            if (index == 0)
+                              parms[nationality] = result[index][nationality];
+                            if (index == 0)
+                              parms[workplace] = result[index][workplace];
+                            if (index == 0)
+                              parms[marital_status] =
+                                  result[index][marital_status];
+                            if (index == 0)
+                              parms[about_us] = result[index][about_us];
                             parms[DEVICE_TYPE] = deviceType;
                             parms[DEVICE_TOKEN] = deviceTokenValue;
 
-                            parms[ROLE_ID] =roleIdrole != null?roleIdrole.toString() :widget.roleId.toString();
-                            parms[ROLE_PLAN_ID] = rolePlanId != null?rolePlanId.toString():widget.rolePlanIds.toString();
+                            parms[ROLE_ID] = roleIdrole != null
+                                ? roleIdrole.toString()
+                                : widget.roleId.toString();
+                            parms[ROLE_PLAN_ID] = rolePlanId != null
+                                ? rolePlanId.toString()
+                                : widget.rolePlanIds.toString();
                           }
                           print("vikasssss===${parms}");
                           // FIRSTNAME: result[index][FIRSTNAME],
@@ -765,8 +810,7 @@ class _SpouseTypeState extends State<SpouseType> {
                               dismissDialog(context);
                             }
                             dismissDialog(context);
-                          }
-                         );
+                          });
                         } else if (!acceptTerms) {
                           showDialogBox(context, termsofService,
                               'Please read & accept our terms of services');
@@ -1059,37 +1103,100 @@ class _SpouseTypeState extends State<SpouseType> {
                                       //     });
                                       //   }
                                       // } else
-                                        if (data[index].plans.quarterly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType) {
-                                        if (
-                                            data[index].plans.quarterly.feeType != null) {
+                                      if (data[index].plans.quarterly != null &&
+                                          widget.response[widget.plan_index]
+                                                  ['fee_type'] ==
+                                              data[index]
+                                                  .plans
+                                                  .quarterly
+                                                  .feeType) {
+                                        if (data[index]
+                                                .plans
+                                                .quarterly
+                                                .feeType !=
+                                            null) {
                                           //
                                           setState(() {
-                                            rolePlanId = data[index].plans.quarterly.id.toString();
-                                            rolePlanFee = data[index].plans.quarterly.fee.toString();
-                                            roleIdrole = data[index].plans.quarterly.roleId.toString();
+                                            rolePlanId = data[index]
+                                                .plans
+                                                .quarterly
+                                                .id
+                                                .toString();
+                                            rolePlanFee = data[index]
+                                                .plans
+                                                .quarterly
+                                                .fee
+                                                .toString();
+                                            roleIdrole = data[index]
+                                                .plans
+                                                .quarterly
+                                                .roleId
+                                                .toString();
 
                                             print("rolePlanId " + rolePlanId);
                                             print("rolePlanFee " + rolePlanFee);
                                           });
                                         }
-                                      } else if (data[index].plans.halfYearly != null && widget.response[widget.plan_index]['fee_type'] == data[index].plans.halfYearly.feeType) {
-
-                                        if (data[index].plans.halfYearly.feeType != null) {
+                                      } else if (data[index].plans.halfYearly !=
+                                              null &&
+                                          widget.response[widget.plan_index]
+                                                  ['fee_type'] ==
+                                              data[index]
+                                                  .plans
+                                                  .halfYearly
+                                                  .feeType) {
+                                        if (data[index]
+                                                .plans
+                                                .halfYearly
+                                                .feeType !=
+                                            null) {
                                           setState(() {
-                                            rolePlanId = data[index].plans.halfYearly.id.toString();
-                                            rolePlanFee = data[index].plans.halfYearly.fee.toString();
-                                            roleIdrole = data[index].plans.quarterly.roleId.toString();
+                                            rolePlanId = data[index]
+                                                .plans
+                                                .halfYearly
+                                                .id
+                                                .toString();
+                                            rolePlanFee = data[index]
+                                                .plans
+                                                .halfYearly
+                                                .fee
+                                                .toString();
+                                            roleIdrole = data[index]
+                                                .plans
+                                                .quarterly
+                                                .roleId
+                                                .toString();
 
                                             print("rolePlanId " + rolePlanId);
                                             print("rolePlanFee " + rolePlanFee);
                                           });
                                         }
-                                      } else if (data[index].plans.yearly != null && widget.response[widget.plan_index]['fee_type'] ==data[index].plans.yearly.feeType) {
-                                        if (data[index].plans.yearly.feeType != null) {
+                                      } else if (data[index].plans.yearly !=
+                                              null &&
+                                          widget.response[widget.plan_index]
+                                                  ['fee_type'] ==
+                                              data[index]
+                                                  .plans
+                                                  .yearly
+                                                  .feeType) {
+                                        if (data[index].plans.yearly.feeType !=
+                                            null) {
                                           setState(() {
-                                            rolePlanId = data[index].plans.yearly.id.toString();
-                                            rolePlanFee = data[index].plans.yearly.fee.toString();
-                                            roleIdrole = data[index].plans.quarterly.roleId.toString();
+                                            rolePlanId = data[index]
+                                                .plans
+                                                .yearly
+                                                .id
+                                                .toString();
+                                            rolePlanFee = data[index]
+                                                .plans
+                                                .yearly
+                                                .fee
+                                                .toString();
+                                            roleIdrole = data[index]
+                                                .plans
+                                                .quarterly
+                                                .roleId
+                                                .toString();
 
                                             print("rolePlanId " + rolePlanId);
                                             print("rolePlanFee " + rolePlanFee);
@@ -1102,7 +1209,10 @@ class _SpouseTypeState extends State<SpouseType> {
                                       setState(() {
                                         selectChildIndex = index;
                                         //  widget.response[widget.plan_index]['fee_type']
-                                        childValueCount = data[index].member != null ? data[index].member - 2 : 0;
+                                        childValueCount =
+                                            data[index].member != null
+                                                ? data[index].member - 2
+                                                : 0;
                                         roleId = data[index].id.toString();
                                         // rolePlanId = widget.response[widget.plan_index]['fee_type'] == data[index].plans.monthly.feeType ? data[index].plans.monthly.id.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType ? data[index].plans.quarterly.id.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.halfYearly.feeType ? data[index].plans.halfYearly.id.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.yearly.feeType ? data[index].plans.yearly.id.toString() : "Something Wrong";
                                         // rolePlanFee = widget.response[widget.plan_index]['fee_type'] == data[index].plans.monthly.feeType ? data[index].plans.monthly.fee.toString(): widget.response[widget.plan_index]['fee_type'] == data[index].plans.quarterly.feeType ? data[index].plans.quarterly.fee.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.halfYearly.feeType ? data[index].plans.halfYearly.fee.toString() : widget.response[widget.plan_index]['fee_type'] == data[index].plans.yearly.feeType ? data[index].plans.yearly.fee.toString() : "Something Wrong";
@@ -1119,8 +1229,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                         });
                                       }
                                     },
-                                    child: selectChild(
-                                        childValue[index], selectChildIndex, index));
+                                    child: selectChild(childValue[index],
+                                        selectChildIndex, index));
                               },
                             ),
                           ),

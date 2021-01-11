@@ -93,12 +93,9 @@ String tName = "tName";
 String tExp = "tExp";
 String tTrainess = "tTrainess";
 String tReview = "tReview";
-String tSession = "tSession";
 String tPrice = "tPrice";
-String tBooking = "tBooking";
-String tId = "tId";
-String tSlot = "tSlot";
 var timage = "image";
+var profileImage = "image";
 
 
 //user data

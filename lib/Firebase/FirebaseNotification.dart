@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:volt/Bookings/all_bookings.dart';
 import 'package:volt/Firebase/Local_Notification.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
@@ -29,7 +30,6 @@ static  initNoti(BuildContext context)  {
         LocalNotification.showNotificationMediaStyle(message["notification"]["title"],message["notification"]["body"]);
       }
       if(message["data"]["click_action"] ){
-          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(),));
          print('click call');
       }
       
@@ -51,7 +51,8 @@ static  initNoti(BuildContext context)  {
 
       }
       if(message["data"]["click_action"]){
-       print('click call');
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (values) => AllBookings()));
+        print('click call');
       }
     
       },

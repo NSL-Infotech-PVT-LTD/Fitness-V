@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:volt/Bookings/all_bookings.dart';
 
 
 class LocalNotification {
@@ -23,8 +24,6 @@ class LocalNotification {
         priority: Priority.high,
         importance: Importance.max,
     );
-    
-    
     // AndroidNotificationChannel androidNotificationChannel =AndroidNotificationChannel('channel-00110', 'name', 'desc',importance: Importance.max);
 
     var platformChannelSpecifics=NotificationDetails(
