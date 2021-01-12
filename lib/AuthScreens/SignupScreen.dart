@@ -460,6 +460,7 @@ class SignupState extends State<SignupScreen> {
                           Padding(
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
+                              textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
                                 // ignore: deprecated_member_use
@@ -481,6 +482,7 @@ class SignupState extends State<SignupScreen> {
                           Padding(
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
+                              textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
                                 // ignore: deprecated_member_use
@@ -496,6 +498,7 @@ class SignupState extends State<SignupScreen> {
                           Padding(
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
+                              textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
                                 // ignore: deprecated_member_use
@@ -588,6 +591,7 @@ class SignupState extends State<SignupScreen> {
                           Padding(
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
+                              textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.text,
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -686,6 +690,7 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
                                 controller: designationController,
                                 decoration: InputDecoration(
@@ -699,6 +704,7 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
                                 controller: hotelController,
                                 decoration: InputDecoration(
@@ -727,10 +733,11 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
                                 controller: aboutUsController,
                                 decoration: InputDecoration(
-                                    hintText: "How did you hear about us",
+                                    hintText: "How did you hear about us?",
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -742,6 +749,7 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
                                 controller: nationalityController,
                                 decoration: InputDecoration(
@@ -757,6 +765,7 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
                                 controller: workPlaceController,
                                 decoration: InputDecoration(
@@ -772,6 +781,7 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
                                 validator: (value) {
                                   if (value.isEmpty) {
@@ -793,6 +803,7 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
                                 validator: (value) {
                                   if (value.isEmpty) {
@@ -903,7 +914,12 @@ class SignupState extends State<SignupScreen> {
                               ],
                             ),
                           ),
-
+                          SizedBox(
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.03,
+                          ),
                           Visibility(
                             visible: widget.type != 'fairMont' && widget.type !=
                                 'guest',
@@ -918,7 +934,7 @@ class SignupState extends State<SignupScreen> {
                                         _navigateAndDisplaySelection(context),
                                     child:result != null&&result.length>0
                                         ? Text(
-                                      "Change",
+                                      "Change my trainer",
                                       style:
                                       TextStyle(color: Colors.indigo),
                                     )
@@ -964,8 +980,8 @@ class SignupState extends State<SignupScreen> {
                                           ),
                                           Text(
                                             result != null
-                                                ? "${yearsExpTrainer} Years Experienced"
-                                                : "0 Years Experienced",
+                                                ? "${yearsExpTrainer} Years Experience"
+                                                : "0 Years Experience",
                                             style:
                                             TextStyle(color: Colors.grey),
                                           ),

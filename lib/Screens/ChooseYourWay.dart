@@ -14,6 +14,10 @@ import 'package:volt/Value/Strings.dart';
 import '../Methods.dart';
 
 class ChooseYourWay extends StatefulWidget {
+  final bool isGuest;
+
+  const ChooseYourWay({Key key, this.isGuest}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => ChooseWayState();
 }
@@ -25,6 +29,7 @@ class ChooseWayState extends State<ChooseYourWay> {
   List fairMont_list;
   var gymMember = "gym_members";
   var pool_and_beach = "pool_and_beach_members";
+
 
 
   @override
@@ -82,6 +87,8 @@ class ChooseWayState extends State<ChooseYourWay> {
                 ),
               ),
               DefaultTabController(
+                initialIndex: widget.isGuest?1:0,
+
                   length: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

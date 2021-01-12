@@ -111,7 +111,7 @@ class GymMemberState extends State<GymMemberPlan> {
               Padding(
                 padding: EdgeInsets.only(top: 10, left: 60, right: 60),
                 child: Text(
-                    'Selection of one plan At least is important to proceed in Gym Membership.',
+                    'Please choose a plan.',
                     style: TextStyle(fontSize: textSize10, color: Colors.grey)),
               ),
               Container(
@@ -137,7 +137,7 @@ class GymMemberState extends State<GymMemberPlan> {
                             height: SizeConfig.screenHeight * .9,
                             initialPage: 1,
                             enlargeCenterPage: true,
-                            autoPlay: true,
+                            autoPlay: false,
                             reverse: false,
                             enableInfiniteScroll: false,
                             autoPlayInterval: Duration(seconds: 2),

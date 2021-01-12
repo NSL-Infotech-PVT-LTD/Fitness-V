@@ -38,7 +38,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
                 context: context,
                 builder: (context) {
                   return CupertinoAlertDialog(
-                    title: Text("Check",style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal)),
+                    title: Text("Check your inbox",style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal)),
                     content: Padding(
                       padding: const EdgeInsets.only(top:10.0),
                       child: Text("Password reset link sent, please check inbox",style: TextStyle(color: Colors.black54,fontWeight: FontWeight.normal)),

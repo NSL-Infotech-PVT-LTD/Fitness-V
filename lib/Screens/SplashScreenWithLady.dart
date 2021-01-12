@@ -11,6 +11,8 @@ import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 
+import '../AuthScreens/LoginScreen.dart';
+
 class SplashScreenWithLady extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SplashScreenWithLadyState();
@@ -28,7 +30,7 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
   _moveScreen() {
     if (_auth.isEmpty) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => ChooseYourWay()));
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Dashboard()));

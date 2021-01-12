@@ -241,7 +241,7 @@ class GroupClassState extends State<GroupClass> {
                           ),
                           Expanded(
                             child: Text(
-                              "We have a fantastic range of special Group classes current and recent activities. designed to help you enjoy your Volt membership to the max!'",
+                              "We have a fantastic range of special Group classes designed to help you get fit and healthy while enjoying new daily challenges. why not make it fun?'",
                               style: TextStyle(
                                   color: CColor.LightGrey, fontSize: 10),
                             ),

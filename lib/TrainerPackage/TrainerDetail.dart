@@ -520,7 +520,7 @@ class TrainerDetailState extends State<TrainerDetail>
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
-                            fontStyle: FontStyle.italic),
+                            fontStyle: FontStyle.normal),
                       ),
                     ),
                     Padding(

@@ -337,7 +337,7 @@ class _DetailState extends State<GroupClassDetail> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          'Duration in class',
+                          'Duration of class',
                           style: TextStyle(
                               color: Color(0xFF303030).withOpacity(.6),
                               fontSize: 14),

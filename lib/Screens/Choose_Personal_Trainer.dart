@@ -8,6 +8,8 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+import '../Value/SizeConfig.dart';
+
 class ChoosePersonalTrainer extends StatefulWidget {
   @override
   _ChoosePersonalTrainerState createState() => _ChoosePersonalTrainerState();
@@ -20,7 +22,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
   bool isLoading = false;
   List users = List();
   String auth = '';
-  int valueHolder = 4;
+  int valueHolder = 1;
   int trainerPrice = 250;
 
   void _getList(String auth, int index) async {
@@ -142,7 +144,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                         ConstrainedBox(
                             constraints: BoxConstraints(maxWidth: 300),
                             child: Text(
-                              "We are proud to offer you fully certified, professional instructors,who are experts in many various areas.",
+                              "We are proud to offer you fully certified, professional instructors, who are experts in many way to help you feel your best.",
                               style:
                                   TextStyle(fontSize: 12, color: Colors.grey),
                             )),
@@ -160,6 +162,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                       ),
                     )
                   : ListView.builder(
+itemExtent: 100.0,
                       itemCount: users.length,
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
@@ -168,20 +171,33 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                             leading: users[i]['image'] == null
                                 ? Image.asset(
                                     baseImageAssetsUrl + 'logo_black.png',
+
                                   )
-                                : FadeInImage.assetNetwork(
-                                    placeholder:
-                                        baseImageAssetsUrl + 'logo_black.png',
-                                    image: BASE_URL +
-                                        'uploads/trainer-user/' + users[i]['image'],
-                                  ),
-                            trailing: _myRadioButton(
-                              title: "",
-                              value: i,
-                              onChanged: (newValue) => setState(() {
-                                myBottom(i);
-                                _groupValue = newValue;
-                              }),
+                                :
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                                minHeight: 500,
+                              ),
+                              child: FadeInImage.assetNetwork(
+                                placeholder: baseImageAssetsUrl + 'logo_black.png',
+                                image: BASE_URL +
+                                    'uploads/trainer-user/' + users[i]['image'],
+                            height: 200,
+fit: BoxFit.cover,
+                              ),
+                            ),
+
+                            trailing: Align(
+                              widthFactor: 0.0,// for width between trailing and leading
+                              child: _myRadioButton(
+                                title: "",
+                                value: i,
+                                onChanged: (newValue) => setState(() {
+                                  myBottom(i);
+                                  _groupValue = newValue;
+                                }),
+                              ),
                             ),
                             title: Row(
                               children: [
@@ -193,7 +209,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                   child: Text(
                                     "View Profile",
                                     style: TextStyle(
-                                        color: Colors.blueAccent,
+                                        color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   onTap: () => Navigator.push(
@@ -220,7 +236,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(users[i]["expirence"] +
-                                    " years of Experienced"),
+                                    " years of experience"),
                                 Text(
                                     "${users[i]["booking_cnt"]} Trainees (${users[i]["booking_reviewed_cnt"]}" +
                                         " Reviews)"),
@@ -291,23 +307,26 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                               width: SizeConfig.screenWidth * .68,
                               child: Slider(
                                   value: valueHolder.toDouble() == 0
-                                      ? 4
+                                      ? 1
                                       : valueHolder.toDouble(),
-                                  min: 4,
-                                  max: 12,
+                                  min: 1,
+                                  max: 24,
                                   divisions: 4,
                                   activeColor: Colors.black,
                                   inactiveColor: Colors.grey,
-                                  label:
-                                      '${valueHolder.round() == 0 ? 4 : valueHolder.round()}',
+                                 label: '${valueHolder.round() == 0 ? 1 : valueHolder}',
                                   onChanged: (double newValue) {
                                     setState(() {
-
-                                      // print(newValue.round());
-                                      valueHolder = newValue.round() == 10
-                                          ? 12
-                                          : newValue.round();
-                                      // print("cehckcehckcehck " + trainerPrice.toString());
+                                      print("cehckcehckcehck " + newValue.toString());
+                                      valueHolder = newValue.round();
+                                      if(valueHolder == 7){
+                                        valueHolder = 6;
+                                      } else if(valueHolder == 13){
+                                        valueHolder = 12;
+                                      }else if(valueHolder == 18){
+                                        valueHolder = 24;
+                                      }
+                                      print("cehckcehckcehck " + valueHolder.toString());
                                       trainerPrice = sendValue();
                                     });
                                   },
@@ -325,7 +344,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                   Container(
                                     width: SizeConfig.screenWidth * .17,
                                     child: Text(
-                                      '4',
+                                      '1',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -339,7 +358,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                   Container(
                                     width: SizeConfig.screenWidth * .17,
                                     child: Text(
-                                      '8',
+                                      '12',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -348,7 +367,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                     child: Container(
                                       width: SizeConfig.screenWidth * .17,
                                       child: Text(
-                                        '12',
+                                        '24',
                                         textAlign: TextAlign.end,
                                         style: TextStyle(color: Colors.black),
                                       ),
@@ -377,17 +396,17 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.black45))
                                           ])),
-                                  SizedBox(
-                                    width: SizeConfig.screenWidth * .1,
-                                  ),
+                                  // SizedBox(
+                                  //   width: SizeConfig.screenWidth * 0.2,
+                                  // ),
                                   Container(
                                     margin: EdgeInsets.only(left: 10, top: 10),
-                                    width: 150,
-                                    height: 60,
+                                    width: SizeConfig.screenWidth * 0.50,
+                                    height: button_height,
                                     decoration: BoxDecoration(
                                         color: Colors.black,
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(16))),
+                                            Radius.circular(button_radius))),
                                     child: Center(
                                         child: Text(
                                       '${sendValue()} $aed',
@@ -414,6 +433,13 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                     ),
                   ),
                   Container(
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(button_radius))),
+                    margin: EdgeInsets.only(top: padding25,left: 30,right:30 ),
+                    height: button_height,
+                    width: SizeConfig.screenWidth,
                     // width: 100,
                     child: RaisedButton(
                       color: Colors.black,
@@ -423,12 +449,15 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                             context, [users[index], valueHolder, trainerPrice]);
                         //  print("${widget.id}  ${valueHolder}");
                       },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(button_radius)),
                       textColor: Colors.white,
                       padding: const EdgeInsets.all(0.0),
                       child: Text('Done',
                           style: TextStyle(fontSize: 15, color: Colors.white)),
                     ),
-                  ),
+           //   color: Colors.black,
+
+              ),
                 ],
               ),
             ),
@@ -440,13 +469,13 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
 
   int sendValue() {
     int value = 0;
-    if (valueHolder == 4) {
+    if (valueHolder == 1) {
       value = 250;
     } else if (valueHolder == 6) {
       value = 1400;
-    } else if (valueHolder == 8) {
-      value = 2600;
     } else if (valueHolder == 12) {
+      value = 2600;
+    } else if (valueHolder == 24) {
       value = 5000;
     }
     print('$valueHolder =====> $value');

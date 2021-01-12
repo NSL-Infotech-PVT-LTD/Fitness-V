@@ -6,12 +6,12 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
 
-    <uses-permission android:name="android.permission.INTERNET"/>
- 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Volt"
-        android:icon="@mipmap/app_logo">
+        android:icon="@mipmap/app_logo"
+        android:label="Volt">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -20,29 +20,31 @@
 
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:icon="@mipmap/app_logo"
-            android:showWhenLocked="true"
-            android:turnScreenOn="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
+            android:icon="@mipmap/app_logo"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:theme="@style/LaunchTheme"
+            android:turnScreenOn="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-             <intent-filter>
-      <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-      <category android:name="android.intent.category.DEFAULT" />
-  </intent-filter>
+
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="channel-00110"/>
+            android:value="channel-00110" />
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

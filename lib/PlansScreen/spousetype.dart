@@ -143,6 +143,7 @@ class _SpouseTypeState extends State<SpouseType> {
           } else {
             for (int i = result.length; i > myLength; i--) {
               result.removeAt(i - 1);
+
             }
           }
           print("vikas $result");
@@ -337,7 +338,7 @@ class _SpouseTypeState extends State<SpouseType> {
                               fill,
                               style: TextStyle(
                                 color: CColor.WHITE,
-                                fontSize: textSize18,
+                                fontSize: textSize14,
                               ),
                             ),
                           ),
@@ -567,8 +568,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                                               ['memberIndex'] ==
                                                           index.toString()
                                                       ? 'View Details'
-                                                      : 'Fill Details'
-                                                  : 'Fill Details',
+                                                      : 'Complete details'
+                                                  : 'Complete details',
                                               style: TextStyle(
                                                   color: stoData[index] != ''
                                                       ? stoData[index][
@@ -620,7 +621,7 @@ class _SpouseTypeState extends State<SpouseType> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0)),
                           child: Text(
-                            'Extra Child?',
+                            'Extra child?',
                             style: TextStyle(color: Colors.black, fontSize: 12),
                           ),
                         ),

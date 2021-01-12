@@ -178,7 +178,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                       top: 85,
                                       left: 55,
                                       child: Text(
-                                        'Service Hours',
+                                        'Programme hours',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 8,
@@ -291,7 +291,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                     fontSize: 24, color: Color(0xff2e2e2e)),
                               ),
                               Text(
-                                'You may check your booking in BOOKINGS.',
+                                'You may check your booking in Bookings.',
                                 style: TextStyle(
                                     fontSize: 10, color: Color(0xff707070)),
                               )

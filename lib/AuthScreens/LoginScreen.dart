@@ -358,7 +358,7 @@ class LoginState extends State<LoginScreen> {
                                     size: 20,
                                   ),
                                   Text(
-                                    choosePlan,
+                                    choosePlan ,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 12),
@@ -369,7 +369,33 @@ class LoginState extends State<LoginScreen> {
                                 Navigator.pushReplacement(
                                     context,
                                     new MaterialPageRoute(
-                                        builder: (context) => ChooseYourWay()));
+                                        builder: (context) => ChooseYourWay(isGuest: false,)));
+//                                  ilder: (context) => Dashboard()));
+                              },
+                            ),    FlatButton(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.group,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  Text(
+                                    continueAsGuest,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => ChooseYourWay(isGuest: true,)));
 //                                  ilder: (context) => Dashboard()));
                               },
                             )
