@@ -52,7 +52,7 @@ class ChooseWayState extends State<ChooseYourWay> {
               Stack(
                 children: <Widget>[
                   Image.asset(
-                    'assets/images/two_lady.jpg',
+                    'assets/images/newbanner.jpg',
                     width: SizeConfig.screenWidth,
                     height: 234,
                     fit: BoxFit.cover,
@@ -129,12 +129,12 @@ class ChooseWayState extends State<ChooseYourWay> {
                                           ? Navigator.push(
                                           context,
                           SizeRoute(page: GymMemberPlan(response: gym_list,gymMembers: gymMember,))) : showMyDialog(context, 'Error!', "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");},
-                                    child: _CommonView('assets/images/dummy2.png', "Gym Member", "(Gym, Personal Training, Group Fitness and more)")),
+                                    child: _CommonView('assets/images/gymMember.jpg', "Gym Member", "(Gym, Personal Training, Group Fitness and more)")),
                                 Divider(height: 2,),
                                 GestureDetector(
                                     onTap: () {pool_and_beach_list != null? Navigator.push(context,SizeRoute(page: GymMemberPlan(response:pool_and_beach_list,gymMembers:pool_and_beach,)))
                                         : showMyDialog(context, 'Error!',"Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");},
-                                    child: _CommonView('assets/images/dummy.png', "Pool & Beach", "(Only Gym Members)")),
+                                    child: _CommonView('assets/images/poolBeach.jpg', "Pool & Beach", "(Only Gym Members)")),
                                 Divider(
                                   height: 2,
                                 ),
@@ -155,14 +155,11 @@ class ChooseWayState extends State<ChooseYourWay> {
                                                 isCityTrue: true,
                                                 isSingle: true,
                                                     rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
-
                                               )))
                                           : showMyDialog(context, 'Error!',
                                               "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
-                                    child: _CommonView(
-                                        'assets/images/dummy1.png',
-                                        "Guest",
+                                    child: _CommonView('assets/images/GUEST.jpg', "Guest",
                                         "")),
                                 Divider(
                                   height: 2,
@@ -183,9 +180,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                                           : showMyDialog(context, 'Error!',
                                               "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
                                     },
-                                    child: _CommonView(
-                                        'assets/images/fairmont.jpg',
-                                        fairmontHotel,
+                                    child: _CommonView('assets/images/hotelGuest.jpg', fairmontHotel,
                                         "")),
                                 Divider(
                                   height: 2,

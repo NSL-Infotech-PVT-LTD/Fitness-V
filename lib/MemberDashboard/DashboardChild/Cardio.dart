@@ -127,7 +127,7 @@ class _CardioState extends State<Cardio> {
               Padding(
                 padding: EdgeInsets.only(left: 57, right: 20),
                 child: Text(
-                  'We are proud to offer you fully certified, professional instructors, who are experts in many various areas. Our diverse and well rounded staff will be able to cater to your needs, no matter which style of fitness & wellness you require.',
+                  'We are proud to offer you fully certified, professional instructors, who are experts in many ways to help you feel your best. Our diverse and well rounded staff will be able to cater to your needs, no matter which style of fitness & wellness you require.',
                   style: TextStyle(fontSize: 8, color: Color(0xffc1c1c1)),
                 ),
               ),

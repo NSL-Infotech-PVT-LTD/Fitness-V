@@ -693,7 +693,7 @@ class BookingView extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              'Service Hours',
+                                              'Programme Hours',
                                               style: TextStyle(
                                                   color: Colors.black38,
                                                   fontSize: 10),

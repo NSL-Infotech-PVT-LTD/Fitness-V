@@ -11,7 +11,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/app_logo"
-        android:label="Volt">
+        android:label="Volt Fitness Club">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

@@ -60,10 +60,7 @@ class GymMemberState extends State<GymMemberPlan> {
           (j) => PlansDetails(
               fee_type: value[j]['fee_type'], fee: value[j]['fee'].toString()));
 
-      imgList.add(cardView(widget.response[i]['image'],
-          widget.response[i]['category'],
-          widget.response[i]['name'], plansList,
-          widget.response[i]));
+      imgList.add(cardView(widget.response[i]['image'], widget.response[i]['category'], widget.response[i]['name'], plansList, widget.response[i]));
     }
 
     indexValue = indexValue + 1;
@@ -168,18 +165,17 @@ class GymMemberState extends State<GymMemberPlan> {
                                 shape: BoxShape.circle,
                                 border:
                                     Border.all(width: 1, color: Colors.white),
-                                color: _current == index
-                                    ? Colors.white
-                                    : Colors.black,
+                                color: _current == index ? Colors.white : Colors.black,
                               ),
                             );
                           }),
                         ),
                       ],
-                    )),
+                        ),
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -259,14 +255,10 @@ class GymMemberState extends State<GymMemberPlan> {
                         children: <Widget>[
                           ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
-                              child: imageLink != null
-                                  ? whitePlaceHolder(IMAGE_URL, imageLink,
-                                      SizeConfig.screenHeight * .25, 0.0)
-                                  : Image.asset(
-                                      baseImageAssetsUrl + 'logo_black.png',
-                                      width: SizeConfig.screenWidth * .6,
-                                      fit: BoxFit.fitWidth,
-                                      height: SizeConfig.screenHeight * .25)),
+                              child: imageLink != null ? whitePlaceHolder(IMAGE_URL, imageLink, SizeConfig.screenHeight * .25, 0.0)
+                                //  : Image.asset(baseImageAssetsUrl + 'logo_black.png',
+                                  : Image.asset(baseImageAssetsUrl + 'poolBeach.jpg',
+                                  width: SizeConfig.screenWidth * .6, fit: BoxFit.fitWidth, height: SizeConfig.screenHeight * .25)),
                           Padding(
                             padding: EdgeInsets.fromLTRB(10, 12, 10, 10),
                             child: Row(

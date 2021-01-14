@@ -7,6 +7,7 @@ import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
+import 'package:volt/Screens/view_personal_trainer.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -76,13 +77,13 @@ class LoginState extends State<LoginScreen> {
     });
   }
 
-  bool passwordVisible = true;
+  bool passwordVisible = false;
   bool _isIos;
   String deviceType = '';
 
   @override
   void initState() {
-    passwordVisible = true;
+    passwordVisible = false;
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
     super.initState();
@@ -239,63 +240,40 @@ class LoginState extends State<LoginScreen> {
                                       padding: EdgeInsets.only(top: 0),
                                       child: TextFormField(
                                         cursorColor: Colors.black,
-                                        keyboardType:
-                                            TextInputType.visiblePassword,
-                                        obscureText: passwordVisible,
-                                        key: new Key('password'),
-                                        controller: _passwordFieldController,
-                                        decoration: new InputDecoration(
-                                          suffixIcon: IconButton(
-                                            icon: Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: 10),
-                                                child: _validate2
-                                                    ? Icon(Icons.error,
-                                                        color: Colors.red)
-                                                    : Icon(
-                                                        // Based on passwordVisible state choose the icon
-                                                        passwordVisible
-                                                            ? Icons.visibility
-                                                            : Icons
-                                                                .visibility_off,
-                                                        color:
-                                                            CColor.DividerCOlor,
-                                                      )),
-                                            onPressed: () {
-                                              // Update the state i.e. toogle the state of passwordVisible variable
-                                              setState(() {
-                                                passwordVisible =
-                                                    !passwordVisible;
-                                              });
-                                            },
-                                          ),
-                                          border: InputBorder.none,
-                                          contentPadding: EdgeInsets.only(
-                                              left: 20, bottom: 13, top: 12),
-                                          hintText: password,
-                                        ),
+                                        keyboardType: TextInputType.visiblePassword,
+                                           obscureText: passwordVisible,
+                              key: new Key('password'),
+                              controller: _passwordFieldController,
+                              decoration: new InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Padding(
+                              padding:
+                                  EdgeInsets.only(bottom: 10),
+                              child: _validate2 ? Icon(Icons.error,
+                                      color: Colors.red) : Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      passwordVisible ? Icons.visibility_off:Icons.visibility ,
+                                      color: CColor.DividerCOlor,
+                                    )),
+                          onPressed: () {
+                            // Update the state i.e. toogle the state of passwordVisible variable
+                            setState(() {
+                              passwordVisible = !passwordVisible;
+                            });
+                          },
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(
+                            left: 20, bottom: 13, top: 12),
+                        hintText: password,
+                      ),
                                       ),
                                     ),
                                   )
                                 ],
                               ),
                             ),
-                            Align(
-                                alignment: Alignment.topRight,
-                                child: FlatButton(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                ForgotPassword()));
-                                  },
-                                  child: Text(
-                                    forgetPassword,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                )),
+
                             Container(
                               child: RaisedButton(
                                 onPressed: () {
@@ -346,9 +324,71 @@ class LoginState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
+                            Align(
+                                alignment: Alignment.center,
+                                child: FlatButton(
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                ForgotPassword()));
+                                  },
+                                  child: Text(
+                                    forgetPassword,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )),
+                            Text(
+                              'or',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: textSize16,
+                                  fontFamily: open_semi_bold),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top:20.0),
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.07,
+                                width: MediaQuery.of(context).size.width * 0.50,
+                                child: OutlineButton(
+                                  shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0)),
+                                  borderSide: BorderSide(color: Colors.white),
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.group,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                                      Text(
+                                        continueAsGuest,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) => ChooseYourWay(isGuest: true,)));
+//                                  ilder: (context) => Dashboard()));
+                                  },
+                                ),
+                              ),
+                            ),
+
                             FlatButton(
                               padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
-                              child: Column(
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -357,8 +397,9 @@ class LoginState extends State<LoginScreen> {
                                     color: Colors.white,
                                     size: 20,
                                   ),
+                                  SizedBox(width:10),
                                   Text(
-                                    choosePlan ,
+                                    choosePlan,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 12),
@@ -372,33 +413,8 @@ class LoginState extends State<LoginScreen> {
                                         builder: (context) => ChooseYourWay(isGuest: false,)));
 //                                  ilder: (context) => Dashboard()));
                               },
-                            ),    FlatButton(
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.group,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  Text(
-                                    continueAsGuest,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => ChooseYourWay(isGuest: true,)));
-//                                  ilder: (context) => Dashboard()));
-                              },
-                            )
+                            ),
+
                           ],
                         )),
                   ],

@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:volt/Bookings/YourBooking.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/Screens/view_personal_trainer.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
@@ -214,11 +215,13 @@ class SelectSessionState extends State<SelectSession> {
               SizedBox(
                 height: 30,
               ),
+
+              //////////////////////////////////////////
+
               Visibility(
                 visible: _wantToShowPrice,
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 25.0, right: 25, top: 0, bottom: 10),
+                  padding: EdgeInsets.only(left:50),
                   child: Row(
                     children: <Widget>[
                       new RichText(
@@ -226,7 +229,8 @@ class SelectSessionState extends State<SelectSession> {
                           text: TextSpan(
                               text: "Price",
                               style: TextStyle(
-                                  fontSize: textSize12, color: Colors.black),
+                                  fontSize: textSize12,
+                                  color: Colors.black),
                               children: <TextSpan>[
                                 TextSpan(
                                     text: "",
@@ -235,22 +239,22 @@ class SelectSessionState extends State<SelectSession> {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black45))
                               ])),
-                      SizedBox(
-                        width: SizeConfig.screenWidth * .1,
-                      ),
+                      // SizedBox(
+                      //   width: SizeConfig.screenWidth * 0.2,
+                      // ),
                       Container(
                         margin: EdgeInsets.only(left: 10, top: 10),
-                        width: 150,
-                        height: 60,
+                        width: SizeConfig.screenWidth * 0.50,
+                        height: button_height,
                         decoration: BoxDecoration(
                             color: Colors.black,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16))),
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(button_radius))),
                         child: Center(
                             child: Text(
-                          '${sendValue()} $aed ',
-                          style: TextStyle(color: Colors.white),
-                        )),
+                              '${sendValue()} $aed',
+                              style: TextStyle(color: Colors.white),
+                            )),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 5, top: 10),
@@ -267,40 +271,131 @@ class SelectSessionState extends State<SelectSession> {
                   ),
                 ),
               ),
+
+              /////////////////////////////////
+
+              // Visibility(
+              //   visible: _wantToShowPrice,
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(
+              //         left: 25.0, right: 25, top: 0, bottom: 10),
+              //     child: Row(
+              //       children: <Widget>[
+              //         new RichText(
+              //             textAlign: TextAlign.start,
+              //             text: TextSpan(
+              //                 text: "Price",
+              //                 style: TextStyle(
+              //                     fontSize: textSize12, color: Colors.black),
+              //                 children: <TextSpan>[
+              //                   TextSpan(
+              //                       text: "",
+              //                       style: TextStyle(
+              //                           fontSize: textSize8,
+              //                           fontWeight: FontWeight.bold,
+              //                           color: Colors.black45))
+              //                 ])),
+              //         SizedBox(
+              //           width: SizeConfig.screenWidth * .1,
+              //         ),
+              //         Container(
+              //           margin: EdgeInsets.only(left: 10, top: 10),
+              //           width: 150,
+              //           height: 60,
+              //           decoration: BoxDecoration(
+              //               color: Colors.black,
+              //               borderRadius:
+              //                   BorderRadius.all(Radius.circular(16))),
+              //           child: Center(
+              //               child: Text(
+              //             '${sendValue()} $aed ',
+              //             style: TextStyle(color: Colors.white),
+              //           )),
+              //         ),
+              //         Container(
+              //           margin: EdgeInsets.only(left: 5, top: 10),
+              //           height: 60,
+              //           child: Align(
+              //             alignment: Alignment.center,
+              //             child: Text(
+              //               '/ Hour',
+              //               style: TextStyle(color: Colors.grey),
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: 50,
               ),
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(top: padding15),
-                  height: button_height,
-                  width: 150,
-                  child: FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => YourBooking(
-                                    id: widget.id,
-                                    image: widget.image,
-                                    wantToShowPrice: _wantToShowPrice,
-                                    isGroupClass: widget.isGroupClass,
-                                    name: widget.name,
-                                    payment: sendValue().toString(),
-                                    serviceHours: valueHolder == 0 ? 1.toString() : valueHolder.toString(),
-                                  )));
-                    },
-                    child: Text(
-                      continu,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                  ),
+              // Center(
+              //   child: Container(
+              //     margin: EdgeInsets.only(top: padding15),
+              //     height: button_height,
+              //     width: 150,
+              //     child: FlatButton(
+              //       onPressed: () {
+              //         Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => YourBooking(
+              //                       id: widget.id,
+              //                       image: widget.image,
+              //                       wantToShowPrice: _wantToShowPrice,
+              //                       isGroupClass: widget.isGroupClass,
+              //                       name: widget.name,
+              //                       payment: sendValue().toString(),
+              //                       serviceHours: valueHolder == 0 ? 1.toString() : valueHolder.toString(),
+              //                     )));
+              //       },
+              //       child: Text(
+              //         continu,
+              //         textAlign: TextAlign.center,
+              //         style: TextStyle(
+              //             color: Colors.black,
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 16),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(button_radius))),
+                margin: EdgeInsets.only(top: padding25,left: 30,right:30 ),
+                height: button_height,
+                width: SizeConfig.screenWidth,
+                // width: 100,
+                child: RaisedButton(
+                  color: Colors.black,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => YourBooking(
+                              id: widget.id,
+                              image: widget.image,
+                              wantToShowPrice: _wantToShowPrice,
+                              isGroupClass: widget.isGroupClass,
+                              name: widget.name,
+                              payment: sendValue().toString(),
+                              serviceHours: valueHolder == 0 ? 1.toString() : valueHolder.toString(),
+                            )));
+                    //  print("${widget.id}  ${valueHolder}");
+                  },
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(button_radius)),
+                  textColor: Colors.white,
+                  padding: const EdgeInsets.all(0.0),
+                  child: Text(continu,
+                      style: TextStyle(fontSize: 15, color: Colors.white)),
                 ),
-              )
+                //   color: Colors.black,
+
+              ),
             ]),
       ),
     );

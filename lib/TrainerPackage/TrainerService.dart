@@ -513,7 +513,6 @@ class TrainerServiceState extends State<TrainerService> {
                                     onChanged: (bool value) {
                                       setState(() {
                                         isDateSelected4
-
                                         = value;
                                       });
                                     })

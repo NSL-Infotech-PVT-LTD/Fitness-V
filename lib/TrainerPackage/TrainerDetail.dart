@@ -401,7 +401,6 @@ class TrainerDetailState extends State<TrainerDetail>
                                              }
                                             else{
                                                doYoWantToCntinue();
-
                                              }
                                             },
                                             color: is_booked_by_me
@@ -414,7 +413,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                             child: Text(
                                               is_booked_by_me
                                                   ? alreadyBooked
-                                                  : book_now,
+                                                  :  book_now,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -426,7 +425,8 @@ class TrainerDetailState extends State<TrainerDetail>
                                   ),
                                 ),
                               ],
-                            ))
+                            ),
+                        )
                       ],
                     ),
                   ],
@@ -454,10 +454,13 @@ class TrainerDetailState extends State<TrainerDetail>
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
                       ),
-                      Tab(
-                        child: Text(
-                          'Reviews',
-                          style: TextStyle(fontWeight: FontWeight.normal),
+                      Visibility(
+                        visible: false,
+                        child: Tab(
+                          child: Text(
+                            'Reviews',
+                            style: TextStyle(fontWeight: FontWeight.normal),
+                          ),
                         ),
                       )
                     ],
@@ -628,7 +631,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                 ),
                         );
                       })
-                  : Image.asset(baseImageAssetsUrl + 'no_reviews.png'),
+                  : Visibility(visible: false,child: Image.asset(baseImageAssetsUrl + 'no_reviews.png')),
             ],
           ),
           length: 2,

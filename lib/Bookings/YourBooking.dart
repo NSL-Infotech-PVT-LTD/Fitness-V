@@ -258,11 +258,12 @@ class YourBookingState extends State<YourBooking> {
                                         fontFamily: fontRegular),
                                   ),
                                 ),
+
                                 Positioned(
                                   top: 85,
                                   left: 55,
                                   child: Text(
-                                    'Service Hours',
+                                    'Programme Hours',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 8,

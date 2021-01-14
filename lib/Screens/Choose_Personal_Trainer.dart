@@ -144,7 +144,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                         ConstrainedBox(
                             constraints: BoxConstraints(maxWidth: 300),
                             child: Text(
-                              "We are proud to offer you fully certified, professional instructors, who are experts in many way to help you feel your best.",
+                              "We are proud to offer you fully certified, professional instructors, who are experts in many ways to help you feel your best.",
                               style:
                                   TextStyle(fontSize: 12, color: Colors.grey),
                             )),
@@ -162,29 +162,24 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                       ),
                     )
                   : ListView.builder(
-itemExtent: 100.0,
+                    itemExtent: 100.0,
                       itemCount: users.length,
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
                       itemBuilder: (context, i) {
                         return ListTile(
-                            leading: users[i]['image'] == null
-                                ? Image.asset(
-                                    baseImageAssetsUrl + 'logo_black.png',
-
-                                  )
-                                :
+                            leading: users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo_black.png') :
                             ConstrainedBox(
                               constraints: BoxConstraints(
-                                minWidth: 100,
-                                minHeight: 500,
+                                minWidth: 80,
+                                minHeight: 100,
                               ),
                               child: FadeInImage.assetNetwork(
                                 placeholder: baseImageAssetsUrl + 'logo_black.png',
                                 image: BASE_URL +
-                                    'uploads/trainer-user/' + users[i]['image'],
-                            height: 200,
-fit: BoxFit.cover,
+                                  'uploads/trainer-user/' + users[i]['image'],
+                                  height: 200,
+                                 fit: BoxFit.cover,
                               ),
                             ),
 
@@ -280,8 +275,7 @@ fit: BoxFit.cover,
                   const Text('Session (in Hours)',
                       style: TextStyle(color: Colors.grey)),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 25.0, right: 25, top: 0, bottom: 10),
+                    padding: const EdgeInsets.only(left: 25.0, right: 25, top: 0, bottom: 10),
                     child: Row(
                       children: <Widget>[
                         new RichText(
