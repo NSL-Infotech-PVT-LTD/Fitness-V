@@ -458,76 +458,6 @@ class SignupState extends State<SignupScreen> {
                             style: TextStyle(
                                 color: Color(0xFF707070), fontSize: 15),
                           ),
-                          SizedBox(
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height * 0.03,
-                          ),
-                          Visibility(
-                            visible: (widget.memberIndex == 0 &&
-                                widget.type != "guest") || widget.type ==
-                                "fairMont" || widget.isSingle,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                  height: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height * 0.05,
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.50,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: file == null ? Text(
-                                        'Choose Profile Photo') : Text(
-                                        "Photo Selected"),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.07,
-                                ),
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  height: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height * 0.05,
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.14,
-                                  child: RaisedButton.icon(
-                                    color: Colors.black,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 2),
-                                    onPressed: () {
-                                      _showMyDialog();
-                                    },
-                                    icon: Padding(
-                                      padding: const EdgeInsets.only(left:8.0),
-                                      child: Center(child: Icon(Icons.camera,color: Colors.white,)),
-                                    ),
-                                    label: Text(""),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
 
 
                           Padding(
@@ -910,6 +840,8 @@ class SignupState extends State<SignupScreen> {
                               ),
                             ),
                           ),
+
+
                           Visibility(
                             visible: (widget.memberIndex == 0 ||
                                 widget.memberIndex == null) && widget.type !=
@@ -946,38 +878,122 @@ class SignupState extends State<SignupScreen> {
                                   },
                                 )),
                           ),
-                          SizedBox(height: 20),
-
+                          SizedBox(
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.03,
+                          ),
                           Visibility(
-                            visible: widget.type != 'fairMont' && widget.type != 'guest',
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 8.0),
-                              child: Row(
-                                children: [
-                                  Text("Choose Trainer"),
-                                  Spacer(),
-                                  InkWell(
-                                    onTap: () =>
-                                        _navigateAndDisplaySelection(context),
-                                    child:result != null&&result.length>0
-                                        ? Text(
-                                      "Change my trainer",
-                                      style:
-                                      TextStyle(color: Colors.indigo),
-                                    )
-                                        : Container(
-                                      child: Center(
-                                          child: Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                          )),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5)),
-                                          color: Colors.black),
+                            visible: (widget.memberIndex == 0 &&
+                                widget.type != "guest") || widget.type ==
+                                "fairMont" || widget.isSingle,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  height: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height * 0.06,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.50,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
                                     ),
-                                  )
-                                ],
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Center(
+                                    child: file == null ? Text(
+                                        'Choose A Profile Photo') : Text(
+                                        "Photo Selected"),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.07,
+                                ),
+                                Container(
+
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  height: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height * 0.06,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.14,
+                                  child: RaisedButton.icon(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    color: Colors.black,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 2),
+                                    onPressed: () {
+                                      _showMyDialog();
+                                    },
+                                    icon: Padding(
+                                      padding: const EdgeInsets.only(left:8.0),
+                                      child: Center(child: Icon(Icons.image_outlined,color: Colors.white,size: 35,)),
+                                    ),
+                                    label: Text(""),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+Divider(),
+                          Align(child: Text("Optional",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,),
+                          SizedBox(height: 12),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.06,
+                            width: MediaQuery.of(context).size.width * 0.80,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Visibility(
+                              visible: widget.type != 'fairMont' && widget.type != 'guest',
+                              child: Padding(
+                                padding: EdgeInsets.all( 8.0),
+                                child: Row(
+                                  children: [
+                                    Text("Choose Trainer"),
+                                    Spacer(),
+                                    InkWell(
+                                      onTap: () =>
+                                          _navigateAndDisplaySelection(context),
+                                      child:result != null&&result.length>0
+                                          ? Text(
+                                        "Change my trainer",
+                                        style:
+                                        TextStyle(color: Colors.indigo),
+                                      )
+                                          : Container(
+                                        height: 28,
+                                        child: Center(
+                                            child: Icon(
+                                              Icons.navigate_next,
+                                              color: Colors.white,
+                                            )),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5)),
+                                            color: Colors.black),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -1071,7 +1087,6 @@ class SignupState extends State<SignupScreen> {
                               ),
                             ),
                           ),
-
                           // Visibility(
                           //   visible: widget.form
                           //   Type.isEmpty ? true : false,

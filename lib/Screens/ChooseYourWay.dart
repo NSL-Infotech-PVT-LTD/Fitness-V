@@ -87,9 +87,9 @@ class ChooseWayState extends State<ChooseYourWay> {
                 ),
               ),
               DefaultTabController(
-                initialIndex: widget.isGuest?1:0,
+                //initialIndex: widget.isGuest?1:0,
 
-                  length: 2,
+                  length: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -102,11 +102,11 @@ class ChooseWayState extends State<ChooseYourWay> {
                           width: SizeConfig.screenWidth,
                           child: TabBar(
                             tabs: [
-                              Tab(
+                              !widget.isGuest?Tab(
                                   icon: Text(
                                 memeber,
                                 style: TextStyle(fontSize: textSize16),
-                              )),
+                              )):
                               Tab(
                                   icon: Text(guest, style: TextStyle(fontSize: textSize16))),
                             ],
@@ -121,16 +121,15 @@ class ChooseWayState extends State<ChooseYourWay> {
                         height: 300,
                         child: TabBarView(
                           children: <Widget>[
-                            Column(
+                            !widget.isGuest? Column(
                               children: <Widget>[
                                 GestureDetector(
                                     onTap: () {
-                                      gym_list != null
-                                          ? Navigator.push(
-                                          context,
-                          SizeRoute(page: GymMemberPlan(response: gym_list,gymMembers: gymMember,))) : showMyDialog(context, 'Error!', "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");},
+                                      gym_list != null ? Navigator.push(context, SizeRoute(page: GymMemberPlan(response: gym_list,gymMembers: gymMember,))) : showMyDialog(context, 'Error!', "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");},
                                     child: _CommonView('assets/images/gymMember.jpg', "Gym Member", "(Gym, Personal Training, Group Fitness and more)")),
+
                                 Divider(height: 2,),
+
                                 GestureDetector(
                                     onTap: () {pool_and_beach_list != null? Navigator.push(context,SizeRoute(page: GymMemberPlan(response:pool_and_beach_list,gymMembers:pool_and_beach,)))
                                         : showMyDialog(context, 'Error!',"Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");},
@@ -139,7 +138,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                                   height: 2,
                                 ),
                               ],
-                            ),
+                            ):
                             Column(
                               children: <Widget>[
                                 GestureDetector(
@@ -259,7 +258,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pushReplacement(
-                      context, SizeRoute(page: ChooseYourWay()));
+                      context, SizeRoute(page: ChooseYourWay(isGuest: false,)));
                 },
                 isDestructiveAction: true,
               ),
@@ -282,7 +281,7 @@ Widget _CommonView(String image, String title, String des) => GestureDetector(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.asset(
                       image,
-                      width: 76,
+                      width:76,
                       fit: BoxFit.cover,
                       height: 76,
                     )),
