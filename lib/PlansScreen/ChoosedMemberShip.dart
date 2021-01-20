@@ -66,6 +66,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 
     SizeConfig().init(context);
     return Scaffold(
+
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(
         child: Container(
@@ -139,7 +140,6 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                     return GestureDetector(
                       onTap: () {
                         plan_index = index;
-
                         setState(() {
                           currentSelectedIndex = index;
                           planIdS = plansList[index].planId.toString();
@@ -333,14 +333,10 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 //                        Navigator.pushReplacement(
 //                            context,
 //                            new MaterialPageRoute(builder: (context) =>FamilyWithTwo()));     //SpouseType()));
-                        currentSelectedIndex == -1
-                            ? showDialogBox(context, "Choose Plan Alert",
-                                'Please choose your plan type')
-                            : checkRoll();
+                        currentSelectedIndex == -1 ? showDialogBox(context, "Choose Plan Alert", 'Please choose your plan type') : checkRoll();
                       },
                       color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(button_radius)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(button_radius)),
                       child: Text(
                         'Proceed',
                         style: TextStyle(
@@ -356,7 +352,6 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
 //                SizeConfig.screenWidth,
 //                FontWeight.bold,
 //              )
-
                   ),
               SizedBox(
                 height: 20,
@@ -430,9 +425,7 @@ class PlansDetails {
   final String rolePlanId;
   bool choosePlan;
 
-  PlansDetails(
-      {this.fee_type, this.fee, this.choosePlan, this.planId, this.rolePlanId});
-}
+  PlansDetails({this.fee_type, this.fee, this.choosePlan, this.planId, this.rolePlanId});}
 
 class CustomPlansDetails extends StatefulWidget {
   final List items;
@@ -457,7 +450,7 @@ class PlansState extends State<CustomPlansDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-      widget.items[widget.index].fee_type == "quarterly"?"3 Months":widget.items[widget.index].fee_type == "half_yearly"?"6 Months":widget.items[widget.index].fee_type == "yearly"?"Annual":widget.items[widget.index].fee_type,
+              widget.items[widget.index].fee_type == "quarterly"?"3 Months":widget.items[widget.index].fee_type == "half_yearly"?"6 Months":widget.items[widget.index].fee_type == "yearly"?"Annual":widget.items[widget.index].fee_type,
                 style: TextStyle(fontFamily: open_light, fontSize: 14),
               ),
               SizedBox(
@@ -489,8 +482,7 @@ class PlansState extends State<CustomPlansDetails> {
                 ? ScaleAnimatedWidget(
                     duration: Duration(milliseconds: 150),
                     enabled: widget.myValue,
-                    child: SvgPicture.asset('assets/icons/icon_selected.svg'))
-                : SvgPicture.asset('assets/icons/icon_unselected.svg'),
+                    child: SvgPicture.asset('assets/icons/icon_selected.svg')) : SvgPicture.asset('assets/icons/icon_unselected.svg'),
           ),
 //              Switch(
 //                value: widget.myValue,

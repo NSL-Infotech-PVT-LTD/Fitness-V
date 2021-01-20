@@ -18,7 +18,7 @@ class SplashState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 3),
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ChooseYourWay())));
+            context, MaterialPageRoute(builder: (context) => ChooseYourWay(isGuest: true,))));
          //   context, MaterialPageRoute(builder: (context) => ChooseYourWay())));
     SizeConfig().init(context);
     return Scaffold(

@@ -15,7 +15,8 @@ class LocalNotification {
     var initS = InitializationSettings(
         android: initSettingAndroid, iOS: initSettingIos);
     _flutterLocalNotificationsPlugin.initialize(initS, onSelectNotification:onSelectNoti);
-  
+
+
   }
 
   static Future<void> showNotificationMediaStyle(String title,String body) async {

@@ -52,7 +52,7 @@ class ChooseWayState extends State<ChooseYourWay> {
               Stack(
                 children: <Widget>[
                   Image.asset(
-                    'assets/images/newbanner.jpg',
+                    'assets/images/voltLogoBanner.png',
                     width: SizeConfig.screenWidth,
                     height: 234,
                     fit: BoxFit.cover,

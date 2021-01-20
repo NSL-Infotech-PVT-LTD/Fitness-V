@@ -236,12 +236,13 @@ class GroupClassState extends State<GroupClass> {
                       ),
                       Row(
                         children: <Widget>[
+
                           SizedBox(
                             width: SizeConfig.blockSizeHorizontal * 12,
                           ),
                           Expanded(
                             child: Text(
-                              "We have a fantastic range of special Group classes designed to help you get fit and healthy while enjoying new daily challenges. why not make it fun?'",
+                              "We have a fantastic range of special Group classes designed to help you get fit and healthy while enjoying new daily challenges. why not make it fun?",
                               style: TextStyle(
                                   color: CColor.LightGrey, fontSize: 10),
                             ),

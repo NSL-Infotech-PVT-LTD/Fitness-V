@@ -5,7 +5,7 @@ import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:flutter/material.dart';
 class FirebaseIn {
- 
+
  FirebaseIn();
  static FirebaseMessaging   _firebaseMessaging;
 static  initNoti(BuildContext context)  {
@@ -20,7 +20,7 @@ static  initNoti(BuildContext context)  {
   LocalNotification.initLocal(context);
 
    _firebaseMessaging.configure(
-    
+
         // ignore: missing_return
     onLaunch: (message)  {
       print("onLaunch : $message");
@@ -32,7 +32,9 @@ static  initNoti(BuildContext context)  {
       if(message["data"]["click_action"] ){
          print('click call');
       }
-      
+
+ 
+
      },
     // ignore: missing_return
     onMessage: (message) async {
@@ -43,18 +45,24 @@ static  initNoti(BuildContext context)  {
       },
     // ignore: missing_return
     onResume:  (message) async {
-      print("onResume : $message");
-      print(message["notification"]["title"]);
-      print(message["data"]["click_action"]);
-      if(message["notification"]["title"] != null){
-        LocalNotification.showNotificationMediaStyle(message["notification"]["title"],message["notification"]["body"]);
+      if(message != null){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (values) => AllBookings()));
+        print('click call');
+      }
+      print("onResume vikas : $message");
+      print("vikas"+message["notification"]["title"]);
+      print("vikas"+message["data"]["click_action"]);
+      if("vikas"+message["notification"]["title"] != null){
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (values) => AllBookings()));
+        LocalNotification.showNotificationMediaStyle("vikas"+message["notification"]["title"],message["notification"]["body"]);
 
       }
       if(message["data"]["click_action"]){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (values) => AllBookings()));
         print('click call');
       }
-    
+
       },
   );
 

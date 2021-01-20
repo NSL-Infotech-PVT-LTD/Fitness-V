@@ -7,12 +7,15 @@
          FlutterApplication and put your custom class here. -->
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:icon="@mipmap/app_logo"
-        android:label="Volt Fitness Club">
-
+        android:label="Volt Fitness Club"
+        android:icon="@mipmap/app_logo">
+<!--    <application-->
+<!--        android:name=".Application"-->
+<!--        android:icon="@mipmap/app_logo"-->
+<!--        android:label="Volt Fitness Club">-->
+<!--    <application android:name=".Application" android:label="messaging_tut" android:icon="@mipmap/ic_launcher">-->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo" />

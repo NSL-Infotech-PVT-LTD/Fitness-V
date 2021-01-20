@@ -312,7 +312,7 @@ class LoginState extends State<LoginScreen> {
                                     color: Color(0xff484848),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(3)),
-                                  ),
+                                   ),
                                   child: Text(
                                     'Sign In',
                                     textAlign: TextAlign.center,
@@ -350,70 +350,132 @@ class LoginState extends State<LoginScreen> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top:20.0),
-                              child: SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.07,
-                                width: MediaQuery.of(context).size.width * 0.50,
-                                child: OutlineButton(
-                                  shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0)),
-                                  borderSide: BorderSide(color: Colors.white),
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.group,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                      SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                                      Text(
-                                        continueAsGuest,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 14),
-                                      ),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) => ChooseYourWay(isGuest: true,)));
+                              child: Container(
+
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  color: Colors.white,
+                                ),
+                                child: SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.06,
+                                  width: MediaQuery.of(context).size.width * 0.50,
+                                  child: OutlineButton(
+
+                                    shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+                                  //  borderSide: BorderSide(color: Colors.white),
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        // Icon(
+                                        // //  Icons.group,
+                                        //   color: Colors.white,
+                                        //   size: 20,
+                                        // ),
+                                        SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                                        Text(
+                                          "Sign Up",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black, fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) => ChooseYourWay(isGuest: false,)));
 //                                  ilder: (context) => Dashboard()));
-                                  },
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),  Padding(
+                              padding: const EdgeInsets.only(top:20.0),
+                              child: Container(
+
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  color: Colors.black,
+                                ),
+                                child: SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.06,
+                                  width: MediaQuery.of(context).size.width * 0.50,
+                                  child: OutlineButton(
+
+                                    shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+                                    borderSide: BorderSide(color: Colors.white),
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        // Icon(
+                                        // //  Icons.group,
+                                        //   color: Colors.white,
+                                        //   size: 20,
+                                        // ),
+                                        SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                                        Text(
+                                          continueAsGuest,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) => ChooseYourWay(isGuest: true,)));
+//                                  ilder: (context) => Dashboard()));
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
+//                             Padding(
+//                               padding: const EdgeInsets.only(top:20.0),
+//                               child: SizedBox(
+//                                 height: MediaQuery.of(context).size.height * 0.07,
+//                                 width: MediaQuery.of(context).size.width * 0.50,
+//                                 child: OutlineButton(
+//                                   shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0)),
+//                                   borderSide: BorderSide(color: Colors.white),
+//                                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+//                                   child: Row(
+//                                     crossAxisAlignment: CrossAxisAlignment.center,
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: <Widget>[
+//                                       // Icon(
+//                                       //   Icons.group,
+//                                       //   color: Colors.white,
+//                                       //   size: 20,
+//                                       // ),
+//                                       SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+//                                       Text(
+//                                         continueAsGuest,
+//                                         textAlign: TextAlign.center,
+//                                         style: TextStyle(
+//                                             color: Colors.white, fontSize: 14),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                   onPressed: () {
+//                                     Navigator.pushReplacement(
+//                                         context,
+//                                         new MaterialPageRoute(
+//                                             builder: (context) => ChooseYourWay(isGuest: true,)));
+// //                                  ilder: (context) => Dashboard()));
+//                                   },
+//                                 ),
+//                               ),
+//                             ),
 
-                            FlatButton(
-                              padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.group,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  SizedBox(width:10),
-                                  Text(
-                                    choosePlan,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => ChooseYourWay(isGuest: false,)));
-//                                  ilder: (context) => Dashboard()));
-                              },
-                            ),
+
 
                           ],
                         )),

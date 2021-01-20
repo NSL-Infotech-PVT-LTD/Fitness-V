@@ -179,8 +179,7 @@ Widget setNoDataContent() => Align(
     alignment: Alignment.center,
     child: Image.asset(baseImageAssetsUrl + 'place_holder.png'));
 
-Widget fullWidthButton(context, String title, double setWidth, FontWeight bold,
-        StatefulWidget whereToGO) =>
+Widget fullWidthButton(context, String title, double setWidth, FontWeight bold, StatefulWidget whereToGO) =>
     Container(
       margin: EdgeInsets.only(top: padding15),
       height: button_height,

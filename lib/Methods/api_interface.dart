@@ -67,6 +67,7 @@ String MIDDLENAME = "middle_name";
 String BIRTH_DATE = "birth_date";
 String DESIGNATION = "designation";
 String workplace = "workplace";
+String imageProfile = "imageProfile";
 String nationality = "nationality";
 String about_us = "about_us";
 String marital_status = "marital_status";

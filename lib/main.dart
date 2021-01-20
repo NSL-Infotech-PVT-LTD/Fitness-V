@@ -23,8 +23,10 @@ class _MyAppState extends State<MyApp> {
   bool _newNotification = false;
 
   void _navigateToItemDetail() {
-
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (values) => AllBookings()));
   }
+
 
   Future<void> _showMyDialog() async {
     return showDialog<void>(
@@ -57,17 +59,16 @@ class _MyAppState extends State<MyApp> {
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
         _showMyDialog();
-        //_showMyDialog();
 
-        print("NOTIFICATION ARRIVED ");
+        print("NOTIFICATION ARRIVED");
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-      //  _navigateToItemDetail(sdfs);
+        _navigateToItemDetail();
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
-    //    _navigateToItemDetail(sdfs);
+        _navigateToItemDetail();
       },
     );
   }

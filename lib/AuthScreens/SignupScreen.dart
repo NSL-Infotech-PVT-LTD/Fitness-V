@@ -879,10 +879,10 @@ class SignupState extends State<SignupScreen> {
                                 )),
                           ),
                           SizedBox(
-                            height: MediaQuery
+                            height: MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
                                 .of(context)
                                 .size
-                                .height * 0.03,
+                                .height * 0.02,
                           ),
                           Visibility(
                             visible: (widget.memberIndex == 0 &&
@@ -907,9 +907,7 @@ class SignupState extends State<SignupScreen> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Center(
-                                    child: file == null ? Text(
-                                        'Choose A Profile Photo') : Text(
-                                        "Photo Selected"),
+                                    child: file == null ? Text('Choose A Profile Photo') : Text("Photo Selected"),
                                   ),
                                 ),
                                 SizedBox(
@@ -949,56 +947,61 @@ class SignupState extends State<SignupScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 20),
-Divider(),
-                          Align(child: Text("Optional",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,),
-                          SizedBox(height: 12),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            width: MediaQuery.of(context).size.width * 0.80,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Visibility(
-                              visible: widget.type != 'fairMont' && widget.type != 'guest',
-                              child: Padding(
-                                padding: EdgeInsets.all( 8.0),
-                                child: Row(
-                                  children: [
-                                    Text("Choose Trainer"),
-                                    Spacer(),
-                                    InkWell(
-                                      onTap: () =>
-                                          _navigateAndDisplaySelection(context),
-                                      child:result != null&&result.length>0
-                                          ? Text(
-                                        "Change my trainer",
-                                        style:
-                                        TextStyle(color: Colors.indigo),
+                          Visibility(
+                            visible: widget.type != 'fairMont' && widget.type != 'guest',
+                            child: Column(children: [
+                              SizedBox(height: 35),
+                              Divider(),
+                              Align(child: Text("Optional",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,),
+                              SizedBox(height: 12),
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.80,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all( 8.0),
+                                  child: Row(
+                                    children: [
+                                      Text("Choose Trainer"),
+                                      Spacer(),
+                                      InkWell(
+                                        onTap: () =>
+                                            _navigateAndDisplaySelection(context),
+                                        child:result != null&&result.length>0
+                                            ? Text(
+                                          "Change my trainer",
+                                          style:
+                                          TextStyle(color: Colors.indigo),
+                                        )
+                                            : Container(
+                                          height: 28,
+                                          child: Center(
+                                              child: Icon(
+                                                Icons.navigate_next,
+                                                color: Colors.white,
+                                              )),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5)),
+                                              color: Colors.black),
+                                        ),
                                       )
-                                          : Container(
-                                        height: 28,
-                                        child: Center(
-                                            child: Icon(
-                                              Icons.navigate_next,
-                                              color: Colors.white,
-                                            )),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5)),
-                                            color: Colors.black),
-                                      ),
-                                    )
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
+                              SizedBox(height: 12),
+                              Divider(),
+                            ],),
                           ),
+
                           Visibility(
-                            visible:result != null&&result.length>0,
+                            visible: result != null,//&&result.length>0&&,
                             child: Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: Card(
@@ -1016,14 +1019,14 @@ Divider(),
                                           Text(
                                             result != null
                                                 ? nameTrainer
-                                                : "Farley Willth",
+                                                : "No Trainer Selected",
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
                                             result != null
-                                                ? "${yearsExpTrainer} Years Experience"
+                                                ? "$yearsExpTrainer Years Experience"
                                                 : "0 Years Experience",
                                             style:
                                             TextStyle(color: Colors.grey),
@@ -1251,6 +1254,7 @@ Divider(),
                                         tReview: reviewTrainer,
                                         tPrice: priceTrainer.toString(),
                                         timage: imageTrainer,
+                                        
 
                                       };
                                       print("vikas 0=====>${parms.toString()}");

@@ -15,7 +15,7 @@ class SuccessState extends State<SuccessScreen> {
   Future<bool> _onWillPop() async {
     return (await Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => ChooseYourWay()),
+          MaterialPageRoute(builder: (context) => LoginScreen()),
           (r) => false,
         )) ??
         false;
@@ -67,7 +67,7 @@ class SuccessState extends State<SuccessScreen> {
                         'Back to Home'.toUpperCase(),
                         SizeConfig.screenWidth,
                         FontWeight.bold,
-                        ChooseYourWay())),
+                        ChooseYourWay(isGuest: true,))),
                 Padding(
                     padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
                     child: fullWidthButton(context, 'Login'.toUpperCase(),
