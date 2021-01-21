@@ -106,6 +106,11 @@ class SignupState extends State<SignupScreen> {
   var deviceTok = '';
 
   var fromDate;
+  var checkInViewdate;
+  var checkOutViewdate;
+  var checkInDate;
+  var checkOutDate;
+  DateTime initCheckIn;
   var myDate, sendDate;
   var formatter = new DateFormat("dd/MM/yyyy");
   var sendDateFormat = new DateFormat("yyyy-MM-dd");
@@ -117,6 +122,12 @@ class SignupState extends State<SignupScreen> {
   void fromDatePicker() {
     getData();
   }
+ void checkOutFun() {
+   checkOut();
+  }
+ void checkInFun() {
+   checkIN();
+  }
 
   String rolePlanId;
 
@@ -127,7 +138,138 @@ class SignupState extends State<SignupScreen> {
       myField = newValue;
     });
   }
+  Future<DateTime> checkOut() {
+    return showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return CupertinoActionSheet(actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: Text(
+                      "Done",
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  )),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  if (myDate != null) {
+                    checkOutDate = sendDateFormat.format(myDate);
+                    checkOutViewdate = formatter.format(myDate);
 
+                    //    print("check In + check out " + checkInDate + checkOutDate);
+                  }
+                });
+              },
+            ),
+            Container(
+              height: 300.0,
+              color: Colors.white,
+              child: CupertinoDatePicker(
+                use24hFormat: true,
+                minimumDate: DateTime.now(),
+
+            //    maximumDate: new DateTime(2019, 12, 30),
+                minimumYear: DateTime.now().year,
+                maximumYear:DateTime.now().year,
+                minuteInterval: 1,
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: DateTime.now(),
+                backgroundColor: Colors.white,
+                onDateTimeChanged: (dateTime) {
+                  myDate = dateTime;
+                  // print("$myDate");
+//                setState(() {
+//                  if (dateTime != null) fromDate = formatter.format(dateTime);
+//                });
+                },
+              ),
+            ),
+          ]);
+        });
+
+//    return showDatePicker(
+//        context: context,
+//        initialDate: DateTime(2019),
+//        firstDate: DateTime(1980),
+//        lastDate: DateTime(2020),
+//        builder: (BuildContext context, Widget child) {
+//          return Theme(
+//            data: ThemeData.fallback(),
+//            child: child,
+//          );
+//        });
+  }
+  Future<DateTime> checkIN() {
+    return showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return CupertinoActionSheet(actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: Text(
+                      "Done",
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  )),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  if (myDate != null) {
+                    checkInDate = sendDateFormat.format(myDate);
+                    checkInViewdate = formatter.format(myDate);
+
+                //    print("check In + check out " + checkInDate + checkOutDate);
+                  }
+                });
+              },
+            ),
+            Container(
+              height: 300.0,
+              color: Colors.white,
+              child: CupertinoDatePicker(
+                use24hFormat: true,
+              //  maximumDate: new DateTime(2019, 12, 30),
+                minimumDate: DateTime.now(),
+                minimumYear: DateTime.now().year,
+                maximumYear:DateTime.now().year,
+                minuteInterval: 1,
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: DateTime.now(),
+                backgroundColor: Colors.white,
+                onDateTimeChanged: (dateTime) {
+                  myDate = dateTime;
+                  initCheckIn = dateTime;
+                  // print("$myDate");
+//                setState(() {
+//                  if (dateTime != null) fromDate = formatter.format(dateTime);
+//                });
+                },
+              ),
+            ),
+          ]);
+        });
+
+//    return showDatePicker(
+//        context: context,
+//        initialDate: DateTime(2019),
+//        firstDate: DateTime(1980),
+//        lastDate: DateTime(2020),
+//        builder: (BuildContext context, Widget child) {
+//          return Theme(
+//            data: ThemeData.fallback(),
+//            child: child,
+//          );
+//        });
+  }
   Future<DateTime> getData() {
     return showCupertinoModalPopup(
         context: context,
@@ -150,6 +292,7 @@ class SignupState extends State<SignupScreen> {
                   if (myDate != null) {
                     fromDate = formatter.format(myDate);
                     sendDate = sendDateFormat.format(myDate);
+                //    print("check In + check out " + checkInDate.toString() + checkOutDate);
                   }
                 });
               },
@@ -193,6 +336,7 @@ class SignupState extends State<SignupScreen> {
   bool passwordVisible = true;
   @override
   void initState() {
+    print("profile image " + widget.profileImage.toString());
      passwordVisible = true;
     if (widget.type != null) print("form type " + widget.type);
     rolePlanId = widget.rolePlanId;
@@ -594,7 +738,7 @@ class SignupState extends State<SignupScreen> {
                           Padding(
                             padding: EdgeInsets.only(top: 12),
                             child: TextFormField(
-                              textCapitalization: TextCapitalization.sentences,
+                              textCapitalization: TextCapitalization.none,
                               keyboardType: TextInputType.text,
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -652,7 +796,7 @@ class SignupState extends State<SignupScreen> {
 
 
                           Visibility(
-                            visible: widget.type != 'fairMont',
+                            visible: widget.type != 'fairMont' &&  widget.type != 'guest',
                             child: Container(
                               margin: EdgeInsets.only(
                                   top: margin20, bottom: 10),
@@ -667,14 +811,10 @@ class SignupState extends State<SignupScreen> {
                                   Padding(
                                       padding: EdgeInsets.only(left: 10),
                                       child: Text(
-                                        fromDate == null
-                                            ? birthDate
-                                            : fromDate.toString(),
+                                        fromDate == null ? birthDate : fromDate.toString(),
                                         style: TextStyle(
                                             fontSize: textSize12,
-                                            color: fromDate == null
-                                                ? Colors.black45
-                                                : Colors.black),
+                                            color: fromDate == null ? Colors.black45 : Colors.black),
                                       )),
                                   Spacer(),
                                   GestureDetector(
@@ -694,9 +834,8 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
                           Visibility(
-                            visible: widget.memberIndex == 0 || widget
-                                .memberIndex == null && widget.type !=
-                                'fairMont',
+                            visible: (widget.memberIndex == 0 || widget.memberIndex == null ) && widget.type != 'guest' && widget.type != 'fairMont',
+
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
@@ -706,9 +845,7 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
                           Visibility(
-                            visible: (widget.memberIndex == 0 ||
-                                widget.memberIndex == null) && widget.type !=
-                                'guest' && widget.type != 'fairMont',
+                            visible: (widget.memberIndex == 0 || widget.memberIndex == null) && widget.type != 'guest' && widget.type != 'fairMont',
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
@@ -819,6 +956,84 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
                           Visibility(
+                            visible: widget.type == 'fairMont' || widget.type == 'guest',
+                            child: Padding(
+                              padding: const EdgeInsets.only(top:8.0),
+                              child: Align(child: Text("Check In",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,),
+                            ),
+                          ),
+                          Visibility(
+                            visible: widget.type == 'fairMont' || widget.type == 'guest',
+                            child: Container(
+                              margin: EdgeInsets.only(top: margin20, bottom: 6),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(button_radius)),
+                                  border: Border.all(
+                                      color: Colors.black26, width: 1)),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        checkInDate == null ? checkIn : checkInViewdate.toString(),
+                                        style: TextStyle(fontSize: textSize12, color: checkInDate == null ? Colors.black45 : Colors.black),
+                                      )),
+                                  Spacer(),
+                                  GestureDetector(
+                                    onTap: checkInFun,
+                                    child: Container(
+                                      height: 50,
+                                      width: 40,
+                                      color: Color(0xFFDFDFDF),
+                                      child: Image(
+                                        image: AssetImage(
+                                            baseImageUrl + 'calendar.png'),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Visibility(visible: widget.type == 'fairMont' || widget.type == 'guest',child: Align(child: Text("Check Out",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,)),
+                          Visibility(
+                            visible: widget.type == 'fairMont' || widget.type == 'guest',
+                            child: Container(
+                              margin: EdgeInsets.only(top: margin20, bottom: 6),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(button_radius)),
+                                  border: Border.all(
+                                      color: Colors.black26, width: 1)),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        checkOutViewdate == null ? checkOutt : checkOutViewdate.toString(),
+                                        style: TextStyle(fontSize: textSize12, color: checkOutViewdate == null ? Colors.black45 : Colors.black),
+                                      )),
+                                  Spacer(),
+                                  GestureDetector(
+                                    onTap: checkOutFun,
+                                    child: Container(
+                                      height: 50,
+                                      width: 40,
+                                      color: Color(0xFFDFDFDF),
+                                      child: Image(
+                                        image: AssetImage(
+                                            baseImageUrl + 'calendar.png'),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Visibility(
                             visible: (widget.memberIndex == 0 ||
                                 widget.memberIndex == null) && widget.type !=
                                 'guest' && widget.type != 'fairMont',
@@ -885,9 +1100,7 @@ class SignupState extends State<SignupScreen> {
                                 .height * 0.02,
                           ),
                           Visibility(
-                            visible: (widget.memberIndex == 0 &&
-                                widget.type != "guest") || widget.type ==
-                                "fairMont" || widget.isSingle,
+                            visible: (widget.memberIndex == 0 || widget.memberIndex == null ) && widget.type != 'guest' && widget.type != 'fairMont',
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
@@ -1169,8 +1382,7 @@ class SignupState extends State<SignupScreen> {
                                 //  print("$fromDate");
                                 print("check");
                                 if (formKey.currentState.validate()) {
-                                  if (widget.type != 'fairMont' &&
-                                      fromDate == null) {
+                                  if ((widget.type != 'fairMont' && widget.type != "guest") && fromDate == null) {
                                     showDialogBox(context, 'Date of Birth',
                                         'Please fill your date of birth');
                                   }
@@ -1201,35 +1413,20 @@ class SignupState extends State<SignupScreen> {
                                         if (widget.memberIndex !=
                                             null)"memberIndex": widget
                                             .memberIndex.toString(),
-                                        FIRSTNAME: firstNameController.text
-                                            .toString().trim(),
-                                        MIDDLENAME: middletNameController.text
-                                            .toString().trim(),
-                                        LASTNAME: lastNameController.text
-                                            .toString().trim(),
+                                        FIRSTNAME: firstNameController.text.toString().trim(),
+                                        MIDDLENAME: middletNameController.text.toString().trim(),
+                                        LASTNAME: lastNameController.text.toString().trim(),
                                         CHILD: radioItem,
-                                        MOBILE: mobileController.text.toString()
-                                            .trim(),
-                                        EMAIL: emailController.text.toString()
-                                            .trim(),
-                                        PASSWORD: passwordController.text
-                                            .toString().trim(),
+                                        MOBILE: mobileController.text.toString().trim(),
+                                        EMAIL: emailController.text.toString().trim(),
+                                        PASSWORD: passwordController.text.toString().trim(),
                                         BIRTH_DATE: sendDate,
-                                        EMIRATES_ID: emiratesController.text
-                                            .toString().trim(),
-                                        if (widget.isSingle &&
-                                            widget.type == "guest")ROLE_ID: 8
-                                            .toString(),
+                                        EMIRATES_ID: emiratesController.text.toString().trim(),
+                                        if (widget.isSingle && widget.type == "guest")ROLE_ID: 8.toString(),
                                         //rolePlanId.toString(),
-                                        if (widget.isSingle &&
-                                            widget.type != "fairMont" &&
-                                            widget.type !=
-                                                "guest")ROLE_ID: rolePlanId
-                                            .toString(),
+                                        if (widget.isSingle && widget.type != "fairMont" && widget.type != "guest")ROLE_ID: rolePlanId.toString(),
                                         //rolePlanId.toString(),
-                                        if (widget.isSingle &&
-                                            widget.type == "fairMont")ROLE_ID: 9
-                                            .toString(),
+                                        if (widget.isSingle && widget.type == "fairMont")ROLE_ID: 9.toString(),
                                         //rolePlanId.toString(),
                                         if (widget.isSingle && roleId != null)ROLE_PLAN_ID: roleId.toString(),
                                         EMEREGENCY_NUMBER: emergencyController.text.toString().trim(),
@@ -1254,8 +1451,8 @@ class SignupState extends State<SignupScreen> {
                                         tReview: reviewTrainer,
                                         tPrice: priceTrainer.toString(),
                                         timage: imageTrainer,
-                                        
-
+                                        checkInKey : checkInDate.toString(),
+                                        checkOutKey : checkOutDate.toString(),
                                       };
                                       print("vikas 0=====>${parms.toString()}");
                                     }

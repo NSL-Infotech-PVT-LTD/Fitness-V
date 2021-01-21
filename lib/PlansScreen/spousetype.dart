@@ -226,8 +226,7 @@ class _SpouseTypeState extends State<SpouseType> {
               isSingle: false,
               isCityTrue: true,
               isEmailError: errorMessage1.contains("email has") ? true : false,
-              profileImage: myResult != null && myResult.length > 1
-                  ? myResult[1]
+              profileImage: myResult != null && myResult.length > 1 ? myResult[1]
                   : null)),
     );
 
@@ -533,15 +532,11 @@ class _SpouseTypeState extends State<SpouseType> {
                                     _navigateAndDisplaySelection(
                                         ind: index,
                                         context: context,
-                                        chFilledData: result[index] != null &&
-                                                result[index].isNotEmpty
-                                            ? result[index]
-                                            : null,
+                                        chFilledData: result[index] != null && result[index].isNotEmpty ? result[index] : null,
                                         formType: '',
                                         // rolePanId: rolePlanId.toString(),
                                         // roleSId: roleId.toString());
-                                        rolePanId:
-                                            widget.rolePlanIds.toString(),
+                                        rolePanId: widget.rolePlanIds.toString(),
                                         roleSId: widget.roleIds.toString());
                                     // }
                                   },
@@ -563,10 +558,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
-                                              stoData[index] != ''
-                                                  ? stoData[index]
-                                                              ['memberIndex'] ==
-                                                          index.toString()
+                                              stoData[index] != '' ? stoData[index]
+                                                              ['memberIndex'] == index.toString()
                                                       ? 'View Details'
                                                       : 'Complete details'
                                                   : 'Complete details',

@@ -58,6 +58,8 @@ String trainerId = "trainer_id";
 String SEARCH = "search";
 String LIMIT = "limit";
 String PAGE = "page";
+String checkInKey = "check_in";
+String checkOutKey = "check_out";
 
 //signup keys
 String NAME = "name";

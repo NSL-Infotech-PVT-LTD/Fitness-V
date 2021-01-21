@@ -100,7 +100,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
           toolbarHeight: mediaHeight * 0.08,
           backgroundColor: Colors.white,
           titleSpacing: -10,
-          leading: Icon(Icons.arrow_back_ios_sharp),
+          leading: InkWell(onTap: (){Navigator.pop(context);  },child: Icon(Icons.arrow_back_ios_sharp)),
           title: InkWell(
             child: Text("Back"),
             onTap: () {
@@ -122,7 +122,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
             ),
           ],
         ),
-        body: Padding(
+        body: SingleChildScrollView(child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
@@ -146,7 +146,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                             child: Text(
                               "We are proud to offer you fully certified, professional instructors, who are experts in many ways to help you feel your best.",
                               style:
-                                  TextStyle(fontSize: 12, color: Colors.grey),
+                              TextStyle(fontSize: 12, color: Colors.grey),
                             )),
                       ],
                     ),
@@ -156,96 +156,137 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
               SizedBox(height: 20),
               isLoading
                   ? Padding(
-                      padding: EdgeInsets.only(top: mediaHeight * 0.20),
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.black,
-                      ),
-                    )
-                  : ListView.builder(
-                    itemExtent: 100.0,
-                      itemCount: users.length,
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (context, i) {
-                        return ListTile(
-                            leading: users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo_black.png') :
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: 80,
-                                minHeight: 100,
-                              ),
-                              child: FadeInImage.assetNetwork(
-                                placeholder: baseImageAssetsUrl + 'logo_black.png',
-                                image: BASE_URL +
-                                  'uploads/trainer-user/' + users[i]['image'],
-                                  height: 200,
-                                 fit: BoxFit.cover,
-                              ),
-                            ),
+                padding: EdgeInsets.only(top: mediaHeight * 0.20),
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.black,
+                ),
+              )
+                  :
 
-                            trailing: Align(
-                              widthFactor: 0.0,// for width between trailing and leading
-                              child: _myRadioButton(
-                                title: "",
-                                value: i,
-                                onChanged: (newValue) => setState(() {
-                                  myBottom(i);
-                                  _groupValue = newValue;
-                                }),
-                              ),
+              ListView.builder(
+                  itemExtent: 130.0,
+                  itemCount: users.length,
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  itemBuilder: (context, i) {
+                    return
+                      Padding(padding:EdgeInsets.only(bottom:12),child: ListTile(
+                          tileColor: Colors.grey.shade200,
+                          leading: users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo_black.png') :
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: 50,
+                              minHeight: 100,
                             ),
-                            title: Row(
-                              children: [
-                                Text(users[i]["first_name"]),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.03),
-                                InkWell(
-                                  child: Text(
-                                    "View Profile",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
+                            child: FadeInImage.assetNetwork(
+                              placeholder: baseImageAssetsUrl + 'logo_black.png',
+                              image: BASE_URL +
+                                  'uploads/trainer-user/' + users[i]['image'],
+                              height: 200,
+                                fit: BoxFit.contain,
+                            ),
+                          ),
+
+                          trailing: Align(
+                            widthFactor: 1.0,// for width between trailing and leading
+                            child: _myRadioButton(
+                              title: "",
+                              value: i,
+                              onChanged: (newValue) => setState(() {
+                                myBottom(i);
+                                setState(() {
+                                  _groupValue = newValue;
+                                });
+
+                              }),
+                            ),
+                          ),
+                          title: Row(
+                            children: [
+                              Text(users[i]["first_name"],style: TextStyle(fontSize: 15),),
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.03),
+
+                              // InkWell(
+                              //    child: Text(
+                              //      "View Profile",
+                              //      style: TextStyle(
+                              //          color: Colors.white,
+                              //          fontWeight: FontWeight.bold),
+                              //    ),
+                              //    onTap: () => Navigator.push(
+                              //      context,
+                              //      MaterialPageRoute(
+                              //          builder: (context) => TrainerDetail(
+                              //              fromForm: true,
+                              //              id: users[i]["id"])),
+                              //    ),
+                              //  ),
+                            ],
+                          ),
+                          // trailing: Radio(
+                          //   value: users[i]["id"],
+                          //   groupValue: _character,
+                          //   onChanged: (value) {
+                          //     setState(() {
+                          //       _character = value;
+                          //     });
+                          //   },
+                          // ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(users[i]["expirence"] + " years of experience",style: TextStyle(fontSize: 13),),
+                              Text("${users[i]["booking_cnt"]} Trainees (${users[i]["booking_reviewed_cnt"]}" + " Reviews)"),
+                              Padding(
+                                padding: const EdgeInsets.only(top:6.0),
+                                child: Container(
+
+                                  width: MediaQuery.of(context).size.width *
+                                      0.27,
+                                  height: MediaQuery.of(context).size.height *
+                                      0.03,
+
+                                  child:  RaisedButton(
+                                    color: Colors.grey.shade500
+                                    ,onPressed: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => TrainerDetail(
+                                              fromForm: true,
+                                              id: users[i]["id"])),
+                                    );
+                                  }, shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(07.0),
+                                    // side: BorderSide(color: Colors.grey)
                                   ),
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TrainerDetail(
-                                            fromForm: true,
-                                            id: users[i]["id"])),
+                                    child: Text(
+                                      "View Profile",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                            // trailing: Radio(
-                            //   value: users[i]["id"],
-                            //   groupValue: _character,
-                            //   onChanged: (value) {
-                            //     setState(() {
-                            //       _character = value;
-                            //     });
-                            //   },
-                            // ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(users[i]["expirence"] +
-                                    " years of experience"),
-                                Text(
-                                    "${users[i]["booking_cnt"]} Trainees (${users[i]["booking_reviewed_cnt"]}" +
-                                        " Reviews)"),
-                              ],
-                            ),
-                            onTap: () {
-                              myBottom(i);
-                            }
-                            //   trailing: Icon(Icons.more_vert),
-                            );
-                      }),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            myBottom(i);
+                          }
+                        //   trailing: Icon(Icons.more_vert),
+                      ));
+
+                  }),
             ],
           ),
-        ));
+        ),),
+
+        );
   }
 
   myBottom(index) {
@@ -481,6 +522,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
 
   Widget _myRadioButton({String title, int value, Function onChanged}) {
     return Radio(
+      activeColor: Colors.black,
       value: value,
       groupValue: _groupValue,
       onChanged: onChanged,

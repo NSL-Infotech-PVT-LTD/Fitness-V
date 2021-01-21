@@ -1,4 +1,4 @@
-const signup = 'Sign up';
+const signup = 'Save Details';
 const login = 'Log in';
 const chooseYourWay = 'Choose your way to register';
 const memeber = 'Member';
@@ -43,6 +43,8 @@ const female = 'Female';
 const mobile = 'Mobile Number *';
 const address = 'Address *';
 const birthDate = 'Birth Date *';
+const checkIn = 'Check In*';
+const checkOutt = 'Check Out*';
 const email = 'Email';
 const married = 'married';
 const single = 'single';

@@ -54,7 +54,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                   Image.asset(
                     'assets/images/voltLogoBanner.png',
                     width: SizeConfig.screenWidth,
-                    height: 234,
+                    height: 300,
                     fit: BoxFit.cover,
                   ),
 //                  Positioned(
@@ -70,22 +70,22 @@ class ChooseWayState extends State<ChooseYourWay> {
 //                  )
                 ],
               ),
-              Container(
-                height: 72,
-                width: SizeConfig.screenWidth,
-                color: Colors.black,
-                padding: EdgeInsets.only(left: padding25),
-                child: Align(
-                  child: Text(
-                    chooseYourWay,
-                    style: TextStyle(
-                      color: CColor.WHITE,
-                      fontSize: textSize18,
-                    ),
-                  ),
-                  alignment: Alignment.centerLeft,
-                ),
-              ),
+              // Container(
+              //   height: 72,
+              //   width: SizeConfig.screenWidth,
+              //   color: Colors.black,
+              //   padding: EdgeInsets.only(left: padding25),
+              //   child: Align(
+              //     child: Text(
+              //       chooseYourWay ,
+              //       style: TextStyle(
+              //         color: CColor.WHITE,
+              //         fontSize: textSize18,
+              //       ),
+              //     ),
+              //     alignment: Alignment.centerLeft,
+              //   ),
+              // ),
               DefaultTabController(
                 //initialIndex: widget.isGuest?1:0,
 
