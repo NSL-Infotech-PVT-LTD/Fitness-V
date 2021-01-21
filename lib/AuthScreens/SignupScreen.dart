@@ -989,7 +989,7 @@ class SignupState extends State<SignupScreen> {
                                       color: Color(0xFFDFDFDF),
                                       child: Image(
                                         image: AssetImage(
-                                            baseImageUrl + 'calendar.png'),
+                                            baseImageUrl + 'calendar.png'),     
                                       ),
                                     ),
                                   ),
