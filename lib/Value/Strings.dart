@@ -1,4 +1,4 @@
-const signup = 'Save Details';
+const signup = 'Register';
 const login = 'Log in';
 const chooseYourWay = 'Choose your way to register';
 const memeber = 'Member';

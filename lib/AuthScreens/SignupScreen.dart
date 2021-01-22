@@ -1163,7 +1163,7 @@ class SignupState extends State<SignupScreen> {
                             child: Column(children: [
                               SizedBox(height: 35),
                               Divider(),
-                              Align(child: Text("Optional",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,),
+                              Align(child: Text("Choose Trainer (Optional)",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey.shade700,fontSize: 12),),alignment: Alignment.centerLeft,),
                               SizedBox(height: 12),
                               Container(
                                 height: MediaQuery.of(context).size.height * 0.06,
@@ -1583,7 +1583,7 @@ class SignupState extends State<SignupScreen> {
                                   borderRadius:
                                   BorderRadius.circular(button_radius)),
                               child: Text(
-                                widget.isSingle ? signup : 'Save Details',
+                                widget.isSingle ? signup : 'Register',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

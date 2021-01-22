@@ -374,28 +374,27 @@ class GymMemberState extends State<GymMemberPlan> {
                               child:Column(children: <Widget>[
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                                  child: Row(
-                                    children: <Widget>[
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      setState(() {
 
-                                            slider = _current;
+                                        slider = _current;
 
-                                            currentSelectedIndex = index;
+                                        currentSelectedIndex = index;
 
-                                            print(currentSelectedIndex);
-                                            print(plans[index].planId);
-                                            print(plans[index].rolePlanId);
-                                            currentSelectedIndex = index;
-                                            plan_index = index;
-                                            planIdS = plans[index].planId;
-                                            rolePlanIdS = plans[index].rolePlanId;
-                                          });
+                                        print(currentSelectedIndex);
+                                        print(plans[index].planId);
+                                        print(plans[index].rolePlanId);
+                                        currentSelectedIndex = index;
+                                        plan_index = index;
+                                        planIdS = plans[index].planId;
+                                        rolePlanIdS = plans[index].rolePlanId;
+                                      });
 
-
-                                        },
-                                        child: Container(
+                                    },
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
                                           height: 20.0,
                                           width: 20.0,
                                           child:index == currentSelectedIndex && _current == slider? ScaleAnimatedWidget(
@@ -403,26 +402,26 @@ class GymMemberState extends State<GymMemberPlan> {
                                               enabled:index == currentSelectedIndex && _current == slider,
                                               child: SvgPicture.asset('assets/icons/icon_selected.svg')) : SvgPicture.asset('assets/icons/icon_unselected.svg'),
                                         ),
-                                      ),
-                                      SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
-                                      Text(
-                                        plans[index].fee_type == "quarterly"
-                                            ? "3 months"
-                                            : plans[index].fee_type == "half_yearly"
-                                            ? "6 months"
-                                            : plans[index].fee_type == "yearly"
-                                            ? "Annual"
-                                            : plans[index].fee_type,
-                                        style: TextStyle(
-                                            fontSize: textSize12, fontWeight: FontWeight.normal),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        plans[index].fee + ' AED',
-                                        style:
-                                        TextStyle(fontSize: textSize12, fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                        SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
+                                        Text(
+                                          plans[index].fee_type == "quarterly"
+                                              ? "3 months"
+                                              : plans[index].fee_type == "half_yearly"
+                                              ? "6 months"
+                                              : plans[index].fee_type == "yearly"
+                                              ? "Annual"
+                                              : plans[index].fee_type,
+                                          style: TextStyle(
+                                              fontSize: textSize12, fontWeight: FontWeight.normal),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          plans[index].fee + ' AED',
+                                          style:
+                                          TextStyle(fontSize: textSize12, fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 myDivider()
@@ -669,26 +668,19 @@ class _CustomPlansDetailsState extends State<CustomPlansDetails> {
     return Column(children: <Widget>[
       Padding(
         padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-        child: Row(
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                setState(() {
+        child: GestureDetector(
+          onTap: (){
+            setState(() {
+              index = widget.currentIndex;
 
-                  index = widget.currentIndex;
-
-                  print(widget.currentIndex);
-                  print(widget.items.planId);
-                  print(widget.items.rolePlanId);
-                  // currentSelectedIndex = index;
-                  // plan_index = index;
-                  // planIdS = plans[index].planId;
-                  // rolePlanIdS = plans[index].rolePlanId;
-                });
-
-
-              },
-              child: Container(
+              print(widget.currentIndex);
+              print(widget.items.planId);
+              print(widget.items.rolePlanId);
+            });
+          },
+          child: Row(
+            children: <Widget>[
+              Container(
                 height: 20.0,
                 width: 20.0,
                 child:index == widget.currentIndex ? ScaleAnimatedWidget(
@@ -696,26 +688,26 @@ class _CustomPlansDetailsState extends State<CustomPlansDetails> {
                     enabled:index == widget.currentIndex?true:false,
                     child: SvgPicture.asset('assets/icons/icon_selected.svg')) : SvgPicture.asset('assets/icons/icon_unselected.svg'),
               ),
-            ),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
-            Text(
-              widget.items.fee_type == "quarterly"
-                  ? "3 months"
-                  : widget.items.fee_type == "half_yearly"
-                  ? "6 months"
-                  : widget.items.fee_type == "yearly"
-                  ? "Annual"
-                  : widget.items.fee_type,
-              style: TextStyle(
-                  fontSize: textSize12, fontWeight: FontWeight.normal),
-            ),
-            Spacer(),
-            Text(
-              widget.items.fee + ' AED',
-              style:
-              TextStyle(fontSize: textSize12, fontWeight: FontWeight.bold),
-            ),
-          ],
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
+              Text(
+                widget.items.fee_type == "quarterly"
+                    ? "3 months"
+                    : widget.items.fee_type == "half_yearly"
+                    ? "6 months"
+                    : widget.items.fee_type == "yearly"
+                    ? "Annual"
+                    : widget.items.fee_type,
+                style: TextStyle(
+                    fontSize: textSize12, fontWeight: FontWeight.normal),
+              ),
+              Spacer(),
+              Text(
+                widget.items.fee + ' AED',
+                style:
+                TextStyle(fontSize: textSize12, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
       myDivider()

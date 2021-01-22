@@ -147,7 +147,7 @@ class LoginState extends State<LoginScreen> {
                             //       fontFamily: open_light),
                             // ),
                             SizedBox(
-                              height: 100,
+                              height: 40,
                             ),
                             Text(
                               existingAcc,

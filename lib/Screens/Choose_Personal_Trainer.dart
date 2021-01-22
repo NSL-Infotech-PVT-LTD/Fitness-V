@@ -142,7 +142,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                               fontFamily: "fonts/regular.ttf", fontSize: 22),
                         ),
                         ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 300),
+                            constraints: BoxConstraints(maxWidth: SizeConfig.screenWidth * 0.80),
                             child: Text(
                               "We are proud to offer you fully certified, professional instructors, who are experts in many ways to help you feel your best.",
                               style:
@@ -164,122 +164,124 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                   :
 
               ListView.builder(
-                  itemExtent: 130.0,
+                //  itemExtent: 150.0,
                   itemCount: users.length,
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
                   itemBuilder: (context, i) {
                     return
-                      Padding(padding:EdgeInsets.only(bottom:12),child: ListTile(
-                          tileColor: Colors.grey.shade200,
-                          leading: users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo.png') :
-                          ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minWidth: 50,
-                              minHeight: 100,
-                            ),
-                            child: FadeInImage.assetNetwork(
-                              placeholder: baseImageAssetsUrl + 'logo.png',
-                              image: BASE_URL +
-                                  'uploads/trainer-user/' + users[i]['image'],
-                              height: 200,
-                                fit: BoxFit.contain,
-                            ),
+                      Padding(padding:EdgeInsets.only(bottom:12),child:
+
+                      GestureDetector(
+                        onTap: (){
+                          myBottom(i);
+                          setState(() {
+                            _groupValue = i;
+                          });
+
+                          },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
                           ),
 
-                          trailing: Align(
-                            widthFactor: 1.0,// for width between trailing and leading
-                            child: _myRadioButton(
-                              title: "",
-                              value: i,
-                              onChanged: (newValue) => setState(() {
-                                myBottom(i);
-                                setState(() {
-                                  _groupValue = newValue;
-                                });
-
-                              }),
-                            ),
-                          ),
-                          title: Row(
-                            children: [
-                              Text(users[i]["first_name"],style: TextStyle(fontSize: 15),),
-                              SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.03),
-
-                              // InkWell(
-                              //    child: Text(
-                              //      "View Profile",
-                              //      style: TextStyle(
-                              //          color: Colors.white,
-                              //          fontWeight: FontWeight.bold),
-                              //    ),
-                              //    onTap: () => Navigator.push(
-                              //      context,
-                              //      MaterialPageRoute(
-                              //          builder: (context) => TrainerDetail(
-                              //              fromForm: true,
-                              //              id: users[i]["id"])),
-                              //    ),
-                              //  ),
-                            ],
-                          ),
-                          // trailing: Radio(
-                          //   value: users[i]["id"],
-                          //   groupValue: _character,
-                          //   onChanged: (value) {
-                          //     setState(() {
-                          //       _character = value;
-                          //     });
-                          //   },
-                          // ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(users[i]["expirence"] + " years of experience",style: TextStyle(fontSize: 13),),
-                              Text("${users[i]["booking_cnt"]} Trainees (${users[i]["booking_reviewed_cnt"]}" + " Reviews)"),
-                              Padding(
-                                padding: const EdgeInsets.only(top:6.0),
-                                child: Container(
-
-                                  width: MediaQuery.of(context).size.width *
-                                      0.27,
-                                  height: MediaQuery.of(context).size.height *
-                                      0.03,
-
-                                  child:  RaisedButton(
-                                    color: Colors.grey.shade500
-                                    ,onPressed: (){
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => TrainerDetail(
-                                              fromForm: true,
-                                              id: users[i]["id"])),
-                                    );
-                                  }, shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(07.0),
-                                    // side: BorderSide(color: Colors.grey)
-                                  ),
-                                    child: Text(
-                                      "View Profile",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
+                        //  height: SizeConfig.screenHeight * 0.20,
+                          width: SizeConfig.screenWidth * 0.90,
+                          child: Flex(
+                            direction: Axis.vertical,
+                            children:[  Row(children: [
+                              users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo.png',height:80 ,) :
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minWidth: 50,
+                                      minHeight: 50,
+                                    ),
+                                    child: FadeInImage.assetNetwork(
+                                      placeholder: baseImageAssetsUrl + 'logo.png',
+                                      placeholderCacheHeight: 80,
+                                      image: BASE_URL +
+                                          'uploads/trainer-user/' + users[i]['image'],
+                                      height: 120,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
+                              Expanded( child:  Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: SizeConfig.screenHeight * 0.02),
+                                    Text(users[i]["first_name"],style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                                    SizedBox(height: SizeConfig.screenHeight * 0.01),
+                                    Text(users[i]["expirence"] + " years of experience",style: TextStyle(fontSize: 13),),
+                                    SizedBox(height: SizeConfig.screenHeight * 0.01),
+                                    Text("${users[i]["booking_cnt"]} Trainees (${users[i]["booking_reviewed_cnt"]}" + " Reviews)"),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top:8.0),
+                                      child: Container(
+
+                                        width: MediaQuery.of(context).size.width *
+                                            0.27,
+                                        height: MediaQuery.of(context).size.height *
+                                            0.05,
+
+                                        child:  RaisedButton(
+                                          color: Colors.grey.shade500
+                                          ,onPressed: (){
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => TrainerDetail(
+                                                    fromForm: true,
+                                                    id: users[i]["id"])),
+                                          );
+                                        }, shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(07.0),
+                                          // side: BorderSide(color: Colors.grey)
+                                        ),
+                                          child: Text(
+                                            "View Profile",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  //     ),
+                                  //     onTap: () {
+                                  //       myBottom(i);
+                                  //     }
+                                  //   //   trailing: Icon(Icons.more_vert),
+                                  // ),
+                                ),
+                              ),),
+                              SizedBox(width: SizeConfig.screenWidth * 0.04),
+                              _myRadioButton(
+                                title: "",
+                                value: i,
+                                onChanged: (newValue) => setState(() {
+                                  myBottom(i);
+                                  _groupValue = newValue;
+
+                                }),
+                              )
+                            ],),]
+
                           ),
-                          onTap: () {
-                            myBottom(i);
-                          }
-                        //   trailing: Icon(Icons.more_vert),
-                      ));
+                         // ],),
+                        ),
+                      ),
+                      );
 
                   }),
             ],

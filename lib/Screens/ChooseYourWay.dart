@@ -35,26 +35,33 @@ class ChooseWayState extends State<ChooseYourWay> {
     getRoleApi(context);
     super.initState();
   }
+  Future<bool> _willPopCallback() async {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+    return true; // return true if the route to be popped
+  }
+
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: CColor.WHITE,
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: topMargin),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Image.asset(
-                    'assets/images/voltLogoBanner.png',
-                    width: SizeConfig.screenWidth,
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
+    return WillPopScope(
+      onWillPop: _willPopCallback,
+      child: Scaffold(
+        backgroundColor: CColor.WHITE,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(top: topMargin),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/voltLogoBanner.png',
+                      width: SizeConfig.screenWidth,
+                      height: 300,
+                      fit: BoxFit.cover,
+                    ),
 //                  Positioned(
 //                    top: 0,
 //                    bottom: 0,
@@ -66,157 +73,157 @@ class ChooseWayState extends State<ChooseYourWay> {
 //                      height: 76,
 //                    ),
 //                  )
-                ],
-              ),
-              // Container(
-              //   height: 72,
-              //   width: SizeConfig.screenWidth,
-              //   color: Colors.black,
-              //   padding: EdgeInsets.only(left: padding25),
-              //   child: Align(
-              //     child: Text(
-              //       chooseYourWay ,
-              //       style: TextStyle(
-              //         color: CColor.WHITE,
-              //         fontSize: textSize18,
-              //       ),
-              //     ),
-              //     alignment: Alignment.centerLeft,
-              //   ),
-              // ),
-              DefaultTabController(
-                //initialIndex: widget.isGuest?1:0,
-
-                  length: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Card(
-                        elevation: 5,
-                        color: CColor.WHITE,
-                        child: Container(
-                          height: 60,
-                          padding: EdgeInsets.only(left: padding15),
-                          width: SizeConfig.screenWidth,
-                          child: TabBar(
-                            tabs: [
-                              !widget.isGuest?Tab(
-                                  icon: Text(
-                                memeber,
-                                style: TextStyle(fontSize: textSize16),
-                              )):
-                              Tab(
-                                  icon: Text(guest, style: TextStyle(fontSize: textSize16))),
-                            ],
-                            isScrollable: true,
-                            indicatorColor: Colors.black,
-                            labelColor: Color(0xFF474747),
-                            unselectedLabelColor: Color(0xFFC1C1C1),
+                  ],
+                ),
+                // Container(
+                //   height: 72,
+                //   width: SizeConfig.screenWidth,
+                //   color: Colors.black,
+                //   padding: EdgeInsets.only(left: padding25),
+                //   child: Align(
+                //     child: Text(
+                //       chooseYourWay ,
+                //       style: TextStyle(
+                //         color: CColor.WHITE,
+                //         fontSize: textSize18,
+                //       ),
+                //     ),
+                //     alignment: Alignment.centerLeft,
+                //   ),
+                // ),
+                DefaultTabController(
+                  //initialIndex: widget.isGuest?1:0,
+                    length: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Card(
+                          elevation: 5,
+                          color: CColor.WHITE,
+                          child: Container(
+                            height: 60,
+                            padding: EdgeInsets.only(left: padding15),
+                            width: SizeConfig.screenWidth,
+                            child: TabBar(
+                              tabs: [
+                                !widget.isGuest?Tab(
+                                    icon: Text(
+                                  memeber,
+                                  style: TextStyle(fontSize: textSize16),
+                                )):
+                                Tab(
+                                    icon: Text(guest, style: TextStyle(fontSize: textSize16))),
+                              ],
+                              isScrollable: true,
+                              indicatorColor: Colors.black,
+                              labelColor: Color(0xFF474747),
+                              unselectedLabelColor: Color(0xFFC1C1C1),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        height: 300,
-                        child: TabBarView(
-                          children: <Widget>[
-                            !widget.isGuest? Stack(
-                               children: [
-                                 Center(child: Image.asset('assets/images/watermark.png',color: Colors.grey.shade100)),
-                                 Column(
-                                   children: <Widget>[
-                                     GestureDetector(
-                                         onTap: () {
-                                           gym_list != null ? Navigator.push(context, SizeRoute(page: GymMemberPlan(response: gym_list,gymMembers: gymMember,))) : showMyDialog(context, 'Error!', "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");},
-                                         child: _CommonView('assets/images/gymMember.jpg', "Gym Member", "(Gym, Personal Training, Group Fitness and more)")),
+                        Container(
+                          height: 300,
+                          child: TabBarView(
+                            children: <Widget>[
+                              !widget.isGuest? Stack(
+                                 children: [
+                                   Center(child: Image.asset('assets/images/watermark.png',color: Colors.grey.shade100)),
+                                   Column(
+                                     children: <Widget>[
+                                       GestureDetector(
+                                           onTap: () {
+                                             gym_list != null ? Navigator.push(context, SizeRoute(page: GymMemberPlan(response: gym_list,gymMembers: gymMember,))) : showMyDialog(context, 'Error!', "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");},
+                                           child: _CommonView('assets/images/gymMember.jpg', "Gym Member", "(Gym, Personal Training, Group Fitness and more)")),
 
-                                     Divider(height: 2,),
+                                       Divider(height: 2,),
 
-                                     GestureDetector(
-                                         onTap: () {pool_and_beach_list != null? Navigator.push(context,SizeRoute(page: GymMemberPlan(response:pool_and_beach_list,gymMembers:pool_and_beach,)))
-                                             : showMyDialog(context, 'Error!',"Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");},
-                                         child: _CommonView('assets/images/poolBeach.jpg', "Pool & Beach", "(Only Gym Members)")),
-                                     Divider(
-                                       height: 2,
-                                     ),
-                                   ],
-                                 ),
-                               ],
+                                       GestureDetector(
+                                           onTap: () {pool_and_beach_list != null? Navigator.push(context,SizeRoute(page: GymMemberPlan(response:pool_and_beach_list,gymMembers:pool_and_beach,)))
+                                               : showMyDialog(context, 'Error!',"Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");},
+                                           child: _CommonView('assets/images/poolBeach.jpg', "Pool & Beach", "(Only Gym Members)")),
+                                       Divider(
+                                         height: 2,
+                                       ),
+                                     ],
+                                   ),
+                                 ],
 
-                            ):
-                            Stack(
-                children: [
-                  Center(child: Image.asset('assets/images/watermark.png',color: Colors.grey.shade100)),
-                  Column(
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          guest_list != null
-                              ? Navigator.push(
-                              context,
-                              SizeRoute(
-                                  page: SignupScreen(
-                                    response: guest_list,
-                                    type: 'guest',
-                                    formType: "",
-                                    isCityTrue: true,
-                                    isSingle: true,
-                                    rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
-                                  )))
-                              : showMyDialog(context, 'Error!',
-                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
-                        },
-                        child: _CommonView('assets/images/GUEST.jpg', "Guest",
-                            "")),
-                    Divider(
-                      height: 2,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          fairMont_list != null
-                              ? Navigator.push(
-                              context,
-                              SizeRoute(
-                                  page: SignupScreen(
-                                      response: fairMont_list,
-                                      type: 'fairMont',
+                              ):
+                              Stack(
+                  children: [
+                    Center(child: Image.asset('assets/images/watermark.png',color: Colors.grey.shade100)),
+                    Column(
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {
+                            guest_list != null
+                                ? Navigator.push(
+                                context,
+                                SizeRoute(
+                                    page: SignupScreen(
+                                      response: guest_list,
+                                      type: 'guest',
                                       formType: "",
+                                      isCityTrue: true,
                                       isSingle: true,
                                       rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
-                                      isCityTrue: true)))
-                              : showMyDialog(context, 'Error!',
-                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
-                        },
-                        child: _CommonView('assets/images/hotelGuest.jpg', fairmontHotel,
-                            "")),
-                    Divider(
-                      height: 2,
-                    ),
-                  ],
-                )],
-                            )
-                          ],
-                        ),
-                      )
+                                    )))
+                                : showMyDialog(context, 'Error!',
+                                "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
+                          },
+                          child: _CommonView('assets/images/GUEST.jpg', "Guest",
+                              "")),
+                      Divider(
+                        height: 2,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            fairMont_list != null
+                                ? Navigator.push(
+                                context,
+                                SizeRoute(
+                                    page: SignupScreen(
+                                        response: fairMont_list,
+                                        type: 'fairMont',
+                                        formType: "",
+                                        isSingle: true,
+                                        rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
+                                        isCityTrue: true)))
+                                : showMyDialog(context, 'Error!',
+                                "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
+                          },
+                          child: _CommonView('assets/images/hotelGuest.jpg', fairmontHotel,
+                              "")),
+                      Divider(
+                        height: 2,
+                      ),
                     ],
-                  )),
-              Center(
-                  child: Text(
-                'Already Registered?',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
-              )),
-              Center(
-                child: FlatButton(
-                    onPressed: () {
-                      Navigator.push(context, ScaleRoute(page: LoginScreen()));
-                    },
-                    child: Text(
-                      login,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  )],
+                              )
+                            ],
+                          ),
+                        )
+                      ],
                     )),
-              )
-            ],
+                Center(
+                    child: Text(
+                  'Already Registered?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15),
+                )),
+                Center(
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.push(context, ScaleRoute(page: LoginScreen()));
+                      },
+                      child: Text(
+                        login,
+                        style:
+                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      )),
+                )
+              ],
+            ),
           ),
         ),
       ),
