@@ -155,7 +155,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                             : FadeInImage.assetNetwork(
                                                 placeholder:
                                                     baseImageAssetsUrl +
-                                                        'logo_black.png',
+                                                        'logo.png',
                                                 image: BASE_URL +
                                                     _roleUrl +
                                                     widget.image,
@@ -202,7 +202,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                       top: 125,
                                       left: 55,
                                       child: Text(
-                                        'Training Period',
+                                        'Booked on',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 8,

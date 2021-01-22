@@ -207,7 +207,7 @@ class EventDetailState extends State<EventDetail> {
                         )),
                   ),
                   _imageLink == null
-                      ? Image.asset(baseImageAssetsUrl + 'logo_black.png')
+                      ? Image.asset(baseImageAssetsUrl + 'logo.png')
                       : setImage(widget.status, _imageLink),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(25.0, 10, 8.0, 5),
@@ -309,14 +309,14 @@ class EventDetailState extends State<EventDetail> {
       ? ColorFiltered(
           colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
           child: FadeInImage.assetNetwork(
-            placeholder: baseImageAssetsUrl + 'logo_black.png',
+            placeholder: baseImageAssetsUrl + 'logo.png',
             image: BASE_URL + imageUrlEvent + imgLink,
             width: SizeConfig.screenWidth,
             fit: BoxFit.fill,
             height: SizeConfig.screenHeight * .35,
           ))
       : FadeInImage.assetNetwork(
-          placeholder: baseImageAssetsUrl + 'logo_black.png',
+          placeholder: baseImageAssetsUrl + 'logo.png',
           image: BASE_URL + imageUrlEvent + imgLink,
           fit: BoxFit.fill,
           width: SizeConfig.screenWidth,
@@ -324,7 +324,7 @@ class EventDetailState extends State<EventDetail> {
         );
 }
 // FadeInImage.assetNetwork(
-//      placeholder: baseImageAssetsUrl + 'logo_black.png',
+//      placeholder: baseImageAssetsUrl + 'logo.png',
 //      image: BASE_URL + roleUrl + imageLink,
 //      width: width,
 //      fit: BoxFit.cover,

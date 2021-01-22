@@ -157,7 +157,7 @@ class ProfileState extends State<ProfileScreen> {
                   child: Row(
                     children: <Widget>[
                       Image.asset(
-                        baseImageAssetsUrl + 'logo_black.png',
+                        baseImageAssetsUrl + 'logo.png',
                         width: 60,
                         height: 30,
                       ),
@@ -468,7 +468,7 @@ class ProfileState extends State<ProfileScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Image.asset(
-                      baseImageAssetsUrl + 'logo_black.png',
+                      baseImageAssetsUrl + 'logo.png',
                       height: 60,
                       color: Color(0xff8B8B8B),
                       width: 100,

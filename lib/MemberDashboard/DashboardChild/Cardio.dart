@@ -71,7 +71,7 @@ class _CardioState extends State<Cardio> {
       if (checkList.length > 0) {
         return checkList[0]['image'] == null
             ? Image.asset(
-                baseImageAssetsUrl + 'logo_black.png',
+                baseImageAssetsUrl + 'logo.png',
                 height: 200,
                 width: MediaQuery.of(context).size.width * .43,
               )
@@ -184,7 +184,7 @@ class _CardioState extends State<Cardio> {
                                       200,
                                       MediaQuery.of(context).size.width * .43)
                                   : Image.asset(
-                                      baseImageAssetsUrl + 'logo_black.png',
+                                      baseImageAssetsUrl + 'logo.png',
                                       height: 200,
                                       width: MediaQuery.of(context).size.width *
                                           .43,
@@ -237,7 +237,7 @@ class _CardioState extends State<Cardio> {
                                       200,
                                       MediaQuery.of(context).size.width * .43)
                                   : Image.asset(
-                                      baseImageAssetsUrl + 'logo_black.png',
+                                      baseImageAssetsUrl + 'logo.png',
                                       height: 200,
                                       width: MediaQuery.of(context).size.width *
                                           .43,
@@ -358,12 +358,12 @@ class RecomendedTrainer extends StatelessWidget {
             children: <Widget>[
               trainerClass.imgLink == null
                   ? Image.asset(
-                      baseImageAssetsUrl + 'logo_black.png',
+                      baseImageAssetsUrl + 'logo.png',
                       width: 125,
                       height: 110,
                     )
                   : FadeInImage.assetNetwork(
-                      placeholder: baseImageAssetsUrl + 'logo_black.png',
+                      placeholder: baseImageAssetsUrl + 'logo.png',
                       image: BASE_URL +
                           'uploads/trainer-user/' +
                           trainerClass.imgLink,

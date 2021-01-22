@@ -172,14 +172,14 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                     return
                       Padding(padding:EdgeInsets.only(bottom:12),child: ListTile(
                           tileColor: Colors.grey.shade200,
-                          leading: users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo_black.png') :
+                          leading: users[i]['image'] == null ? Image.asset(baseImageAssetsUrl + 'logo.png') :
                           ConstrainedBox(
                             constraints: BoxConstraints(
                               minWidth: 50,
                               minHeight: 100,
                             ),
                             child: FadeInImage.assetNetwork(
-                              placeholder: baseImageAssetsUrl + 'logo_black.png',
+                              placeholder: baseImageAssetsUrl + 'logo.png',
                               image: BASE_URL +
                                   'uploads/trainer-user/' + users[i]['image'],
                               height: 200,

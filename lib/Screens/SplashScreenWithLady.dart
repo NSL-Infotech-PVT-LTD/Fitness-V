@@ -79,7 +79,7 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
                 left: 0,
                 right: 0,
                 child: Image.asset(
-                  'assets/images/logo_black.png',
+                  'assets/images/logo.png',
                   height: 112,
                   width: 192,
                 ),

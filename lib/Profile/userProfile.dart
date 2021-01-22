@@ -250,7 +250,7 @@ class UserProfileState extends State<UserProfile> {
               child: Row(
                 children: <Widget>[
                   Image.asset(
-                    baseImageAssetsUrl + 'logo_black.png',
+                    baseImageAssetsUrl + 'logo.png',
                     width: 60,
                     height: 30,
                   ),

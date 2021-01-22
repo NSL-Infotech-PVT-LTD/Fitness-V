@@ -231,7 +231,7 @@ Widget whitePlaceHolder(
 Widget blackPlaceHolder(
         String roleUrl, String imageLink, double height, double width) =>
     FadeInImage.assetNetwork(
-      placeholder: baseImageAssetsUrl + 'logo_black.png',
+      placeholder: baseImageAssetsUrl + 'logo.png',
       image: BASE_URL + roleUrl + imageLink,
       width: width,
       fit: BoxFit.cover,

@@ -110,7 +110,7 @@ class SignupState extends State<SignupScreen> {
   var checkOutViewdate;
   var checkInDate;
   var checkOutDate;
-  DateTime initCheckIn;
+  DateTime initCheckIn = DateTime.now();
   var myDate, sendDate;
   var formatter = new DateFormat("dd/MM/yyyy");
   var sendDateFormat = new DateFormat("yyyy-MM-dd");
@@ -138,72 +138,7 @@ class SignupState extends State<SignupScreen> {
       myField = newValue;
     });
   }
-  Future<DateTime> checkOut() {
-    return showCupertinoModalPopup(
-        context: context,
-        builder: (context) {
-          return CupertinoActionSheet(actions: <Widget>[
-            CupertinoActionSheetAction(
-              child: Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: Text(
-                      "Done",
-                      style: TextStyle(color: Colors.black87),
-                    ),
-                  )),
-              isDefaultAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {
-                  if (myDate != null) {
-                    checkOutDate = sendDateFormat.format(myDate);
-                    checkOutViewdate = formatter.format(myDate);
 
-                    //    print("check In + check out " + checkInDate + checkOutDate);
-                  }
-                });
-              },
-            ),
-            Container(
-              height: 300.0,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                use24hFormat: true,
-                minimumDate: DateTime.now(),
-
-            //    maximumDate: new DateTime(2019, 12, 30),
-                minimumYear: DateTime.now().year,
-                maximumYear:DateTime.now().year,
-                minuteInterval: 1,
-                mode: CupertinoDatePickerMode.date,
-                initialDateTime: DateTime.now(),
-                backgroundColor: Colors.white,
-                onDateTimeChanged: (dateTime) {
-                  myDate = dateTime;
-                  // print("$myDate");
-//                setState(() {
-//                  if (dateTime != null) fromDate = formatter.format(dateTime);
-//                });
-                },
-              ),
-            ),
-          ]);
-        });
-
-//    return showDatePicker(
-//        context: context,
-//        initialDate: DateTime(2019),
-//        firstDate: DateTime(1980),
-//        lastDate: DateTime(2020),
-//        builder: (BuildContext context, Widget child) {
-//          return Theme(
-//            data: ThemeData.fallback(),
-//            child: child,
-//          );
-//        });
-  }
   Future<DateTime> checkIN() {
     return showCupertinoModalPopup(
         context: context,
@@ -246,8 +181,77 @@ class SignupState extends State<SignupScreen> {
                 initialDateTime: DateTime.now(),
                 backgroundColor: Colors.white,
                 onDateTimeChanged: (dateTime) {
+
+                  setState(() {
+                    myDate = dateTime;
+                    initCheckIn = dateTime;
+                  });
+
+                  // print("$myDate");
+//                setState(() {
+//                  if (dateTime != null) fromDate = formatter.format(dateTime);
+//                });
+                },
+              ),
+            ),
+          ]);
+        });
+
+//    return showDatePicker(
+//        context: context,
+//        initialDate: DateTime(2019),
+//        firstDate: DateTime(1980),
+//        lastDate: DateTime(2020),
+//        builder: (BuildContext context, Widget child) {
+//          return Theme(
+//            data: ThemeData.fallback(),
+//            child: child,
+//          );
+//        });
+  }
+  Future<DateTime> checkOut() {
+    return showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return CupertinoActionSheet(actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: Text(
+                      "Done",
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                  )),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  if (myDate != null) {
+                    checkOutDate = sendDateFormat.format(myDate);
+                    checkOutViewdate = formatter.format(myDate);
+                    //    print("check In + check out " + checkInDate + checkOutDate);
+                  }
+                });
+              },
+            ),
+            Container(
+              height: 300.0,
+              color: Colors.white,
+              child: CupertinoDatePicker(
+                use24hFormat: true,
+                minimumDate:initCheckIn != null ? initCheckIn.add(Duration(days: 1)): DateTime.now(),
+
+                //    maximumDate: new DateTime(2019, 12, 30),
+                minimumYear: initCheckIn.year != null ? initCheckIn.year: DateTime.now().year,
+                //   maximumYear:DateTime.now().year,
+                minuteInterval: 1,
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: initCheckIn != null ? initCheckIn.add(Duration(days: 1)) : DateTime.now(),
+                backgroundColor: Colors.white,
+                onDateTimeChanged: (dateTime) {
                   myDate = dateTime;
-                  initCheckIn = dateTime;
                   // print("$myDate");
 //                setState(() {
 //                  if (dateTime != null) fromDate = formatter.format(dateTime);
@@ -471,7 +475,6 @@ class SignupState extends State<SignupScreen> {
     // {id: 28, fee: 1900, fee_type: Yearly, role_id: 7, role_plan: Yearly: AED 1900}]
     if (widget.type != null) {
       //  roleId = widget.response[0]['id'].toString();
-
       if (widget.type != 'guest') {
         List plans = widget.response;
         if (plans.length > 0) {
@@ -682,7 +685,7 @@ class SignupState extends State<SignupScreen> {
                           Visibility(
                             visible: widget.type != 'fairMont',
                             child: Padding(
-                              padding: EdgeInsets.only(top: 12),
+                              padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
@@ -710,49 +713,43 @@ class SignupState extends State<SignupScreen> {
                               visible: (widget.memberIndex == 0 ||
                                   widget.memberIndex == null) && widget.type !=
                                   'guest' && widget.type != 'fairMont',
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 12),
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    // ignore: deprecated_member_use
-                                    WhitelistingTextInputFormatter.digitsOnly,
-                                    CardNumberInputFormatter()
-                                  ],
-                                  maxLength: 15,
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return fieldIsRequired;
-                                    } else if (value.length < 9) {
-                                      return 'Please enter valid number';
-                                    }
-                                    return null;
-                                  },
-                                  controller: emergencyController,
-                                  decoration: InputDecoration(
-                                      hintText: emergencyContact,
-                                      hintStyle:
-                                      TextStyle(fontSize: textSize12)),
-                                ),
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  // ignore: deprecated_member_use
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CardNumberInputFormatter()
+                                ],
+                                maxLength: 15,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return fieldIsRequired;
+                                  } else if (value.length < 9) {
+                                    return 'Please enter valid number';
+                                  }
+                                  return null;
+                                },
+                                controller: emergencyController,
+                                decoration: InputDecoration(
+                                    hintText: emergencyContact,
+                                    hintStyle:
+                                    TextStyle(fontSize: textSize12)),
                               )),
-                          Padding(
-                            padding: EdgeInsets.only(top: 12),
-                            child: TextFormField(
-                              textCapitalization: TextCapitalization.none,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return fieldIsRequired;
-                                } else if (!validateEmail(value)) {
-                                  return 'Please enter valid email';
-                                }
-                                return null;
-                              },
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                  hintText: email + '*',
-                                  hintStyle: TextStyle(fontSize: textSize12)),
-                            ),
+                          TextFormField(
+                            textCapitalization: TextCapitalization.none,
+                            keyboardType: TextInputType.text,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return fieldIsRequired;
+                              } else if (!validateEmail(value)) {
+                                return 'Please enter valid email';
+                              }
+                              return null;
+                            },
+                            controller: emailController,
+                            decoration: InputDecoration(
+                                hintText: email + '*',
+                                hintStyle: TextStyle(fontSize: textSize12)),
                           ),
                           Visibility(
                             visible: widget.type != 'fairMont',
@@ -956,16 +953,16 @@ class SignupState extends State<SignupScreen> {
                             ),
                           ),
                           Visibility(
-                            visible: widget.type == 'fairMont' || widget.type == 'guest',
+                            visible: widget.type == 'fairMont',
                             child: Padding(
-                              padding: const EdgeInsets.only(top:8.0),
-                              child: Align(child: Text("Check In",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,),
+                              padding: const EdgeInsets.only(top:10.0),
+                              child: Align(child: Text("Check In",textAlign: TextAlign.start,style: TextStyle(fontSize: 12),),alignment: Alignment.centerLeft,),
                             ),
                           ),
                           Visibility(
-                            visible: widget.type == 'fairMont' || widget.type == 'guest',
+                            visible: widget.type == 'fairMont' ,
                             child: Container(
-                              margin: EdgeInsets.only(top: margin20, bottom: 6),
+                              margin: EdgeInsets.only(top: margin15, bottom: 6),
                               height: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(
@@ -989,7 +986,7 @@ class SignupState extends State<SignupScreen> {
                                       color: Color(0xFFDFDFDF),
                                       child: Image(
                                         image: AssetImage(
-                                            baseImageUrl + 'calendar.png'),     
+                                            baseImageUrl + 'calendar.png'),
                                       ),
                                     ),
                                   ),
@@ -997,11 +994,12 @@ class SignupState extends State<SignupScreen> {
                               ),
                             ),
                           ),
-                          Visibility(visible: widget.type == 'fairMont' || widget.type == 'guest',child: Align(child: Text("Check Out",textAlign: TextAlign.start,style: TextStyle(color: Colors.grey,fontSize: 12),),alignment: Alignment.centerLeft,)),
+                          SizedBox(height: SizeConfig.screenHeight * 0.01),
+                          Visibility(visible: widget.type == 'fairMont' ,child: Align(child: Text("Check Out",textAlign: TextAlign.start,style: TextStyle(fontSize: 12),),alignment: Alignment.centerLeft,)),
                           Visibility(
-                            visible: widget.type == 'fairMont' || widget.type == 'guest',
+                            visible: widget.type == 'fairMont',
                             child: Container(
-                              margin: EdgeInsets.only(top: margin20, bottom: 6),
+                              margin: EdgeInsets.only(top: margin15, bottom: 6),
                               height: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(
@@ -1100,7 +1098,7 @@ class SignupState extends State<SignupScreen> {
                                 .height * 0.02,
                           ),
                           Visibility(
-                            visible: (widget.memberIndex == 0 || widget.memberIndex == null ) && widget.type != 'guest' && widget.type != 'fairMont',
+                            visible: (widget.memberIndex == 0 || widget.memberIndex == null )  && widget.type != 'fairMont',//&& widget.type != 'guest'
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
@@ -1288,10 +1286,10 @@ class SignupState extends State<SignupScreen> {
                                         padding: const EdgeInsets.all(0.0),
                                         child: result == null ? Image.asset(
                                           baseImageAssetsUrl +
-                                              'logo_black.png',)
+                                              'logo.png',)
                                             : FadeInImage.assetNetwork(
                                           placeholder:
-                                          baseImageAssetsUrl + 'logo_black.png',
+                                          baseImageAssetsUrl + 'logo.png',
                                           image: BASE_URL +
                                               'uploads/trainer-user/' +
                                               imageTrainer,
@@ -1781,7 +1779,7 @@ class SignupState extends State<SignupScreen> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Image.asset(
-                                    baseImageAssetsUrl + 'logo_black.png',
+                                    baseImageAssetsUrl + 'logo.png',
                                     height: 90,
                                     color: Color(0xff8B8B8B),
                                     width: 120,

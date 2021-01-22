@@ -387,7 +387,7 @@ class _EventState extends State<EventClass>
                                           ),
                                           child: FadeInImage.assetNetwork(
                                             placeholder: baseImageAssetsUrl +
-                                                'logo_black.png',
+                                                'logo.png',
                                             image: BASE_URL +
                                                 Constants.uploads +
                                                 Constants.event +

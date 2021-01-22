@@ -109,25 +109,22 @@ class NotificationState extends State<NotificationScreen> {
                   !isLoading && notificationList.length > 0
                       ? Column(
                           children: <Widget>[
-                            Container(
-                              height: MediaQuery.of(context).size.height,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  primary: false,
-                                  itemCount: notificationList.length,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      child: CustomNotiView(
-                                        customNoti: notificationList[index],
-                                        color: Color(0xFF000000),
-                                        titleColor: Color(0xFF000000),
-                                        onTap: () {},
-                                      ),
-                                    );
-                                  }),
-                            ),
+                            ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
+                                primary: false,
+                                itemCount: notificationList.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    child: CustomNotiView(
+                                      customNoti: notificationList[index],
+                                      color: Color(0xFF000000),
+                                      titleColor: Color(0xFF000000),
+                                      onTap: () {},
+                                    ),
+                                  );
+                                }),
                             // Container(
                             //   height: MediaQuery.of(context).size.height * 1,
                             //   child: ListView.builder(

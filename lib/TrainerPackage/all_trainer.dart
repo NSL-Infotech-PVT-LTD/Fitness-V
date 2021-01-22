@@ -130,10 +130,10 @@ class AllTrainersViewState extends State<AllTrainersView> {
                     children: <Widget>[
                       users[index]['image'] == null
                           ? Image.asset(
-                              baseImageAssetsUrl + 'logo_black.png',
+                              baseImageAssetsUrl + 'logo.png',
                               width: SizeConfig.screenWidth / 2,
                               height: SizeConfig.screenWidth / 2.65,) : FadeInImage.assetNetwork(
-                              placeholder: baseImageAssetsUrl + 'logo_black.png',
+                              placeholder: baseImageAssetsUrl + 'logo.png',
                               image: BASE_URL + 'uploads/trainer-user/' + users[index]['image'],
                               fit: BoxFit.scaleDown,
                               width: double.maxFinite,
@@ -191,7 +191,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
 //                    ? CircleAvatar(
 //                    radius: 30.0,
 //                    child: Image.asset(
-//                      baseImageAssetsUrl + 'logo_black.png',
+//                      baseImageAssetsUrl + 'logo.png',
 //                    ))
 //                    : CircleAvatar(
 //                  radius: 30.0,

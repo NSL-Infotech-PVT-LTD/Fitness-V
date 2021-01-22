@@ -123,7 +123,7 @@ class ChooseMemberShipState extends State<ChooseMemberShip> {
                             widget.response['image'],
                             SizeConfig.screenHeight * .25,
                             SizeConfig.screenWidth)
-                        : Image.asset(baseImageAssetsUrl + 'logo_black.png',
+                        : Image.asset(baseImageAssetsUrl + 'logo.png',
                             fit: BoxFit.cover,
                             width: SizeConfig.screenWidth,
                             height: SizeConfig.screenHeight * .25)),

@@ -427,7 +427,7 @@ class _EventState extends State<Event> {
                                                               .assetNetwork(
                                                             placeholder:
                                                                 baseImageAssetsUrl +
-                                                                    'logo_black.png',
+                                                                    'logo.png',
                                                             image: BASE_URL +
                                                                 Constants
                                                                     .uploads +

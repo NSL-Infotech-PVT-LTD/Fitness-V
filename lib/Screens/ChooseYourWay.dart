@@ -30,8 +30,6 @@ class ChooseWayState extends State<ChooseYourWay> {
   var gymMember = "gym_members";
   var pool_and_beach = "pool_and_beach_members";
 
-
-
   @override
   void initState() {
     getRoleApi(context);
@@ -63,7 +61,7 @@ class ChooseWayState extends State<ChooseYourWay> {
 //                    left: 0,
 //                    right: 0,
 //                    child: Image.asset(
-//                      'assets/images/logo_black.png',
+//                      'assets/images/logo.png',
 //                      width: 300,
 //                      height: 76,
 //                    ),
@@ -121,70 +119,80 @@ class ChooseWayState extends State<ChooseYourWay> {
                         height: 300,
                         child: TabBarView(
                           children: <Widget>[
-                            !widget.isGuest? Column(
-                              children: <Widget>[
-                                GestureDetector(
-                                    onTap: () {
-                                      gym_list != null ? Navigator.push(context, SizeRoute(page: GymMemberPlan(response: gym_list,gymMembers: gymMember,))) : showMyDialog(context, 'Error!', "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");},
-                                    child: _CommonView('assets/images/gymMember.jpg', "Gym Member", "(Gym, Personal Training, Group Fitness and more)")),
+                            !widget.isGuest? Stack(
+                               children: [
+                                 Center(child: Image.asset('assets/images/watermark.png',color: Colors.grey.shade100)),
+                                 Column(
+                                   children: <Widget>[
+                                     GestureDetector(
+                                         onTap: () {
+                                           gym_list != null ? Navigator.push(context, SizeRoute(page: GymMemberPlan(response: gym_list,gymMembers: gymMember,))) : showMyDialog(context, 'Error!', "Due to some reason couldn't load your data, sorry for inconvenience please press Ok to refresh");},
+                                         child: _CommonView('assets/images/gymMember.jpg', "Gym Member", "(Gym, Personal Training, Group Fitness and more)")),
 
-                                Divider(height: 2,),
+                                     Divider(height: 2,),
 
-                                GestureDetector(
-                                    onTap: () {pool_and_beach_list != null? Navigator.push(context,SizeRoute(page: GymMemberPlan(response:pool_and_beach_list,gymMembers:pool_and_beach,)))
-                                        : showMyDialog(context, 'Error!',"Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");},
-                                    child: _CommonView('assets/images/poolBeach.jpg', "Pool & Beach", "(Only Gym Members)")),
-                                Divider(
-                                  height: 2,
-                                ),
-                              ],
+                                     GestureDetector(
+                                         onTap: () {pool_and_beach_list != null? Navigator.push(context,SizeRoute(page: GymMemberPlan(response:pool_and_beach_list,gymMembers:pool_and_beach,)))
+                                             : showMyDialog(context, 'Error!',"Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");},
+                                         child: _CommonView('assets/images/poolBeach.jpg', "Pool & Beach", "(Only Gym Members)")),
+                                     Divider(
+                                       height: 2,
+                                     ),
+                                   ],
+                                 ),
+                               ],
+
                             ):
-                            Column(
-                              children: <Widget>[
-                                GestureDetector(
-                                    onTap: () {
-                                      guest_list != null
-                                          ? Navigator.push(
-                                              context,
-                                              SizeRoute(
-                                                  page: SignupScreen(
-                                                response: guest_list,
-                                                type: 'guest',
-                                                formType: "",
-                                                isCityTrue: true,
-                                                isSingle: true,
-                                                    rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
-                                              )))
-                                          : showMyDialog(context, 'Error!',
-                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
-                                    },
-                                    child: _CommonView('assets/images/GUEST.jpg', "Guest",
-                                        "")),
-                                Divider(
-                                  height: 2,
-                                ),
-                                GestureDetector(
-                                    onTap: () {
-                                      fairMont_list != null
-                                          ? Navigator.push(
-                                              context,
-                                              SizeRoute(
-                                                  page: SignupScreen(
-                                                      response: fairMont_list,
-                                                      type: 'fairMont',
-                                                      formType: "",
-                                                      isSingle: true,
-                                                      rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
-                                                      isCityTrue: true)))
-                                          : showMyDialog(context, 'Error!',
-                                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
-                                    },
-                                    child: _CommonView('assets/images/hotelGuest.jpg', fairmontHotel,
-                                        "")),
-                                Divider(
-                                  height: 2,
-                                ),
-                              ],
+                            Stack(
+                children: [
+                  Center(child: Image.asset('assets/images/watermark.png',color: Colors.grey.shade100)),
+                  Column(
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          guest_list != null
+                              ? Navigator.push(
+                              context,
+                              SizeRoute(
+                                  page: SignupScreen(
+                                    response: guest_list,
+                                    type: 'guest',
+                                    formType: "",
+                                    isCityTrue: true,
+                                    isSingle: true,
+                                    rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
+                                  )))
+                              : showMyDialog(context, 'Error!',
+                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
+                        },
+                        child: _CommonView('assets/images/GUEST.jpg', "Guest",
+                            "")),
+                    Divider(
+                      height: 2,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          fairMont_list != null
+                              ? Navigator.push(
+                              context,
+                              SizeRoute(
+                                  page: SignupScreen(
+                                      response: fairMont_list,
+                                      type: 'fairMont',
+                                      formType: "",
+                                      isSingle: true,
+                                      rolePlanId: guest_list!=null&&guest_list.length>0?guest_list[0]['id'].toString():"",
+                                      isCityTrue: true)))
+                              : showMyDialog(context, 'Error!',
+                              "Due to some reason couldn't your data, sorry for inconvenience please press Ok to refresh");
+                        },
+                        child: _CommonView('assets/images/hotelGuest.jpg', fairmontHotel,
+                            "")),
+                    Divider(
+                      height: 2,
+                    ),
+                  ],
+                )],
                             )
                           ],
                         ),
@@ -270,6 +278,8 @@ class ChooseWayState extends State<ChooseYourWay> {
 
 Widget _CommonView(String image, String title, String des) => GestureDetector(
       child: Container(
+        //  decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logo.png')) ),
+
         child: Column(
           children: <Widget>[
             Row(

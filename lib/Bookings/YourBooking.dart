@@ -239,7 +239,7 @@ class YourBookingState extends State<YourBooking> {
                                         right: 40,
                                         child: FadeInImage.assetNetwork(
                                           placeholder: baseImageAssetsUrl +
-                                              'logo_black.png',
+                                              'logo.png',
                                           image: BASE_URL +
                                               "${widget.isGroupClass ? imageClassUrl : trainerUser}" +
                                               widget.image,
@@ -286,7 +286,7 @@ class YourBookingState extends State<YourBooking> {
                                   top: 175,
                                   left: 55,
                                   child: Text(
-                                    'Training Period',
+                                    'Booked On',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 8,

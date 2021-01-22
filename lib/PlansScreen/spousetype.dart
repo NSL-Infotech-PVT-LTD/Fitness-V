@@ -957,7 +957,7 @@ class _SpouseTypeState extends State<SpouseType> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Image.asset(
-                                baseImageAssetsUrl + 'logo_black.png',
+                                baseImageAssetsUrl + 'logo.png',
                                 height: 90,
                                 color: Color(0xff8B8B8B),
                                 width: 120,

@@ -293,7 +293,7 @@ class GymMemberState extends State<GymMemberPlan> {
                               child: imageLink != null
                                   ? whitePlaceHolder(IMAGE_URL, imageLink,
                                   SizeConfig.screenHeight * .25, 0.0)
-                              //  : Image.asset(baseImageAssetsUrl + 'logo_black.png',
+                              //  : Image.asset(baseImageAssetsUrl + 'logo.png',
                                   : Image.asset(
                                   baseImageAssetsUrl + 'poolBeach.jpg',
                                   width: SizeConfig.screenWidth * .6,

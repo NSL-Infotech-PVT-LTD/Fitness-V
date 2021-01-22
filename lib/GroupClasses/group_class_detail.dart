@@ -109,7 +109,7 @@ class _DetailState extends State<GroupClassDetail> {
             SizedBox(height: 20),
             classImage == null
                 ? Image.asset(
-                    baseImageAssetsUrl + 'logo_black.png',
+                    baseImageAssetsUrl + 'logo.png',
                     height: SizeConfig.blockSizeVertical * 25,
                     width: SizeConfig.screenWidth,
                     fit: BoxFit.cover,

@@ -93,7 +93,7 @@ class SelectSessionState extends State<SelectSession> {
               ),
               _imageLink == null
                   ? Image.asset(
-                      baseImageAssetsUrl + 'logo_black.png',
+                      baseImageAssetsUrl + 'logo.png',
                       height: 150,
                     )
                   : setImage(_imageLink),
@@ -416,7 +416,7 @@ class SelectSessionState extends State<SelectSession> {
   }
 
   Widget setImage(String imgLink) => FadeInImage.assetNetwork(
-        placeholder: baseImageAssetsUrl + 'logo_black.png',
+        placeholder: baseImageAssetsUrl + 'logo.png',
         image: BASE_URL +
             "${widget.isGroupClass ? imageClassUrl : trainerUser}" +
             imgLink,

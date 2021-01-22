@@ -308,7 +308,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                           )
                                         : FadeInImage.assetNetwork(
                                             placeholder: baseImageAssetsUrl +
-                                                'logo_black.png',
+                                                'logo.png',
                                             image: BASE_URL +
                                                 'uploads/trainer-user/' +
                                                 imgLink,
@@ -664,7 +664,7 @@ class CustomReviews extends StatelessWidget {
           children: <Widget>[
             Image.asset(
               items.imageUrl == null
-                  ? baseImageAssetsUrl + 'logo_black.png'
+                  ? baseImageAssetsUrl + 'logo.png'
                   : BASE_URL + IMAGE_URL + items.imageUrl,
               width: 35,
               height: 35,

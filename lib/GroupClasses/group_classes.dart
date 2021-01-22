@@ -367,7 +367,7 @@ class CustomGroupState extends StatelessWidget {
         children: <Widget>[
           items.img == null
               ? Image.asset(
-            baseImageAssetsUrl + 'logo_black.png',
+            baseImageAssetsUrl + 'logo.png',
             height: SizeConfig.blockSizeVertical * 25,
             width: SizeConfig.blockSizeHorizontal * 90,
             fit: BoxFit.cover,

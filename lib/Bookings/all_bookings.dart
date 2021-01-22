@@ -385,7 +385,7 @@ class AllBookingsState extends State<AllBookings> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Image.asset(
-                            baseImageAssetsUrl + 'logo_black.png',
+                            baseImageAssetsUrl + 'logo.png',
                             height: 90,
                             color: Color(0xff8B8B8B),
                             width: 120,
@@ -615,17 +615,18 @@ class BookingView extends StatelessWidget {
                         children: <Widget>[
                           Container(
                             width: SizeConfig.screenWidth * .56,
+                         //   height: SizeConfig.screenHeight * .20,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Status ',
+                                  'Booking Status ',
                                   style: TextStyle(
                                       color: Colors.black38, fontSize: 10),
                                 ),
                                 Text(
-                                  "${customBooking.status == "0"?"Pending":"Confirm"}",
+                                  "${customBooking.status == "0"?"PENDING":"CONFIRM"}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -698,74 +699,81 @@ class BookingView extends StatelessWidget {
                                                   color: Colors.black38,
                                                   fontSize: 10),
                                             ),
-                                            Text(
-                                              customBooking.serviceHours ==
-                                                      'null'
-                                                  ? '--'
-                                                  : '${customBooking.serviceHours == null ? '' : customBooking.serviceHours} Hours',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500),
+                                            Padding(
+                                              padding: const EdgeInsets.only(bottom:8.0),
+                                              child: Text(
+                                                customBooking.serviceHours ==
+                                                        'null'
+                                                    ? '--'
+                                                    : '${customBooking.serviceHours == null ? '' : customBooking.serviceHours} Hours',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
                                             ),
                                           ],
                                         )),
-                                    SizedBox(
-                                      width:
-                                          customBooking.serviceHours == 'null'
-                                              ? 0
-                                              : 20,
+
+
+                                  ],
+                                ),
+                                SizedBox(
+                                  width:
+                                  customBooking.serviceHours == 'null'
+                                      ? 0
+                                      : 20,
+                                ),
+                                Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Booking Date',
+                                      style: TextStyle(
+                                          color: Colors.black38,
+                                          fontSize: 10),
                                     ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          'Booking Date',
-                                          style: TextStyle(
-                                              color: Colors.black38,
-                                              fontSize: 10),
-                                        ),
-                                        SizedBox(
-                                          width: SizeConfig.screenWidth*0.30,
-                                          child: Text(
-                                            "${DateFormat("dd/MM/yyyy hh:mm a").format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(customBooking.bookingDate))}",
-                                            overflow: TextOverflow.fade,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      ],
+                                    SizedBox(
+                                      width: SizeConfig.screenWidth*0.30,
+                                      child: Text(
+                                        "${DateFormat("dd/MM/yyyy hh:mm a").format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(customBooking.bookingDate))}",
+                                        overflow: TextOverflow.fade,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ],
+
                             ),
                           ),
 
 
                           Column(
                             children: <Widget>[
+                              SizedBox(height: SizeConfig.screenHeight * 0.01,),
                               customBooking.imgLink == null
                                   ? Image.asset(
-                                      baseImageAssetsUrl + 'logo_black.png',
+                                      baseImageAssetsUrl + 'logo.png',
                                       width: SizeConfig.screenWidth * .25,
                                       height: 110,
                                       fit: BoxFit.fill,
                                     )
                                   : FadeInImage.assetNetwork(
                                       placeholder:
-                                          baseImageAssetsUrl + 'logo_black.png',
+                                          baseImageAssetsUrl + 'logo.png',
                                       image: BASE_URL +
                                           customBooking.url +
                                           customBooking.imgLink,
-                                      height: SizeConfig.screenHeight * .13,
+                                      height: SizeConfig.screenHeight * .20,
                                       fit: BoxFit.cover,
-                                      width: SizeConfig.screenWidth * .28,
+                                      width: SizeConfig.screenWidth * .32,
                                     ),
                               Align(
                                 alignment: Alignment.topCenter,
