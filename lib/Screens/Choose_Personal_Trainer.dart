@@ -227,7 +227,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                       padding: const EdgeInsets.only(top:8.0),
                                       child: Container(
 
-                                        width: MediaQuery.of(context).size.width *
+                                        width: MediaQuery.of(context).size.width *  
                                             0.27,
                                         height: MediaQuery.of(context).size.height *
                                             0.05,
