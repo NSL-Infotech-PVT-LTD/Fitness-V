@@ -1098,7 +1098,7 @@ class SignupState extends State<SignupScreen> {
                                 .height * 0.02,
                           ),
                           Visibility(
-                            visible: (widget.memberIndex == 0 || widget.memberIndex == null )  && widget.type != 'fairMont',//&& widget.type != 'guest'
+                            visible: (widget.memberIndex == 0 || widget.memberIndex == null )  && widget.type != 'fairMont' && widget.type != 'guest',
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
@@ -1384,8 +1384,7 @@ class SignupState extends State<SignupScreen> {
                                     showDialogBox(context, 'Date of Birth',
                                         'Please fill your date of birth');
                                   }
-                                  else if (radioItem.isEmpty &&
-                                      widget.type != 'fairMont') {
+                                  else if (radioItem == "" && widget.type != 'fairMont') {
                                     showDialogBox(context, 'Gender',
                                         'Please select gender');
                                   }

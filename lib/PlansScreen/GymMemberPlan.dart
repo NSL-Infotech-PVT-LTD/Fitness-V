@@ -162,7 +162,7 @@ class GymMemberState extends State<GymMemberPlan> {
                           carouselSlider = CarouselSlider(
                             carouselController: _carouselController,
                             options: CarouselOptions(
-                              height: SizeConfig.screenHeight * .9,
+                              height: SizeConfig.screenHeight * .8,
                               initialPage: 0,
                               enlargeCenterPage: true,
                               autoPlay: false,

@@ -278,12 +278,12 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 20),
+                              SizedBox(height: 0),
                               SvgPicture.asset(
                                 baseImageAssetsUrl + 'booking_confirmed.svg',
                                 fit: BoxFit.cover,
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: 18),
                               Text(
                                   booking_confirmed_bottom,
                                 textAlign: TextAlign.center,

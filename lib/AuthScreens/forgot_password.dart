@@ -125,10 +125,11 @@ class ForgotPasswordState extends State<ForgotPassword> {
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
                                   child: Image.asset(
-                                    'assets/images/logo_white.png',
+                                    'assets/images/logo.png',
                                     height: SizeConfig.blockSizeVertical * 20,
                                     width: SizeConfig.blockSizeHorizontal * 60,
                                     fit: BoxFit.fill,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 SizedBox(

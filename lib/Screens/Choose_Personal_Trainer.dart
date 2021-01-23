@@ -231,7 +231,6 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                             0.27,
                                         height: MediaQuery.of(context).size.height *
                                             0.05,
-
                                         child:  RaisedButton(
                                           color: Colors.grey.shade500
                                           ,onPressed: (){

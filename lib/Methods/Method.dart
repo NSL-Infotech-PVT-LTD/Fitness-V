@@ -2,6 +2,7 @@ import 'package:device_info/device_info.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:volt/AuthScreens/LoginScreen.dart';
@@ -168,7 +169,54 @@ void exitDialog(context) {
         );
       });
 }
-
+void exitFromApp(context) {
+  showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return CupertinoActionSheet(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              "Alert!",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontFamily: open_semi_bold),
+            ),
+          ),
+          message: Text(
+            "Are you sure, you want to exit?",
+            style: TextStyle(
+                color: Colors.black.withOpacity(.4),
+                fontSize: 14,
+                fontWeight: FontWeight.normal),
+          ),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Text("Confirm",
+                  style: TextStyle(
+                      color: Color(0xFFB71C1C),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold)),
+              onPressed: () {
+          //      Navigator.pop(context);
+                SystemNavigator.pop();
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text("Cancel",
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(.7),
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      });
+}
 void logoutDialog(context) {
   showCupertinoModalPopup(
       context: context,

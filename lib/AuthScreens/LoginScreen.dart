@@ -77,13 +77,13 @@ class LoginState extends State<LoginScreen> {
     });
   }
 
-  bool passwordVisible = false;
+  bool passwordVisible = true;
   bool _isIos;
   String deviceType = '';
 
   @override
   void initState() {
-    passwordVisible = false;
+    passwordVisible = true;
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
     super.initState();
@@ -205,7 +205,7 @@ class LoginState extends State<LoginScreen> {
                                             border: InputBorder.none,
                                             contentPadding: EdgeInsets.only(
                                                 left: 15, bottom: 10),
-                                            hintText: userName),
+                                            hintText: "Email"),
                                       ),
                                     ),
                                   ),
@@ -406,7 +406,7 @@ class LoginState extends State<LoginScreen> {
                                   child: OutlineButton(
 
                                     shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
-                                    borderSide: BorderSide(color: Colors.white),
+                                 //   borderSide: BorderSide(color: Colors.white),
                                     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                     child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
