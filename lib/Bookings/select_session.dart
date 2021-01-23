@@ -97,22 +97,22 @@ class SelectSessionState extends State<SelectSession> {
                       height: 150,
                     )
                   : setImage(_imageLink),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 25.0, right: 25, top: 20, bottom: 10),
-                child: Text(
-                  'Private lesson with $personal_trainer.',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 25.0, right: 25, top: 0, bottom: 10),
-                child: myDivider(),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //       left: 25.0, right: 25, top: 20, bottom: 10),
+              //   child: Text(
+              //     'Private lesson with $personal_trainer.',
+              //     style: TextStyle(
+              //         color: Colors.black,
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 12),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //       left: 25.0, right: 25, top: 0, bottom: 10),
+              //   child: myDivider(),
+              // ),
               SizedBox(
                 height: 50,
               ),
@@ -153,8 +153,7 @@ class SelectSessionState extends State<SelectSession> {
                               divisions: widget.isGroupClass ? 2 : 4,
                               activeColor: Colors.black,
                               inactiveColor: Colors.grey,
-                              label:
-                                  '${valueHolder.round() == 0 ? 1 : valueHolder.round()}',
+                              label: '${valueHolder.round() == 0 ? 1 : valueHolder.round()}',
                               onChanged: (double newValue) {
                                 setState(() {
                                   valueHolder = newValue.round() == 18

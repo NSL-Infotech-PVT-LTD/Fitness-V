@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:volt/Bookings/YourBooking.dart';
 import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/GroupClasses/group_classes.dart';
 import 'package:volt/Methods/Method.dart';
@@ -375,11 +376,51 @@ class _DetailState extends State<GroupClassDetail> {
             SizedBox(
               height: 50,
             ),
-            Container(
+            recurring == "one-time"? Container(
               height: 50,
               width: SizeConfig.screenWidth * .7,
               child: RaisedButton(
                   onPressed: () {
+                    // Navigator.push(
+                    //     context,
+                    //     ScaleRoute(
+                    //         page: SelectSession(
+                    //       id: id,
+                    //       image: classImage,
+                    //       name: className,
+                    //       isGroupClass: true,
+                    //       roleType: _roleType,
+                    //     )));
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => YourBooking(
+                              id: id,
+                              image: classImage,
+                              wantToShowPrice: false,
+                              isGroupClass: true,
+                              name: className,
+                              payment: "0",
+                              serviceHours: "1",
+                            )));
+
+                  },
+                  color: Colors.black,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(button_radius)),
+                  child: Center(
+                    child: Text(
+                      'Join Class Now',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )),
+            ):Container(
+              height: 50,
+              width: SizeConfig.screenWidth * .7,
+              child: RaisedButton(
+                  onPressed: () {
+
                     Navigator.push(
                         context,
                         ScaleRoute(

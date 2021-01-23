@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home2.dart';
+import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
@@ -56,6 +57,13 @@ class DashboardState extends State<Dashboard> {
     super.initState();
   }
 
+  Future<bool> _willPopCallback() async {
+    exitFromApp(context);
+    // await showDialog or Show add banners or whatever
+    // then
+    return true; // return true if the route to be popped
+  }
+
   _navigateAndDisplaySelection(BuildContext context) async {
     imageValue = await Navigator.push(
       context,
@@ -76,261 +84,264 @@ class DashboardState extends State<Dashboard> {
       _children = [Home(), Cardio(), EventClass()];
     }
     SizeConfig().init(context);
-    return Scaffold(
-        backgroundColor: CColor.WHITE,
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: onTabTapped,
-          items:  roleId == "8" || roleId == "9"?
-          <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: _currentIndex == 0
-                  ? new SvgPicture.asset(
-                baseImageAssetsUrl + 'home_dark.svg',
-                height: 20,
-                width: 20,
-              )
-                  : new SvgPicture.asset(
-                baseImageAssetsUrl + 'in_home.svg',
-                height: 20,
-                width: 20,
-              ),
-              // ignore: deprecated_member_use
-              title: new Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: _currentIndex == 0
-                      ? Text('Home',
-                      style: TextStyle(
-                          fontSize: textSize10,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600))
-                      : Text(
-                    'Home',
-                    style: TextStyle(fontSize: textSize10),
-                  )),
-            ),
-            BottomNavigationBarItem(
-                icon: _currentIndex == 1
-                    ? SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
-                    height: 20, width: 20)
+    return WillPopScope(
+      onWillPop: _willPopCallback,
+      child: Scaffold(
+          backgroundColor: CColor.WHITE,
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: onTabTapped,
+            items:  roleId == "8" || roleId == "9"?
+            <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: _currentIndex == 0
+                    ? new SvgPicture.asset(
+                  baseImageAssetsUrl + 'home_dark.svg',
+                  height: 20,
+                  width: 20,
+                )
                     : new SvgPicture.asset(
-                  baseImageAssetsUrl + 'in_cardio.svg',
+                  baseImageAssetsUrl + 'in_home.svg',
                   height: 20,
                   width: 20,
                 ),
                 // ignore: deprecated_member_use
                 title: new Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: _currentIndex == 1
-                        ? Text(
-                      'Events',
-                      style: TextStyle(
-                          fontSize: textSize10,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    )
+                    child: _currentIndex == 0
+                        ? Text('Home',
+                        style: TextStyle(
+                            fontSize: textSize10,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600))
                         : Text(
-                      'Events',
+                      'Home',
                       style: TextStyle(fontSize: textSize10),
-                    )))
-          ]:<BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: _currentIndex == 0
-                  ? new SvgPicture.asset(
-                      baseImageAssetsUrl + 'home_dark.svg',
-                      height: 20,
-                      width: 20,
-                    )
-                  : new SvgPicture.asset(
-                      baseImageAssetsUrl + 'in_home.svg',
-                      height: 20,
-                      width: 20,
-                    ),
-              // ignore: deprecated_member_use
-              title: new Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: _currentIndex == 0
-                      ? Text('Home',
-                          style: TextStyle(
-                              fontSize: textSize10,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600))
-                      : Text(
-                          'Home',
-                          style: TextStyle(fontSize: textSize10),
-                        )),
-            ),
-            BottomNavigationBarItem(
-              icon: _currentIndex == 1
-                  ? new SvgPicture.asset(baseImageAssetsUrl + 'trainer.svg',
+                    )),
+              ),
+              BottomNavigationBarItem(
+                  icon: _currentIndex == 1
+                      ? SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
                       height: 20, width: 20)
-                  : new SvgPicture.asset(
-                      baseImageAssetsUrl + 'in_trainer.svg',
-                      height: 20,
-                      width: 20,
-                    ),
-              // ignore: deprecated_member_use
-              title: new Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: _currentIndex == 1
-                      ? Text('Trainer',
-                          style: TextStyle(
-                              fontSize: textSize10,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600))
-                      : Text(
-                          'Trainer',
-                          style: TextStyle(fontSize: textSize10),
-                        )),
-            ),
-            BottomNavigationBarItem(
-                icon: roleId == "8" || roleId == "9"
+                      : new SvgPicture.asset(
+                    baseImageAssetsUrl + 'in_cardio.svg',
+                    height: 20,
+                    width: 20,
+                  ),
+                  // ignore: deprecated_member_use
+                  title: new Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: _currentIndex == 1
+                          ? Text(
+                        'Events',
+                        style: TextStyle(
+                            fontSize: textSize10,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600),
+                      )
+                          : Text(
+                        'Events',
+                        style: TextStyle(fontSize: textSize10),
+                      )))
+            ]:<BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: _currentIndex == 0
                     ? new SvgPicture.asset(
-                        baseImageAssetsUrl + 'in_cardio.svg',
+                        baseImageAssetsUrl + 'home_dark.svg',
                         height: 20,
                         width: 20,
                       )
-                    : _currentIndex == 2
-                        ? SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
-                            height: 20, width: 20)
-                        : new SvgPicture.asset(
-                            baseImageAssetsUrl + 'in_cardio.svg',
-                            height: 20,
-                            width: 20,
-                          ),
+                    : new SvgPicture.asset(
+                        baseImageAssetsUrl + 'in_home.svg',
+                        height: 20,
+                        width: 20,
+                      ),
                 // ignore: deprecated_member_use
                 title: new Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: roleId == "8" || roleId == "9"
-                        ? Text(
-                            'Events',
+                    child: _currentIndex == 0
+                        ? Text('Home',
+                            style: TextStyle(
+                                fontSize: textSize10,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600))
+                        : Text(
+                            'Home',
                             style: TextStyle(fontSize: textSize10),
-                          )
-                        : _currentIndex == 2
-                            ? Text(
-                                'Events',
-                                style: TextStyle(
-                                    fontSize: textSize10,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                              )
-                            : Text(
-                                'Events',
-                                style: TextStyle(fontSize: textSize10),
-                              )))
-          ],
-        ),
-        appBar: CustomAppBar(
-          height: 140,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: topMargin40,
+                          )),
               ),
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        _navigateAndDisplaySelection(context);
-                      },
-                      child: imageValue == null
-                          ? Image.asset(
-                              baseImageAssetsUrl + 'circleuser.png',
-                              height: 40,
-                              width: 40,
-                            )
-                          : CircleAvatar(
-                              radius: 25.0,
-                              backgroundImage: NetworkImage(
-                                  BASE_URL + 'uploads/image/' + imageValue),
-                              backgroundColor: Colors.transparent,
+              BottomNavigationBarItem(
+                icon: _currentIndex == 1
+                    ? new SvgPicture.asset(baseImageAssetsUrl + 'trainer.svg',
+                        height: 20, width: 20)
+                    : new SvgPicture.asset(
+                        baseImageAssetsUrl + 'in_trainer.svg',
+                        height: 20,
+                        width: 20,
+                      ),
+                // ignore: deprecated_member_use
+                title: new Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: _currentIndex == 1
+                        ? Text('Trainer',
+                            style: TextStyle(
+                                fontSize: textSize10,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600))
+                        : Text(
+                            'Trainer',
+                            style: TextStyle(fontSize: textSize10),
+                          )),
+              ),
+              BottomNavigationBarItem(
+                  icon: roleId == "8" || roleId == "9"
+                      ? new SvgPicture.asset(
+                          baseImageAssetsUrl + 'in_cardio.svg',
+                          height: 20,
+                          width: 20,
+                        )
+                      : _currentIndex == 2
+                          ? SvgPicture.asset(baseImageAssetsUrl + 'cardio.svg',
+                              height: 20, width: 20)
+                          : new SvgPicture.asset(
+                              baseImageAssetsUrl + 'in_cardio.svg',
+                              height: 20,
+                              width: 20,
                             ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Image.asset(
-                      baseImageAssetsUrl + 'logo.png',
-                      width: 60,
-                      height: 30,
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => NotificationScreen()));
-                        },
-                        child: SvgPicture.asset(baseImageAssetsUrl + 'noti_dot.svg'))
-                  ],
-                ),
-              ),
-              Divider(
-                height: .5,
-                // color: CColor.PRIMARYCOLOR,
-              ),
+                  // ignore: deprecated_member_use
+                  title: new Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: roleId == "8" || roleId == "9"
+                          ? Text(
+                              'Events',
+                              style: TextStyle(fontSize: textSize10),
+                            )
+                          : _currentIndex == 2
+                              ? Text(
+                                  'Events',
+                                  style: TextStyle(
+                                      fontSize: textSize10,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                )
+                              : Text(
+                                  'Events',
+                                  style: TextStyle(fontSize: textSize10),
+                                )))
             ],
           ),
-        ),
-        body: roleId == "8" || roleId == "9" ? Container(child: _children[_currentIndex],): _currentIndex == 2 ? Container(child: _children[_currentIndex],) : SingleChildScrollView(
-                    child: Column(children: <Widget>[
-                      _children[_currentIndex],
+          appBar: CustomAppBar(
+            height: 140,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: topMargin40,
+                ),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          _navigateAndDisplaySelection(context);
+                        },
+                        child: imageValue == null
+                            ? Image.asset(
+                                baseImageAssetsUrl + 'circleuser.png',
+                                height: 40,
+                                width: 40,
+                              )
+                            : CircleAvatar(
+                                radius: 25.0,
+                                backgroundImage: NetworkImage(
+                                    BASE_URL + 'uploads/image/' + imageValue),
+                                backgroundColor: Colors.transparent,
+                              ),
+                      ),
                       SizedBox(
-                        height: 50,
+                        width: 5,
                       ),
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 25, bottom: 0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset(
-                                baseImageAssetsUrl + 'logo.png',
-                                height: 90,
-                                color: Color(0xff8B8B8B),
-                                width: 120,
-                              ),
-                            ),
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: EdgeInsets.only(left: 25, bottom: 0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: SvgPicture.asset(
-                                baseImageAssetsUrl + 'vector_lady.svg',
-                                height: 90,
-                                width: 120,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          )
-                        ],
+                      Image.asset(
+                        baseImageAssetsUrl + 'logo.png',
+                        width: 60,
+                        height: 30,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 40, bottom: 10),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              volt_rights,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
+                      Spacer(),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => NotificationScreen()));
+                          },
+                          child: SvgPicture.asset(baseImageAssetsUrl + 'noti_dot.svg'))
+                    ],
+                  ),
+                ),
+                Divider(
+                  height: .5,
+                  // color: CColor.PRIMARYCOLOR,
+                ),
+              ],
+            ),
+          ),
+          body: roleId == "8" || roleId == "9" ? Container(child: _children[_currentIndex],): _currentIndex == 2 ? Container(child: _children[_currentIndex],) : SingleChildScrollView(
+                      child: Column(children: <Widget>[
+                        _children[_currentIndex],
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 25, bottom: 0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Image.asset(
+                                  baseImageAssetsUrl + 'logo.png',
+                                  height: 90,
                                   color: Color(0xff8B8B8B),
-                                  fontSize: 8,
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: open_italic),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      )
-                    ]),
-                  )
+                                  width: 120,
+                                ),
+                              ),
+                            ),
+                            Spacer(),
+                            Padding(
+                              padding: EdgeInsets.only(left: 25, bottom: 0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: SvgPicture.asset(
+                                  baseImageAssetsUrl + 'vector_lady.svg',
+                                  height: 90,
+                                  width: 120,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 40, bottom: 10),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                volt_rights,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color(0xff8B8B8B),
+                                    fontSize: 8,
+                                    fontStyle: FontStyle.italic,
+                                    fontFamily: open_italic),
+                              )),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        )
+                      ]),
+                    )
+      ),
     );
   }
 }

@@ -260,7 +260,7 @@ class GroupClassState extends State<GroupClass> {
                 ),
               ),
               expandedHeight: SizeConfig.screenHeight * .45,
-            )
+            ),
           ];
         },
         body: Material(

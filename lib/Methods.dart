@@ -24,11 +24,16 @@ Widget backWithArrow(context) => Container(
               Navigator.pop(context);
             },
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Text(
-              back,
-              style: TextStyle(fontSize: 16),
+          InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                back,
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           ),
         ],
