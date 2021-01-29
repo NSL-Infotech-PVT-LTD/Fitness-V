@@ -19,6 +19,7 @@ class YourBooking extends StatefulWidget {
   final String payment;
   final bool isGroupClass;
   final bool wantToShowPrice;
+  final bool isSession;
 
   const YourBooking(
       {this.id,
@@ -27,7 +28,8 @@ class YourBooking extends StatefulWidget {
       this.isGroupClass,
       this.name,
       this.wantToShowPrice,
-      this.payment});
+      this.payment,
+        this.isSession});
 
   @override
   State<StatefulWidget> createState() => YourBookingState();
@@ -41,6 +43,7 @@ class YourBookingState extends State<YourBooking> {
   void initState() {
     getString(USER_AUTH).then((value) => {auth = value});
     super.initState();
+    print("isSession ${widget.isSession}");
   }
   void doYoWantToCntinue() {
     showCupertinoDialog(
@@ -61,9 +64,7 @@ class YourBookingState extends State<YourBooking> {
                   bookingFunction(
                       auth,
                       context,
-                      "${widget.isGroupClass ? classSchedules : trainerUsers}",
-                      widget.id.toString(),
-                      widget.serviceHours);
+                      "${widget.isGroupClass ? classSchedules : widget.isSession? sessionType:trainerUsers}", widget.id.toString(), widget.serviceHours);
                 },
                 isDestructiveAction: false,
               ),
@@ -263,7 +264,7 @@ class YourBookingState extends State<YourBooking> {
                                   top: 85,
                                   left: 55,
                                   child: Text(
-                                    'Programme Hours',
+                                    'Programme ${widget.isSession?"Session":"Hours"}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 8,
@@ -275,7 +276,7 @@ class YourBookingState extends State<YourBooking> {
                                   left: 55,
                                   child: Text(
                                     // ignore: unrelated_type_equality_checks
-                                    '${widget.serviceHours == 0 ? 1 : widget.serviceHours} Hours',
+                                    '${widget.serviceHours == 0 ? 1 : widget.serviceHours} ${widget.isSession?"Session":"Hours"}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,

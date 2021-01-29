@@ -190,7 +190,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                       left: 55,
                                       child: Text(
                                         widget.hours != null
-                                            ? "${widget.hours} Hours"
+                                            ? "${widget.hours}  Session"
                                             : '--:--',
                                         style: TextStyle(
                                             color: Colors.white,
@@ -285,7 +285,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                               ),
                               SizedBox(height: 18),
                               Text(
-                                  booking_confirmed_bottom,
+                                widget.modelType == 'class_schedules' ?"Request Submitted \n Booked":booking_confirmed_bottom,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 24, color: Color(0xff2e2e2e)),
@@ -294,7 +294,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                 'You may check your booking in Bookings.',
                                 style: TextStyle(
                                     fontSize: 10, color: Color(0xff707070)),
-                              )
+                              ),
                             ],
                           ),
                         ),

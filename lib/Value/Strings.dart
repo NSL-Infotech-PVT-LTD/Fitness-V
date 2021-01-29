@@ -1,4 +1,4 @@
-const signup = 'Register';
+const signup = 'Submit';
 const login = 'Log in';
 const chooseYourWay = 'Choose your way to register';
 const memeber = 'Member';
@@ -15,11 +15,15 @@ const internetError = 'Internet Error';
 const durationOfStay = 'duration_of_stay';
 const hotelNo = 'hotel_room_no';
 const image = 'image';
+const roleIdDash ="roleIdDash";
+const validTill ="validTill";
 
 const notifications = 'Notifications';
 const groupClasses = 'Group Classes';
+const sessionClasses = 'Session';
 const cart = 'Cart';
 const booking = 'Booking';
+const id = "id";
 const go_to_dashboard = 'Go to Dashboard';
 const your_booking = 'Your Booking';
 const booking_confirmed = 'Request Sent';

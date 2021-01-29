@@ -123,59 +123,14 @@ void termsBottom(String title, String msg, context) {
                     Padding(
                         padding: EdgeInsets.all(20), child: Html(data: msg)),
                     SizedBox(
-                      height: 50,
+                      height: 5,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 25, bottom: 0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Image.asset(
-                              baseImageAssetsUrl + 'logo.png',
-                              height: 90,
-                              color: Color(0xff8B8B8B),
-                              width: 120,
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(left: 25, bottom: 0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: SvgPicture.asset(
-                              baseImageAssetsUrl + 'vector_lady.svg',
-                              height: 90,
-                              width: 120,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 40, bottom: 10),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            volt_rights,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Color(0xff8B8B8B),
-                                fontSize: 8,
-                                fontStyle: FontStyle.italic,
-                                fontFamily: open_italic),
-                          )),
-                    ),
+                    footer(),
                     SizedBox(
-                      height: 50,
-                    )
-                  ],
-                )),
-          ));
+                      height: 10,
+                    ),
+                  ]),
+          )));
         });
       });
 }
@@ -226,6 +181,7 @@ Widget finishAllScreenButton(context, String title, double setWidth,
 
 Future<bool> bookingFunction(String auth, context, String model_type,
     String model_id, String hours) async {
+  print("modal Type "+model_type);
   bool isBooked = false;
   isConnectedToInternet().then((internet) {
     if (internet != null && internet) {
@@ -235,7 +191,8 @@ Future<bool> bookingFunction(String auth, context, String model_type,
         "model_id": model_id,
         if (model_type == trainerUsers) "hours": hours,
         if (model_type == classSchedules) "session": hours,
-      }; 
+        if (model_type == sessionType) "session": hours,
+      };
 
       bookingApi(auth, parms).then((response) {
         dismissDialog(context);
@@ -247,25 +204,34 @@ Future<bool> bookingFunction(String auth, context, String model_type,
           if (response.data != null && response.data.booking != null) {
             var name = '';
 
-            if (response.data.booking.model_type == 'events') {
+            if (response.data.booking.model_type == 'events' && response.data.booking.model_type != "") {
               name = response.data.booking.model_detail.name;
             } else if (response.data.booking.model_type == 'class_schedules') {
               name = response.data.booking.model_detail.class_detail.name;
             } else {
-              name = response.data.booking.model_detail.full_name;
+              name = response.data.booking.model_detail != null && response.data.booking.model_detail.full_name != null?response.data.booking.model_detail.full_name:"Sessions";
             }
 
-            Navigator.pushAndRemoveUntil(
+            model_type == sessionType? Navigator.pushAndRemoveUntil(
+                context,
+                ScaleRoute(
+                    page: BookingConfirmed(
+                      createdAt: response.data.booking.created_at,
+                      hours: hours,
+                     // image: response.data.booking.model_type == 'class_schedules' ? response.data.booking.model_detail.class_detail.image : response.data.booking.model_detail.image,
+                      name: "Session",
+                     bookingId: response.data.booking.id.toString(),
+//                  hours: response.data.booking.id.toString(),
+                   //   modelType: response.data.booking.model_type,
+                    )),
+                    (r) => false): Navigator.pushAndRemoveUntil(
                 context,
                 ScaleRoute(
                     page: BookingConfirmed(
                   createdAt: response.data.booking.created_at,
                   hours: hours,
-                  image: response.data.booking.model_type == 'class_schedules'
-                      ? response.data.booking.model_detail.class_detail.image
-                      : response.data.booking.model_detail.image,
-                  name: name,
-                  bookingId: response.data.booking.id.toString(),
+                  image: response.data.booking.model_type == 'class_schedules' ? response.data.booking.model_detail.class_detail.image : response.data.booking.model_detail.image,
+                  name: name, bookingId: response.data.booking.id.toString(),
 //                  hours: response.data.booking.id.toString(),
                   modelType: response.data.booking.model_type,
                 )),
@@ -342,7 +308,38 @@ class ScaleRoute extends PageRouteBuilder {
           ),
         );
 }
-
+Widget footer(){
+  return Column(
+    children: [
+      SizedBox(
+        height: 20,
+      ),
+      Align(
+        alignment: Alignment.center,
+        child: Image.asset(
+          baseImageAssetsUrl + 'logo.png',
+          height: 70,
+          color: Colors.black,
+          width: 120,
+        ),
+      ),
+      Align(
+          alignment: Alignment.center,
+          child: Text(
+            volt_rights,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 8,
+                fontStyle: FontStyle.italic,
+                fontFamily: open_italic),
+          )),
+      SizedBox(
+        height: 20,
+      ),
+    ],
+  ) ;
+}
 
 // void customBottomSheet({Widget widget, context}) {
 //    showModalBottomSheet(

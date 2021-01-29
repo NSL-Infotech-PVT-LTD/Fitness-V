@@ -391,7 +391,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                     child: RaisedButton(
                                             onPressed: () {
                                              if(!is_booked_by_me){
-                                               Navigator.push(context, MaterialPageRoute(builder: (builder)=>SelectSession(
+                                               Navigator.push(context, MaterialPageRoute(builder: (builder)=>SelectSession(isSession: false,
                                                  id: widget.id,
                                                  image: imgLink,
                                                  isGroupClass: false,
@@ -411,9 +411,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                                     BorderRadius.circular(
                                                         button_radius)),
                                             child: Text(
-                                              is_booked_by_me
-                                                  ? alreadyBooked
-                                                  :  book_now,
+                                              is_booked_by_me ? alreadyBooked :  book_now,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.white,

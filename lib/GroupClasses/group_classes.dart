@@ -288,30 +288,19 @@ class GroupClassState extends State<GroupClass> {
                       items: CustomGroupClass(
                           className: users[index]['class_detail']['name'],
                           img: users[index]['class_detail']['image'],
-                          classOwner: users[index]['trainer'] != null
-                              ? users[index]['trainer']['first_name']
-                              : '',
+                          classOwner: users[index]['trainer'] != null ? users[index]['trainer']['first_name'] : '',
+                          endDate: users[index]['end_date'],
+                          startDate: users[index]['start_date'],
                           classTime: users[index]['class_type'],
                           is_booked_by_me: users[index]['is_booked_by_me'],
                           id: users[index]['id'],
-                          leftSeats:
-                          users[index]['available_capacity'].toString()),
-                      deleteCallBack: () {
+                          leftSeats: users[index]['available_capacity'].toString()),
+                        deleteCallBack: () {
                         currentIndex = index;
-                        deleteId = users[index]['is_booked_by_me_booking_id']
-                            .toString();
-                        if (users[index]['available_capacity'].toString() !=
-                            '0' &&
-                            !users[index]['is_booked_by_me']) {
-                          Navigator.push(
-                              context,
-                              ScaleRoute(
-                                  page: GroupClassDetail(
-                                    id: users[index]['id'],
-                                  )));
-                        } else {
-                          doYoWantToCntinue(users[index]['is_booked_by_me'],
-                              users[index]['id'].toString());
+                        deleteId = users[index]['is_booked_by_me_booking_id'].toString();
+                        if (users[index]['available_capacity'].toString() != '0' && !users[index]['is_booked_by_me']) {
+                          Navigator.push(context, ScaleRoute(page: GroupClassDetail(id: users[index]['id'],)));
+                        } else {doYoWantToCntinue(users[index]['is_booked_by_me'], users[index]['id'].toString());
                         }
                       },
                     )
@@ -322,8 +311,6 @@ class GroupClassState extends State<GroupClass> {
                       ),
                     );
                   }
-
-
               }
 //            controller: _sc,
           ),
@@ -341,6 +328,8 @@ class CustomGroupClass {
   final String classTime;
   final String leftSeats;
   final bool is_booked_by_me;
+  final String startDate;
+  final String endDate;
 
   const CustomGroupClass({this.img,
     this.is_booked_by_me,
@@ -348,7 +337,10 @@ class CustomGroupClass {
     this.id,
     this.classOwner,
     this.classTime,
-    this.leftSeats});
+    this.leftSeats,
+  this.startDate,
+    this.endDate
+  });
 }
 
 class CustomGroupState extends StatelessWidget {
@@ -432,6 +424,72 @@ class CustomGroupState extends StatelessWidget {
                   )),
             ],
           ),
+          Row(
+          //  mainAxisAlignment: MainAxisAlignment.,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(width: SizeConfig.screenWidth * 0.07),
+              Icon(Icons.calendar_today_outlined,size:40 ,),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Start Date: ",style: TextStyle(fontSize: 12),),
+                  Text(items.startDate.toString(), style: TextStyle(fontSize: 12),),
+                ],
+              ),
+              SizedBox(width: SizeConfig.screenWidth * 0.20),
+              Icon(Icons.calendar_today_outlined,size:40 ,),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("End Date: ",style: TextStyle(fontSize: 12),),
+
+                  Text(items.endDate.toString(), style: TextStyle(fontSize: 12),),
+                ],
+              ),
+              // FlatButton.icon(
+              //     onPressed: () {},
+              //     icon: Icon(
+              //       Icons.supervised_user_circle,
+              //       size: 15,
+              //     ),
+              //     label: FittedBox(
+              //       fit: BoxFit.cover,
+              //       child: Text(
+              //         items.startDate.toString(),
+              //         style: TextStyle(fontSize: 12),
+              //       ),
+              //     )),
+              // FlatButton.icon(
+              //     onPressed: () {},
+              //     icon: Icon(
+              //       Icons.calendar_today,
+              //       size: 15,
+              //     ),
+              //     label: FittedBox(
+              //       fit: BoxFit.cover,
+              //       child: Text(
+              //         items.endDate.toString(),
+              //         style: TextStyle(fontSize: 12),
+              //       ),
+              //     )),
+              // FlatButton.icon(
+              //     onPressed: () {},
+              //     icon: Icon(
+              //       Icons.format_align_left,
+              //       size: 15,
+              //     ),
+              //     label: FittedBox(
+              //       fit: BoxFit.cover,
+              //       child: Text(
+              //         "${items.leftSeats} Seats Left",
+              //         style: TextStyle(fontSize: 12),
+              //       ),
+              //     )),
+            ],
+          ),
           SizedBox(
             height: 5,
           ),
@@ -446,11 +504,7 @@ class CustomGroupState extends StatelessWidget {
                     borderRadius: BorderRadius.circular(button_radius)),
                 child: Center(
                   child: Text(
-                    items.leftSeats != '0'
-                        ? !items.is_booked_by_me
-                        ? 'View Detail'
-                        : 'Already booked! Do you want to cancel?'
-                        : 'House Full',
+                    items.leftSeats != '0' ? !items.is_booked_by_me ? 'View Detail' : 'Already booked! Do you want to cancel?' : 'House Full',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: !items.is_booked_by_me ? 14 : 10),

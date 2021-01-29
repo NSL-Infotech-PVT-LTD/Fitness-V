@@ -32,6 +32,7 @@ class _DetailState extends State<GroupClassDetail> {
       recurring = '',
       seatsLeft = '',
       duration = '',
+      location = '',
       className = '',
       classDesc = '',
       startAndEndDate = '',
@@ -73,6 +74,7 @@ class _DetailState extends State<GroupClassDetail> {
               recurring = response.data.class_type;
               seatsLeft = response.data.available_capacity.toString();
               duration = response.data.duration;
+              location = response.data.location_detail.location;
               setState(() {});
             }
           } else {
@@ -358,6 +360,48 @@ class _DetailState extends State<GroupClassDetail> {
                     padding: const EdgeInsets.only(left: 35.0, top: 6),
                     child: Text(
                       '$duration min'.toUpperCase(),
+                      maxLines: 3,
+                      style: TextStyle(
+                          fontFamily: open_semi_bold,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Color(0xFF303030)),
+                    ),
+                  ),SizedBox(height: 25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_city,
+                        size: 25,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          'Venue',
+                          style: TextStyle(
+                              color: Color(0xFF303030).withOpacity(.6),
+                              fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 40.0, right: 200, top: 5),
+                    child: MySeparator(
+                      height: 1,
+                      color: Colors.black26,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 35.0, top: 6),
+                    child: Text(
+                      '$location min'.toString().toUpperCase(),
                       maxLines: 3,
                       style: TextStyle(
                           fontFamily: open_semi_bold,

@@ -59,6 +59,7 @@ class GymMemberState extends State<GymMemberPlan> {
   List limit;
   String planIdS;
   String rolePlanIdS;
+  String planPrice;
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +338,6 @@ class GymMemberState extends State<GymMemberPlan> {
                         scrollDirection: Axis.vertical,
                         itemCount: plans.length,
                         itemBuilder: (context, index) {
-
                           // Expanded(
                           //   flex: 1,
                           //   child: GestureDetector(
@@ -389,6 +389,8 @@ class GymMemberState extends State<GymMemberPlan> {
                                         plan_index = index;
                                         planIdS = plans[index].planId;
                                         rolePlanIdS = plans[index].rolePlanId;
+                                        planPrice = plans[index].fee;
+                                        print("check fee"+plans[index].fee);
                                       });
 
                                     },
@@ -414,6 +416,7 @@ class GymMemberState extends State<GymMemberPlan> {
                                           style: TextStyle(
                                               fontSize: textSize12, fontWeight: FontWeight.normal),
                                         ),
+                                        Container(width: SizeConfig.screenWidth* 0.25,color: Colors.white,height: SizeConfig.screenHeight * 0.03,),
                                         Spacer(),
                                         Text(
                                           plans[index].fee + ' AED',
@@ -569,6 +572,10 @@ class GymMemberState extends State<GymMemberPlan> {
                 formType: "",
                 roleId: planIdS,
                 rolePlanId: rolePlanIdS,
+            planPrice: planPrice,
+
+            //    planPrice: planPrice,
+
               )));
     }
   }

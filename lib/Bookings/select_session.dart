@@ -17,6 +17,7 @@ class SelectSession extends StatefulWidget {
   final String name;
   final bool isGroupClass;
   final String roleType;
+  final bool isSession;
 
   const SelectSession(
       {Key key,
@@ -24,7 +25,7 @@ class SelectSession extends StatefulWidget {
       this.id,
       this.image,
       this.name,
-      this.roleType});
+      this.roleType, this.isSession});
 
   @override
   State<StatefulWidget> createState() => SelectSessionState();
@@ -92,10 +93,12 @@ class SelectSessionState extends State<SelectSession> {
                 height: 20,
               ),
               _imageLink == null
-                  ? Image.asset(
-                      baseImageAssetsUrl + 'logo.png',
-                      height: 150,
-                    )
+                  ? Center(
+                    child: Image.asset(
+                        baseImageAssetsUrl + 'logo.png',
+                        height: 150,
+                      ),
+                  )
                   : setImage(_imageLink),
               // Padding(
               //   padding: const EdgeInsets.only(
@@ -374,8 +377,10 @@ class SelectSessionState extends State<SelectSession> {
                   onPressed: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        widget.isSession? MaterialPageRoute(
+                          builder: (context) => YourBooking(wantToShowPrice: false,name: "Session",isGroupClass: false,payment: sendValue().toString(),serviceHours:  valueHolder == 0 ? 1.toString() : valueHolder.toString(),isSession: widget.isSession,)) :MaterialPageRoute(
                             builder: (context) => YourBooking(
+                              isSession: false,
                               id: widget.id,
                               image: widget.image,
                               wantToShowPrice: _wantToShowPrice,

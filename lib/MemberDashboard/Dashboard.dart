@@ -16,6 +16,8 @@ import 'package:volt/Value/Strings.dart';
 import 'package:volt/changes.dart';
 import 'package:volt/util/custom_dashboard_appbar.dart';
 
+import '../Methods.dart';
+
 class  Dashboard extends StatefulWidget {
   final role;
 
@@ -29,6 +31,8 @@ class DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
   var imageValue;
   var roleValue;
+  var _id;
+  bool load = true;
   List<Widget> _children;
 
   void onTabTapped(int index) {
@@ -39,7 +43,7 @@ class DashboardState extends State<Dashboard> {
     });
   }
 
-  var roleId = "";
+  var roleId ;
 
   @override
   void initState() {
@@ -47,12 +51,31 @@ class DashboardState extends State<Dashboard> {
         .then((value) => {imageValue = value})
         .whenComplete(() => setState(() {}));
 
+    getString(Id)
+        .then((value) => {_id = value})
+        .whenComplete(() => setState(() {}));
+
     getString(roleName)
         .then((value) => {roleValue = value})
         .whenComplete(() => setState(() {}));
-    getString("roleId")
-        .then((value) => {roleId = value})
-        .whenComplete(() => setState(() {}));
+
+
+    getString(roleIdDash).then((value) => roleId = value.toString()).whenComplete((){
+      setState(() {
+        load = false;
+        if (roleId == '8' || roleId == '9') {
+          _children = [load?Center(child: CircularProgressIndicator(backgroundColor: Colors.black,)):Home(image: imageValue,roleId: roleId,), EventClass()];
+        } else {
+          _children = [load?Center(child: CircularProgressIndicator(backgroundColor: Colors.black,)):Home(image: imageValue,roleId: roleId,), Cardio(), EventClass()];
+        }
+      });
+    });
+    // getString()
+    //     .then((value) => {roleId = value})
+    //     .whenComplete(() => setState(() {
+    //   load = false;
+    //       print("check role id" + roleId.toString());
+    // }));
 
     super.initState();
   }
@@ -78,11 +101,7 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    if (roleId == '8' || roleId == '9') {
-      _children = [Home(), EventClass()];
-    } else {
-      _children = [Home(), Cardio(), EventClass()];
-    }
+
     SizeConfig().init(context);
     return WillPopScope(
       onWillPop: _willPopCallback,
@@ -286,61 +305,30 @@ class DashboardState extends State<Dashboard> {
             ),
           ),
           body: roleId == "8" || roleId == "9" ? Container(child: _children[_currentIndex],): _currentIndex == 2 ? Container(child: _children[_currentIndex],) : SingleChildScrollView(
-                      child: Column(children: <Widget>[
-                        _children[_currentIndex],
-                        SizedBox(
-                          height: 50,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(left: 25, bottom: 0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Image.asset(
-                                  baseImageAssetsUrl + 'logo.png',
-                                  height: 90,
-                                  color: Color(0xff8B8B8B),
-                                  width: 120,
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Padding(
-                              padding: EdgeInsets.only(left: 25, bottom: 0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: SvgPicture.asset(
-                                  baseImageAssetsUrl + 'vector_lady.svg',
-                                  height: 90,
-                                  width: 120,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 40, bottom: 10),
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                volt_rights,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color(0xff8B8B8B),
-                                    fontSize: 8,
-                                    fontStyle: FontStyle.italic,
-                                    fontFamily: open_italic),
-                              )),
-                        ),
-                        SizedBox(
-                          height: 50,
-                        )
-                      ]),
-                    )
+            child: Column(children: <Widget>[
+              _children[_currentIndex],
+              //footer(),
+               //   Spacer(),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 25, bottom: 0),
+              //   child: Align(
+              //     alignment: Alignment.centerLeft,
+              //     child: SvgPicture.asset(
+              //       baseImageAssetsUrl + 'vector_lady.svg',
+              //       height: 90,
+              //       width: 120,
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   width: 20,
+              // ),
+
+              // SizedBox(
+              //   height: 50,
+              // )
+            ]),
+          )
       ),
     );
   }

@@ -6,6 +6,7 @@ class UserResponse {
   int id;
   int is_booked_by_me_booking_id;
   String name;
+  String role_expired_on;
   String nationality;
   String model_type;
   String review;
@@ -48,6 +49,7 @@ class UserResponse {
   CreatedByModel class_detail;
   List<PlanDetail> plan_detail;
   UserResponse(
+      this.role_expired_on,
     this.id,
     this.is_booked_by_me_booking_id,
     this.nationality,
@@ -95,6 +97,7 @@ class UserResponse {
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nationality = json['nationality'];
+    role_expired_on = json['role_expired_on'];
     is_booked_by_me_booking_id = json['is_booked_by_me_booking_id'];
     name = json['name'];
     gender = json['gender'];
@@ -133,13 +136,14 @@ class UserResponse {
     created_by_detail = json['created_by_detail'] != null ? new CreatedByModel.fromJson(json['created_by_detail']) : null;
     class_detail = json['class_detail'] != null ? new CreatedByModel.fromJson(json['class_detail']) : null;
     role = json['role'] != null ? new RoleModel.fromJson(json['role']) : null;
-    model_detail = json['model_detail'] != null ? new CreatedByModel.fromJson(json['model_detail']) : null;
+    model_detail = json['model_detail'] != null && json['model_detail'] != "" ? new CreatedByModel.fromJson(json['model_detail']) : null;
     plan_detail = json['plan_detail'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['role_expired_on'] = this.role_expired_on;
     data['is_booked_by_me_booking_id'] = this.is_booked_by_me_booking_id;
     data['model_type'] = this.model_type;
     data['nationality'] = this.nationality;
