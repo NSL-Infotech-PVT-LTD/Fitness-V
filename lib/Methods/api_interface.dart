@@ -64,6 +64,7 @@ String checkOutKey = "check_out";
 //signup keys
 String NAME = "name";
 String FIRSTNAME = "first_name";
+String trainerPriceNew = "trainerPriceNew";
 String LASTNAME = "last_name";
 String MIDDLENAME = "middle_name";
 String BIRTH_DATE = "birth_date";
@@ -90,6 +91,7 @@ String classSchedules = "class_schedules";
 String trainerUsers = "trainer_users";
 String trainerIds = "trainer_users";
 String trainerData = "trainerData";
+String sessionType = "sessions";
 
 
 String tName = "tName";
@@ -110,6 +112,8 @@ String userPlanImage = "userPlanImage";
 String rolePlan = "rolePlan";
 String roleName = "roleName";
 String roleCategory = "roleCategory";
+String roleId = "roleId";
+String Id = "Id";
 String USER_EMAIL = "USER_EMAIL";
 String roleType = 'roleType';
 String CONTENT_VALUE = "application/x-www-form-urlencoded";

@@ -50,6 +50,7 @@ class UserProfileState extends State<UserProfile> {
   bool _isEnable = true;
   String deviceType = '';
   String deviceToken = "";
+  String _role = "";
 
   var fromDate, toDate, sendDate;
   var formatter = new DateFormat("dd/MM/yyyy");
@@ -72,6 +73,9 @@ class UserProfileState extends State<UserProfile> {
   ];
   String selectedCity;
   String genderItem = '';
+  bool isVisible = false;
+
+
 
   void fromDatePicker() async {
     var order = await getData();
@@ -139,19 +143,20 @@ class UserProfileState extends State<UserProfile> {
           dismissDialog(context);
           if (response.status) {
             if (response.data != null) {
+              _role = response.data.user.role.id.toString();
+              isVisible = _role == "8" || _role == "8"?false:true;
               firstNameController.text = response.data.user.first_name;
               middletNameController.text = response.data.user.middle_name;
               lastNameController.text = response.data.user.last_name;
               mobileController.text = response.data.user.mobile;
-              emergencyController.text =
-                  response.data.user.emergency_contact_no;
+              emergencyController.text = response.data.user.emergency_contact_no;
               emailController.text = response.data.user.email;
               designationController.text = response.data.user.designation;
               emiratesController.text = response.data.user.emirates_id;
               genderController.text = response.data.user.gender;
               genderItem =  response.data.user.gender;
               addressController.text = response.data.user.address;
-              nationalityController.text = response.data.user.nationality;
+              nationalityController.text = response.data.user.nationality  == "" ? "dubai": response.data.user.nationality;
 
               DateTime tempDate = new DateFormat("yyyy-MM-dd")
                   .parse(response.data.user.birth_date);
@@ -372,7 +377,7 @@ class UserProfileState extends State<UserProfile> {
                               padding: EdgeInsets.only(top: 12),
                               child: TextFormField(
                                 keyboardType: TextInputType.text,
-                                readOnly: true,
+                                readOnly: _isEnable,
                                 inputFormatters: <TextInputFormatter>[
                                   WhitelistingTextInputFormatter(
                                       RegExp("[a-zA-Z]"))
@@ -456,31 +461,34 @@ class UserProfileState extends State<UserProfile> {
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 8),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                readOnly: _isEnable,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CardNumberInputFormatter()
-                                ],
-                                maxLength: 15,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return fieldIsRequired;
-                                  } else if (value.length < 9) {
-                                    return 'Please Enter Valid Number';
-                                  }
-                                  return null;
-                                },   controller: emergencyController,
-                                style: TextStyle(
-                                    color:
-                                        _isEnable ? Colors.grey : Colors.black),
-                                decoration: InputDecoration(
-                                    labelText: emergencyContact,
-                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
-                                    hintStyle: TextStyle(fontSize: textSize12)),
+                            Visibility(
+                              visible: isVisible,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 8),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  readOnly: _isEnable,
+                                  inputFormatters: [
+                                    WhitelistingTextInputFormatter.digitsOnly,
+                                    CardNumberInputFormatter()
+                                  ],
+                                  maxLength: 15,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return fieldIsRequired;
+                                    } else if (value.length < 9) {
+                                      return 'Please Enter Valid Number';
+                                    }
+                                    return null;
+                                  },   controller: emergencyController,
+                                  style: TextStyle(
+                                      color:
+                                          _isEnable ? Colors.grey : Colors.black),
+                                  decoration: InputDecoration(
+                                      labelText: emergencyContact,
+                                      labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                      hintStyle: TextStyle(fontSize: textSize12)),
+                                ),
                               ),
                             ),
                             Padding(
@@ -496,41 +504,44 @@ class UserProfileState extends State<UserProfile> {
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
-                            Container(
-                              margin:
-                                  EdgeInsets.only(top: margin30, bottom: 20),
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(button_radius)),
-                                  border: Border.all(
-                                      color: Colors.black26, width: 1)),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        fromDate == null
-                                            ? birthDate
-                                            : fromDate.toString(),
-                                        style: TextStyle(
-                                            fontSize: textSize12,
-                                            color: Colors.grey),
-                                      )),
-                                  Spacer(),
-                                  GestureDetector(
-//                                    onTap: fromDatePicker,
-                                    child: Container(
-                                      height: 50,
-                                      width: 40,
-                                      color: Color(0xFFDFDFDF),
-                                      child: Image(
-                                        image: AssetImage(
-                                            baseImageUrl + 'calendar.png'),
+                            Visibility(
+                              visible: true,
+                              child: Container(
+                                margin:
+                                    EdgeInsets.only(top: margin30, bottom: 20),
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(button_radius)),
+                                    border: Border.all(
+                                        color: Colors.black26, width: 1)),
+                                child: Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          fromDate == null
+                                              ? birthDate
+                                              : fromDate.toString(),
+                                          style: TextStyle(
+                                              fontSize: textSize12,
+                                              color: Colors.grey),
+                                        )),
+                                    Spacer(),
+                                    GestureDetector(
+                                   onTap: fromDatePicker,
+                                      child: Container(
+                                        height: 50,
+                                        width: 40,
+                                        color: Color(0xFFDFDFDF),
+                                        child: Image(
+                                          image: AssetImage(
+                                              baseImageUrl + 'calendar.png'),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
 //                            Padding(
@@ -548,42 +559,48 @@ class UserProfileState extends State<UserProfile> {
 //                                    hintStyle: TextStyle(fontSize: textSize12)),
 //                              ),
 //                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 12),
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                readOnly: true,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return fieldIsRequired;
-                                  }
-                                  return null;
-                                },
-                                controller: emiratesController,
-                                style: TextStyle(color: Colors.grey),
-                                decoration: InputDecoration(
-                                    labelText: emiratesId,
-                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
-                                    hintStyle: TextStyle(fontSize: textSize12)),
+                            Visibility(
+                            visible: isVisible,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 12),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  readOnly: true,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return fieldIsRequired;
+                                    }
+                                    return null;
+                                  },
+                                  controller: emiratesController,
+                                  style: TextStyle(color: Colors.grey),
+                                  decoration: InputDecoration(
+                                      labelText: emiratesId,
+                                      labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                      hintStyle: TextStyle(fontSize: textSize12)),
+                                ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 12),
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                readOnly: _isEnable,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return fieldIsRequired;
-                                  }
-                                  return null;
-                                },
-                                controller: addressController,
-                                style: TextStyle(color: _isEnable ? Colors.grey : Colors.black),
-                                decoration: InputDecoration(
-                                    labelText: address,
-                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
-                                    hintStyle: TextStyle(fontSize: textSize12)),
+                            Visibility(
+                              visible: isVisible,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 12),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  readOnly: _isEnable,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return fieldIsRequired;
+                                    }
+                                    return null;
+                                  },
+                                  controller: addressController,
+                                  style: TextStyle(color: _isEnable ? Colors.grey : Colors.black),
+                                  decoration: InputDecoration(
+                                      labelText: address,
+                                      labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                      hintStyle: TextStyle(fontSize: textSize12)),
+                                ),
                               ),
                             ),
 
@@ -601,44 +618,48 @@ class UserProfileState extends State<UserProfile> {
                                       hintStyle: TextStyle(fontSize: textSize12)),
 
                               ),
-                            ):Padding(
-                              padding: EdgeInsets.only(top: 12),
-                              child: TextFormField(
-                                readOnly: false,
-                                keyboardType: TextInputType.text,
-                                controller: nationalityController,
-                                style: TextStyle(color: _isEnable ? Colors.grey : Colors.black),
-                                decoration: InputDecoration(
+                            ):Visibility(
+                              visible: true,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 12),
+                                child: TextFormField(
+                                  readOnly: false,
+                                  keyboardType: TextInputType.text,
+                                  controller: nationalityController,
+                                  style: TextStyle(color: _isEnable ? Colors.grey : Colors.black),
+                                  decoration: InputDecoration(
 
-                                      labelText: "Nationality",
-                                      labelStyle: TextStyle(fontSize: 12,color: Colors.black),
-                                      hintStyle: TextStyle(fontSize: textSize12)),
+                                        labelText: "Nationality",
+                                        labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                        hintStyle: TextStyle(fontSize: textSize12)),
 
+                                ),
                               ),
                             ),
 
-                            _isEnable
-                                ? Padding(
-                                    padding: EdgeInsets.only(top: 12),
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.text,
-                                      readOnly: true,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return fieldIsRequired;
-                                        }
-                                        return null;
-                                      },
-                                      controller: cityController,
-                                      style: TextStyle(color: Colors.grey),
-                                      decoration: InputDecoration(
-                                          labelText: "City",
-                                          labelStyle: TextStyle(fontSize: 12,color: Colors.black),
-                                          hintStyle:
-                                              TextStyle(fontSize: textSize12)),
+                            _isEnable ? Visibility(
+                              visible: isVisible,
+                              child: Padding(
+                                      padding: EdgeInsets.only(top: 12),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        readOnly: true,
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return fieldIsRequired;
+                                          }
+                                          return null;
+                                        },
+                                        controller: cityController,
+                                        style: TextStyle(color: Colors.grey),
+                                        decoration: InputDecoration(
+                                            labelText: "City",
+                                            labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                            hintStyle:
+                                                TextStyle(fontSize: textSize12)),
+                                      ),
                                     ),
-                                  )
-                                : Padding(
+                            ) : Padding(
                                     padding: EdgeInsets.only(top: 18),
                                     child: DropdownButton(
                                       hint: selectedCity == null
@@ -689,22 +710,24 @@ class UserProfileState extends State<UserProfile> {
                                       } else {
                                         Map<String, String> parms = {
                                           FIRSTNAME: firstNameController.text.toString().trim(),
-                                          MIDDLENAME: middletNameController.text.toString().trim(),
+                                          MIDDLENAME: middletNameController.text.toString().trim() != null ?middletNameController.text.toString().trim():null,
                                           LASTNAME: lastNameController.text.toString().trim(),
-                                          BIRTH_DATE: sendDate,
-                                          MOBILE: mobileController.text.toString().trim(),
-                                          EMEREGENCY_NUMBER: emergencyController.text.toString().trim(),
-                                          CITY: selectedCity,
-                                          EMIRATES_ID: emiratesController.text.toString().trim(),
-                                          Nationality:nationalityController.text,
+                                          BIRTH_DATE: sendDate != null?sendDate:DateTime.now().toString(),
+                                          MOBILE: mobileController.text.toString().trim() != null ?mobileController.text.toString().trim():null,
+                                          EMEREGENCY_NUMBER: emergencyController.text.toString().trim() != null ?emergencyController.text.toString().trim():null,
+                                          CITY: selectedCity != null ?selectedCity :null,
+                                          EMIRATES_ID: emiratesController.text.toString().trim() != null ?emiratesController.text.toString().trim() : null,
+                                          Nationality:nationalityController.text != null ?nationalityController.text:"Dubai",
 //                                          DESIGNATION: designationController
 //                                            .text
 //                                              .toString()
 //                                              .trim(),
                                           ADDRESS: addressController.text
                                               .toString()
-                                              .trim(),
-                                         GENDER: genderItem.toLowerCase(),
+                                              .trim() != null ?addressController.text
+                                              .toString()
+                                              .trim() : null,
+                                         GENDER: genderItem.toLowerCase() != null?genderItem.toLowerCase():null,
                                           DEVICE_TYPE: deviceType,
                                           DEVICE_TOKEN: deviceTokenValue,
                                         };
@@ -732,7 +755,7 @@ class UserProfileState extends State<UserProfile> {
                                                 var errorMessage = '';
                                                 if (response.error != null) {
                                                   errorMessage =
-                                                      response.error.toString();
+                                                      response.errors.toString();
                                                 } else if (response.errors !=
                                                     null) {
                                                   errorMessage = response

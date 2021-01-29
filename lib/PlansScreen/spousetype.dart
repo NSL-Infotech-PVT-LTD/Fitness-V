@@ -7,6 +7,7 @@ import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/AuthScreens/SuccessScreen.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Screens/view_personal_trainer.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -143,7 +144,6 @@ class _SpouseTypeState extends State<SpouseType> {
           } else {
             for (int i = result.length; i > myLength; i--) {
               result.removeAt(i - 1);
-
             }
           }
           print("vikas $result");
@@ -217,6 +217,7 @@ class _SpouseTypeState extends State<SpouseType> {
       context,
       MaterialPageRoute(
           builder: (context) => SignupScreen(
+              gymMemberType: widget.gym_members,
               rolePlanId: widget.rolePlanIds,
               roleId: widget.roleId,
               memberIndex: index,
@@ -226,7 +227,8 @@ class _SpouseTypeState extends State<SpouseType> {
               isSingle: false,
               isCityTrue: true,
               isEmailError: errorMessage1.contains("email has") ? true : false,
-              profileImage: myResult != null && myResult.length > 1 ? myResult[1]
+              profileImage: myResult != null && myResult.length > 1
+                  ? myResult[1]
                   : null)),
     );
 
@@ -236,13 +238,18 @@ class _SpouseTypeState extends State<SpouseType> {
 
         result[index] = myResult[0];
 
-        print("fsdfsdf${myResult.length}");
         Totalprice = 0;
-        result.forEach((element) {
+        print("hnsdjhds $result");
+        for (int i = 0; i < result.length; i++) {
           Totalprice = Totalprice +
-              int.parse(
-                  "${element['trainerPrice'] != null && element['trainerPrice'] != "null" ? (element['trainerPrice']) : 0}");
-        });
+              (i == 0
+                  ? (int.parse(
+                      "${result[i]['trainerPriceNew'] != null && result[i]['trainerPriceNew'] != "null" ? (result[i]['trainerPriceNew']) : 0}"))
+                  : (int.parse(
+                      "${result[i]['trainerPriceNew_$i'] != null && result[i]['trainerPriceNew_$i'] != "null" ? (result[i]['trainerPriceNew_$i']) : 0}")));
+
+          print("hnsdjhds $Totalprice");
+        }
       }
       // if (result.length>0) {
       //   stoData[int.parse(result[index]['memberIndex'])] = result;
@@ -532,11 +539,15 @@ class _SpouseTypeState extends State<SpouseType> {
                                     _navigateAndDisplaySelection(
                                         ind: index,
                                         context: context,
-                                        chFilledData: result[index] != null && result[index].isNotEmpty ? result[index] : null,
+                                        chFilledData: result[index] != null &&
+                                                result[index].isNotEmpty
+                                            ? result[index]
+                                            : null,
                                         formType: '',
                                         // rolePanId: rolePlanId.toString(),
                                         // roleSId: roleId.toString());
-                                        rolePanId: widget.rolePlanIds.toString(),
+                                        rolePanId:
+                                            widget.rolePlanIds.toString(),
                                         roleSId: widget.roleIds.toString());
                                     // }
                                   },
@@ -558,8 +569,10 @@ class _SpouseTypeState extends State<SpouseType> {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
-                                              stoData[index] != '' ? stoData[index]
-                                                              ['memberIndex'] == index.toString()
+                                              stoData[index] != ''
+                                                  ? stoData[index]
+                                                              ['memberIndex'] ==
+                                                          index.toString()
                                                       ? 'View Details'
                                                       : 'Complete details'
                                                   : 'Complete details',
@@ -748,6 +761,33 @@ class _SpouseTypeState extends State<SpouseType> {
                                   .then((response) {
                                 dismissDialog(context);
                                 if (response.status) {
+                                  setString(USER_AUTH, "Bearer " + response.data.token);
+                                  setString(roleType, response.data.user.role.name);
+                                  if (response.data != null && response.data.user != null)
+                                    setString(userImage, response.data.user.image);
+
+                                  if (response.data != null && response.data.user != null)
+                                    setString(id, response.data.user.id.toString());
+                                  print("roleIdCheck" + response.data.user.role.id.toString());
+                                  setString(roleIdDash, response.data.user.role.id.toString());
+
+                                  if (response.data.user.role != null) {
+
+                                    print("roleID "+"${response.data.user.role.toJson().toString()}");
+
+                                    setString(userPlanImage, response.data.user.role.image);
+                                    setString(roleName, response.data.user.role.name);
+                                    setString(Id, response.data.user.id.toString());
+
+                                    setString(validTill, response.data.user.role_expired_on);
+                                    setString(roleCategory, response.data.user.role.category);
+                                    if (response.data.user.role.current_plan != null) {
+                                      setString(
+                                          rolePlan, response.data.user.role.current_plan.role_plan);
+                                    }
+                                  }
+
+                                  setString(USER_NAME, response.data.user.full_name);
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     ScaleRoute(page: SuccessScreen()),

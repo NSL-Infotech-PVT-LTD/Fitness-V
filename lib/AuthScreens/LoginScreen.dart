@@ -49,11 +49,21 @@ class LoginState extends State<LoginScreen> {
             setString(roleType, response.data.user.role.name);
             if (response.data != null && response.data.user != null)
               setString(userImage, response.data.user.image);
+
+            if (response.data != null && response.data.user != null)
+              setString(id, response.data.user.id.toString());
+            print("roleIdCheck" + response.data.user.role.id.toString());
+            setString(roleIdDash, response.data.user.role.id.toString());
+
             if (response.data.user.role != null) {
-              
+
+              print("roleID "+"${response.data.user.role.toJson().toString()}");
+
               setString(userPlanImage, response.data.user.role.image);
               setString(roleName, response.data.user.role.name);
-              setString("roleId", response.data.user.role.id.toString());
+              setString(Id, response.data.user.id.toString());
+
+              setString(validTill, response.data.user.role_expired_on);
               setString(roleCategory, response.data.user.role.category);
               if (response.data.user.role.current_plan != null) {
                 setString(
@@ -99,344 +109,348 @@ class LoginState extends State<LoginScreen> {
     return Form(
         key: _formKey,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: CColor.WHITE,
-          body: SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/splash_boy.png',
-                      fit: BoxFit.cover,
-                      width: SizeConfig.screenWidth,
-                    ),
-                    Image.asset(
-                      'assets/images/gredient.png',
-                      width: SizeConfig.screenWidth,
-                      fit: BoxFit.fill,
-                    ),
-                    Container(
-                      height: SizeConfig.screenHeight,
-                      width: SizeConfig.screenWidth,
-                      color: Colors.black54,
-                    ),
-                    Container(
-                        margin: EdgeInsets.only(
-                            top: SizeConfig.blockSizeVertical * 20),
-                        padding: EdgeInsets.only(left: 50, right: 50),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
-                              child: Image.asset(
-                                'assets/images/logo.png',
-                                height: SizeConfig.blockSizeVertical * 20,
-                                width: SizeConfig.blockSizeHorizontal * 60,
-                                fit: BoxFit.fill,color: Colors.white,
-                              ),
-                            ),
-                            // Text(
-                            //   localGuest,
-                            //   style: TextStyle(
-                            //       color: Colors.white,
-                            //       fontSize: textSize16,
-                            //       fontFamily: open_light),
-                            // ),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Text(
-                              existingAcc,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: textSize16,
-                                  fontFamily: open_light),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              height: 50,
-                              margin: EdgeInsets.only(bottom: 3),
-                              width: SizeConfig.screenWidth,
-                              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.white10,
-                                        offset: Offset(0, 5),
-                                        blurRadius: 5)
-                                  ],
-                                  borderRadius: BorderRadius.circular(3)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    baseImageAssetsUrl + 'user.svg',
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(top: 8),
-                                      child: TextFormField(
-                                        cursorColor: Colors.black,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        key: new Key('email'),
-                                        controller:
-                                            _emailAddressFieldController,
-                                        decoration: new InputDecoration(
-                                            suffixIcon: IconButton(
-                                              icon: Icon(
-                                                Icons.error,
-                                                color: _validate1
-                                                    ? Colors.red
-                                                    : Colors.transparent,
-                                              ),
-                                              onPressed: () {},
-                                            ),
-                                            border: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15, bottom: 10),
-                                            hintText: "Email"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 50,
-                              width: SizeConfig.screenWidth,
-                              margin: EdgeInsets.only(bottom: 15),
-                              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.white10,
-                                        offset: Offset(0, 5),
-                                        blurRadius: 5)
-                                  ],
-                                  borderRadius: BorderRadius.circular(3)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    baseImageAssetsUrl + 'lock.svg',
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(top: 0),
-                                      child: TextFormField(
-                                        cursorColor: Colors.black,
-                                        keyboardType: TextInputType.visiblePassword,
-                                           obscureText: passwordVisible,
-                              key: new Key('password'),
-                              controller: _passwordFieldController,
-                              decoration: new InputDecoration(
-                        suffixIcon: IconButton(
-                          icon: Padding(
-                              padding:
-                                  EdgeInsets.only(bottom: 10),
-                              child: _validate2 ? Icon(Icons.error,
-                                      color: Colors.red) : Icon(
-                                      // Based on passwordVisible state choose the icon
-                                      passwordVisible ? Icons.visibility_off:Icons.visibility ,
-                                      color: CColor.DividerCOlor,
-                                    )),
-                          onPressed: () {
-                            // Update the state i.e. toogle the state of passwordVisible variable
-                            setState(() {
-                              passwordVisible = !passwordVisible;
-                            });
-                          },
+          body: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Container(
+                  height: SizeConfig.screenHeight,
+                  child: Image.asset(
+                    'assets/images/splash_boy.png',
+                   fit: BoxFit.fill,
+                    width: SizeConfig.screenWidth,
+                  ),
+                ),
+                Container(
+                  height: SizeConfig.screenHeight,
+                  child: Image.asset(
+                    'assets/images/gredient.png',
+                    width: SizeConfig.screenWidth,
+                 fit: BoxFit.fill,
+                  ),
+                ),
+                Container(
+                  height: SizeConfig.screenHeight,
+                  width: SizeConfig.screenWidth,
+                  color: Colors.black54,
+                ),
+                Container(
+                    margin: EdgeInsets.only(
+                        top: SizeConfig.blockSizeVertical * 15),
+                    padding: EdgeInsets.only(left: 50, right: 50),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            height: SizeConfig.blockSizeVertical * 20,
+                            width: SizeConfig.blockSizeHorizontal * 60,
+                            fit: BoxFit.fill,color: Colors.white,
+                          ),
                         ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(
-                            left: 20, bottom: 13, top: 12),
-                        hintText: password,
-                      ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                        // Text(
+                        //   localGuest,
+                        //   style: TextStyle(
+                        //       color: Colors.white,
+                        //       fontSize: textSize16,
+                        //       fontFamily: open_light),
+                        // ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        // Text(
+                        //   existingAcc,
+                        //   style: TextStyle(
+                        //       color: Colors.white,
+                        //       fontSize: textSize16,
+                        //       fontFamily: open_light),
+                        // ),
 
-                            Container(
-                              child: RaisedButton(
-                                onPressed: () {
-                                  // print(deviceTok);
-                                  if (_emailAddressFieldController
-                                      .text.isEmpty) {
-                                    setState(() {
-                                      _validate1 = true;
-                                    });
-                                  } else if (_passwordFieldController
-                                      .text.isEmpty) {
-                                    setState(() {
-                                      _validate1 = false;
-                                      _validate2 = true;
-                                    });
-                                  } else {
-                                    _validate1 = false;
-                                    _validate2 = false;
-                                    login();
-                                  }
-                                },
-                                color: Color(0xff484848),
-                                padding: EdgeInsets.all(0.0),
-                                textColor: Colors.white,
-                                child: Container(
-                                  padding: EdgeInsets.only(top: 15),
-                                  height: 50.0,
-                                  width: SizeConfig.screenWidth,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                       colors: [
-                                        Color(0xff484848),
-                                        Color(0xffCCCCCC)
-                                      ],
-                                    ),
-                                    color: Color(0xff484848),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(3)),
-                                   ),
-                                  child: Text(
-                                    'Sign In',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: textSize16,
-                                        fontFamily: open_semi_bold),
+                        Container(
+                          height: 50,
+                          margin: EdgeInsets.only(bottom: 3),
+                          width: SizeConfig.screenWidth,
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.white10,
+                                    offset: Offset(0, 5),
+                                    blurRadius: 5)
+                              ],
+                              borderRadius: BorderRadius.circular(3)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset(
+                                baseImageAssetsUrl + 'user.svg',
+                                height: 20,
+                                width: 20,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 8),
+                                  child: TextFormField(
+                                    cursorColor: Colors.black,
+                                    keyboardType:
+                                        TextInputType.emailAddress,
+                                    key: new Key('email'),
+                                    controller:
+                                        _emailAddressFieldController,
+                                    decoration: new InputDecoration(
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            Icons.error,
+                                            color: _validate1
+                                                ? Colors.red
+                                                : Colors.transparent,
+                                          ),
+                                          onPressed: () {},
+                                        ),
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.only(
+                                            left: 15, bottom: 10),
+                                        hintText: "Email"),
                                   ),
                                 ),
                               ),
-                            ),
-                            Align(
-                                alignment: Alignment.center,
-                                child: FlatButton(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                ForgotPassword()));
-                                  },
-                                  child: Text(
-                                    forgetPassword,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          width: SizeConfig.screenWidth,
+                          margin: EdgeInsets.only(bottom: 15),
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.white10,
+                                    offset: Offset(0, 5),
+                                    blurRadius: 5)
+                              ],
+                              borderRadius: BorderRadius.circular(3)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset(
+                                baseImageAssetsUrl + 'lock.svg',
+                                height: 20,
+                                width: 20,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 0),
+                                  child: TextFormField(
+                                    cursorColor: Colors.black,
+                                    keyboardType: TextInputType.visiblePassword,
+                                       obscureText: passwordVisible,
+                          key: new Key('password'),
+                          controller: _passwordFieldController,
+                          decoration: new InputDecoration(
+                    suffixIcon: IconButton(
+                      icon: Padding(
+                          padding:
+                              EdgeInsets.only(bottom: 10),
+                          child: _validate2 ? Icon(Icons.error,
+                                  color: Colors.red) : Icon(
+                                  // Based on passwordVisible state choose the icon
+                                  passwordVisible ? Icons.visibility_off:Icons.visibility ,
+                                  color: CColor.DividerCOlor,
                                 )),
-                            Text(
-                              'or',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: textSize16,
-                                  fontFamily: open_semi_bold),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top:20.0),
-                              child: Container(
-
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                  color: Colors.white,
-                                ),
-                                child: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.06,
-                                  width: MediaQuery.of(context).size.width * 0.50,
-                                  child: OutlineButton(
-
-                                    shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
-                                  //  borderSide: BorderSide(color: Colors.white),
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        // Icon(
-                                        // //  Icons.group,
-                                        //   color: Colors.white,
-                                        //   size: 20,
-                                        // ),
-                                        SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                                        Text(
-                                          "Sign Up",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.black, fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) => ChooseYourWay(isGuest: false,)));
-//                                  ilder: (context) => Dashboard()));
-                                    },
+                      onPressed: () {
+                        // Update the state i.e. toogle the state of passwordVisible variable
+                        setState(() {
+                          passwordVisible = !passwordVisible;
+                        });
+                      },
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(
+                        left: 20, bottom: 13, top: 12),
+                    hintText: password,
+                  ),
                                   ),
                                 ),
-                              ),
-                            ),  Padding(
-                              padding: const EdgeInsets.only(top:20.0),
-                              child: Container(
+                              )
+                            ],
+                          ),
+                        ),
 
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                  color: Colors.black,
+                        Container(
+                          child: RaisedButton(
+                            onPressed: () {
+                              // print(deviceTok);
+                              if (_emailAddressFieldController
+                                  .text.isEmpty) {
+                                setState(() {
+                                  _validate1 = true;
+                                });
+                              } else if (_passwordFieldController
+                                  .text.isEmpty) {
+                                setState(() {
+                                  _validate1 = false;
+                                  _validate2 = true;
+                                });
+                              } else {
+                                _validate1 = false;
+                                _validate2 = false;
+                                login();
+                              }
+                            },
+                            color: Color(0xff484848),
+                            padding: EdgeInsets.all(0.0),
+                            textColor: Colors.white,
+                            child: Container(
+                              padding: EdgeInsets.only(top: 15),
+                              height: 50.0,
+                              width: SizeConfig.screenWidth,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                   colors: [
+                                    Color(0xff484848),
+                                    Color(0xffCCCCCC)
+                                  ],
                                 ),
-                                child: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.06,
-                                  width: MediaQuery.of(context).size.width * 0.50,
-                                  child: OutlineButton(
-
-                                    shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
-                                 //   borderSide: BorderSide(color: Colors.white),
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        // Icon(
-                                        // //  Icons.group,
-                                        //   color: Colors.white,
-                                        //   size: 20,
-                                        // ),
-                                        SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                                        Text(
-                                          continueAsGuest,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.white, fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) => ChooseYourWay(isGuest: true,)));
-//                                  ilder: (context) => Dashboard()));
-                                    },
-                                  ),
-                                ),
+                                color: Color(0xff484848),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(3)),
+                               ),
+                              child: Text(
+                                'Log In',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: textSize16,
+                                    fontFamily: open_semi_bold),
                               ),
                             ),
+                          ),
+                        ),
+                        Align(
+                            alignment: Alignment.center,
+                            child: FlatButton(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            ForgotPassword()));
+                              },
+                              child: Text(
+                                forgetPassword,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )),
+                        Text(
+                          'or',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: textSize16,
+                              fontFamily: open_semi_bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:20.0),
+                          child: Container(
+
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              color: Colors.white,
+                            ),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.06,
+                              width: MediaQuery.of(context).size.width * 0.50,
+                              child: OutlineButton(
+
+                                shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+                              //  borderSide: BorderSide(color: Colors.white),
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    // Icon(
+                                    // //  Icons.group,
+                                    //   color: Colors.white,
+                                    //   size: 20,
+                                    // ),
+                                    SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                                    Text(
+                                      "Sign Up",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => ChooseYourWay(isGuest: false,)));
+//                                  ilder: (context) => Dashboard()));
+                                },
+                              ),
+                            ),
+                          ),
+                        ),  Padding(
+                          padding: const EdgeInsets.only(top:20.0),
+                          child: Container(
+
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              color: Colors.black,
+                            ),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.06,
+                              width: MediaQuery.of(context).size.width * 0.50,
+                              child: OutlineButton(
+
+                                shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
+                             //   borderSide: BorderSide(color: Colors.white),
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    // Icon(
+                                    // //  Icons.group,
+                                    //   color: Colors.white,
+                                    //   size: 20,
+                                    // ),
+                                    SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                                    Text(
+                                      continueAsGuest,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => ChooseYourWay(isGuest: true,)));
+//                                  ilder: (context) => Dashboard()));
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
 //                             Padding(
 //                               padding: const EdgeInsets.only(top:20.0),
 //                               child: SizedBox(
@@ -477,11 +491,11 @@ class LoginState extends State<LoginScreen> {
 
 
 
-                          ],
-                        )),
-                  ],
-                ),
-              ])),
+                      ],
+                    )),
+              ],
+            ),
+          ]),
         ));
   }
 }

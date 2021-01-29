@@ -44,8 +44,7 @@ class ProfileState extends State<ProfileScreen> {
             if (response.data != null) {
               if (response.data.config != null &&
                   response.data.config.isNotEmpty)
-                termsBottom(
-                    'Terms & Conditions', response.data.config, context);
+                termsBottom('Terms & Conditions', response.data.config, context);
             }
           } else {
             dismissDialog(context);
@@ -460,38 +459,7 @@ class ProfileState extends State<ProfileScreen> {
                       )),
                 ),
                 myDivider(),
-                SizedBox(
-                  height: 50,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 25, bottom: 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Image.asset(
-                      baseImageAssetsUrl + 'logo.png',
-                      height: 60,
-                      color: Color(0xff8B8B8B),
-                      width: 100,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 40, bottom: 10),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        volt_rights,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Color(0xff8B8B8B),
-                            fontSize: 8,
-                            fontStyle: FontStyle.italic,
-                            fontFamily: open_italic),
-                      )),
-                ),
-                SizedBox(
-                  height: 50,
-                )
+                footer()
               ],
             ),
           ),
