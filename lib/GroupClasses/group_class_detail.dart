@@ -440,6 +440,7 @@ class _DetailState extends State<GroupClassDetail> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => YourBooking(
+                              isSession: true,
                               id: id,
                               image: classImage,
                               wantToShowPrice: false,
@@ -469,6 +470,7 @@ class _DetailState extends State<GroupClassDetail> {
                         context,
                         ScaleRoute(
                             page: SelectSession(
+                               isSession: false,
                           id: id,
                           image: classImage,
                           name: className,
