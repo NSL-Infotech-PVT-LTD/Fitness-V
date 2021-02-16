@@ -440,7 +440,7 @@ class _DetailState extends State<GroupClassDetail> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => YourBooking(
-                              isSession: true,
+                              isSession: false,
                               id: id,
                               image: classImage,
                               wantToShowPrice: false,
@@ -476,6 +476,7 @@ class _DetailState extends State<GroupClassDetail> {
                           name: className,
                           isGroupClass: true,
                           roleType: _roleType,
+
                         )));
                   },
                   color: Colors.black,

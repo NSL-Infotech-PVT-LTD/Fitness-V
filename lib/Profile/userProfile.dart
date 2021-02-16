@@ -41,6 +41,7 @@ class UserProfileState extends State<UserProfile> {
   var emailController = TextEditingController();
   var dobController = TextEditingController();
   var designationController = TextEditingController();
+  var workController = TextEditingController();
   var emiratesController = TextEditingController();
   var addressController = TextEditingController();
   var cityController = TextEditingController();
@@ -144,8 +145,9 @@ class UserProfileState extends State<UserProfile> {
           if (response.status) {
             if (response.data != null) {
               _role = response.data.user.role.id.toString();
-              isVisible = _role == "8" || _role == "8"?false:true;
+              isVisible = _role == "8" || _role == "9"?false:true;
               firstNameController.text = response.data.user.first_name;
+              workController.text = response.data.user.work;
               middletNameController.text = response.data.user.middle_name;
               lastNameController.text = response.data.user.last_name;
               mobileController.text = response.data.user.mobile;
@@ -157,7 +159,6 @@ class UserProfileState extends State<UserProfile> {
               genderItem =  response.data.user.gender;
               addressController.text = response.data.user.address;
               nationalityController.text = response.data.user.nationality  == "" ? "dubai": response.data.user.nationality;
-
               DateTime tempDate = new DateFormat("yyyy-MM-dd")
                   .parse(response.data.user.birth_date);
 
@@ -223,7 +224,7 @@ class UserProfileState extends State<UserProfile> {
   Widget circleImage() {
     if (_imageFile == null) {
       if (image == null) {
-        return Image.asset(baseImageAssetsUrl + 'circleuser.png');
+        return SvgPicture.asset(baseImageAssetsUrl + 'place_holder.svg');
       } else {
         setString(userImage, image);
 
@@ -544,23 +545,43 @@ class UserProfileState extends State<UserProfile> {
                                 ),
                               ),
                             ),
-//                            Padding(
-//                              padding: EdgeInsets.only(top: 0),
-//                              child: TextFormField(
-//                                keyboardType: TextInputType.text,
-//                                readOnly: _isEnable,
-//                                controller: designationController,
-//                                style: TextStyle(
-//                                    color:
-//                                        _isEnable ? Colors.grey : Colors.black),
-//                                decoration: InputDecoration(
-//                                    labelText: designation,
-//                                    labelStyle: TextStyle(fontSize: 12,color: Colors.black),
-//                                    hintStyle: TextStyle(fontSize: textSize12)),
-//                              ),
-//                            ),
+                           Visibility(
+                              visible: isVisible ,
+                             child: Padding(
+                               padding: EdgeInsets.only(top: 0),
+                               child: TextFormField(
+                                 keyboardType: TextInputType.text,
+                                 readOnly: _isEnable,
+                                 controller: designationController,
+                                 style: TextStyle(
+                                     color:
+                                         _isEnable ? Colors.grey : Colors.black),
+                                 decoration: InputDecoration(
+                                     labelText: designation,
+                                     labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                     hintStyle: TextStyle(fontSize: textSize12)),
+                               ),
+                             ),
+                           ),      Visibility(
+                              visible: isVisible ,
+                             child: Padding(
+                               padding: EdgeInsets.only(top: 0),
+                               child: TextFormField(
+                                 keyboardType: TextInputType.text,
+                                 readOnly: _isEnable,
+                                 controller: workController,
+                                 style: TextStyle(
+                                     color:
+                                         _isEnable ? Colors.grey : Colors.black),
+                                 decoration: InputDecoration(
+                                     labelText: Work,
+                                     labelStyle: TextStyle(fontSize: 12,color: Colors.black),
+                                     hintStyle: TextStyle(fontSize: textSize12)),
+                               ),
+                             ),
+                           ),
                             Visibility(
-                            visible: isVisible,
+                            visible:isVisible,
                               child: Padding(
                                 padding: EdgeInsets.only(top: 12),
                                 child: TextFormField(
@@ -638,7 +659,7 @@ class UserProfileState extends State<UserProfile> {
                             ),
 
                             _isEnable ? Visibility(
-                              visible: isVisible,
+                              visible: true,//isVisible,
                               child: Padding(
                                       padding: EdgeInsets.only(top: 12),
                                       child: TextFormField(
@@ -659,43 +680,46 @@ class UserProfileState extends State<UserProfile> {
                                                 TextStyle(fontSize: textSize12)),
                                       ),
                                     ),
-                            ) : Padding(
-                                    padding: EdgeInsets.only(top: 18),
-                                    child: DropdownButton(
-                                      hint: selectedCity == null
-                                          ? Text('Select Emirates')
-                                          : Text(
-                                              selectedCity,
-                                              style: TextStyle(
-                                                  fontSize: textSize14,
-                                                  color: _isEnable
-                                                      ? Colors.grey
-                                                      : Colors.black),
-                                            ),
-                                      isExpanded: true,
-                                      iconSize: 30.0,
-                                      style: TextStyle(fontSize: textSize14),
-                                      items: _cities.map(
-                                        (val) {
-                                          return DropdownMenuItem<String>(
-                                            value: val,
-                                            child: Text(
-                                              val,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: textSize14),
-                                            ),
+                            ) : Visibility(
+                            visible:true, //isVisible,
+                              child: Padding(
+                                      padding: EdgeInsets.only(top: 18),
+                                      child: DropdownButton(
+                                        hint: selectedCity == null
+                                            ? Text('Select Emirates')
+                                            : Text(
+                                                selectedCity,
+                                                style: TextStyle(
+                                                    fontSize: textSize14,
+                                                    color: _isEnable
+                                                        ? Colors.grey
+                                                        : Colors.black),
+                                              ),
+                                        isExpanded: true,
+                                        iconSize: 30.0,
+                                        style: TextStyle(fontSize: textSize14),
+                                        items: _cities.map(
+                                          (val) {
+                                            return DropdownMenuItem<String>(
+                                              value: val,
+                                              child: Text(
+                                                val,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: textSize14),
+                                              ),
+                                            );
+                                          },
+                                        ).toList(),
+                                        onChanged: (val) {
+                                          setState(
+                                            () {
+                                              selectedCity = val;
+                                            },
                                           );
                                         },
-                                      ).toList(),
-                                      onChanged: (val) {
-                                        setState(
-                                          () {
-                                            selectedCity = val;
-                                          },
-                                        );
-                                      },
-                                    )),
+                                      )),
+                            ),
                             Container(
                               margin: EdgeInsets.only(top: padding25),
                               height: button_height,

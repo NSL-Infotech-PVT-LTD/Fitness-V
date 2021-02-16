@@ -216,6 +216,7 @@ class _SpouseTypeState extends State<SpouseType> {
     myResult = await Navigator.push(
       context,
       MaterialPageRoute(
+
           builder: (context) => SignupScreen(
               gymMemberType: widget.gym_members,
               rolePlanId: widget.rolePlanIds,
@@ -230,14 +231,15 @@ class _SpouseTypeState extends State<SpouseType> {
               profileImage: myResult != null && myResult.length > 1
                   ? myResult[1]
                   : null)),
-    );
+    ).whenComplete(() => setState((){
+
+    }));
 
     setState(() {
       if (myResult != null) {
         // price = myResult['trainerPrice'];
 
         result[index] = myResult[0];
-
         Totalprice = 0;
         print("hnsdjhds $result");
         for (int i = 0; i < result.length; i++) {
@@ -254,11 +256,9 @@ class _SpouseTypeState extends State<SpouseType> {
       // if (result.length>0) {
       //   stoData[int.parse(result[index]['memberIndex'])] = result;
       // }
-
       print('part $stoData');
     });
   }
-
   // _navigateAndDisplaySelection1(BuildContext context, String formType) async {
   //   result1 = await Navigator.push(
   //     context,
@@ -307,11 +307,16 @@ class _SpouseTypeState extends State<SpouseType> {
                               Navigator.pop(context);
                             },
                             child: Icon(Icons.arrow_back_ios)),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            'Back',
-                            style: TextStyle(fontSize: textSize20),
+                        GestureDetector(
+                           onTap: (){
+                             Navigator.pop(context);
+                           },
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Back',
+                              style: TextStyle(fontSize: textSize20),
+                            ),
                           ),
                         )
                       ],
@@ -447,11 +452,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                         ? 2.0
                                         : 1.5
                                     : 1.5,
-                                color: result[index] != null &&
-                                        result[index].isNotEmpty
-                                    ? result[index]['memberIndex'] ==
-                                            index.toString()
-                                        ? Colors.white
+                                color: result[index] != null && result[index].isNotEmpty ? result[index]['memberIndex'] == index.toString() ? Colors.white
                                         : Color(0xFFBDBDBD)
                                     : Color(0xFFBDBDBD)),
                             borderRadius: BorderRadius.circular(5.0),
@@ -492,10 +493,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                             : memberName[index]
                                         : memberName[index],
                                     style: TextStyle(
-                                      color: result[index] != null &&
-                                              result[index].isNotEmpty
-                                          ? result[index]['memberIndex'] ==
-                                                  index.toString()
+                                      color: result[index] != null && result[index].isNotEmpty ? result[index]['memberIndex'] == index.toString()
                                               ? Colors.white
                                               : Colors.black
                                           : Colors.black,
@@ -507,8 +505,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                     padding: EdgeInsets.all(10),
                                     child: SvgPicture.asset(
                                       baseImageAssetsUrl + 'user.svg',
-                                      color: result[index] != null &&
-                                              result[index].isNotEmpty
+                                      color: result[index] != null && result[index].isNotEmpty
                                           ? result[index]['memberIndex'] ==
                                                   index.toString()
                                               ? Colors.white
@@ -539,10 +536,7 @@ class _SpouseTypeState extends State<SpouseType> {
                                     _navigateAndDisplaySelection(
                                         ind: index,
                                         context: context,
-                                        chFilledData: result[index] != null &&
-                                                result[index].isNotEmpty
-                                            ? result[index]
-                                            : null,
+                                        chFilledData: result[index] != null && result[index].isNotEmpty ? result[index] : null,
                                         formType: '',
                                         // rolePanId: rolePlanId.toString(),
                                         // roleSId: roleId.toString());
@@ -570,12 +564,8 @@ class _SpouseTypeState extends State<SpouseType> {
                                           children: <Widget>[
                                             Text(
                                               stoData[index] != ''
-                                                  ? stoData[index]
-                                                              ['memberIndex'] ==
-                                                          index.toString()
-                                                      ? 'View Details'
-                                                      : 'Complete details'
-                                                  : 'Complete details',
+                                                  ? stoData[index]['memberIndex'] == index.toString()
+                                                      ? 'View Details' : 'Complete details' : 'Complete details',
                                               style: TextStyle(
                                                   color: stoData[index] != ''
                                                       ? stoData[index][
@@ -638,228 +628,234 @@ class _SpouseTypeState extends State<SpouseType> {
                     child: checkbox(iaccept, termsofService, acceptTerms),
                     padding: EdgeInsets.only(left: 10),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: padding5, left: 20, right: 20),
-                    height: button_height,
-                    width: SizeConfig.screenWidth,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.blueGrey,
-                        ),
-                        color: Colors.white),
-                    child: RaisedButton(
-                      onPressed: () {
-                        bool formCheck = false;
-                        // for(int i=0; i<result.length;i++)
-                        //   {
-                        //     if(result[i]['memberIndex']==i.toString())
-                        //       {
-                        //         print(i);
-                        //         print("Empty______________");
-                        //         break;
-                        //       }
-                        //   }
-                        /**
-                         * single form detail
-                         */
-                        result.forEach((element) {
-                          if (element.isEmpty) {
-                            formCheck = false;
-                            return;
-                          } else {
-                            formCheck = true;
-                          }
-                        });
-
-                        if (result != null && formCheck && acceptTerms) {
-                          Map<String, String> parms = {};
-                          for (int index = 0; index < result.length; index++) {
-                            parms[FIRSTNAME +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
-                            parms[MIDDLENAME +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
-                            parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] =
-                                result[index][LASTNAME +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            parms[MOBILE + "${index == 0 ? "" : "_$index"}"] =
-                                result[index]
-                                    [MOBILE + "${index == 0 ? "" : "_$index"}"];
-                            parms[EMAIL + "${index == 0 ? "" : "_$index"}"] =
-                                result[index]
-                                    [EMAIL + "${index == 0 ? "" : "_$index"}"];
-                            parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] =
-                                result[index][PASSWORD +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            parms[BIRTH_DATE +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
-                            parms[EMIRATES_ID +
-                                    "${index == 0 ? "" : "_$index"}"] =
-                                result[index][EMIRATES_ID +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            parms[GENDER + "${index == 0 ? "" : "_$index"}"] =
-                                result[index]
-                                    [GENDER + "${index == 0 ? "" : "_$index"}"];
-                            parms[trainer_id +
-                                "${index == 0 ? "" : "_$index"}"] = result[
-                                    index]
-                                [trainer_id + "${index == 0 ? "" : "_$index"}"];
-                            parms[trainer_slot +
-                                    "${index == 0 ? "" : "_$index"}"] =
-                                result[index][trainer_slot +
-                                    "${index == 0 ? "" : "_$index"}"];
-                            if (index == 0)
-                              parms[EMEREGENCY_NUMBER] =
-                                  result[index][EMEREGENCY_NUMBER];
-                            if (index == 0)
-                              parms[DESIGNATION] = result[index][DESIGNATION];
-                            if (index == 0)
-                              parms[ADDRESS] = result[index][ADDRESS];
-                            if (index == 0) parms[CITY] = result[index][CITY];
-                            if (index == 0)
-                              parms[nationality] = result[index][nationality];
-                            if (index == 0)
-                              parms[workplace] = result[index][workplace];
-                            if (index == 0)
-                              parms[marital_status] =
-                                  result[index][marital_status];
-                            if (index == 0)
-                              parms[about_us] = result[index][about_us];
-                            parms[DEVICE_TYPE] = deviceType;
-                            parms[DEVICE_TOKEN] = deviceTokenValue;
-
-                            parms[ROLE_ID] = roleIdrole != null
-                                ? roleIdrole.toString()
-                                : widget.roleId.toString();
-                            parms[ROLE_PLAN_ID] = rolePlanId != null
-                                ? rolePlanId.toString()
-                                : widget.rolePlanIds.toString();
-                          }
-                          print("vikasssss===${parms}");
-                          // FIRSTNAME: result[index][FIRSTNAME],
-                          // MIDDLENAME: result[index][MIDDLENAME],
-                          // LASTNAME: result[index][LASTNAME],
-                          // MOBILE: result[index][MOBILE],
-                          // EMAIL: result[index][EMAIL],
-                          // PASSWORD: result[index][PASSWORD],
-                          // BIRTH_DATE: result[index][BIRTH_DATE],
-                          // EMIRATES_ID: result[index][EMIRATES_ID],
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Container(
+                      margin: EdgeInsets.only(top: padding5, left: 20, right: 20),
+                      height: button_height,
+                      width: SizeConfig.screenWidth,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueGrey,
+                          ),
+                          color: Colors.white),
+                      child: RaisedButton(
+                        onPressed: () {
+                          bool formCheck = false;
+                          // for(int i=0; i<result.length;i++)
+                          //   {
+                          //     if(result[i]['memberIndex']==i.toString())
+                          //       {
+                          //         print(i);
+                          //         print("Empty______________");
+                          //         break;
+                          //       }
+                          //   }
                           /**
-                           * form 1 details
+                           * single form detail
                            */
-                          isConnectedToInternet().then((internet) {
-                            print("AllParam" + parms.toString());
-                            if (internet != null && internet) {
-                              showProgress(context, "Please wait.....");
-
-                              signUpToServer(parms: parms, file: myResult[1])
-                                  .then((response) {
-                                dismissDialog(context);
-                                if (response.status) {
-                                  setString(USER_AUTH, "Bearer " + response.data.token);
-                                  setString(roleType, response.data.user.role.name);
-                                  if (response.data != null && response.data.user != null)
-                                    setString(userImage, response.data.user.image);
-
-                                  if (response.data != null && response.data.user != null)
-                                    setString(id, response.data.user.id.toString());
-                                  print("roleIdCheck" + response.data.user.role.id.toString());
-                                  setString(roleIdDash, response.data.user.role.id.toString());
-
-                                  if (response.data.user.role != null) {
-
-                                    print("roleID "+"${response.data.user.role.toJson().toString()}");
-
-                                    setString(userPlanImage, response.data.user.role.image);
-                                    setString(roleName, response.data.user.role.name);
-                                    setString(Id, response.data.user.id.toString());
-
-                                    setString(validTill, response.data.user.role_expired_on);
-                                    setString(roleCategory, response.data.user.role.category);
-                                    if (response.data.user.role.current_plan != null) {
-                                      setString(
-                                          rolePlan, response.data.user.role.current_plan.role_plan);
-                                    }
-                                  }
-
-                                  setString(USER_NAME, response.data.user.full_name);
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    ScaleRoute(page: SuccessScreen()),
-                                    (r) => false,
-                                  );
-                                } else {
-                                  dismissDialog(context);
-
-                                  if (response.error != null)
-                                    showDialogBox(
-                                        context, "Error!", response.error);
-                                  else {
-                                    errorMessage1 = '';
-                                    if (response.errors != null) {
-                                      var value = response.errors.toJson();
-
-                                      if (value['email'] != null) {
-                                        errorMessage = response.errors.email;
-                                        setState(() {
-                                          errorMessage1 = response.errors.email;
-                                        });
-                                      } else if (response.errors.email_1 !=
-                                          null) {
-                                        errorMessage = response.errors.email_1;
-                                        setState(() {
-                                          errorMessage1 =
-                                              response.errors.email_1;
-                                        });
-                                      } else if (response.errors.email_2 !=
-                                          null) {
-                                        errorMessage = response.errors.email_2;
-                                        setState(() {
-                                          errorMessage1 =
-                                              response.errors.email_2;
-                                        });
-                                      } else if (response.errors.email_3 !=
-                                          null) {
-                                        errorMessage = response.errors.email_3;
-                                        setState(() {
-                                          errorMessage1 =
-                                              response.errors.email_3;
-                                        });
-                                      }
-
-                                      showDialogBox(
-                                          context, error, errorMessage);
-                                    }
-                                  }
-                                }
-                              });
+                          result.forEach((element) {
+                            if (element.isEmpty) {
+                              formCheck = false;
+                              return;
                             } else {
-                              showDialogBox(
-                                  context, internetError, pleaseCheckInternet);
-                              dismissDialog(context);
+                              formCheck = true;
                             }
-                            dismissDialog(context);
                           });
-                        } else if (!acceptTerms) {
-                          showDialogBox(context, termsofService,
-                              'Please read & accept our terms of services');
-                        } else {
-                          showDialogBox(
-                              context, error, 'please fill all details');
-                        }
-                      },
-                      /** from end Api**/
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0)),
-                      child: Text(
-                        signup,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+
+                          if (result != null && formCheck && acceptTerms) {
+                            Map<String, String> parms = {};
+                            for (int index = 0; index < result.length; index++) {
+                              parms[FIRSTNAME +
+                                  "${index == 0 ? "" : "_$index"}"] = result[
+                                      index]
+                                  [FIRSTNAME + "${index == 0 ? "" : "_$index"}"];
+                              parms[MIDDLENAME +
+                                  "${index == 0 ? "" : "_$index"}"] = result[
+                                      index]
+                                  [MIDDLENAME + "${index == 0 ? "" : "_$index"}"];
+                              parms[LASTNAME + "${index == 0 ? "" : "_$index"}"] =
+                                  result[index][LASTNAME +
+                                      "${index == 0 ? "" : "_$index"}"];
+                              parms[MOBILE + "${index == 0 ? "" : "_$index"}"] =
+                                  result[index]
+                                      [MOBILE + "${index == 0 ? "" : "_$index"}"];
+                              parms[EMAIL + "${index == 0 ? "" : "_$index"}"] =
+                                  result[index]
+                                      [EMAIL + "${index == 0 ? "" : "_$index"}"];
+                              parms[PASSWORD + "${index == 0 ? "" : "_$index"}"] =
+                                  result[index][PASSWORD +
+                                      "${index == 0 ? "" : "_$index"}"];
+                              parms[BIRTH_DATE +
+                                  "${index == 0 ? "" : "_$index"}"] = result[
+                                      index]
+                                  [BIRTH_DATE + "${index == 0 ? "" : "_$index"}"];
+                              parms[EMIRATES_ID +
+                                      "${index == 0 ? "" : "_$index"}"] =
+                                  result[index][EMIRATES_ID +
+                                      "${index == 0 ? "" : "_$index"}"];
+                              parms[GENDER + "${index == 0 ? "" : "_$index"}"] =
+                                  result[index]
+                                      [GENDER + "${index == 0 ? "" : "_$index"}"];
+                              parms[trainer_id +
+                                  "${index == 0 ? "" : "_$index"}"] = result[
+                                      index]
+                                  [trainer_id + "${index == 0 ? "" : "_$index"}"];
+                              parms[trainer_slot +
+                                      "${index == 0 ? "" : "_$index"}"] =
+                                  result[index][trainer_slot +
+                                      "${index == 0 ? "" : "_$index"}"];
+                              if (index == 0)
+                                parms[EMEREGENCY_NUMBER] =
+                                    result[index][EMEREGENCY_NUMBER];
+                              if (index == 0)
+                                parms[DESIGNATION] = result[index][DESIGNATION];
+                              if (index == 0)
+                                parms[ADDRESS] = result[index][ADDRESS];
+                              if (index == 0) parms[CITY] = result[index][CITY];
+                              if (index == 0)
+                                parms[nationality] = result[index][nationality];
+                              if (index == 0)
+                                parms[workplace] = result[index][workplace];
+                              if (index == 0)
+                                parms[marital_status] =
+                                    result[index][marital_status];
+                              if (index == 0)
+                                parms[about_us] = result[index][about_us];
+                              parms[DEVICE_TYPE] = deviceType;
+                              parms[DEVICE_TOKEN] = deviceTokenValue;
+
+                              parms[ROLE_ID] = roleIdrole != null
+                                  ? roleIdrole.toString()
+                                  : widget.roleId.toString();
+                              parms[ROLE_PLAN_ID] = rolePlanId != null
+                                  ? rolePlanId.toString()
+                                  : widget.rolePlanIds.toString();
+                            }
+                            print("vikasssss===${parms}");
+                            // FIRSTNAME: result[index][FIRSTNAME],
+                            // MIDDLENAME: result[index][MIDDLENAME],
+                            // LASTNAME: result[index][LASTNAME],
+                            // MOBILE: result[index][MOBILE],
+                            // EMAIL: result[index][EMAIL],
+                            // PASSWORD: result[index][PASSWORD],
+                            // BIRTH_DATE: result[index][BIRTH_DATE],
+                            // EMIRATES_ID: result[index][EMIRATES_ID],
+                            /**
+                             * form 1 details
+                             */
+                            isConnectedToInternet().then((internet) {
+                              print("AllParam" + parms.toString());
+                              if (internet != null && internet) {
+                                showProgress(context, "Please wait.....");
+
+                                signUpToServer(parms: parms, file: myResult[1])
+                                    .then((response) {
+                                  dismissDialog(context);
+                                  if (response.status) {
+                                    setString(USER_AUTH, "Bearer " + response.data.token);
+                                    setString(roleType, response.data.user.role.name);
+                                    if (response.data != null && response.data.user != null)
+                                      setString(userImage, response.data.user.image);
+
+                                    if (response.data != null && response.data.user != null)
+                                      setString(id, response.data.user.id.toString());
+                                    print("roleIdCheck" + response.data.user.role.id.toString());
+                                    setString(roleIdDash, response.data.user.role.id.toString());
+
+                                    if (response.data.user.role != null) {
+
+                                      print("roleID "+"${response.data.user.role.toJson().toString()}");
+
+                                      setString(userPlanImage, response.data.user.role.image);
+                                      setString(roleName, response.data.user.role.name);
+                                      setString(Id, response.data.user.id.toString());
+                                      setString(trainer_slot, response.data.user.trainer_slot.toString());
+                                      setString(mySessions, response.data.user.trainer_slot.toString());
+
+                                      setString(validTill, response.data.user.role_expired_on);
+
+                                      setString(roleCategory, response.data.user.role.category);
+                                      if (response.data.user.role.current_plan != null) {
+                                        setString(
+                                            rolePlan, response.data.user.role.current_plan.role_plan);
+                                      }
+                                    }
+
+                                    setString(USER_NAME, response.data.user.full_name);
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      ScaleRoute(page: SuccessScreen()),
+                                      (r) => false,
+                                    );
+                                  } else {
+                                    dismissDialog(context);
+
+                                    if (response.error != null)
+                                      showDialogBox(
+                                          context, "Error!", response.error);
+                                    else {
+                                      errorMessage1 = '';
+                                      if (response.errors != null) {
+                                        var value = response.errors.toJson();
+
+                                        if (value['email'] != null) {
+                                          errorMessage = response.errors.email;
+                                          setState(() {
+                                            errorMessage1 = response.errors.email;
+                                          });
+                                        } else if (response.errors.email_1 !=
+                                            null) {
+                                          errorMessage = response.errors.email_1;
+                                          setState(() {
+                                            errorMessage1 =
+                                                response.errors.email_1;
+                                          });
+                                        } else if (response.errors.email_2 !=
+                                            null) {
+                                          errorMessage = response.errors.email_2;
+                                          setState(() {
+                                            errorMessage1 =
+                                                response.errors.email_2;
+                                          });
+                                        } else if (response.errors.email_3 !=
+                                            null) {
+                                          errorMessage = response.errors.email_3;
+                                          setState(() {
+                                            errorMessage1 =
+                                                response.errors.email_3;
+                                          });
+                                        }
+
+                                        showDialogBox(
+                                            context, error, errorMessage);
+                                      }
+                                    }
+                                  }
+                                });
+                              } else {
+                                showDialogBox(
+                                    context, internetError, pleaseCheckInternet);
+                                dismissDialog(context);
+                              }
+                              dismissDialog(context);
+                            });
+                          } else if (!acceptTerms) {
+                            showDialogBox(context, termsofService,
+                                'Please read & accept our terms of services');
+                          } else {
+                            showDialogBox(
+                                context, error, 'please fill all details');
+                          }
+                        },
+                        /** from end Api**/
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0)),
+                        child: Text(
+                          signup,
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ),
                     ),
                   ),

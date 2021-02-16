@@ -148,14 +148,63 @@ class _EventState extends State<EventClass>
               background: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  GestureDetector(
-                      onTap: () {},
-                      child: Image.asset(
-                        baseImageAssetsUrl + 'fitness.png',
-                        fit: BoxFit.cover,
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight * .17,
-                      )),
+
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    width: SizeConfig.screenWidth,
+                    height: SizeConfig.screenHeight * .17,
+                    child: Stack(
+                      children: <Widget>[
+                        // Positioned(
+                        //     left: 0,
+                        //     right: 0,
+                        //     top: padding50,
+                        //     child: Image.asset(
+                        //       baseImageUrl + 'exc_sign.png',
+                        //       height: 111,
+                        //     )),
+                        Positioned(
+                          // left: 50,
+                          // bottom: padding50 + padding30,
+                          child:   GestureDetector(
+                              onTap: () {},
+                              child: Image.asset(
+                                //baseImageAssetsUrl + 'fitness.png',
+                                baseImageAssetsUrl + 'voltLogoBanner.png',
+                                fit: BoxFit.cover,
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight * .17,
+                              )),
+                        ),
+                        Positioned(
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            color: Colors.black26,
+                          ),
+                        ),
+
+                        Positioned(
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/logo.png',
+                              width: 200,
+
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+
                   SizedBox(height: 10),
                   Row(
                     children: <Widget>[

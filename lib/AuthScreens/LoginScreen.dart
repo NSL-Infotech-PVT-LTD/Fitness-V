@@ -6,6 +6,7 @@ import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Screens/view_personal_trainer.dart';
 import 'package:volt/Value/CColor.dart';
@@ -19,6 +20,36 @@ import 'dart:io';
 class LoginScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => LoginState();
+}
+List gym_list;
+List pool_and_beach_list;
+List guest_list;
+List fairMont_list;
+
+
+Future<StatusResponse> getRoleApi(context,userType) {
+  isConnectedToInternet().then((internet) {
+    if (internet != null && internet) {
+    //  showProgress(context, "Loading....");
+      getRoles().then((response) {
+        dismissDialog(context);
+        if (response.status) {
+          gym_list = response.data.gym_members;
+          pool_and_beach_list = response.data.pool_and_beach_members;
+          guest_list = response.data.local_guest;
+          fairMont_list = response.data.fairmont_hotel_guest;
+          saveUser(userData,userType == "gym_members"?gym_list:userType == "pool_and_beach_members"?pool_and_beach_list:gym_list);
+        } else {
+          showDialogBox(context, "Error!", response.error);
+        }
+      }).whenComplete(() => dismissDialog(context));
+    } else {
+      showDialogBox(context, internetError, pleaseCheckInternet);
+      dismissDialog(context);
+    }
+
+    dismissDialog(context);
+  });
 }
 
 class LoginState extends State<LoginScreen> {
@@ -45,29 +76,41 @@ class LoginState extends State<LoginScreen> {
         getLogin(parms).then((response) {
           dismissDialog(context);
           if (response.status) {
+
+
             setString(USER_AUTH, "Bearer " + response.data.token);
+            setString(UserFeeType,response.data.user.role.current_plan.fee.toString());
+            setString(userCurrentRoleID,response.data.user.role.id.toString());
             setString(roleType, response.data.user.role.name);
+              getRoleApi(context,response.data.user.role.nameFilter);
+
             if (response.data != null && response.data.user != null)
               setString(userImage, response.data.user.image);
 
             if (response.data != null && response.data.user != null)
               setString(id, response.data.user.id.toString());
-            print("roleIdCheck" + response.data.user.role.id.toString());
-            setString(roleIdDash, response.data.user.role.id.toString());
+            print("roleIdCheck" + response.data.user.toJson().toString());
+
+            if (response.data.user.my_sessions != null) {
+              setString(mySessions, response.data.user.my_sessions.toString());
+            }if (response.data.user.my_sessions != null) {
+              setString(trainer_slot, response.data.user.trainer_slot.toString());
+            }
 
             if (response.data.user.role != null) {
 
               print("roleID "+"${response.data.user.role.toJson().toString()}");
-
+              setString(roleIdDash, response.data.user.role.id.toString());
+              setString(poolOrGym, response.data.user.role.nameFilter);
               setString(userPlanImage, response.data.user.role.image);
               setString(roleName, response.data.user.role.name);
               setString(Id, response.data.user.id.toString());
 
               setString(validTill, response.data.user.role_expired_on);
+
               setString(roleCategory, response.data.user.role.category);
               if (response.data.user.role.current_plan != null) {
-                setString(
-                    rolePlan, response.data.user.role.current_plan.role_plan);
+                setString(rolePlan, response.data.user.role.current_plan.role_plan);
               }
             }
 
@@ -86,7 +129,6 @@ class LoginState extends State<LoginScreen> {
       }
     });
   }
-
   bool passwordVisible = true;
   bool _isIos;
   String deviceType = '';
@@ -374,7 +416,6 @@ class LoginState extends State<LoginScreen> {
                               height: MediaQuery.of(context).size.height * 0.06,
                               width: MediaQuery.of(context).size.width * 0.50,
                               child: OutlineButton(
-
                                 shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10)),
                               //  borderSide: BorderSide(color: Colors.white),
                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -387,7 +428,6 @@ class LoginState extends State<LoginScreen> {
                                     //   color: Colors.white,
                                     //   size: 20,
                                     // ),
-                                    SizedBox(width: MediaQuery.of(context).size.width * 0.03),
                                     Text(
                                       "Sign Up",
                                       textAlign: TextAlign.center,
@@ -442,9 +482,7 @@ class LoginState extends State<LoginScreen> {
                                 ),
                                 onPressed: () {
                                   Navigator.pushReplacement(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) => ChooseYourWay(isGuest: true,)));
+                                      context, MaterialPageRoute( builder: (context) => ChooseYourWay(isGuest: true,)));
 //                                  ilder: (context) => Dashboard()));
                                 },
                               ),
@@ -488,9 +526,6 @@ class LoginState extends State<LoginScreen> {
 //                                 ),
 //                               ),
 //                             ),
-
-
-
                       ],
                     )),
               ],

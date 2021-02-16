@@ -98,7 +98,7 @@ class TrainerDetailState extends State<TrainerDetail>
             ),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: Text("Yes"),
+                child: Text("Yes",style: TextStyle( color: CColor.CancelBTN)),
                 onPressed: () {
                   Navigator.pop(context);
                   if (is_booked_by_me) {
@@ -108,7 +108,7 @@ class TrainerDetailState extends State<TrainerDetail>
                 isDestructiveAction: true,
               ),
               CupertinoDialogAction(
-                child: Text("No"),
+                child: Text("No",style: TextStyle( color: CColor.CancelBTN)),
                 onPressed: () {
                   Navigator.pop(context);
                 },

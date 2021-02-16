@@ -53,7 +53,7 @@ Widget backWithArrowAndIcon(String imageUrl) => Container(
             ),
           ),
           Spacer(),
-          SvgPicture.asset(imageUrl)
+          SvgPicture.asset(imageUrl,)
         ],
       ),
       padding: EdgeInsets.fromLTRB(padding10, padding5, padding10, padding10),
@@ -216,6 +216,7 @@ Future<bool> bookingFunction(String auth, context, String model_type,
                 context,
                 ScaleRoute(
                     page: BookingConfirmed(
+
                       createdAt: response.data.booking.created_at,
                       hours: hours,
                      // image: response.data.booking.model_type == 'class_schedules' ? response.data.booking.model_detail.class_detail.image : response.data.booking.model_detail.image,
@@ -231,7 +232,8 @@ Future<bool> bookingFunction(String auth, context, String model_type,
                   createdAt: response.data.booking.created_at,
                   hours: hours,
                   image: response.data.booking.model_type == 'class_schedules' ? response.data.booking.model_detail.class_detail.image : response.data.booking.model_detail.image,
-                  name: name, bookingId: response.data.booking.id.toString(),
+                  name: name,
+                      bookingId: response.data.booking.id.toString(),
 //                  hours: response.data.booking.id.toString(),
                   modelType: response.data.booking.model_type,
                 )),

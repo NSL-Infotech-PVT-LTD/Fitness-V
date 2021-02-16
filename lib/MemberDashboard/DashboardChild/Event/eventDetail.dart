@@ -102,7 +102,7 @@ class EventDetailState extends State<EventDetail> {
             ),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: Text("Yes"),
+                child: Text("Yes",style: TextStyle( color: CColor.CancelBTN)),
                 onPressed: () {
 //
                   if (!_isBookedByMe) {
@@ -123,7 +123,7 @@ class EventDetailState extends State<EventDetail> {
                 isDestructiveAction: true,
               ),
               CupertinoDialogAction(
-                child: Text("No"),
+                child: Text("No",style: TextStyle( color: CColor.CancelBTN)),
                 onPressed: () {
                   Navigator.pop(context);
                 },

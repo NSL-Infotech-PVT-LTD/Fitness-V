@@ -14,11 +14,10 @@ class StatusResponse {
   StatusResponse.fromJson(Map<String, dynamic> json,) {
     status = json['status'];
     code = json['code'];
-    print("==========> "+json['data'] .toString());
+    print("==========> class error "+json['error'] .toString());
+    print("==========> class data "+json['data'] .toString());
 
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-
-
     error = json['error'];
     errors = json['errors']!=null?new AuthError.fromJson(json['errors']):null;
 
