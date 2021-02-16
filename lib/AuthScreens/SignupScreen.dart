@@ -740,8 +740,7 @@ class SignupState extends State<SignupScreen> {
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
                                 // ignore: deprecated_member_use
-                                WhitelistingTextInputFormatter(
-                                    RegExp("[a-zA-Z]"))
+                                //WhitelistingTextInputFormatter(RegExp("[a-zA-Z]"))
                               ],
                               validator: (value) {
                                 if (value.isEmpty) {

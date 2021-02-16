@@ -132,9 +132,14 @@ class LoginState extends State<LoginScreen> {
   bool passwordVisible = true;
   bool _isIos;
   String deviceType = '';
+  bool isVisible = false;
+  bool isVisiblePass = false;
+  String text = "";
+  String textPass = "";
 
   @override
   void initState() {
+
     passwordVisible = true;
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
@@ -242,22 +247,41 @@ class LoginState extends State<LoginScreen> {
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 8),
                                   child: TextFormField(
+                                    onChanged: (text){
+                                      setState(() {
+                                        text.isEmpty?isVisible =false:isVisible =true;
+                                      });
+
+                                    },
                                     cursorColor: Colors.black,
                                     keyboardType:
                                         TextInputType.emailAddress,
                                     key: new Key('email'),
-                                    controller:
-                                        _emailAddressFieldController,
+                                    controller: _emailAddressFieldController,
                                     decoration: new InputDecoration(
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            Icons.error,
-                                            color: _validate1
-                                                ? Colors.red
-                                                : Colors.transparent,
-                                          ),
-                                          onPressed: () {},
-                                        ),
+                                        suffixIcon: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.error,
+                                                color: _validate1 ? Colors.red
+                                                    : Colors.transparent,
+                                              ),
+                                              onPressed: () {},
+                                            ),
+                                            Visibility(
+                                              visible: isVisible,
+                                              child: IconButton(icon: Icon(Icons.clear,color: Colors.grey,), onPressed:(){
+                                                _emailAddressFieldController.clear();
+                                                setState(() {
+                                                  isVisible = false;
+                                                });
+                                              } ),
+                                            ),
+                                          ],
+                                        )  ,
                                         border: InputBorder.none,
                                         contentPadding: EdgeInsets.only(
                                             left: 15, bottom: 10),
@@ -295,28 +319,47 @@ class LoginState extends State<LoginScreen> {
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 0),
                                   child: TextFormField(
+                                    onChanged: (textPass){
+                                      setState(() {
+                                        textPass.isEmpty?isVisiblePass = false:isVisiblePass = true;
+                                      });
+                                    },
                                     cursorColor: Colors.black,
                                     keyboardType: TextInputType.visiblePassword,
                                        obscureText: passwordVisible,
                           key: new Key('password'),
                           controller: _passwordFieldController,
                           decoration: new InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: Padding(
-                          padding:
-                              EdgeInsets.only(bottom: 10),
-                          child: _validate2 ? Icon(Icons.error,
-                                  color: Colors.red) : Icon(
-                                  // Based on passwordVisible state choose the icon
-                                  passwordVisible ? Icons.visibility_off:Icons.visibility ,
-                                  color: CColor.DividerCOlor,
-                                )),
-                      onPressed: () {
-                        // Update the state i.e. toogle the state of passwordVisible variable
-                        setState(() {
-                          passwordVisible = !passwordVisible;
-                        });
-                      },
+                    suffixIcon:Row(
+                      mainAxisSize:MainAxisSize.min,
+                      children: [
+                        Visibility(
+                          visible:isVisiblePass,
+                          child: IconButton(icon: Icon(Icons.clear,color: Colors.grey,), onPressed:(){
+                            _passwordFieldController.clear();
+                            setState(() {
+                              isVisiblePass = false;
+                            });
+                          } ),
+                        ) ,
+                        IconButton(
+                          icon: Padding(
+                              padding:
+                                  EdgeInsets.only(bottom: 10),
+                              child: _validate2 ? Icon(Icons.error,
+                                      color: Colors.red) : Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      passwordVisible ? Icons.visibility_off:Icons.visibility ,
+                                      color: CColor.DividerCOlor,
+                                    )),
+                          onPressed: () {
+                            // Update the state i.e. toogle the state of passwordVisible variable
+                            setState(() {
+                              passwordVisible = !passwordVisible;
+                            });
+                          },
+                        ),
+                      ],
                     ),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(

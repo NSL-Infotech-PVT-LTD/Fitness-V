@@ -45,17 +45,13 @@ class DashboardState extends State<Dashboard> {
       setState(() {
 
       });
-
   }
 
   set onTabTappedNew(int index) {
-
-
       _currentIndex = index;
       print("_currentIndejnjjx $_currentIndex");
       setState(() {
       });
-
 
   }
 
@@ -278,6 +274,13 @@ class DashboardState extends State<Dashboard> {
                   padding: EdgeInsets.all(20),
                   child: Row(
                     children: <Widget>[
+                      GestureDetector(onTap: (){
+                        _willPopCallback();
+                      },
+                        child: Icon(Icons.arrow_back_ios),
+                      ),
+
+
                       GestureDetector(
                         onTap: () {
                           _navigateAndDisplaySelection(context);
@@ -289,8 +292,7 @@ class DashboardState extends State<Dashboard> {
                                 width: 40,
                               )
                             :
-
-
+                            
                         CircleAvatar(
                                 radius: 25.0,
                                 backgroundImage: NetworkImage(
@@ -298,6 +300,8 @@ class DashboardState extends State<Dashboard> {
                                 backgroundColor: Colors.transparent,
                               ),
                       ),
+
+
                       SizedBox(
                         width: 5,
                       ),
