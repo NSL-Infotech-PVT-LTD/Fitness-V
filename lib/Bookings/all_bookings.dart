@@ -324,8 +324,7 @@ class AllBookingsState extends State<AllBookings> {
                                 ),
                                 margin: EdgeInsets.all(10.0),
                                 decoration: BoxDecoration(
-                                    color:
-                                        _trainers ? Colors.black : Colors.black26,
+                                    color: _trainers ? Colors.black : Colors.black26,
                                     shape: BoxShape.circle))),
 
                         GestureDetector(
