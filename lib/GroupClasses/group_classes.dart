@@ -305,25 +305,25 @@ class GroupClassState extends State<GroupClass> {
 //            ListView.builder(itemBuilder: null)
                         ],
                       ),
-                      Row(
-                        children: <Widget>[
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 12,
-                          ),
-                          Expanded(
-                            child: Text(
-                              "We have a fantastic range of special Group classes designed to help you get fit and healthy while enjoying new daily challenges. why not make it fun?",
-                              style: TextStyle(
-                                  color: CColor.LightGrey, fontSize: 10),
-                            ),
-                          ),
-                          SizedBox(
-                            width: SizeConfig.blockSizeHorizontal * 8,
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     SizedBox(
+                      //       width: SizeConfig.blockSizeHorizontal * 12,
+                      //     ),
+                      //     Expanded(
+                      //       child: Text(
+                      //         "We have a fantastic range of special Group classes designed to help you get fit and healthy while enjoying new daily challenges. why not make it fun?",
+                      //         style: TextStyle(
+                      //             color: CColor.LightGrey, fontSize: 10),
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       width: SizeConfig.blockSizeHorizontal * 8,
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(
-                        height: 20,
+                        height: 12,
                       ),
                       GestureDetector(
                         onTap: () {
@@ -349,14 +349,11 @@ class GroupClassState extends State<GroupClass> {
                               ),
                             )),
                       ),
-                      SizedBox(
-                        height: 14,
-                      ),
                     ],
                   ),
                 ),
               ),
-              expandedHeight: SizeConfig.screenHeight * .48,
+              expandedHeight: SizeConfig.screenHeight * .42,
             ),
           ];
         },

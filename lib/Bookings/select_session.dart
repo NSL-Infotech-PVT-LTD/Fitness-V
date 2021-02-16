@@ -454,8 +454,8 @@ class SelectSessionState extends State<SelectSession> {
                               id: widget.id, image: widget.image, wantToShowPrice: _wantToShowPrice,
                               isGroupClass: widget.isGroupClass,
                               name: widget.name,
-                              payment: sendValueT().toString(),
-                              serviceHours: valueSessionsHolder == 0 ? 1.toString() : valueSessionsHolder.toString(),
+                              payment: sendValue().toString(),
+                              serviceHours: valueHolder == 0 ? 1.toString() : valueHolder.toString(),
                             )));
                     //  print("${widget.id}  ${valueHolder}");
                   },
