@@ -175,6 +175,7 @@ class GymMemberState extends State<UpgradePlan> {
   String planIdS;
   String rolePlanIdS;
   String planPrice;
+  String feeType;
   int indexOfSlider;
   int currentFee;
   @override
@@ -526,7 +527,8 @@ class GymMemberState extends State<UpgradePlan> {
                                         planIdS = plans[index].planId;
                                         rolePlanIdS = plans[index].rolePlanId;
                                         planPrice = plans[index].fee;
-                                        print("check fee"+plans[index].fee);
+                                        feeType = plans[index].fee_type;
+                                        print("check fee"+plans[index].fee_type);
                                       });
 
                                     },
@@ -542,8 +544,7 @@ class GymMemberState extends State<UpgradePlan> {
                                         ),
                                         SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                                         Text(
-                                          plans[index].fee_type == "quarterly" ? "3 months" : plans[index].fee_type == "half_yearly"
-                                              ? "6 months"
+                                          plans[index].fee_type == "quarterly" ? "3 months" : plans[index].fee_type == "half_yearly" ? "6 months"
                                               : plans[index].fee_type == "yearly"
                                               ? "Annual"
                                               : plans[index].fee_type,
@@ -592,36 +593,39 @@ class GymMemberState extends State<UpgradePlan> {
                     //     child: fullWidthButton(context, proceed, SizeConfig.screenWidth, FontWeight.bold, ChooseMemberShip(_response: _response, gymMembers: widget.gymMembers)
                     //     )),
 
-                    Padding(
-                        padding: EdgeInsets.only(left: 40, right: 40),
-                        child: Container(
-                          margin: EdgeInsets.only(top: padding15),
-                          height: 50,
-                          width: SizeConfig.screenWidth,
-                          child: RaisedButton(
-                            onPressed: () {
+                    Visibility(
+                      visible: feeType == "yearly",
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 40, right: 40),
+                          child: Container(
+                            margin: EdgeInsets.only(top: padding15),
+                            height: 50,
+                            width: SizeConfig.screenWidth,
+                            child: RaisedButton(
+                              onPressed: () {
 //                        Navigator.pushReplacement(
 //                            context,
 //                            new MaterialPageRoute(builder: (context) =>FamilyWithTwo()));     //SpouseType()));
-                              currentSelectedIndex == -1 ? showDialogBox(context, "Choose Plan Alert", 'Please choose your plan type') :upgradePlanFun();
-                            },
-                            color: Colors.black,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(button_radius)),
-                            child: Text(
-                              'Upgrade',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                currentSelectedIndex == -1 ? showDialogBox(context, "Choose Plan Alert", 'Please choose your plan type') :upgradePlanFun();
+                              },
+                              color: Colors.black,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(button_radius)),
+                              child: Text(
+                                'Upgrade',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
                             ),
-                          ),
-                        )
+                          )
 //                fullWidthButton(
 //                context,
 //                'Proceed',
 //                SizeConfig.screenWidth,
 //                FontWeight.bold,
 //              )
+                      ),
                     ),
                   ],
                 ),

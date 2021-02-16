@@ -93,7 +93,7 @@ class TrainerDetailState extends State<TrainerDetail>
             title: Text("Booking cancel"),
             content: Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: Text("Do you want to continue ?",
+              child: Text("Do you want to continue?",
                   style: TextStyle(wordSpacing: 1)),
             ),
             actions: <Widget>[

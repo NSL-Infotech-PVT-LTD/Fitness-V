@@ -87,7 +87,7 @@ class AllBookingsState extends State<AllBookings> {
             title: Text("Booking cancel"),
             content: Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: Text("Do you want to continue ?",
+              child: Text("Do you want to continue?",
                   style: TextStyle(wordSpacing: 1)),
             ),
             actions: <Widget>[
@@ -324,7 +324,8 @@ class AllBookingsState extends State<AllBookings> {
                                 ),
                                 margin: EdgeInsets.all(10.0),
                                 decoration: BoxDecoration(
-                                    color: _trainers ? Colors.black : Colors.black26,
+                                    color:
+                                        _trainers ? Colors.black : Colors.black26,
                                     shape: BoxShape.circle))),
 
                         GestureDetector(
@@ -814,23 +815,26 @@ class BookingView extends StatelessWidget {
                                       fit: BoxFit.cover,
                                       width: SizeConfig.screenWidth * .32,
                                     ),
-                              Align(
-                                alignment: Alignment.topCenter,
-                                child: Container(
-                                  margin: EdgeInsets.only(top: padding5),
-                                  height: 30,
-                                  width: 120,
-                                  child: RaisedButton(
-                                    onPressed: callBackeDelete,
-                                    color: CColor.CancelBTN,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(button_radius)),
-                                    child: Text(
-                                      cancelBooking,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 9),
+                              Visibility(
+                                visible: customBooking.bookingType != "Sessions",
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: padding5),
+                                    height: 30,
+                                    width: 120,
+                                    child: RaisedButton(
+                                      onPressed: callBackeDelete,
+                                      color: CColor.CancelBTN,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(button_radius)),
+                                      child: Text(
+                                        cancelBooking,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 9),
+                                      ),
                                     ),
                                   ),
                                 ),

@@ -740,8 +740,7 @@ class SignupState extends State<SignupScreen> {
                               keyboardType: TextInputType.text,
                               inputFormatters: <TextInputFormatter>[
                                 // ignore: deprecated_member_use
-                                WhitelistingTextInputFormatter(
-                                    RegExp("[a-zA-Z]"))
+                                //WhitelistingTextInputFormatter(RegExp("[a-zA-Z]"))
                               ],
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -1590,8 +1589,7 @@ class SignupState extends State<SignupScreen> {
                                             .toString()
                                             .trim(),
                                         LASTNAME: lastNameController.text
-                                            .toString()
-                                            .trim(),
+                                            .toString(),
                                         CHILD: radioItem,
                                         MOBILE: mobileController.text
                                             .toString()
@@ -1696,8 +1694,7 @@ class SignupState extends State<SignupScreen> {
                                                 ? ""
                                                 : "_${widget.memberIndex}"}':
                                         lastNameController.text
-                                            .toString()
-                                            .trim(),
+                                            .toString(),
                                         CHILD + '${widget.memberIndex == 0
                                             ? ""
                                             : "_${widget.memberIndex}"}':
