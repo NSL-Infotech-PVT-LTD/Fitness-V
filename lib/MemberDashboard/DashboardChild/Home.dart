@@ -51,6 +51,20 @@ class HomeState extends State<Home> {
         isLoading = true;
       });
       setState(() {
+        getString(USER_AUTH)
+            .then((value) => getProfileDetailApi(value).then((response) {
+          setState(() {
+            if (response.data.user.my_sessions != null) {
+              setString(trainer_slot, response.data.user.trainer_slot.toString());
+            }
+            setString(validTill, response.data.user.role_expired_on);
+            _sessions = response.data.user.my_sessions.toString();
+            print("sessions"+_sessions);
+            setState(() {
+              isLoading = false;
+            });
+          });
+        }));
         getString(Id)
             .then((value) => {_id = value})
             .whenComplete(() => setState(() {
@@ -76,17 +90,7 @@ class HomeState extends State<Home> {
             .whenComplete(() => setState(() {
           print("mySessionss " + _mySessionss);
         }));
-        getString(USER_AUTH)
-            .then((value) => getProfileDetailApi(value).then((response) {
-          setState(() {
-            setString(validTill, response.data.user.role_expired_on);
-            _sessions = response.data.user.my_sessions.toString();
-            print("sessions"+_sessions);
-            setState(() {
-              isLoading = false;
-            });
-          });
-        }));
+
       });
 
     }else{
@@ -352,7 +356,7 @@ class HomeState extends State<Home> {
                               ),
 
                               Visibility(
-                                visible: _roleIdDash != "8",
+                                visible: true,//_roleIdDash != "8",
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -398,7 +402,7 @@ class HomeState extends State<Home> {
                                   ],
                                 ),
                               ),   Visibility(
-                                visible: true,//_roleIdDash != "8" && _roleIdDash != "9",
+                                visible: _roleIdDash != "8" && _roleIdDash != "9",
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -429,7 +433,7 @@ class HomeState extends State<Home> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Remain Session",
+                                      "GX",
                                       style: TextStyle(
                                           color: Color(0xFF727272),
                                           fontSize: 12,

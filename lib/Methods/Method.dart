@@ -51,9 +51,46 @@ void showDialogBox(context, String title, String message) {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text("OK"),
+              child: Text("OK",style: TextStyle(color: CColor.CancelBTN),),
               onPressed: () {
                 Navigator.pop(context);
+              },
+              isDestructiveAction: true,
+            ),
+          ],
+        );
+      });
+
+//  showDialog(
+//      context: context,
+//      builder: (context) {
+//        return AlertDialog(
+//          title: Text(title),
+//          content: Text(message),
+//          actions: <Widget>[
+//            FlatButton(
+//              child: const Text('OK'),
+//              onPressed: () => Navigator.pop(context),
+//            ),
+//          ],
+//        );
+//      });
+}void showDialogBoxOnlyForYourBooking(context, String title, String message) {
+  showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Text(message, style: TextStyle(wordSpacing: 1)),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text("OK",style: TextStyle(color: CColor.CancelBTN)),
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                    Dashboard()), (Route<dynamic> route) => false);
               },
               isDestructiveAction: true,
             ),

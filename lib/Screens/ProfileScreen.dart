@@ -158,13 +158,13 @@ class ProfileState extends State<ProfileScreen> {
                   height: topMargin,
                 ),
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(10),
                   child: Row(
                     children: <Widget>[
                       Image.asset(
                         baseImageAssetsUrl + 'logo.png',
-                        width: 60,
-                        height: 30,
+                        width: 75,
+                        height: 70,
                       ),
                       Spacer(),
                       GestureDetector(

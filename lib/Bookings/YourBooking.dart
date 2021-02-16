@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
@@ -53,7 +54,7 @@ class YourBookingState extends State<YourBooking> {
             title: Text("Booking confirmation"),
             content: Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: Text("Do you want to continue ?",
+              child: Text("Do you want to continue?",
                   style: TextStyle(wordSpacing: 1)),
             ),
             actions: <Widget>[
@@ -71,7 +72,8 @@ class YourBookingState extends State<YourBooking> {
               CupertinoDialogAction(
                 child: Text("No",style: TextStyle(color: CColor.CancelBTN)),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      Dashboard()), (Route<dynamic> route) => false);
                 },
                 isDestructiveAction: false,
               ),

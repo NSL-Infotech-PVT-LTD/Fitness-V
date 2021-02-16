@@ -11,6 +11,8 @@ import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
 
+import '../../Dashboard.dart';
+
 class EventDetail extends StatefulWidget {
   final int id;
   final String status;
@@ -97,7 +99,7 @@ class EventDetailState extends State<EventDetail> {
                 Text(_isBookedByMe ? "Booking cancel" : "Booking confirmation"),
             content: Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: Text("Do you want to continue ?",
+              child: Text("Do you want to continue?",
                   style: TextStyle(wordSpacing: 1)),
             ),
             actions: <Widget>[
@@ -125,7 +127,8 @@ class EventDetailState extends State<EventDetail> {
               CupertinoDialogAction(
                 child: Text("No",style: TextStyle( color: CColor.CancelBTN)),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      Dashboard()), (Route<dynamic> route) => false);
                 },
                 isDestructiveAction: true,
               ),

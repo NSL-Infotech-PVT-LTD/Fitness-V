@@ -1589,8 +1589,7 @@ class SignupState extends State<SignupScreen> {
                                             .toString()
                                             .trim(),
                                         LASTNAME: lastNameController.text
-                                            .toString()
-                                            .trim(),
+                                            .toString(),
                                         CHILD: radioItem,
                                         MOBILE: mobileController.text
                                             .toString()
@@ -1695,8 +1694,7 @@ class SignupState extends State<SignupScreen> {
                                                 ? ""
                                                 : "_${widget.memberIndex}"}':
                                         lastNameController.text
-                                            .toString()
-                                            .trim(),
+                                            .toString(),
                                         CHILD + '${widget.memberIndex == 0
                                             ? ""
                                             : "_${widget.memberIndex}"}':

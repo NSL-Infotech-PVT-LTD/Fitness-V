@@ -242,7 +242,7 @@ Future<bool> bookingFunction(String auth, context, String model_type,
         } else {
           dismissDialog(context);
           if (response.error != null)
-            showDialogBox(context, "Error!", response.error);
+            showDialogBoxOnlyForYourBooking(context, "Error!", response.error);
         }
       });
     } else {

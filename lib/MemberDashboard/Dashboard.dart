@@ -274,10 +274,15 @@ class DashboardState extends State<Dashboard> {
                   padding: EdgeInsets.all(20),
                   child: Row(
                     children: <Widget>[
-                      GestureDetector(onTap: (){
-                        _willPopCallback();
-                      },
-                        child: Icon(Icons.arrow_back_ios),
+                      Visibility(
+                        visible: _currentIndex != 0,
+                        child: GestureDetector(onTap: (){
+                          setState(() {
+                            _currentIndex = 0;
+                          });
+                        },
+                          child: Icon(Icons.arrow_back_ios),
+                        ),
                       ),
 
 
@@ -292,7 +297,7 @@ class DashboardState extends State<Dashboard> {
                                 width: 40,
                               )
                             :
-                            
+
                         CircleAvatar(
                                 radius: 25.0,
                                 backgroundImage: NetworkImage(

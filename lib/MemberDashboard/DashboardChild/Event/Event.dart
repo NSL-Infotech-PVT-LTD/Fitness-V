@@ -64,8 +64,7 @@ class _EventState extends State<Event> {
       setState(() {
         isLoadingPast = true;
       });
-      _netUtil
-          .post(context, Constants.event, auth, body: {
+      _netUtil.post(context, Constants.event, auth, body: {
             "order_by": "upcoming",
             LIMIT: '10',
             PAGE: index.toString(),
