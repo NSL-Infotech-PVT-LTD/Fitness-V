@@ -13,10 +13,10 @@ import 'notificationList.dart';
 String LOGIN = BASE_URL + "api/login";
 String ROLE = BASE_URL + "api/roles";
 String REGISTRATION = BASE_URL + "api/register";
-String GETPROFILE = BASE_URL + "api/get-profile";
 String RESET_PASSWORD = BASE_URL + "api/reset-password";
 String getTrainersList = BASE_URL + "api/trainers";
 String trainers = BASE_URL + "api/trainer";
+String updateP = "https://dev.netscapelabs.com/volt/public/api/update/role";
 String trainerReviews = BASE_URL + "api/trainer/reviews";
 String getTrainersListRegister = BASE_URL + "api/register/trainers";
 String trainersRegister = BASE_URL + "api/register/trainer";
@@ -56,6 +56,7 @@ String Product_ID = "product_id";
 String trainerId = "trainer_id";
 
 String SEARCH = "search";
+String Date = "date";
 String LIMIT = "limit";
 String PAGE = "page";
 String checkInKey = "check_in";
@@ -110,6 +111,8 @@ String USER_NAME = "USER_NAME";
 String userImage = "userImage";
 String userPlanImage = "userPlanImage";
 String rolePlan = "rolePlan";
+String sessions = "sessions";
+String mySessions = "mySessions";
 String roleName = "roleName";
 String roleCategory = "roleCategory";
 String roleId = "roleId";
@@ -154,6 +157,22 @@ Future<StatusResponse> getTrainersListApi(
       },
       body: jsonEncode(parms));
   print("Tranier " + response.body);
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return StatusResponse.fromJson(map);
+}
+
+//its base url is static please change it manually/////////////////
+Future<StatusResponse> upGradePlan(String auth, Map<String, String> parms) async {
+  final response = await http.post(
+      updateP,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': auth
+      },
+      body: jsonEncode(parms));
+  print("response of update " + response.body);
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
 

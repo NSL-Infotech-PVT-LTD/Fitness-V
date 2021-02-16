@@ -155,23 +155,19 @@ class Datum {
 
 class BookingDetail {
   BookingDetail({
-    this.targetId,
     this.targetModel,
     this.dataType,
   });
 
-  int targetId;
   DataType targetModel;
   DataType dataType;
 
   factory BookingDetail.fromJson(Map<String, dynamic> json) => BookingDetail(
-    targetId: json["target_id"],
     targetModel: dataTypeValues.map[json["target_model"]],
     dataType: dataTypeValues.map[json["data_type"]],
   );
 
   Map<String, dynamic> toJson() => {
-    "target_id": targetId,
     "target_model": dataTypeValues.reverse[targetModel],
     "data_type": dataTypeValues.reverse[dataType],
   };

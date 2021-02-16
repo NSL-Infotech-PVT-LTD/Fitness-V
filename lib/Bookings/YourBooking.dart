@@ -58,7 +58,7 @@ class YourBookingState extends State<YourBooking> {
             ),
             actions: <Widget>[
               CupertinoDialogAction(
-                child: Text("Yes"),
+                child: Text("Yes",style: TextStyle(color: CColor.CancelBTN),),
                 onPressed: () {
 //                  Navigator.pop(context);
                   bookingFunction(
@@ -69,7 +69,7 @@ class YourBookingState extends State<YourBooking> {
                 isDestructiveAction: false,
               ),
               CupertinoDialogAction(
-                child: Text("No"),
+                child: Text("No",style: TextStyle(color: CColor.CancelBTN)),
                 onPressed: () {
                   Navigator.pop(context);
                 },

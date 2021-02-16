@@ -6,6 +6,9 @@ class UserResponse {
   int id;
   int is_booked_by_me_booking_id;
   String name;
+  String work;
+  String trainer_slot;
+  int my_sessions;
   String role_expired_on;
   String nationality;
   String model_type;
@@ -51,9 +54,12 @@ class UserResponse {
   UserResponse(
       this.role_expired_on,
     this.id,
+    this.trainer_slot,
     this.is_booked_by_me_booking_id,
     this.nationality,
+    this.work,
     this.name,
+    this.my_sessions,
     this.model_type,
     this.location,
     this.booking_cnt,
@@ -97,6 +103,8 @@ class UserResponse {
   UserResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nationality = json['nationality'];
+    trainer_slot = json['trainer_slot'].toString();
+    my_sessions = json['my_sessions'];
     role_expired_on = json['role_expired_on'];
     is_booked_by_me_booking_id = json['is_booked_by_me_booking_id'];
     name = json['name'];
@@ -105,6 +113,7 @@ class UserResponse {
     specialities = json['specialities'];
     model_type = json['model_type'];
     location = json['location'];
+    work = json['workplace'];
     expirence = json['expirence'];
     booking_reviewed_cnt = json['booking_reviewed_cnt'];
     booking_cnt = json['booking_cnt'];
@@ -146,7 +155,9 @@ class UserResponse {
     data['role_expired_on'] = this.role_expired_on;
     data['is_booked_by_me_booking_id'] = this.is_booked_by_me_booking_id;
     data['model_type'] = this.model_type;
+    data['my_sessions'] = this.my_sessions;
     data['nationality'] = this.nationality;
+    data['trainer_slot'] = this.trainer_slot;
     data['name'] = this.name;
     data['hours'] = this.hours;
     data['location'] = this.location;

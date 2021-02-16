@@ -6,10 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:volt/AuthScreens/SignupScreen.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
-import 'package:volt/PlansScreen/ChoosedMemberShip.dart';
 import 'package:volt/PlansScreen/spousetype.dart';
-import 'package:volt/Screens/view_personal_trainer.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -19,6 +18,7 @@ import 'package:volt/Value/Strings.dart';
 class GymMemberPlan extends StatefulWidget {
   List response;
   final gymMembers;
+
 
   GymMemberPlan({this.response, this.gymMembers});
 
@@ -49,11 +49,62 @@ class GymMemberState extends State<GymMemberPlan> {
   int slider = -1;
   int plan_index = 0;
 
+
   @override
   void initState() {
+    saveUser(userData, widget.response);
+    setString(poolOrGym, widget.gymMembers);
+    // getString(poolOrGym).then((value) => print({"check pool or gym $value"}));
+    // readUserData(userData).then((value) => print({"check List Date $value"}));
     super.initState();
-    print("che" + widget.gymMembers);
+    // print("che" + widget.gymMembers);
   }
+  // void _getProfileDetail(String auth) async {
+  //   isConnectedToInternet().then((internet) {
+  //     if (internet != null && internet) {
+  //       showProgress(context, "Please wait.....");
+  //
+  //       getProfileDetailApi(auth).then((response) {
+  //         dismissDialog(context);
+  //         if (response.status) {
+  //           if (response.data != null) {
+  //
+  //           }
+  //         } else {
+  //           dismissDialog(context);
+  //           if (response.error != null)
+  //             showDialogBox(context, "Error!", response.error);
+  //         }
+  //       });
+  //     } else {
+  //       showDialogBox(context, internetError, pleaseCheckInternet);
+  //       dismissDialog(context);
+  //     }
+  //   });
+  // }
+  // Future<StatusResponse> getRoleApi(context) {
+  //   isConnectedToInternet().then((internet) {
+  //     if (internet != null && internet) {
+  //       showProgress(context, "Loading....");
+  //       getRoles().then((response) {
+  //         dismissDialog(context);
+  //         if (response.status) {
+  //           // gym_list = response.data.gym_members;
+  //           // pool_and_beach_list = response.data.pool_and_beach_members;
+  //           // guest_list = response.data.local_guest;
+  //           // fairMont_list = response.data.fairmont_hotel_guest;
+  //         } else {
+  //           showDialogBox(context, "Error!", response.error);
+  //         }
+  //       }).whenComplete(() => dismissDialog(context));
+  //     } else {
+  //       showDialogBox(context, internetError, pleaseCheckInternet);
+  //       dismissDialog(context);
+  //     }
+  //     dismissDialog(context);
+  //   });
+  // }
+
 
   List<PlansDetails> plansLists;
   List limit;
@@ -63,6 +114,8 @@ class GymMemberState extends State<GymMemberPlan> {
 
   @override
   Widget build(BuildContext context) {
+
+
     var response;
     int limiti = widget.response.length;
     List<Container> imgList = [];
@@ -161,15 +214,17 @@ class GymMemberState extends State<GymMemberPlan> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           carouselSlider = CarouselSlider(
+
                             carouselController: _carouselController,
                             options: CarouselOptions(
                               height: SizeConfig.screenHeight * .8,
                               initialPage: 0,
                               enlargeCenterPage: true,
                               autoPlay: false,
+
                               reverse: false,
                               enableInfiniteScroll: false,
-                              autoPlayInterval: Duration(seconds: 2),
+                              // autoPlayInterval: Duration(seconds: 2),
                               autoPlayAnimationDuration:
                               Duration(milliseconds: 2000),
                               scrollDirection: Axis.horizontal,
@@ -305,13 +360,7 @@ class GymMemberState extends State<GymMemberPlan> {
                             child: Row(
                               children: <Widget>[
                                 Text(
-                                  planType == "single"
-                                      ? "Single"
-                                      : planType == "couple"
-                                      ? "Couple"
-                                      : planType == "family_with_2"
-                                      ? "Family"
-                                      : planType,
+                                  planType == "single" ? "Single" : planType == "couple" ? "Couple" : planType == "family_with_2" ? "Family" : planType,
                                   style: TextStyle(
                                       fontSize: textSize16,
                                       fontWeight: FontWeight.bold),
@@ -379,9 +428,7 @@ class GymMemberState extends State<GymMemberPlan> {
                                       setState(() {
 
                                         slider = _current;
-
                                         currentSelectedIndex = index;
-
                                         print(currentSelectedIndex);
                                         print(plans[index].planId);
                                         print(plans[index].rolePlanId);
@@ -429,18 +476,14 @@ class GymMemberState extends State<GymMemberPlan> {
                                 ),
                                 myDivider()
                               ])
-
                               // CustomPlansDetails(
                               //   items: plans[index],
                               //   currentIndex:index,
                               //   // currentIndex: ,
                               //   // index: ,
                               // )
-
                           );
                           //),
-
-
                         },
                       ),
                     ),
@@ -537,8 +580,7 @@ class GymMemberState extends State<GymMemberPlan> {
                 type: "member",
                 roleId: rolePlanIdS,
                 rolePlanIds: planIdS,
-                memberCount:
-                response['member'] != null ? response['member'] : 0,
+                memberCount: response['member'] != null ? response['member'] : 0,
                 gym_members: widget.gymMembers,
               )));
     } else if (response['category'].toString().toLowerCase() ==

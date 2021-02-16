@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/Bookings/all_bookings.dart';
+import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/NotificationsScreens/Notification.dart';
+import 'package:volt/PlansScreen/GymMemberPlan.dart';
 import 'package:volt/Profile/userProfile.dart';
+import 'package:volt/Screens/upgradeplan.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -21,6 +24,7 @@ class ProfileScreen extends StatefulWidget {
 
 class ProfileState extends State<ProfileScreen> {
   String _userName = '';
+  String _roleId = '';
   var result;
 
   @override
@@ -28,6 +32,10 @@ class ProfileState extends State<ProfileScreen> {
     _loadAuth();
     getString(userImage)
         .then((value) => {result = value})
+        .whenComplete(() => setState(() {}));
+
+    getString(roleIdDash)
+        .then((value) => {_roleId = value})
         .whenComplete(() => setState(() {}));
 
     super.initState();
@@ -120,7 +128,6 @@ class ProfileState extends State<ProfileScreen> {
     getString(userImage)
         .then((value) => {result = value})
         .whenComplete(() => setState(() {}));
-
     setState(() {});
   }
 
@@ -139,7 +146,6 @@ class ProfileState extends State<ProfileScreen> {
         body: SingleChildScrollView(
           child: WillPopScope(
             onWillPop: () {
-
 
                 Navigator.pop(context, result);
               return new Future(() => false);
@@ -187,8 +193,8 @@ class ProfileState extends State<ProfileScreen> {
                           right: SizeConfig.screenWidth * .37,
                           bottom: 15,
                           child: result == null
-                              ? Image.asset(
-                                  baseImageAssetsUrl + 'circleuser.png',
+                              ? SvgPicture.asset(
+                                  baseImageAssetsUrl + 'place_holder.svg',
                                   height: 105,
                                   width: 105,
                                 )
@@ -280,13 +286,79 @@ class ProfileState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+                Visibility(
+                  visible: _roleId != "8" && _roleId != "9",
+                  child: Column(
+                    children: [
+                      myDivider(),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => UpgradePlan()),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset(baseImageAssetsUrl + 'new.svg'),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: Text(
+                                    upgradePlan,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Color(0xff8B8B8B), fontSize: 16),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Visibility(
+                  visible: true,//_roleId == "8",
+                  child: Column(
+                    children: [
+                      myDivider(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => SelectSession(
+                                    isGroupClass: false,
+                                    isSession: true,
+                                  )));
+                        },//=> _navigateAndDisplaySelection(context),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SvgPicture.asset(baseImageAssetsUrl + 'new.svg'),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: Text(
+                                    'Purchase Sessions',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xff8B8B8B), fontSize: 16),
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 myDivider(),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
                         context,
-                        new MaterialPageRoute(
-                            builder: (context) => NotificationScreen()));
+                        new MaterialPageRoute(builder: (context) => NotificationScreen()));
                   },
                   child: Container(
                       padding: EdgeInsets.fromLTRB(40, 25, 40, 25),
@@ -433,9 +505,6 @@ class ProfileState extends State<ProfileScreen> {
                 myDivider(),
                 GestureDetector(
                   onTap: () {
-
-
-
                     logoutDialog(context);
                   },
                   child: Container(

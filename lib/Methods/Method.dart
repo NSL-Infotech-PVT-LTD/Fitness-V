@@ -147,7 +147,7 @@ void exitDialog(context) {
             CupertinoActionSheetAction(
               child: Text("Confirm",
                   style: TextStyle(
-                      color: Color(0xFFB71C1C),
+                      color:CColor.CancelBTN,
                       fontSize: 14,
                       fontWeight: FontWeight.bold)),
               onPressed: () {
@@ -195,7 +195,7 @@ void exitFromApp(context) {
             CupertinoActionSheetAction(
               child: Text("Confirm",
                   style: TextStyle(
-                      color: Color(0xFFB71C1C),
+                      color: CColor.CancelBTN,
                       fontSize: 14,
                       fontWeight: FontWeight.bold)),
               onPressed: () {
@@ -243,7 +243,7 @@ void logoutDialog(context) {
             CupertinoActionSheetAction(
               child: Text("Confirm",
                   style: TextStyle(
-                      color: Color(0xFFB71C1C),
+                      color: CColor.CancelBTN,
                       fontSize: 14,
                       fontWeight: FontWeight.bold)),
               onPressed: () {
@@ -353,7 +353,6 @@ Widget buildProgressIndicatorCenter(bool isLoading) {
 
 ProgressDialog progress(context) {
   SpinKitFadingCircle(color: Colors.black);
-
   return ProgressDialog(
     context,
     type: ProgressDialogType.Normal,

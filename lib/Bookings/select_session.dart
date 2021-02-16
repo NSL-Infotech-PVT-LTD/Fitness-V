@@ -25,7 +25,8 @@ class SelectSession extends StatefulWidget {
       this.id,
       this.image,
       this.name,
-      this.roleType, this.isSession});
+      this.roleType,
+        this.isSession});
 
   @override
   State<StatefulWidget> createState() => SelectSessionState();
@@ -33,6 +34,7 @@ class SelectSession extends StatefulWidget {
 
 class SelectSessionState extends State<SelectSession> {
   int valueHolder = 0;
+  int valueSessionsHolder = 0;
   String _imageLink;
   String auth = '';
   bool _wantToShowPrice = true;
@@ -138,30 +140,29 @@ class SelectSessionState extends State<SelectSession> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black45))
                             ])),
-                    Column(
+                   widget.isSession?
+                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.only(left: 10, top: 10),
-                          width: widget.isGroupClass
+                          width: widget.isGroupClass || widget.isSession
                               ? SizeConfig.screenWidth * .55
                               : SizeConfig.screenWidth * .72,
                           child: Slider(
-                              value: valueHolder.toDouble() == 0
-                                  ? 1
-                                  : valueHolder.toDouble(),
+                              value: valueSessionsHolder.toDouble() == 0 ? 1 : valueSessionsHolder.toDouble(),
                               min: 0,
-                              max: widget.isGroupClass ? 12 : 24,
-                              divisions: widget.isGroupClass ? 2 : 4,
+                              max: widget.isGroupClass || widget.isSession ? 12 : 24,
+                              divisions: widget.isGroupClass || widget.isSession? 2 : 4,
                               activeColor: Colors.black,
                               inactiveColor: Colors.grey,
-                              label: '${valueHolder.round() == 0 ? 1 : valueHolder.round()}',
+                              label: '${valueSessionsHolder.round() == 0 ? 1 : valueSessionsHolder.round()}',
                               onChanged: (double newValue) {
                                 setState(() {
-                                  valueHolder = newValue.round() == 18
-                                      ? 24
-                                      : newValue.round();
+
+                                  valueSessionsHolder = newValue.round() == 18 ? 24 : newValue.round();
+
                                 });
                               },
                               semanticFormatterCallback: (double newValue) {
@@ -196,7 +197,7 @@ class SelectSessionState extends State<SelectSession> {
                                 ),
                               ),
                               Visibility(
-                                visible: !widget.isGroupClass,
+                                visible: !widget.isGroupClass && !widget.isSession,
                                 child: Container(
                                   width: SizeConfig.screenWidth * .17,
                                   child: Text(
@@ -210,7 +211,77 @@ class SelectSessionState extends State<SelectSession> {
                           ),
                         ),
                       ],
-                    ),
+                    ): Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                     children: <Widget>[
+                       Container(
+                         margin: EdgeInsets.only(left: 10, top: 10),
+                         width: widget.isGroupClass || widget.isSession
+                             ? SizeConfig.screenWidth * .55
+                             : SizeConfig.screenWidth * .72,
+                         child: Slider(
+                             value: valueHolder.toDouble() == 0 ? 1 : valueHolder.toDouble(),
+                             min: 0,
+                             max: widget.isGroupClass || widget.isSession ? 12 : 24,
+                             divisions: widget.isGroupClass || widget.isSession? 2 : 4,
+                             activeColor: Colors.black,
+                             inactiveColor: Colors.grey,
+                             label: '${valueHolder.round() == 0 ? 1 : valueHolder.round()}',
+                             onChanged: (double newValue) {
+                               setState(() {
+
+                                 valueHolder = newValue.round() == 18 ? 24 : newValue.round();
+
+                               });
+                             },
+                             semanticFormatterCallback: (double newValue) {
+                               return '${newValue.round()}';
+                             }),
+                       ),
+                       Container(
+                         margin: EdgeInsets.only(left: 20),
+                         width: SizeConfig.screenWidth * .68,
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                           children: <Widget>[
+                             Container(
+                               width: SizeConfig.screenWidth * .17,
+                               child: Text(
+                                 '1',
+                                 style: TextStyle(color: Colors.black),
+                               ),
+                             ),
+                             Container(
+                               width: SizeConfig.screenWidth * .17,
+                               child: Text(
+                                 '6',
+                                 style: TextStyle(color: Colors.black),
+                               ),
+                             ),
+                             Container(
+                               width: SizeConfig.screenWidth * .17,
+                               child: Text(
+                                 '12',
+                                 style: TextStyle(color: Colors.black),
+                               ),
+                             ),
+                             Visibility(
+                               visible: !widget.isGroupClass && !widget.isSession,
+                               child: Container(
+                                 width: SizeConfig.screenWidth * .17,
+                                 child: Text(
+                                   '24',
+                                   textAlign: TextAlign.end,
+                                   style: TextStyle(color: Colors.black),
+                                 ),
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                     ],
+                   ),
                   ],
                 ),
               ),
@@ -254,7 +325,7 @@ class SelectSessionState extends State<SelectSession> {
                                 Radius.circular(button_radius))),
                         child: Center(
                             child: Text(
-                              '${sendValue()} $aed',
+                              widget.isSession?'${sendValueT()} $aed':'${sendValue()} $aed',
                               style: TextStyle(color: Colors.white),
                             )),
                       ),
@@ -378,16 +449,13 @@ class SelectSessionState extends State<SelectSession> {
                     Navigator.push(
                         context,
                         widget.isSession? MaterialPageRoute(
-                          builder: (context) => YourBooking(wantToShowPrice: false,name: "Session",isGroupClass: false,payment: sendValue().toString(),serviceHours:  valueHolder == 0 ? 1.toString() : valueHolder.toString(),isSession: widget.isSession,)) :MaterialPageRoute(
-                            builder: (context) => YourBooking(
-                              isSession: false,
-                              id: widget.id,
-                              image: widget.image,
-                              wantToShowPrice: _wantToShowPrice,
+                          builder: (context) => YourBooking(wantToShowPrice: false,name: "Session",isGroupClass: false,payment: sendValueT().toString(),serviceHours:  valueSessionsHolder == 0 ? 1.toString() : valueSessionsHolder.toString(),isSession: widget.isSession,)) :MaterialPageRoute(
+                            builder: (context) => YourBooking(isSession: false,
+                              id: widget.id, image: widget.image, wantToShowPrice: _wantToShowPrice,
                               isGroupClass: widget.isGroupClass,
                               name: widget.name,
-                              payment: sendValue().toString(),
-                              serviceHours: valueHolder == 0 ? 1.toString() : valueHolder.toString(),
+                              payment: sendValueT().toString(),
+                              serviceHours: valueSessionsHolder == 0 ? 1.toString() : valueSessionsHolder.toString(),
                             )));
                     //  print("${widget.id}  ${valueHolder}");
                   },
@@ -414,7 +482,22 @@ class SelectSessionState extends State<SelectSession> {
       value = 1400;
     } else if (valueHolder == 12) {
       value = 2600;
-    } else if (valueHolder == 24) {
+    }
+    else if (valueHolder == 24) {
+      value = 5000;
+    }
+    return value;
+  }
+  int sendValueT() {
+    int value = 0;
+    if (valueSessionsHolder == 0) {
+      value = 60;
+    } else if (valueSessionsHolder == 6) {
+      value = 340;
+    } else if (valueSessionsHolder == 12) {
+      value = 660;
+    }
+    else if (valueSessionsHolder == 24) {
       value = 5000;
     }
     return value;

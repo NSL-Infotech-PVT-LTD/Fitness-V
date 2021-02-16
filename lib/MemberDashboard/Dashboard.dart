@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Cardio.dart';
 import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
-import 'package:volt/MemberDashboard/DashboardChild/Home2.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
@@ -24,23 +23,40 @@ class  Dashboard extends StatefulWidget {
   Dashboard({this.role});
 
   @override
+
   State<StatefulWidget> createState() => DashboardState();
+  static DashboardState of(BuildContext context) => context.findAncestorStateOfType<DashboardState>();
 }
 
+
 class DashboardState extends State<Dashboard> {
+
   int _currentIndex = 0;
   var imageValue;
   var roleValue;
   var _id;
   bool load = true;
-  List<Widget> _children;
+  List<Widget> _children = [];
 
   void onTabTapped(int index) {
-    setState(() {
+
       _currentIndex = index;
       print("_currentIndex $_currentIndex");
+      setState(() {
 
-    });
+      });
+
+  }
+
+  set onTabTappedNew(int index) {
+
+
+      _currentIndex = index;
+      print("_currentIndejnjjx $_currentIndex");
+      setState(() {
+      });
+
+
   }
 
   var roleId ;
@@ -49,7 +65,9 @@ class DashboardState extends State<Dashboard> {
   void initState() {
     getString(userImage)
         .then((value) => {imageValue = value})
-        .whenComplete(() => setState(() {}));
+        .whenComplete(() => setState(() {
+
+    }));
 
     getString(Id)
         .then((value) => {_id = value})
@@ -63,7 +81,7 @@ class DashboardState extends State<Dashboard> {
     getString(roleIdDash).then((value) => roleId = value.toString()).whenComplete((){
       setState(() {
         load = false;
-        if (roleId == '8' || roleId == '9') {
+        if (roleId == '8') {
           _children = [load?Center(child: CircularProgressIndicator(backgroundColor: Colors.black,)):Home(image: imageValue,roleId: roleId,), EventClass()];
         } else {
           _children = [load?Center(child: CircularProgressIndicator(backgroundColor: Colors.black,)):Home(image: imageValue,roleId: roleId,), Cardio(), EventClass()];
@@ -101,16 +119,16 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-
+    print("_currentIndex $imageValue");
     SizeConfig().init(context);
     return WillPopScope(
       onWillPop: _willPopCallback,
-      child: Scaffold(
+      child: load?Center(child: CircularProgressIndicator(),):Scaffold(
           backgroundColor: CColor.WHITE,
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
-            onTap: onTabTapped,
-            items:  roleId == "8" || roleId == "9"?
+            onTap: onTabTapped ,
+            items:  roleId == "8"?
             <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: _currentIndex == 0
@@ -265,12 +283,15 @@ class DashboardState extends State<Dashboard> {
                           _navigateAndDisplaySelection(context);
                         },
                         child: imageValue == null
-                            ? Image.asset(
-                                baseImageAssetsUrl + 'circleuser.png',
+                            ? SvgPicture.asset(
+                                baseImageAssetsUrl + 'place_holder.svg',
                                 height: 40,
                                 width: 40,
                               )
-                            : CircleAvatar(
+                            :
+
+
+                        CircleAvatar(
                                 radius: 25.0,
                                 backgroundImage: NetworkImage(
                                     BASE_URL + 'uploads/image/' + imageValue),
@@ -282,8 +303,8 @@ class DashboardState extends State<Dashboard> {
                       ),
                       Image.asset(
                         baseImageAssetsUrl + 'logo.png',
-                        width: 60,
-                        height: 30,
+                        width: 75,
+                        height: 45,
                       ),
                       Spacer(),
                       GestureDetector(

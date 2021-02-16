@@ -41,7 +41,6 @@ class ChooseWayState extends State<ChooseYourWay> {
     return true; // return true if the route to be popped
   }
 
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -63,17 +62,30 @@ class ChooseWayState extends State<ChooseYourWay> {
                       height: 300,
                       fit: BoxFit.cover,
                     ),
-//                  Positioned(
-//                    top: 0,
-//                    bottom: 0,
-//                    left: 0,
-//                    right: 0,
-//                    child: Image.asset(
-//                      'assets/images/logo.png',
-//                      width: 300,
-//                      height: 76,
-//                    ),
-//                  )
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: Colors.black26,
+                      ),
+                    ),
+
+                 Positioned(
+                   top: 0,
+                   bottom: 0,
+                   left: 0,
+                   right: 0,
+                   child: Center(
+                     child: Image.asset(
+                       'assets/images/logo.png',
+                       width: 260,
+
+                       color: Colors.white,
+                     ),
+                   ),
+                 )
                   ],
                 ),
                 // Container(
