@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:952707746827:android:c602f985172d734c3b4b0e",
+        "mobilesdk_app_id": "1:952707746827:android:68c4b3063c3f9e343b4b0e",
         "android_client_info": {
           "package_name": "com.fitness.volt"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "952707746827-fqvgn7v0ja9i5e1sirjumeejkamhq9cj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fitness.volt",
-            "certificate_hash": "d41d75e76f1e668794d4c1200d4159f1d1bd99ef"
-          }
-        },
         {
           "client_id": "952707746827-j9ph77igcqk0lihicglpfvktf6907qee.apps.googleusercontent.com",
           "client_type": 3

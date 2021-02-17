@@ -35,9 +35,9 @@ class MainActivity: FlutterActivity(), PluginRegistrantCallback {
 
 
     override fun registerWith(register: PluginRegistry) {
-        
+
 //        GeneratedPluginRegistrant.registerWith(registry as FlutterEngine);
-       FirebaseMessagingPlugin.registerWith(register?.registrarFor("io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin"));
+        FirebaseMessagingPlugin.registerWith(register?.registrarFor("io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin"));
 //        FirebaseMessagingPlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin"));
     }
 
