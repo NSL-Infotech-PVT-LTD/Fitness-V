@@ -1554,25 +1554,37 @@ class SignupState extends State<SignupScreen> {
                                       fromDate == null) {
                                     showDialogBox(context, 'Date of Birth',
                                         'Please fill your date of birth');
-                                  } else if (radioItem == "" &&
-                                      widget.type != 'fairMont' &&
-                                      widget.type != "guest") {
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                  } else if (radioItem == "") {
                                     showDialogBox(context, 'Gender',
                                         'Please select gender');
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
                                   } else if (((widget.memberIndex == 0 || widget.memberIndex == null) && selectedCity == null &&
                                       widget.type != 'fairMont' &&
                                       widget.type != "guest")) {
                                     showDialogBox(context, 'City',
                                         'Please select your city');
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
                                   } else if (radioItemMarital.isEmpty && widget.type != "guest" && widget.type != "fairMont" && (widget.memberIndex == 0 || widget.isSingle)) {
                                     showDialogBox(context, "Error!",
                                         'Please select marital status');
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
                                   } else if (widget.isSingle && !acceptTerms) {
                                     showDialogBox(context, termsofService,
                                         'Please read & accept our terms of services');
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
                                   } else {
                                     if (widget.memberIndex == 0 || widget.memberIndex == null) {
-
 
                                       parms = {
                                         "trainerPrice":

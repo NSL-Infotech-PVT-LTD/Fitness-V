@@ -17,68 +17,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  String _homeScreenText = "Waiting for token...";
-  int _bottomNavBarSelectedText = 0;
-  bool _newNotification = false;
 
-  void _navigateToItemDetail() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (values) => AllBookings()));
-  }
-
-
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Notification'),
-          content: Text("This is a notification"),
-          actions: <Widget>[
-            TextButton(
-                child: Text('Approve'),
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (values) => AllBookings(),
-                    ),
-                  );
-                }),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        _showMyDialog();
-
-        print("NOTIFICATION ARRIVED");
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-        _navigateToItemDetail();
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-        _navigateToItemDetail();
-      },
-    );
-  }
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
-      navigatorKey: navigatorKey,
+    //  navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'regular',

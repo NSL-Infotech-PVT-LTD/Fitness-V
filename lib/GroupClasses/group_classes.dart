@@ -442,10 +442,7 @@ class GroupClassState extends State<GroupClass> {
                                     deleteId = users[index]
                                     ['is_booked_by_me_booking_id']
                                         .toString();
-                                    if (users[index]['available_capacity']
-                                        .toString() !=
-                                        '0' &&
-                                        !users[index]['is_booked_by_me']) {
+                                    if (users[index]['available_capacity'].toString() != '0' && !users[index]['is_booked_by_me']) {
                                       Navigator.push(
                                           context,
                                           ScaleRoute(

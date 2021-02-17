@@ -79,7 +79,9 @@ class LoginState extends State<LoginScreen> {
 
 
             setString(USER_AUTH, "Bearer " + response.data.token);
-            setString(UserFeeType,response.data.user.role.current_plan.fee.toString());
+            // if (response.data.user.role.current_plan.fee.toString() != null)
+            //   setString(UserFeeType,response.data.user.role.current_plan.fee.toString());
+
             setString(userCurrentRoleID,response.data.user.role.id.toString());
             setString(roleType, response.data.user.role.name);
               getRoleApi(context,response.data.user.role.nameFilter);
@@ -136,8 +138,8 @@ class LoginState extends State<LoginScreen> {
   bool isVisiblePass = false;
   String text = "";
   String textPass = "";
-
   @override
+
   void initState() {
 
     passwordVisible = true;
@@ -146,9 +148,11 @@ class LoginState extends State<LoginScreen> {
     super.initState();
     getString(fireDeviceToken).then((value) {
       deviceTok = value;
-    }); 
-    
+      print("device tok"+deviceTok);
+    });
+
   }
+
 
   @override
   Widget build(BuildContext context) {

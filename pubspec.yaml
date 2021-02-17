@@ -43,6 +43,8 @@ dependencies:
   flutter_rating_bar: ^3.2.0+1
   file_picker: ^2.1.4
   date_picker_timeline: ^1.2.1
+  pull_to_refresh: ^1.6.3
+
 
 
 dev_dependencies:

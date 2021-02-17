@@ -40,9 +40,10 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
 
  @override
   void initState() {
+
     super.initState();
     
-   //FirebaseIn.initNoti(context);
+   FirebaseIn.initNoti(context);
     _loadAuth();  
   }
 

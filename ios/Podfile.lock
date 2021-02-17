@@ -124,9 +124,9 @@ PODS:
   - SDWebImage/Core (5.10.2)
   - shared_preferences (0.0.1):
     - Flutter
-  - sqflite (0.0.1):
+  - sqflite (0.0.2):
     - Flutter
-    - FMDB (~> 2.7.2)
+    - FMDB (>= 2.7.5)
   - SwiftyGif (5.3.0)
 
 DEPENDENCIES:
@@ -221,7 +221,7 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c

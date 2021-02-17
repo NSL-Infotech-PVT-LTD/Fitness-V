@@ -14,7 +14,7 @@ class Data {
   String start_date;
   String end_date;
   String class_type;
-  String capacity;
+  int capacity;
   int available_capacity;
   String duration;
   bool is_booked_by_me;
@@ -66,6 +66,8 @@ class Data {
     token = json['token'];
     message = json['message'];
     name = json['name'];
+    available_capacity = json['available_capacity'];
+
     config = json['config'];
     description = json['description'];
     image = json['image'];
@@ -73,7 +75,6 @@ class Data {
     end_date = json['end_date'];
     class_type = json['class_type'];
     capacity = json['capacity'];
-    available_capacity = json['available_capacity'];
     duration = json['duration'];
     id = json['id'];
     is_booked_by_me_booking_id = json['is_booked_by_me_booking_id'];
@@ -112,15 +113,17 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['message'] = this.message;
     data['id'] = this.id;
+
     data['is_booked_by_me_booking_id'] = this.is_booked_by_me_booking_id;
     data['last_page'] = this.last_page;
     data['name'] = this.name;
+    data['available_capacity'] = this.available_capacity;
+
     data['config'] = this.config;
     data['start_date'] = this.start_date;
     data['end_date'] = this.end_date;
     data['class_type'] = this.class_type;
     data['capacity'] = this.capacity;
-    data['available_capacity'] = this.available_capacity;
     data['duration'] = this.duration;
     data['description'] = this.description;
     data['image'] = this.image;

@@ -29,6 +29,7 @@ class EventDetailState extends State<EventDetail> {
   String _eventName = '';
   bool _isBookedByMe = false;
   String _eventLocation = '';
+  String availableCapacity = '';
   String _eventTime = '';
   String auth = '';
   String deleteId = "";
@@ -59,6 +60,7 @@ class EventDetailState extends State<EventDetail> {
               deleteId = response.data.is_booked_by_me_booking_id.toString();
               _about = response.data.description;
               _eventLocation = response.data.location_detail.location;
+              availableCapacity = response.data.available_capacity.toString();
 
               var startTime = DateFormat("dd/MM/yyyy").format(
                   DateFormat("yyyy-MM-dd").parse(response.data.start_date));
@@ -280,16 +282,26 @@ class EventDetailState extends State<EventDetail> {
                             width: 150,
                             child: RaisedButton(
                               onPressed: () {
-                                doYoWantToCntinue();
+                                if(availableCapacity != '0'){doYoWantToCntinue();}else{
+
+                                }
+
                               },
-                              color: _isBookedByMe
+                              color: _isBookedByMe || availableCapacity == '0'
                                   ? CColor.CancelBTN
                                   : Colors.black,
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.circular(button_radius)),
-                              child: Text(
-                                _isBookedByMe ? alreadyBooked : book_now,
+                              child:  availableCapacity == '0'?Text(
+                                "House Full",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: _isBookedByMe ? 8 : 16),
+                              ):Text(
+                               _isBookedByMe ? alreadyBooked : book_now,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:volt/Firebase/FirebaseNotification.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -13,6 +14,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashState extends State<SplashScreen> {
+
+  @override
+  void initState() {
+
+    FirebaseIn.initNoti(context);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     Timer(

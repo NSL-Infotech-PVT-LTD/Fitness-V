@@ -400,7 +400,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                                )));
                                              }
                                             else{
-                                               doYoWantToCntinue();
+                                              // doYoWantToCntinue();
                                              }
                                             },
                                             color: is_booked_by_me
@@ -411,7 +411,7 @@ class TrainerDetailState extends State<TrainerDetail>
                                                     BorderRadius.circular(
                                                         button_radius)),
                                             child: Text(
-                                              is_booked_by_me ? alreadyBooked :  book_now,
+                                              is_booked_by_me ? onlyAlreadyBooked :  book_now,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.white,

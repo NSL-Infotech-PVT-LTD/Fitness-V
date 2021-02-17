@@ -816,7 +816,7 @@ class BookingView extends StatelessWidget {
                                       width: SizeConfig.screenWidth * .32,
                                     ),
                               Visibility(
-                                visible: customBooking.bookingType != "Sessions",
+                                visible: customBooking.bookingType != "Sessions" && customBooking.bookingType != "Trainer",
                                 child: Align(
                                   alignment: Alignment.topCenter,
                                   child: Container(

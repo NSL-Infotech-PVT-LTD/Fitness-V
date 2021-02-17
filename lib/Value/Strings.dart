@@ -36,6 +36,7 @@ const booking_confirmed = 'Request Sent';
 const booking_confirmed_bottom = 'Request Submitted \n Waiting For Approval';
 const book_now = 'Book Now';
 const alreadyBooked = 'Already booked!\nDo you want to cancel?';
+const onlyAlreadyBooked = 'Already booked!';
 const cancelBooking = 'Cancel Booking';
 const personal_trainer = 'Personal Trainer';
 const forgetPassword = 'Forgot Password ';
