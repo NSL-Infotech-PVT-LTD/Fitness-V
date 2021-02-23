@@ -211,7 +211,6 @@ print("current id inter" + deleteId);
                         url = trainerUser;
                       }
                     }
-
                     _bookingList.add(CustomBooking(
                         bookingId: tList[index]['id'].toString(),
                         bookingType: modelType,
@@ -360,14 +359,14 @@ print("current id inter" + deleteId);
                                     'Sessions',
                                     style: TextStyle(
                                         fontSize: 12,
-                                        color: _trainers
+                                        color: _sessions
                                             ? Colors.white
                                             : Colors.black),
                                   ),
                                 ),
                                 margin: EdgeInsets.all(10.0),
                                 decoration: BoxDecoration(
-                                    color: _trainers ? Colors.black : Colors.black26,
+                                    color: _sessions ? Colors.black : Colors.black26,
                                     shape: BoxShape.circle))),
                         GestureDetector(
                             onTap: () {
