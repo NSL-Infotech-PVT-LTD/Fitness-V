@@ -22,6 +22,7 @@ String getTrainersListRegister = BASE_URL + "api/register/trainers";
 String trainersRegister = BASE_URL + "api/register/trainer";
 String trainerReviewsRegister = BASE_URL + "api/register/trainer/reviews";
 String profile = BASE_URL + "api/get-profile";
+String logOut = BASE_URL + "api/logout";
 
 String eventDetails = BASE_URL + "api/event";
 String privacyUrl = BASE_URL + "api/config/privacy_policy";
@@ -173,6 +174,20 @@ Future<StatusResponse> upGradePlan(String auth, Map<String, String> parms) async
       },
       body: jsonEncode(parms));
   print("response of update " + response.body);
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return StatusResponse.fromJson(map);
+}
+Future<StatusResponse> logOutFun(String auth, Map<String, String> parms) async {
+  final response = await http.post(
+      logOut,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': auth
+      },
+      body: jsonEncode(parms));
+  print("response of logout " + response.body);
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
 

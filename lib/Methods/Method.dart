@@ -254,7 +254,9 @@ void exitFromApp(context) {
         );
       });
 }
-void logoutDialog(context) {
+
+void logoutDialog({context, deviceType, deviceToken,auth}) {
+
   showCupertinoModalPopup(
       context: context,
       builder: (context) {
@@ -284,9 +286,34 @@ void logoutDialog(context) {
                       fontSize: 14,
                       fontWeight: FontWeight.bold)),
               onPressed: () {
+                isConnectedToInternet().then((internet) {
+                  if (internet != null && internet) {
+                    showProgress(context, "Please wait.....");
+                    print('logout Start');
+                      Map<String, String> parms = {
+                        "device_token": deviceToken,
+                        "device_type":deviceType ,
+                      };
+print("params "+parms.toString());
+print("auth "+auth.toString());
+                      logOutFun(auth,parms).then((response) {
+                        dismissDialog(context);
+                        if (response.status) {
+                          print(response.status);
+                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                              LoginScreen()), (Route<dynamic> route) => false);
+                        } else {
+                          dismissDialog(context);
+                          if (response.error != null)
+                            showDialogBox(context, "Error!", response.error);
+                        }
+                      });
+                  } else {
+                    showDialogBox(context, internetError, pleaseCheckInternet);
+                    dismissDialog(context);
+                  }
+                });
                 clearedShared();
-                Navigator.pushAndRemoveUntil(
-                    context, ScaleRoute(page: LoginScreen()), (r) => false);
               },
             ),
             CupertinoActionSheetAction(

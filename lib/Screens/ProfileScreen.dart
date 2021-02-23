@@ -16,6 +16,9 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+import 'dart:io';
+
+import 'SplashScreenWithLady.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -23,12 +26,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileState extends State<ProfileScreen> {
+  String deviceTypeLogout = '';
+   bool  _isIosOut ;
+
   String _userName = '';
   String _roleId = '';
+  String _auth = '';
   var result;
 
   @override
   void initState() {
+
+    _isIosOut = Platform.isIOS;
+    deviceTypeLogout = _isIosOut ? 'ios' : 'android';
+
     _loadAuth();
     getString(userImage)
         .then((value) => {result = value})
@@ -36,6 +47,10 @@ class ProfileState extends State<ProfileScreen> {
 
     getString(roleIdDash)
         .then((value) => {_roleId = value})
+        .whenComplete(() => setState(() {}));
+
+    getString(USER_AUTH)
+        .then((value) => {_auth = value})
         .whenComplete(() => setState(() {}));
 
     super.initState();
@@ -505,7 +520,7 @@ class ProfileState extends State<ProfileScreen> {
                 myDivider(),
                 GestureDetector(
                   onTap: () {
-                    logoutDialog(context);
+                    logoutDialog(context: context,deviceToken: deviceTok!=null?deviceTok:"dfksnfkjdsnkf",deviceType: deviceTypeLogout,auth: _auth);
                   },
                   child: Container(
                       padding: EdgeInsets.fromLTRB(40, 25, 40, 25),

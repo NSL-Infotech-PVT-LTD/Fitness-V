@@ -11,6 +11,7 @@ import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '../AuthScreens/LoginScreen.dart';
 String deviceTok='';
@@ -42,6 +43,7 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
 
   @override
   void initState() {
+
     FirebaseIn.initNoti(context);
     getString(fireDeviceToken).then((value) {
       deviceTok = value;
