@@ -46,6 +46,8 @@ class GymMemberState extends State<UpgradePlan> {
   int indexValue = 0;
   int currentSelectedIndex = 0;//-1;
   int userCurrentFee;
+  String userCurrentNameType;
+
   int userCurrentFeePlanId;
   int slider = 0;
   int plan_index = 0;
@@ -94,6 +96,9 @@ class GymMemberState extends State<UpgradePlan> {
   String _nameFilter ="";
   @override
   void initState() {
+    setState(() {
+      isLoading = true;
+    });
     getString(USER_AUTH).then((value) => {auth = value});
    getString(roleCategory).then((value) => _category = value);
    getString(poolOrGym).then((value) => _nameFilter = value);
@@ -109,6 +114,9 @@ class GymMemberState extends State<UpgradePlan> {
     getString(UserFeeType).then((value) {
       userCurrentFee = int.parse(value);
       print("user Current fee " + userCurrentFee.toString());
+    });    getString(UserFeeName).then((value) {
+      userCurrentNameType = value;
+      print("user Current fee Name" + userCurrentNameType.toString());
     });
     getString(userCurrentRoleID).then((value) {
       userCurrentFeePlanId = int.parse(value);
@@ -176,6 +184,7 @@ class GymMemberState extends State<UpgradePlan> {
   String rolePlanIdS;
   String planPrice;
   String feeType;
+  String forUpgradePlanButtonFee;
   int indexOfSlider;
   int currentFee;
   @override
@@ -190,8 +199,10 @@ class GymMemberState extends State<UpgradePlan> {
       for (var i = 0; i < limiti; i++) {
         value = _response[i]['plan_detail'] ;
         plansList.clear();
-        for(int j = 0; j<value.length;j++){
 
+        for(int j = 0; j<value.length;j++){
+print("Finding issue 1 "+value[j]['fee'].toString());
+print("Finding issue 2 "+ userCurrentFee.toString());
           if(value[j]['fee'] >= userCurrentFee ){ //&& value[j]['role_id'] == //&&  userCurrentFeePlanId == value[j]['role_id']
             plansList.add(PlansDetails(
                 fee_type: value[j]['fee_type'],
@@ -246,7 +257,7 @@ class GymMemberState extends State<UpgradePlan> {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       backgroundColor: CColor.WHITE,
-      body: isLoading?Column(children: [ SizedBox(height: SizeConfig.screenHeight * 0.50,),Center(child: Text("Something went wrong please",style: TextStyle(color:Colors.red),),),
+      body: isLoading?Column(children: [ SizedBox(height: SizeConfig.screenHeight * 0.50,),Center(child: Text("Something went wrong please try Again",style: TextStyle(color:Colors.red),),),
       RaisedButton.icon(onPressed:()=> Navigator.pop(context), icon: Icon(Icons.settings_backup_restore) , label: Text("Back For Retry"))
       ]): SingleChildScrollView(
 
@@ -582,7 +593,7 @@ class GymMemberState extends State<UpgradePlan> {
                       padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
                       child: Column(
                         children: <Widget>[
-                          checkbox("Free", ' Group Classes', signle, 0),
+                        //  checkbox("Free", ' Group Classes', signle, 0),
                           checkbox("Pay For", ' Personal Trainer', couple, 1),
                           //   checkbox("Pay For", ' Pool & Beaches', family, 2),
                         ],
@@ -594,7 +605,7 @@ class GymMemberState extends State<UpgradePlan> {
                     //     )),
 
                     Visibility(
-                      visible: feeType == "yearly",
+                      visible: currentSelectedIndex != 0 ,
                       child: Padding(
                           padding: EdgeInsets.only(left: 40, right: 40),
                           child: Container(

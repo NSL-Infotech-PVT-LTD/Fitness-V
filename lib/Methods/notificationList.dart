@@ -54,7 +54,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     currentPage: json["current_page"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data:json['data'] != null? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))):null,
     firstPageUrl: json["first_page_url"],
     from: json["from"],
     lastPage: json["last_page"],

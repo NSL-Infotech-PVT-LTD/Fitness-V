@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/AuthScreens/forgot_password.dart';
+import 'package:volt/Firebase/FirebaseNotification.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Method.dart';
@@ -8,6 +9,7 @@ import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
+import 'package:volt/Screens/SplashScreenWithLady.dart';
 import 'package:volt/Screens/view_personal_trainer.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -53,14 +55,26 @@ Future<StatusResponse> getRoleApi(context,userType) {
 }
 
 class LoginState extends State<LoginScreen> {
+
+  @override
+
+  void initState() {
+    FirebaseIn.initNoti(context);
+    passwordVisible = true;
+    _isIos = Platform.isIOS;
+    deviceType = _isIos ? 'ios' : 'android';
+    super.initState();
+  }
+
   TextEditingController _emailAddressFieldController = TextEditingController();
   TextEditingController _passwordFieldController = TextEditingController();
   bool _validate1 = false;
   bool _validate2 = false;
   final _formKey = GlobalKey<FormState>();
-  String deviceTok='';
+
 
   void login() async {
+
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
         showProgress(context, "Please wait.....");
@@ -72,16 +86,16 @@ class LoginState extends State<LoginScreen> {
           DEVICE_TOKEN: deviceTok!=null?deviceTok:"dfksnfkjdsnkf",
           DEVICE_TYPE: deviceType
         };
-        print("$parms");
+        print("device Tok  $parms");
         getLogin(parms).then((response) {
+
           dismissDialog(context);
           if (response.status) {
 
-
+          if(response.data.user.role.id != 8 && response.data.user.role.id != 9)  setString(UserFeeType,response.data.user.role.current_plan.fee.toString());
             setString(USER_AUTH, "Bearer " + response.data.token);
             // if (response.data.user.role.current_plan.fee.toString() != null)
             //   setString(UserFeeType,response.data.user.role.current_plan.fee.toString());
-
             setString(userCurrentRoleID,response.data.user.role.id.toString());
             setString(roleType, response.data.user.role.name);
               getRoleApi(context,response.data.user.role.nameFilter);
@@ -101,13 +115,13 @@ class LoginState extends State<LoginScreen> {
 
             if (response.data.user.role != null) {
 
-              print("roleID "+"${response.data.user.role.toJson().toString()}");
+              print("roleID "+"${response.data.user.role.id.toString()}");
               setString(roleIdDash, response.data.user.role.id.toString());
               setString(poolOrGym, response.data.user.role.nameFilter);
               setString(userPlanImage, response.data.user.role.image);
               setString(roleName, response.data.user.role.name);
               setString(Id, response.data.user.id.toString());
-
+              if(response.data.user.role.id != 8 && response.data.user.role.id != 9) setString(UserFeeName,response.data.user.role.current_plan.fee_type.toString());//ideal
               setString(validTill, response.data.user.role_expired_on);
 
               setString(roleCategory, response.data.user.role.category);
@@ -138,20 +152,6 @@ class LoginState extends State<LoginScreen> {
   bool isVisiblePass = false;
   String text = "";
   String textPass = "";
-  @override
-
-  void initState() {
-
-    passwordVisible = true;
-    _isIos = Platform.isIOS;
-    deviceType = _isIos ? 'ios' : 'android';
-    super.initState();
-    getString(fireDeviceToken).then((value) {
-      deviceTok = value;
-      print("device tok"+deviceTok);
-    });
-
-  }
 
 
   @override
@@ -267,13 +267,16 @@ class LoginState extends State<LoginScreen> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
 
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.error,
-                                                color: _validate1 ? Colors.red
-                                                    : Colors.transparent,
+                                            Visibility(
+                                              visible: _validate1,
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.error,
+                                                  color: _validate1 ? Colors.red
+                                                      : Colors.transparent,
+                                                ),
+                                                onPressed: () {},
                                               ),
-                                              onPressed: () {},
                                             ),
                                             Visibility(
                                               visible: isVisible,

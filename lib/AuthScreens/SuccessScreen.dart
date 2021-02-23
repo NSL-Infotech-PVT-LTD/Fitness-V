@@ -41,7 +41,7 @@ class SuccessState extends State<SuccessScreen> {
                   height: 30,
                 ),
                 Text(
-                  'Registration Successfully Done',
+                  'Your Application Has Submitted For Approval',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -52,7 +52,7 @@ class SuccessState extends State<SuccessScreen> {
                 Padding(
                     padding: EdgeInsets.all(20),
                     child: Text(
-                      'Kindly check your email for payment',
+                      'You will received email for further process and payment',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Colors.black,

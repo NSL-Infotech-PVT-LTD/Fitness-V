@@ -6,27 +6,23 @@ import 'package:volt/NotificationsScreens/Notification.dart';
 
 class LocalNotification {
   LocalNotification();
-  static BuildContext _context;
+  static BuildContext ctx;
   static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
 
   static initLocal(BuildContext context) {
-    _context = context;
+    ctx = context;
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initSettingAndroid = AndroidInitializationSettings('logo');
     var initSettingIos = IOSInitializationSettings();
     var initS = InitializationSettings(
         android: initSettingAndroid, iOS: initSettingIos);
+
     _flutterLocalNotificationsPlugin.initialize(initS, onSelectNotification:onSelectNoti);
 
-
   }
 
-  static void sendData(){
-    Navigator.of(_context).push(MaterialPageRoute(builder: (context) => Dashboard(),));
-
-  }
-  static Future<void> showNotificationMediaStyle(String title,String body) async {
+  static Future<void> showNotificationMediaStyle(Map<String,dynamic> msg,String title,String body) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       "channel-00110", 'name', 'desc',
       priority: Priority.high,
@@ -42,19 +38,23 @@ class LocalNotification {
     // await _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation()
     // await _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>().createNotificationChannel(androidNotificationChannel)
 
-    await _flutterLocalNotificationsPlugin.show(0, title, body, platformChannelSpecifics,payload: 'fcm');
+    await _flutterLocalNotificationsPlugin.show(0, title, body, platformChannelSpecifics,payload: '$msg');
+
 
   }
 
   // ignore: missing_return
   static Future<dynamic> onSelectNoti(String payload) {
-    if(payload != null) {
-
-      Navigator.of(_context).push(MaterialPageRoute(builder: (context) => NotificationScreen(),));
+    print("vkas payload===>$payload");
+    if(payload != null && payload!="null" && payload!="{}") {
+      // Navigator.of(_context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+      //     Dashboard()), (Route<dynamic> route) => false);
+      //Navigator.of(_context).push(MaterialPageRoute(builder: (context) => NotificationScreen(),));
 
       print('noti click');
       print('noti content $payload');
     }
+
   }
 
 // static localDispose() {

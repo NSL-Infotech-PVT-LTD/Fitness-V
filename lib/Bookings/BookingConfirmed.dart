@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
+import 'package:volt/MemberDashboard/DashboardChild/Home.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -35,6 +37,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
 
   @override
   void initState() {
+    
     if (widget.modelType == 'events') {
       _roleUrl = imageUrlEvent;
     } else if (widget.modelType == 'class_schedules') {
@@ -189,9 +192,7 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                                       top: 95,
                                       left: 55,
                                       child: Text(
-                                        widget.hours != null
-                                            ? "${widget.hours}  Session"
-                                            : '--:--',
+                                        widget.hours != null && widget.hours.isNotEmpty ? "${widget.hours + (widget.modelType == 'class_schedules' ?" MIN":" Session")}  " : '--:--',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
@@ -293,7 +294,26 @@ class BookingConfirmedState extends State<BookingConfirmed> {
                               Text(
                                 'You may check your booking in Bookings.',
                                 style: TextStyle(
+
                                     fontSize: 10, color: Color(0xff707070)),
+                                textAlign: TextAlign.center,
+                              ), Visibility(
+                                child: mySessionss == "0" && widget.modelType == 'class_schedules'
+                                    ?
+                                RichText(
+                                  text: TextSpan(
+                                    children:<TextSpan>[
+                                      TextSpan(
+                                        text: 'Payment Alert :: ',
+                                        style: TextStyle(color: Colors.red,fontSize: 12)
+                                      ),    TextSpan(
+                                        text: ' Payment link has sent to your register email id',
+                                        style: TextStyle(
+                                    fontSize: 10, color: Color(0xff707070)),
+                                      ),
+                                    ]
+                                  ),
+                                    ) :Container(),
                               ),
                             ],
                           ),

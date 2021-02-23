@@ -14,7 +14,7 @@ class Data {
   String start_date;
   String end_date;
   String class_type;
-  int capacity;
+  String capacity;
   int available_capacity;
   String duration;
   bool is_booked_by_me;
@@ -145,7 +145,6 @@ class Data {
     if (this.location_detail != null) {
       data['location_detail'] = this.location_detail.toJson();
     }
-
     if (this.data != null) {
       data['data'] = this.data;
     }
@@ -159,11 +158,9 @@ class Data {
     if (this.pool_and_beach_members != null) {
       data['pool_and_beach_members'] = this.pool_and_beach_members;
     }
-
     if (this.local_guest != null) {
       data['local_guest'] = this.local_guest;
     }
-
     if (this.fairmont_hotel_guest != null) {
       data['fairmont_hotel_guest'] = this.fairmont_hotel_guest;
     }

@@ -494,7 +494,7 @@ class GymMemberState extends State<GymMemberPlan> {
                       padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
                       child: Column(
                         children: <Widget>[
-                          checkbox("Free", ' Group Classes', signle, 0),
+                         // checkbox("Free", ' Group Classes', signle, 0),
                           checkbox("Pay For", ' Personal Trainer', couple, 1),
                           //   checkbox("Pay For", ' Pool & Beaches', family, 2),
                         ],

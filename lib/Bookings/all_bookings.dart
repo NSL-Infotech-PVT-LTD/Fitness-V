@@ -23,6 +23,9 @@ class AllBookings extends StatefulWidget {
 
 
 class AllBookingsState extends State<AllBookings> {
+
+  String id;
+  String userId;
   int _page = 1;
   int _total = 1;
   ScrollController _sc = new ScrollController();
@@ -35,7 +38,7 @@ class AllBookingsState extends State<AllBookings> {
   var _sessions = false;
   var currentIndex;
 
-  List _bookingList = List();
+  List<CustomBooking> _bookingList = List();
   List _idsList = List();
 
   void setBoolState(String type) {
@@ -59,6 +62,14 @@ class AllBookingsState extends State<AllBookings> {
 
   @override
   void initState() {
+    getString(roleIdDash).then((value) {
+      setState(() {
+        userId = value;
+      });
+
+    });
+
+
     getString(USER_AUTH)
         .then((value) => _auth = value)
         .whenComplete(() => _getBookings(_auth));
@@ -95,7 +106,7 @@ class AllBookingsState extends State<AllBookings> {
                 child: Text("Yes",style: TextStyle( color: CColor.CancelBTN)),
                 onPressed: () {
 //
-
+print("current id inter" + deleteId);
                   _deleteBooking(deleteId);
                 },
                 isDestructiveAction: true,
@@ -124,7 +135,8 @@ class AllBookingsState extends State<AllBookings> {
           if (response.status) {
             if (response.data != null) {
               print(response.data.message);
-              if (currentIndex != null) _bookingList.removeAt(currentIndex);
+              if (currentIndex != null)
+                _bookingList.removeAt(currentIndex);
               setState(() {});
               Navigator.pop(context);
             }
@@ -300,33 +312,36 @@ class AllBookingsState extends State<AllBookings> {
                                 decoration: BoxDecoration(
                                     color: _all ? Colors.black : Colors.black26,
                                     shape: BoxShape.circle))),
-                        GestureDetector(
-                            onTap: () {
-                              setBoolState('trainer_users');
-                              _trainers = true;
-                              _getBookings(_auth);
-                              setState(() {
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: Container(
-                                height: 70,
-                                width: 70,
-                                child: Center(
-                                  child: Text(
-                                    'Trainers',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: _trainers
-                                            ? Colors.white
-                                            : Colors.black),
+                        Visibility(
+                          visible: userId != "8"?true:false,
+                          child: GestureDetector(
+                              onTap: () {
+                                setBoolState('trainer_users');
+                                _trainers = true;
+                                _getBookings(_auth);
+                                setState(() {
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: Container(
+                                  height: 70,
+                                  width: 70,
+                                  child: Center(
+                                    child: Text(
+                                      'Trainers',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: _trainers
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
                                   ),
-                                ),
-                                margin: EdgeInsets.all(10.0),
-                                decoration: BoxDecoration(
-                                    color:
-                                        _trainers ? Colors.black : Colors.black26,
-                                    shape: BoxShape.circle))),
+                                  margin: EdgeInsets.all(10.0),
+                                  decoration: BoxDecoration(
+                                      color:
+                                          _trainers ? Colors.black : Colors.black26,
+                                      shape: BoxShape.circle))),
+                        ),
 
                         GestureDetector(
                             onTap: () {
@@ -551,10 +566,14 @@ class AllBookingsState extends State<AllBookings> {
                               child: BookingView(
                                 customBooking: _bookingList[index],
                                 callBackeDelete: () {
-//                            print("currentid${_idsList[index]['id']}");
-                                  currentIndex = index;
-                                  doYoWantToCntinue(
-                                      _idsList[index]['id'].toString());
+                                  setState(() {
+                                    currentIndex = index;
+                                    id = _bookingList[index].bookingId.toString();
+                                    doYoWantToCntinue(id);
+                                  });
+                           print("currentid ${_idsList[index]['id']}");
+
+
                                 },
                               ));
                         }
@@ -679,7 +698,7 @@ class BookingView extends StatelessWidget {
                                 ),
                                 SizedBox(width: 20),
                                 Text(
-                                  customBooking.paymentStatus.toUpperCase(),
+                                   "${customBooking.bookingType == "Event"?"----":customBooking.paymentStatus.toUpperCase()}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:volt/Bookings/YourBooking.dart';
 import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/GroupClasses/group_class_detail.dart';
 import 'package:volt/Methods/Method.dart';
@@ -16,6 +17,11 @@ import 'package:volt/Value/Strings.dart';
 
 import '../Methods.dart';
 
+int classId;
+
+String imgClass = "";
+String nameClass = "";
+
 class GroupClass extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => GroupClassState();
@@ -28,6 +34,7 @@ class GroupClassState extends State<GroupClass> {
   bool isLoading = false;
   List users = new List();
   String deleteId = "";
+
   int currentIndex = 0;
   var sendDateFormat = new DateFormat("yyyy-MM-dd");
 
@@ -42,7 +49,7 @@ class GroupClassState extends State<GroupClass> {
           Map<String, String> parms = {
             SEARCH: '',
             LIMIT: '10',
-            if(date != null)Date:"$date",
+            if (date != null) Date: "$date",
             PAGE: index.toString()
           };
           getGroupClassListApi(auth, parms).then((response) {
@@ -65,7 +72,7 @@ class GroupClassState extends State<GroupClass> {
                   users.addAll(tList);
                   page++;
                 });
-              }else{
+              } else {
                 setState(() {
                   isLoading = false;
                   firstLoading = false;
@@ -190,10 +197,11 @@ class GroupClassState extends State<GroupClass> {
       }
     });
   }
+
   DateTime _selectedValue;
   @override
-
   DatePickerController _datePickerController = DatePickerController();
+
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
@@ -331,16 +339,17 @@ class GroupClassState extends State<GroupClass> {
                               context,
                               new MaterialPageRoute(
                                   builder: (context) => SelectSession(
-                                    isGroupClass: false,
-                                    isSession: true,
-                                  )));
+                                        isGroupClass: false,
+                                        isSession: true,
+                                      )));
                         },
                         child: Container(
-                          height: SizeConfig.screenHeight * 0.06,
+                            height: SizeConfig.screenHeight * 0.06,
                             decoration: BoxDecoration(
                                 color: Color(0xff2C2C2C),
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(7),)),
+                                  Radius.circular(7),
+                                )),
                             child: Center(
                               child: Text(
                                 'Purchase Session',
@@ -358,123 +367,161 @@ class GroupClassState extends State<GroupClass> {
           ];
         },
         body: Container(
-           color: Colors.white,
+          color: Colors.white,
           child: SafeArea(
             child: Material(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  // SizedBox(height: SizeConfig.screenHeight * 0.01),
-                  Container(
-                    height: SizeConfig.screenHeight * 0.14,
-                    child: DatePicker(
-                      DateTime.now(),
-                      initialSelectedDate: _selectedValue!=null?_selectedValue:DateTime.now(),
-                      selectionColor: Colors.black,
-                      selectedTextColor: Colors.white,
-                      width: SizeConfig.screenWidth * 0.13,
-                      height: SizeConfig.screenHeight * 0.11,
-                      controller: _datePickerController,
-                      daysCount: 30,
-
-                      onDateChange: (date) {
-                        print(date);
-                        // New date selected
-                        setState(() {
-
-                          if(_datePickerController != null){
-                            firstLoading = true;
-                            users.clear();
-                            _selectedValue = date;
-                            page = 1;
-                            totalPage = 1;
-                            _datePickerController.animateToDate(date.add(Duration(days: 0)));
-                            _getList(auth, page,date: sendDateFormat.format(date));
-                          }
-
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.screenHeight * 0.02,),
-                  firstLoading ? Center(
-                    child: Padding(padding: EdgeInsets.symmetric(vertical: SizeConfig.screenHeight * 0.10) ,child: CircularProgressIndicator()),
-                  )
-                      : users.length > 0
-                      ? Expanded(
-                        flex: 5,
-                        child: ListView.builder(
-                            itemCount: users.length + 1,
-                            // Add one more item for progress indicator
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            itemBuilder: (BuildContext context, int index) {
-                              if (index == users.length) {
-                                if (isLoading)
-                                  return buildProgressIndicatorCenter(isLoading);
-                                else {
-                                  return buildProgressIndicatorCenter(isLoading);
-                                  // return  Material(
-                                  //   child: Center(
-                                  //     child: Text("No Data Found",style: TextStyle(color:Colors.black),),
-                                  //   ),
-                                  // );
-                                }
-                              } else {
-                                return  users.length > 0
-                                    ? CustomGroupState(
-                                  items: CustomGroupClass(
-                                    duration: users[index]['trainer']['date_duration']['duration'],
-                                    startTime: users[index]['start_time'],
-                                      className: users[index]['class_detail']['name'],
-                                      img: users[index]['class_detail']['image'],
-                                      classOwner: users[index]['trainer'] != null ? users[index]['trainer']['first_name'] : '',
-                                      endDate: users[index]['end_date'],
-                                      startDate: users[index]['start_date'],
-                                      classTime: users[index]['class_type'],
-                                      is_booked_by_me: users[index]
-                                      ['is_booked_by_me'],
-                                      id: users[index]['id'],
-                                      leftSeats: users[index]
-                                      ['available_capacity']
-                                          .toString()),
-                                  deleteCallBack: () {
-                                    currentIndex = index;
-                                    deleteId = users[index]
-                                    ['is_booked_by_me_booking_id']
-                                        .toString();
-                                    if (users[index]['available_capacity'].toString() != '0' && !users[index]['is_booked_by_me']) {
-                                      Navigator.push(
-                                          context,
-                                          ScaleRoute(
-                                              page: GroupClassDetail(
-                                                id: users[index]['id'],
-                                              )));
-                                    } else {
-                                      doYoWantToCntinue(
-                                          users[index]['is_booked_by_me'],
-                                          users[index]['id'].toString());
-                                    }
-                                  },
-                                )
-                                    : Material(
-                                  child: Center(
-                                    child: Text(
-                                      "No Data Found",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                );
-                              }
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    // SizedBox(height: SizeConfig.screenHeight * 0.01),
+                    Container(
+                      height: SizeConfig.screenHeight * 0.14,
+                      child: DatePicker(
+                        DateTime.now(),
+                        initialSelectedDate: _selectedValue != null
+                            ? _selectedValue
+                            : DateTime.now(),
+                        selectionColor: Colors.black,
+                        selectedTextColor: Colors.white,
+                        width: SizeConfig.screenWidth * 0.13,
+                        height: SizeConfig.screenHeight * 0.11,
+                        controller: _datePickerController,
+                        daysCount: 30,
+                        onDateChange: (date) {
+                          print(date);
+                          // New date selected
+                          setState(() {
+                            if (_datePickerController != null) {
+                              firstLoading = true;
+                              users.clear();
+                              _selectedValue = date;
+                              page = 1;
+                              totalPage = 1;
+                              _datePickerController
+                                  .animateToDate(date.add(Duration(days: 0)));
+                              _getList(auth, page,
+                                  date: sendDateFormat.format(date));
                             }
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.screenHeight * 0.02,
+                    ),
+                    firstLoading
+                        ? Center(
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: SizeConfig.screenHeight * 0.10),
+                                child: CircularProgressIndicator()),
+                          )
+                        : users.length > 0
+                            ? Expanded(
+                                flex: 5,
+                                child: ListView.builder(
+                                    itemCount: users.length + 1,
+                                    // Add one more item for progress indicator
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      if (index == users.length) {
+                                        if (isLoading)
+                                          return buildProgressIndicatorCenter(
+                                              isLoading);
+                                        else {
+                                          return buildProgressIndicatorCenter(
+                                              isLoading);
+                                          // return  Material(
+                                          //   child: Center(
+                                          //     child: Text("No Data Found",style: TextStyle(color:Colors.black),),
+                                          //   ),
+                                          // );
+                                        }
+                                      } else {
+                                        if (users.length > 0) {
+
+                                          imgClass = users[index]
+                                              ['class_detail']['image'];
+                                          nameClass = users[index]
+                                              ['class_detail']['name'];
+                                          return CustomGroupState(
+                                            items: CustomGroupClass(
+                                                duration: users[index]['trainer']
+                                                        ['date_duration']
+                                                    ['duration'],
+                                                startTime: users[index]
+                                                    ['start_time'],
+                                                className: users[index]
+                                                    ['class_detail']['name'],
+                                                img: users[index]
+                                                    ['class_detail']['image'],
+                                                classOwner:
+                                                    users[index]['trainer'] != null
+                                                        ? users[index]['trainer']
+                                                            ['first_name']
+                                                        : '',
+                                                endDate: users[index]
+                                                    ['end_date'],
+                                                startDate: users[index]
+                                                    ['start_date'],
+                                                classTime: users[index]['class_type'],
+                                                is_booked_by_me: users[index]['is_booked_by_me'],
+                                                id: users[index]['id'],
+                                                leftSeats: users[index]['available_capacity'].toString()),
+                                            deleteCallBack: () {
+                                              currentIndex = index;
+
+                                              deleteId = users[index][
+                                                      'is_booked_by_me_booking_id']
+                                                  .toString();
+                                              if (users[index][
+                                                              'available_capacity']
+                                                          .toString() !=
+                                                      '0' &&
+                                                  !users[index]
+                                                      ['is_booked_by_me']) {
+                                                Navigator.push(
+                                                    context,
+                                                    ScaleRoute(
+                                                        page: GroupClassDetail(
+                                                      id: users[index]['id'],
+                                                    )));
+                                              } else {
+                                                doYoWantToCntinue(
+                                                    users[index]
+                                                        ['is_booked_by_me'],
+                                                    users[index]['id']
+                                                        .toString());
+                                              }
+                                            },
+                                          );
+                                        } else {
+                                          return Material(
+                                            child: Center(
+                                              child: Text(
+                                                "No Data Found",
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    }
 //            controller: _sc,
-                        ),
-                      )
-                      : Center(
-                    child: Padding(padding: EdgeInsets.symmetric(vertical: SizeConfig.screenHeight * 0.10),child: Text("No Classes Found")),
-                  ),
-                ],
-              )
-            ),
+                                    ),
+                              )
+                            : Center(
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical:
+                                            SizeConfig.screenHeight * 0.10),
+                                    child: Text("No Classes Found")),
+                              ),
+                  ],
+                )),
           ),
         ),
       ),
@@ -496,10 +543,9 @@ class CustomGroupClass {
   final String startTime;
 
   const CustomGroupClass(
-
       {this.img,
-        this.duration,
-        this.is_booked_by_me,
+      this.duration,
+      this.is_booked_by_me,
       this.className,
       this.id,
       this.classOwner,
@@ -510,9 +556,7 @@ class CustomGroupClass {
       this.startTime});
 }
 
-
 class CustomGroupState extends StatefulWidget {
-
   final CustomGroupClass items;
   final VoidCallback deleteCallBack;
 
@@ -524,7 +568,6 @@ class CustomGroupState extends StatefulWidget {
 }
 
 class _CustomGroupStateState extends State<CustomGroupState> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -533,20 +576,18 @@ class _CustomGroupStateState extends State<CustomGroupState> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-
-       
           widget.items.img == null
               ? Image.asset(
-            baseImageAssetsUrl + 'logo.png',
-            height: SizeConfig.blockSizeVertical * 25,
-            width: SizeConfig.blockSizeHorizontal * 90,
-            fit: BoxFit.cover,
-          )
+                  baseImageAssetsUrl + 'logo.png',
+                  height: SizeConfig.blockSizeVertical * 25,
+                  width: SizeConfig.blockSizeHorizontal * 90,
+                  fit: BoxFit.cover,
+                )
               : blackPlaceHolder(
-              imageClassUrl,
-              widget.items.img,
-              SizeConfig.blockSizeVertical * 25,
-              SizeConfig.blockSizeHorizontal * 90),
+                  imageClassUrl,
+                  widget.items.img,
+                  SizeConfig.blockSizeVertical * 25,
+                  SizeConfig.blockSizeHorizontal * 90),
           SizedBox(
             height: 20,
           ),
@@ -557,19 +598,27 @@ class _CustomGroupStateState extends State<CustomGroupState> {
           SizedBox(
             height: 20,
           ),
+          SizedBox(
+            width: 20,
+          ),
           Row(
-           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Instructor",style: TextStyle(fontSize: 11),),
+
+                  Text(
+                    "Instructor",
+                    style: TextStyle(fontSize: 11),
+                  ),
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.02,
                   ),
-                  Text("${widget.items.classOwner}",style: TextStyle(fontSize: 11)),
+                  Text("${widget.items.classOwner}",
+                      style: TextStyle(fontSize: 11)),
                   // FlatButton(
                   //     onPressed: () {},
                   //
@@ -583,118 +632,150 @@ class _CustomGroupStateState extends State<CustomGroupState> {
                 ],
               ),
               SizedBox(
-                width: SizeConfig.screenWidth * 0.04,
+                width: SizeConfig.screenWidth * 0.05,
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Date",style: TextStyle(fontSize: 11,),),
-                  SizedBox(
-                    height: SizeConfig.screenHeight * 0.02,
-                  ),
-                  Text("${widget.items.startDate}",style: TextStyle(fontSize: 12,)),
-                  // FlatButton(
-                  //     onPressed: () {},
-                  //
-                  //     child: FittedBox(
-                  //       fit: BoxFit.cover,
-                  //       child: Text(
-                  //         "${widget.items.startDate}",
-                  //         style: TextStyle(fontSize: 12),
-                  //       ),
-                  //     )),
+                  // Text("Date",style: TextStyle(fontSize: 11,),),
+                  // SizedBox(
+                  //   height: SizeConfig.screenHeight * 0.02,
+                  // ),
+                  // Text("${widget.items.startDate}",style: TextStyle(fontSize: 12,)),
                 ],
               ),
               SizedBox(
-                width: SizeConfig.screenWidth * 0.04,
+                width: SizeConfig.screenWidth * 0.05,
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Time",style: TextStyle(fontSize: 11)),
+                  Text("Time", style: TextStyle(fontSize: 11)),
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.02,
                   ),
-                  Text("${(widget.items.startTime).replaceAll(":00","")}",style: TextStyle(fontSize: 12,)),
-                  // FlatButton(
-                  //     onPressed: () {},
-                  //
-                  //     child: FittedBox(
-                  //       fit: BoxFit.cover,
-                  //       child: Text(
-                  //         "${widget.items.leftSeats}",
-                  //         style: TextStyle(fontSize: 12),
-                  //       ),
-                  //     )),
+                  Text("${(widget.items.startTime)} ",
+                      style: TextStyle(
+                        fontSize: 12,
+                      )),
                 ],
               ),
               SizedBox(
                 width: SizeConfig.screenWidth * 0.05,
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Duration",style: TextStyle(fontSize: 11),),
+                  Text(
+                    "Duration",
+                    style: TextStyle(fontSize: 11),
+                  ),
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.02,
                   ),
-                  Text("${widget.items.duration.toString()}",style: TextStyle(fontSize: 12,)),
+                  Text("${widget.items.duration.toString()} MIN",
+                      style: TextStyle(
+                        fontSize: 12,
+                      )),
                 ],
               ),
               SizedBox(
-                width: SizeConfig.screenWidth * 0.05,
+                width: SizeConfig.screenWidth * 0.06
+
+                ,
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Available Slot",style: TextStyle(fontSize: 12),),
+                  Text(
+                    "Available Slots",
+                    style: TextStyle(fontSize: 12),
+                  ),
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.02,
                   ),
-                  Text("${widget.items.leftSeats}",style: TextStyle(fontSize: 12)),
-                  // FlatButton(
-                  //     onPressed: () {},
-                  //
-                  //     child: FittedBox(
-                  //       fit: BoxFit.cover,
-                  //       child: Text(
-                  //         "${widget.items.leftSeats}",
-                  //         style: TextStyle(fontSize: 12),
-                  //       ),
-                  //     )),
+                  Text("${widget.items.leftSeats}",
+                      style: TextStyle(fontSize: 12)),
                 ],
               ),
             ],
           ),
-
           SizedBox(
             height: 20,
           ),
           Container(
             height: 50,
-            child: RaisedButton(
-                onPressed: widget.deleteCallBack,
-                color: widget.items.leftSeats != '0' && !widget.items.is_booked_by_me
-                    ? Colors.black
-                    : CColor.CancelBTN,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(button_radius)),
-                child: Center(
-                  child: Text(
-                    widget.items.leftSeats != '0'
-                        ? !widget.items.is_booked_by_me
-                        ? 'View Detail'
-                        : 'Already booked! Do you want to cancel?'
-                        : 'House Full',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: !widget.items.is_booked_by_me ? 14 : 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width:widget.items.leftSeats != '0' && !widget.items.is_booked_by_me?SizeConfig.screenWidth * 0.40:SizeConfig.screenWidth * 0.80,
+                  child: RaisedButton(
+                      onPressed: widget.deleteCallBack,
+                      color: widget.items.leftSeats != '0' &&
+                              !widget.items.is_booked_by_me
+                          ? Colors.black
+                          : CColor.CancelBTN,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(button_radius)),
+                      child: Center(
+                        child: Text(
+                          widget.items.leftSeats != '0'
+                              ? !widget.items.is_booked_by_me
+                                  ? 'View Detail'
+                                  : 'Already booked! Do you want to cancel?'
+                              : 'House Full',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize:
+                                  !widget.items.is_booked_by_me ? 14 : 10),
+                        ),
+                      )),
+                ),
+                Visibility(
+                  visible: widget.items.leftSeats != '0' && !widget.items.is_booked_by_me,
+                  child: Container(
+                    width: SizeConfig.screenWidth * 0.40,
+                    child: RaisedButton(
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => YourBooking(
+                                      isSession: false,
+                                      id: widget.items.id,
+                                      image:  widget.items.img,
+                                      wantToShowPrice: false,
+                                      isGroupClass: true,
+                                      name:  widget.items.className,
+                                      payment: "0",
+                                      serviceHours: widget.items.duration,
+                                    ))), //widget.deleteCallBack,
+                        color: widget.items.leftSeats != '0' &&
+                                !widget.items.is_booked_by_me
+                            ? Colors.black
+                            : CColor.CancelBTN,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(button_radius)),
+                        child: Center(
+                          child: Text(
+                            widget.items.leftSeats != '0' ? !widget.items.is_booked_by_me
+                                    ? 'Book'
+                                    : 'UnBook'
+                                : 'House Full',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    !widget.items.is_booked_by_me ? 14 : 10),
+                          ),
+                        )),
                   ),
-                )),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 20,

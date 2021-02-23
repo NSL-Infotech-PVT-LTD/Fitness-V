@@ -26,6 +26,7 @@ const groupClasses = 'Group Classes';
 const sessionClasses = 'Session';
 const Personal_trainer = 'Personal Trainer';
 const UserFeeType = 'UserFeeType';
+const UserFeeName = 'UserFeeName';
 const userCurrentRoleID = 'userCurrentRoleID';
 const cart = 'Cart';
 const booking = 'Booking';

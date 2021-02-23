@@ -45,6 +45,7 @@ class YourBookingState extends State<YourBooking> {
     getString(USER_AUTH).then((value) => {auth = value});
     super.initState();
     print("isSession ${widget.isSession}");
+    print("isSession ${widget.serviceHours}");
   }
   void doYoWantToCntinue() {
     showCupertinoDialog(
@@ -62,10 +63,7 @@ class YourBookingState extends State<YourBooking> {
                 child: Text("Yes",style: TextStyle(color: CColor.CancelBTN),),
                 onPressed: () {
 //                  Navigator.pop(context);
-                  bookingFunction(
-                      auth,
-                      context,
-                      "${widget.isGroupClass ? classSchedules : widget.isSession? sessionType:trainerUsers}", widget.id.toString(), widget.serviceHours);
+                  bookingFunction(auth, context, "${widget.isGroupClass ? classSchedules : widget.isSession? sessionType:trainerUsers}", widget.id.toString(), widget.serviceHours);
                 },
                 isDestructiveAction: false,
               ),
@@ -278,7 +276,7 @@ class YourBookingState extends State<YourBooking> {
                                   left: 55,
                                   child: Text(
                                     // ignore: unrelated_type_equality_checks
-                                    '${widget.serviceHours == 0 ? 1 : widget.serviceHours} ${widget.isSession?"Session":"Hours"}',
+                                    '${widget.serviceHours.isEmpty ? 1 : widget.serviceHours} ${widget.isSession?"Session":"MIN"}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,

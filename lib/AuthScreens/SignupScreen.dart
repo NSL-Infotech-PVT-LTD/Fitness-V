@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:volt/Firebase/FirebaseNotification.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/Choose_Personal_Trainer.dart';
+import 'package:volt/Screens/SplashScreenWithLady.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
@@ -60,9 +62,12 @@ class SignupScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => SignupState();
+
 }
 
 class SignupState extends State<SignupScreen> {
+
+
   String baseImageUrl = 'assets/images/';
   String radioItem = "";
   String radioItemMarital = '';
@@ -89,27 +94,14 @@ class SignupState extends State<SignupScreen> {
   var addressController = TextEditingController();
   var hotelController = TextEditingController();
   var durationController = TextEditingController();
-  List<String> _cities = [
-    'Dubai',
-    'Sharjah',
-    'Abu Dhabi',
-    'Ajman',
-    'Ras al-khaimah',
-//    'Musaffah City',
-    'Fujairah City',
-//    'Khalifah A City',
-//    'Reef AI Fujairah City',
-//    'Bani Yas City',
-//    'Zayed City',
-    'Umm al-Quwain',
-  ];
+  List<String> _cities = [];
   String selectedCity;
   var selectedTrainer;
 
   bool _isIos;
   String deviceType = '';
   String roleId;
-  var deviceTok = '';
+
 
   var fromDate;
   var checkInViewdate;
@@ -359,6 +351,25 @@ class SignupState extends State<SignupScreen> {
 
   @override
   void initState() {
+    FirebaseIn.initNoti(context);
+    _cities = [
+      'Dubai',
+      'Sharjah',
+      'Abu Dhabi',
+      'Ajman',
+      'Ras al-khaimah',
+//    'Musaffah City',
+      'Fujairah City',
+//    'Khalifah A City',
+//    'Reef AI Fujairah City',
+//    'Bani Yas City',
+//    'Zayed City',
+      'Umm al-Quwain',
+    ];
+    _cities.sort((a,b){
+      return a.toLowerCase().compareTo(b.toLowerCase());
+    });
+
     print("profile image " + widget.profileImage.toString());
     passwordVisible = true;
     if (widget.type != null) print("form type " + widget.type);
@@ -383,9 +394,9 @@ class SignupState extends State<SignupScreen> {
       // }
       _setData(widget.memberIndex.toString());
     }
-    getString(fireDeviceToken).then((value) {
-      deviceTok = value;
-    });
+    // getString(fireDeviceToken).then((value) {
+    //   deviceTok = value;
+    // });
     super.initState();
   }
 
@@ -636,14 +647,9 @@ class SignupState extends State<SignupScreen> {
                           Expanded(
                             flex: 1,
                             child: Visibility(
-                              visible: widget.isSingle &&
-                                  widget.type != 'fairMont' &&
-                                  widget.type != 'guest',
+                              visible: widget.isSingle && widget.type != 'fairMont' && widget.type != 'guest',
                               child: Text(
-                                  "AED ${widget.planPrice
-                                      .toString()} ${priceTrainer.isEmpty
-                                      ? ""
-                                      : "+ $priceTrainer"}",
+                                  "AED ${planPrice != null? planPrice.toString():widget.planPrice}",
                               style: TextStyle(
                               color: CColor.WHITE,
                                   fontSize: textSize14),
@@ -1197,6 +1203,7 @@ class SignupState extends State<SignupScreen> {
                                   onChanged: (val) {
                                     setState(
                                           () {
+
                                         selectedCity = val;
                                         print(selectedCity);
                                       },
@@ -1546,7 +1553,7 @@ class SignupState extends State<SignupScreen> {
 
                                 //  print("$fromDate");
                                 print("check");
-                                print("check form chekc2 $result");
+                               print("check form chekc2 $result");
 
                                 if (formKey.currentState.validate()) {
                                   if ((widget.type != 'fairMont' &&
@@ -1645,7 +1652,7 @@ class SignupState extends State<SignupScreen> {
                                         CITY: selectedCity,
                                         DEVICE_TYPE: deviceType,
                                         GENDER: radioItem.toLowerCase(),
-                                        DEVICE_TOKEN: "deviceTok",
+                                        DEVICE_TOKEN: deviceTok != null ? deviceTok : "deviceTok",
                                         nationality: nationalityController.text,
                                         workplace: workPlaceController.text,
                                         marital_status:
@@ -1673,6 +1680,7 @@ class SignupState extends State<SignupScreen> {
                                         checkOutKey: checkOutDate.toString(),
                                       };
                                       // print("vikas 0=====>${parms.toString()}");
+                                      print("check param $parms");
                                       if (widget.gymMemberType ==
                                           "gym_members" ||
                                           widget.gymMemberType ==
@@ -1770,7 +1778,7 @@ class SignupState extends State<SignupScreen> {
                                         CITY+ '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': selectedCity,
                                         DEVICE_TYPE: deviceType,
                                         GENDER + '${widget.memberIndex == 0 ? "" : "_${widget.memberIndex}"}': radioItem.toLowerCase(),
-                                        DEVICE_TOKEN: "deviceTok",
+                                        DEVICE_TOKEN: deviceTok != null ? deviceTok : "deviceTok",
                                         if (widget.memberIndex == 0)
                                           nationality:
                                           nationalityController.text,
@@ -1844,7 +1852,7 @@ class SignupState extends State<SignupScreen> {
                                               setString(userImage,
                                                   response.data.user.image);
                                             setString(USER_AUTH, "Bearer " + response.data.token);
-                                           // setString(UserFeeType,response.data.user.role.current_plan.fee.toString());
+                                        //   setString(UserFeeName,response.data.user.role.current_plan.fee_type.toString());//ideal
                                             setString(userCurrentRoleID,response.data.user.role.id.toString());
                                             setString(roleType, response.data.user.role.name);
                                        //     getRoleApi(context,response.data.user.role.nameFilter);
@@ -1867,12 +1875,8 @@ class SignupState extends State<SignupScreen> {
                                               setString(id,
                                                   response.data.user.id
                                                       .toString());
-                                            print("roleIdCheck" +
-                                                response.data.user.role.id
-                                                    .toString());
-                                            setString(roleIdDash,
-                                                response.data.user.role.id
-                                                    .toString());
+                                            print("roleIdCheck" + response.data.user.role.id.toString());
+                                            setString(roleIdDash, response.data.user.role.id.toString());
 
                                             if (response.data.user.role !=
                                                 null) {
@@ -1902,8 +1906,7 @@ class SignupState extends State<SignupScreen> {
                                                         .my_sessions
                                                         .toString());
                                               }
-                                              if (response.data.user.role
-                                                  .current_plan != null) {
+                                              if (response.data.user.role.current_plan != null) {
                                                 setString(
                                                     rolePlan,
                                                     response.data.user.role
@@ -2202,51 +2205,52 @@ class SignupState extends State<SignupScreen> {
                           SizedBox(
                             height: 50,
                           ),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(left: 25, bottom: 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Image.asset(
-                                    baseImageAssetsUrl + 'logo.png',
-                                    height: 90,
-                                    color: Color(0xff8B8B8B),
-                                    width: 120,
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(left: 25, bottom: 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: SvgPicture.asset(
-                                    baseImageAssetsUrl + 'vector_lady.svg',
-                                    height: 90,
-                                    width: 120,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 40, bottom: 10),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  volt_rights,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Color(0xff8B8B8B),
-                                      fontSize: 8,
-                                      fontStyle: FontStyle.italic,
-                                      fontFamily: open_italic),
-                                )),
-                          ),
+                          // Row(
+                          //   children: <Widget>[
+                          //     Padding(
+                          //       padding: EdgeInsets.only(left: 25, bottom: 0),
+                          //       child: Align(
+                          //         alignment: Alignment.centerLeft,
+                          //         child: Image.asset(
+                          //           baseImageAssetsUrl + 'logo.png',
+                          //           height: 90,
+                          //           color: Color(0xff8B8B8B),
+                          //           width: 120,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Spacer(),
+                          //     Padding(
+                          //       padding: EdgeInsets.only(left: 25, bottom: 0),
+                          //       child: Align(
+                          //         alignment: Alignment.centerLeft,
+                          //         child: SvgPicture.asset(
+                          //           baseImageAssetsUrl + 'vector_lady.svg',
+                          //           height: 90,
+                          //           width: 120,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     SizedBox(
+                          //       width: 20,
+                          //     )
+                          //   ],
+                          // ),
+                          // Padding(
+                          //   padding: EdgeInsets.only(left: 40, bottom: 10),
+                          //   child: Align(
+                          //       alignment: Alignment.centerLeft,
+                          //       child: Text(
+                          //         volt_rights,
+                          //         textAlign: TextAlign.center,
+                          //         style: TextStyle(
+                          //             color: Color(0xff8B8B8B),
+                          //             fontSize: 8,
+                          //             fontStyle: FontStyle.italic,
+                          //             fontFamily: open_italic),
+                          //       )),
+                          // ),
+                          footer(),
                           SizedBox(
                             height: 50,
                           )
@@ -2258,6 +2262,7 @@ class SignupState extends State<SignupScreen> {
   }
 
   List result;
+  int planPrice ,trainerPrice ;
   String nameTrainer = "";
   String yearsExpTrainer = "";
   String traineesBookedTrainer = "";
@@ -2283,7 +2288,11 @@ class SignupState extends State<SignupScreen> {
       traineesBookedTrainer = result[0]["booking_cnt"].toString();
       reviewTrainer = result[0]["booking_reviewed_cnt"].toString();
       sessionSlotTrainer = result[1].toString();
-      if (priceTrainer != null) priceTrainer = result[2].toString();
+
+      if (priceTrainer != null){
+        priceTrainer = result[2].toString();
+        planPrice = result[2] + int.tryParse(widget.planPrice) ;
+      }
       imageTrainer = result[0]['image'];
       idTrainer = result[0]["id"].toString();
     }

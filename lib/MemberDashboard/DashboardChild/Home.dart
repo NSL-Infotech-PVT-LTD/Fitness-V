@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:volt/AuthScreens/LoginScreen.dart';
 import 'package:volt/Bookings/select_session.dart';
 import 'package:volt/GroupClasses/group_classes.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
@@ -14,7 +16,7 @@ import 'package:volt/Value/Strings.dart';
 
 import 'Cardio.dart';
 
-
+String mySessionss;
 class Home extends StatefulWidget {
 
   final image;
@@ -33,18 +35,21 @@ class HomeState extends State<Home> {
   String _roleIdDash = "";
   String _roleCategory = "";
   String textFind;
+  var sendDateFormat = new DateFormat("yyyy-MM-dd");
+  var userViewFormate = new DateFormat("dd-MM-yyyy");
+  DateTime todayDate = DateTime.now();
 
   List result;
 
   String _id;
   String validtill;
-  String _mySessionss;
+
   String _trainerSlot;
   String _sessions;
+  var difference = 0;
   bool isLoading = false;
 
   void initState() {
-
 
     if (widget.roleId == "8" ||widget.roleId=="9") {
       setState(() {
@@ -54,6 +59,10 @@ class HomeState extends State<Home> {
         getString(USER_AUTH)
             .then((value) => getProfileDetailApi(value).then((response) {
           setState(() {
+            if(value == null && value.isEmpty) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder :(BuildContext context)=>LoginScreen()));
+            }
+
             if (response.data.user.my_sessions != null) {
               setString(trainer_slot, response.data.user.trainer_slot.toString());
             }
@@ -76,19 +85,14 @@ class HomeState extends State<Home> {
           print("roleIdDash" + _roleIdDash);
         }));
         getString(mySessions)
-            .then((value) => {_mySessionss = value})
+            .then((value) => {mySessionss = value})
             .whenComplete(() => setState(() {
-          print("mySessionss " + _mySessionss);
+          print("mySessionss " + mySessionss);
         }));
         getString(trainer_slot)
             .then((value) => {_trainerSlot = value})
             .whenComplete(() => setState(() {
           print("trainerSlot " + _trainerSlot);
-        }));
-        getString(mySessions)
-            .then((value) => {_mySessionss = value})
-            .whenComplete(() => setState(() {
-          print("mySessionss " + _mySessionss);
         }));
 
       });
@@ -110,6 +114,7 @@ class HomeState extends State<Home> {
             setString(userImage, response.data.user.image);
           if (response.data != null && response.data.user != null)
             setString(id, response.data.user.id.toString());
+
           print("roleIdCheck" + response.data.user.role.id.toString());
           setString(roleIdDash, response.data.user.role.id.toString());
           setString(poolOrGym, response.data.user.role.nameFilter);
@@ -158,20 +163,26 @@ class HomeState extends State<Home> {
           //     .whenComplete(() => setState(() {
           //       print("_sessions" + _sessions);
           // }));
-          getString(validTill)
-              .then((value) => {validtill = value})
-              .whenComplete(() => setState(() {
-            print("valid till " + validtill);
-          }));
+          getString(validTill).then((value) {
+            validtill = value;
+            DateTime newTime = DateTime.parse(validtill);
+            DateTime newTimeOne = DateTime.parse(todayDate.toString());
+            difference = newTime.difference(newTimeOne).inDays;
+
+            print("Difference $difference");
+
+            todayDate.compareTo(newTime)  ;
+          });
+
           getString(trainer_slot)
               .then((value) => {_trainerSlot = value})
               .whenComplete(() => setState(() {
             print("trainerSlot " + _trainerSlot);
           }));
           getString(mySessions)
-              .then((value) => {_mySessionss = value})
+              .then((value) => {mySessionss = value})
               .whenComplete(() => setState(() {
-            print("mySessionss " + _mySessionss);
+            print("mySessionss " + mySessionss);
           }));
 
           getString(userPlanImage)
@@ -251,11 +262,14 @@ class HomeState extends State<Home> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                _roleIdDash != "8" &&  _roleIdDash != "9"?
                                 Padding(
                                   padding: const EdgeInsets.only(left: 6.0),
-                                  child: SvgPicture.asset(
-                                      baseImageAssetsUrl + 'activePlan.svg'),
-                                ),
+                                  child:
+                                  difference>7?
+                                  SvgPicture.asset(
+                                      baseImageAssetsUrl +'activePlan.svg'): SvgPicture.asset(baseImageAssetsUrl +'expiredclass.svg')):  SvgPicture.asset(
+                                    baseImageAssetsUrl +'activePlan.svg'),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Image.asset(
@@ -418,7 +432,7 @@ class HomeState extends State<Home> {
                                       child: Divider(),
                                     ),
                                     Text(
-                                      _mySessionss != null && _mySessionss.isNotEmpty ? " ${_mySessionss.toString()}" : "--:--",
+                                      mySessionss != null && mySessionss.isNotEmpty ? " ${mySessionss.toString()}" : "--:--",
                                       style: TextStyle(color: Colors.black, fontSize: 11),
                                     ),
                                   ],

@@ -243,12 +243,16 @@ class _SpouseTypeState extends State<SpouseType> {
         Totalprice = 0;
         print("hnsdjhds $result");
         for (int i = 0; i < result.length; i++) {
-          Totalprice = Totalprice +
-              (i == 0
-                  ? (int.parse(
-                      "${result[i]['trainerPriceNew'] != null && result[i]['trainerPriceNew'] != "null" ? (result[i]['trainerPriceNew']) : 0}"))
-                  : (int.parse(
-                      "${result[i]['trainerPriceNew_$i'] != null && result[i]['trainerPriceNew_$i'] != "null" ? (result[i]['trainerPriceNew_$i']) : 0}")));
+          try{
+            Totalprice = Totalprice +
+                (i == 0
+                    ? (int.parse(
+                    "${result[i]['trainerPriceNew'] != null && result[i]['trainerPriceNew'] != "null" ? (result[i]['trainerPriceNew']) : 0}"))
+                    : (int.parse(
+                    "${result[i]['trainerPriceNew_$i'] != null && result[i]['trainerPriceNew_$i'] != "null" ? (result[i]['trainerPriceNew_$i']) : 0}")));
+          } on FormatException{
+
+          }
 
           print("hnsdjhds $Totalprice");
         }
@@ -363,8 +367,7 @@ class _SpouseTypeState extends State<SpouseType> {
                               child: Text(
                                 //couple +
                                 // widget.response[widget.plan_index]['fee_type'],
-                                widget.response[widget.plan_index]
-                                            ['fee_type'] ==
+                                widget.response[widget.plan_index]['fee_type'] ==
                                         "quarterly"
                                     ? "3 Months"
                                     : widget.response[widget.plan_index]
@@ -390,23 +393,23 @@ class _SpouseTypeState extends State<SpouseType> {
                                 children: [
                                   Text(
                                     aed +
-                                        "${rolePlanFee != null ? rolePlanFee.toString() : widget.response[widget.plan_index]['fee']}",
+                                        "${rolePlanFee != null ? rolePlanFee.toString()+Totalprice.toString() : widget.response[widget.plan_index]['fee'] +Totalprice}",
                                     // aed + "${rolePlanFee != null ? rolePlanFee.toString() : widget.response[widget.plan_index]['fee']} ${Totalprice != null ?  Totalprice.toString() : ""}",
                                     style: TextStyle(
                                       color: CColor.WHITE,
                                       fontSize: textSize18,
                                     ),
                                   ),
-                                  Visibility(
-                                    visible: Totalprice != 0,
-                                    child: Text(
-                                      " + ${Totalprice.toString()}",
-                                      style: TextStyle(
-                                        color: CColor.WHITE,
-                                        fontSize: textSize18,
-                                      ),
-                                    ),
-                                  ),
+                                  // Visibility(
+                                  //   visible: Totalprice != 0,
+                                  //   child: Text(
+                                  //     " + ${Totalprice.toString()}",
+                                  //     style: TextStyle(
+                                  //       color: CColor.WHITE,
+                                  //       fontSize: textSize18,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -740,7 +743,7 @@ class _SpouseTypeState extends State<SpouseType> {
                             // EMAIL: result[index][EMAIL],
                             // PASSWORD: result[index][PASSWORD],
                             // BIRTH_DATE: result[index][BIRTH_DATE],
-                            // EMIRATES_ID: result[index][EMIRATES_ID],
+                            // EMIRATES_ID: flutter channel devresult[index][EMIRATES_ID],
                             /**
                              * form 1 details
                              */
@@ -986,51 +989,52 @@ class _SpouseTypeState extends State<SpouseType> {
                       SizedBox(
                         height: 50,
                       ),
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 25, bottom: 0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset(
-                                baseImageAssetsUrl + 'logo.png',
-                                height: 90,
-                                color: Color(0xff8B8B8B),
-                                width: 120,
-                              ),
-                            ),
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: EdgeInsets.only(left: 25, bottom: 0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: SvgPicture.asset(
-                                baseImageAssetsUrl + 'vector_lady.svg',
-                                height: 90,
-                                width: 120,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 40, bottom: 10),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              volt_rights,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color(0xff8B8B8B),
-                                  fontSize: 8,
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: open_italic),
-                            )),
-                      ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Padding(
+                      //       padding: EdgeInsets.only(left: 25, bottom: 0),
+                      //       child: Align(
+                      //         alignment: Alignment.centerLeft,
+                      //         child: Image.asset(
+                      //           baseImageAssetsUrl + 'logo.png',
+                      //           height: 90,
+                      //           color: Color(0xff8B8B8B),
+                      //           width: 120,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Spacer(),
+                      //     Padding(
+                      //       padding: EdgeInsets.only(left: 25, bottom: 0),
+                      //       child: Align(
+                      //         alignment: Alignment.centerLeft,
+                      //         child: SvgPicture.asset(
+                      //           baseImageAssetsUrl + 'vector_lady.svg',
+                      //           height: 90,
+                      //           width: 120,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 20,
+                      //     )
+                      //   ],
+                      // ),
+                      footer(),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 40, bottom: 10),
+                      //   child: Align(
+                      //       alignment: Alignment.centerLeft,
+                      //       child: Text(
+                      //         volt_rights,
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(
+                      //             color: Color(0xff8B8B8B),
+                      //             fontSize: 8,
+                      //             fontStyle: FontStyle.italic,
+                      //             fontFamily: open_italic),
+                      //       )),
+                      // ),
                       SizedBox(
                         height: 50,
                       )

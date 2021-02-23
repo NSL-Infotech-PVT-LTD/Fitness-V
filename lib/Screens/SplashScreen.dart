@@ -3,10 +3,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/Firebase/FirebaseNotification.dart';
+import 'package:volt/Methods/Pref.dart';
+import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+
+import 'SplashScreenWithLady.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -17,8 +21,11 @@ class SplashState extends State<SplashScreen> {
 
   @override
   void initState() {
-
     FirebaseIn.initNoti(context);
+    getString(fireDeviceToken).then((value) {
+      deviceTok = value;
+      print("device tok"+deviceTok);
+    });
     super.initState();
   }
   @override

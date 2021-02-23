@@ -445,7 +445,7 @@ class ProfileState extends State<ProfileScreen> {
                           Padding(
                               padding: EdgeInsets.only(left: 20),
                               child: Text(
-                                'Instructor Policies',
+                                'Privacy Policy',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color(0xff8B8B8B), fontSize: 16),

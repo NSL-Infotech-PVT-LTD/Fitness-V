@@ -194,49 +194,49 @@ class _DetailState extends State<GroupClassDetail> {
                     ),
                   ),
                   SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.calendar_today,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          'Date of group class',
-                          style: TextStyle(
-                              color: Color(0xFF303030).withOpacity(.6),
-                              fontSize: 14),
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 40.0, right: 180, top: 5),
-                    child: MySeparator(
-                      height: 1,
-                      color: Colors.black26,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 35.0, top: 6),
-                    child: Text(
-                      startAndEndDate.toString().toUpperCase(),
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontFamily: open_semi_bold,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: Color(0xFF303030)),
-                    ),
-                  ),
-                  SizedBox(height: 25),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: <Widget>[
+                  //     Icon(
+                  //       Icons.calendar_today,
+                  //       size: 20,
+                  //     ),
+                  //     SizedBox(
+                  //       width: 10,
+                  //     ),
+                  //     Padding(
+                  //       padding: const EdgeInsets.only(left: 8.0),
+                  //       child: Text(
+                  //         'Date of group class',
+                  //         style: TextStyle(
+                  //             color: Color(0xFF303030).withOpacity(.6),
+                  //             fontSize: 14),
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.only(left: 40.0, right: 180, top: 5),
+                  //   child: MySeparator(
+                  //     height: 1,
+                  //     color: Colors.black26,
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 35.0, top: 6),
+                  //   child: Text(
+                  //     startAndEndDate.toString().toUpperCase(),
+                  //     maxLines: 3,
+                  //     style: TextStyle(
+                  //         fontFamily: open_semi_bold,
+                  //         fontWeight: FontWeight.w400,
+                  //         fontSize: 16,
+                  //         color: Color(0xFF303030)),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 25),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -447,7 +447,7 @@ class _DetailState extends State<GroupClassDetail> {
                               isGroupClass: true,
                               name: className,
                               payment: "0",
-                              serviceHours: "1",
+                              serviceHours: duration,
                             )));
 
                   },
@@ -469,8 +469,7 @@ class _DetailState extends State<GroupClassDetail> {
                     Navigator.push(
                         context,
                         ScaleRoute(
-                            page: SelectSession(
-                               isSession: false,
+                            page: SelectSession(isSession: false,
                           id: id,
                           image: classImage,
                           name: className,

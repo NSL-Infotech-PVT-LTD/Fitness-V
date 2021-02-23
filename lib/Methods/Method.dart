@@ -126,7 +126,7 @@ void showDialogRemoveUntil(context, String title, String message) {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text("OK"),
+              child: Text("OK",style: TextStyle(color: CColor.CancelBTN)),
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                     context, ScaleRoute(page: Dashboard()), (r) => false);

@@ -159,7 +159,7 @@ Widget fullWidthButton(context, String title, double setWidth, FontWeight bold, 
     );
 
 Widget finishAllScreenButton(context, String title, double setWidth,
-        FontWeight bold, StatefulWidget whereToGO) =>
+    FontWeight bold, StatefulWidget whereToGO) =>
     Container(
       margin: EdgeInsets.only(top: padding15),
       height: button_height,
@@ -179,9 +179,10 @@ Widget finishAllScreenButton(context, String title, double setWidth,
       ),
     );
 
-Future<bool> bookingFunction(String auth, context, String model_type,
-    String model_id, String hours) async {
+Future<bool> bookingFunction(String auth, context, String model_type, String model_id, String hours) async {
   print("modal Type "+model_type);
+  print("modal id "+model_id);
+  print("modal session "+hours);
   bool isBooked = false;
   isConnectedToInternet().then((internet) {
     if (internet != null && internet) {
@@ -190,7 +191,7 @@ Future<bool> bookingFunction(String auth, context, String model_type,
         "model_type": model_type,
         "model_id": model_id,
         if (model_type == trainerUsers) "hours": hours,
-        if (model_type == classSchedules) "session": hours,
+        if (model_type == classSchedules) "session": "1",  //its static on class case
         if (model_type == sessionType) "session": hours,
       };
 

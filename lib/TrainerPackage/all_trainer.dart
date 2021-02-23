@@ -64,6 +64,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
 
   @override
   void initState() {
+
     String auth = '';
     getString(USER_AUTH)
         .then((value) => {auth = value})

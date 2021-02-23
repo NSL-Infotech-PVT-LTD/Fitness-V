@@ -29,10 +29,12 @@ class NotificationState extends State<NotificationScreen> {
     getString(USER_AUTH).then((value) => {auth = value}).whenComplete(() {
       notification(auth).then((value) {
        obj  = value;
+       if(obj.data != null && obj.data.data != null)
+
        notificationList  = List<CustomNoti>.generate(
            obj.data.data.length, (i) => CustomNoti(title:obj.data.data.length == 0 ? "No Data Found":obj.data.data[i].body.toString()));
 
-       print("data" + obj.data.data[0].body.toString());
+       // print("data" + obj.data.data[0].body.toString());
       }).whenComplete(() {
         setState(() {
           isLoading = false;
@@ -191,7 +193,7 @@ class CustomNotiView extends StatelessWidget {
               Expanded(
                   child: Padding(
                 child: Text(
-                  customNoti.title,
+                  "${customNoti.title}",
                   style: TextStyle(color: titleColor),
                 ),
                 padding: EdgeInsets.only(left: 10, right: 10),

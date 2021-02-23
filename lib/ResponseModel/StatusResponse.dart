@@ -15,6 +15,7 @@ class StatusResponse {
     status = json['status'];
     code = json['code'];
     print("==========> class error "+json['error'] .toString());
+    print("==========> class errors "+json['errors'] .toString());
     print("==========> class data "+json['data'] .toString());
 
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;

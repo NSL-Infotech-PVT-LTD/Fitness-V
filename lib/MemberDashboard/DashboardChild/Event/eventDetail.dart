@@ -111,8 +111,7 @@ class EventDetailState extends State<EventDetail> {
 //
                   if (!_isBookedByMe) {
                     var isConfirmed = false;
-                    bookingFunction(
-                            auth, context, eventKey, widget.id.toString(), '')
+                    bookingFunction(auth, context, eventKey, widget.id.toString(), '')
                         .then((value) => isConfirmed = value)
                         .whenComplete(() => {
                               if (isConfirmed) {_isBookedByMe = true}
@@ -283,9 +282,7 @@ class EventDetailState extends State<EventDetail> {
                             child: RaisedButton(
                               onPressed: () {
                                 if(availableCapacity != '0'){doYoWantToCntinue();}else{
-
                                 }
-
                               },
                               color: _isBookedByMe || availableCapacity == '0'
                                   ? CColor.CancelBTN

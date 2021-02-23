@@ -6,20 +6,21 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/Firebase/FirebaseNotification.dart';
 import 'package:volt/MemberDashboard/Dashboard.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 
 import '../AuthScreens/LoginScreen.dart';
-
+String deviceTok='';
 class SplashScreenWithLady extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SplashScreenWithLadyState();
 }
 
 class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
-  String _auth = '';
+  static String auth = '';
 
   @override
   void dispose() {
@@ -28,31 +29,35 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
   }
 
   _moveScreen() {
-    if (_auth.isEmpty) {
+    if (auth.isEmpty) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
     } else {
+
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Dashboard()));
     }
   }
 
 
- @override
+  @override
   void initState() {
-
+    FirebaseIn.initNoti(context);
+    getString(fireDeviceToken).then((value) {
+      deviceTok = value;
+      print("device tok"+deviceTok);
+    });
     super.initState();
-    
-   FirebaseIn.initNoti(context);
-    _loadAuth();  
+    _loadAuth();
   }
+
 
   
 
   _loadAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _auth = (prefs.getString(USER_AUTH) ?? '');
+      auth = (prefs.getString(USER_AUTH) ?? '');
       _timer = Timer(Duration(seconds: 3), () => _moveScreen());
     });
   }
