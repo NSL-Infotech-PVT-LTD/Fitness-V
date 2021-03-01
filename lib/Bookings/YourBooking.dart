@@ -63,6 +63,7 @@ class YourBookingState extends State<YourBooking> {
                 child: Text("Yes",style: TextStyle(color: CColor.CancelBTN),),
                 onPressed: () {
 //                  Navigator.pop(context);
+                print("check id"+widget.id.toString());
                   bookingFunction(auth, context, "${widget.isGroupClass ? classSchedules : widget.isSession? sessionType:trainerUsers}", widget.id.toString(), widget.serviceHours);
                 },
                 isDestructiveAction: false,

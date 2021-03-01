@@ -173,7 +173,7 @@ class _EventState extends State<Event> {
                       ),
                       Expanded(
                         child: Text(
-                          fantastic,
+                         fantastic,
                           style: TextStyle(color: CColor.LightGrey, fontSize: 10),
                         ),
                       ),

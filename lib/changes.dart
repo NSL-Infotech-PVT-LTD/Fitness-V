@@ -41,11 +41,14 @@ class _EventState extends State<EventClass>
   @override
   void initState() {
     String auth = '';
+
     getString(USER_AUTH).then((value) {
       auth = value;
+
     }).whenComplete(() => {
-          _createveentsupcomingList(auth, pagePast),
-          _createveentspastList(auth)
+      print(auth),
+      _createveentsupcomingList(auth, pagePast),
+      _createveentspastList(auth)
         });
 
     super.initState();
@@ -68,33 +71,32 @@ class _EventState extends State<EventClass>
 
   void _createveentsupcomingList(String auth, int index) async {
     showProgress(context, 'Loading..');
+    print("check auth"+auth.toString());
+    print("check auth"+index.toString());
     if (!isLoadingPast) {
       setState(() {
         isLoadingPast = true;
       });
-      _netUtil
-          .post(context, Constants.event, auth, body: {
+      _netUtil.post(context, Constants.event, auth, body: {
             "order_by": "upcoming",
             LIMIT: '10',
             PAGE: index.toString(),
           })
           .then((response) async {
+
             dismissDialog(context);
             var extracted = json.decode(response.body);
-
+            print("check respo" + extracted.toString());
             if ((extracted["code"] == 200)) {
-              print("jugraj==>$extracted['data']");
-
               setState(() {
-                apiResponse = extracted['data'];
 
+                apiResponse = extracted['data'];
 //          myData = apiResponse['data'] as List;
                 totalPagePast = extracted['data']['last_page'];
                 List tList = new List();
                 for (int i = 0; i < (apiResponse['data'] as List).length; i++) {
                   tList.add((apiResponse['data'] as List)[i]);
                 }
-
                 setState(() {
                   isLoadingPast = false;
                   myData.addAll(tList);

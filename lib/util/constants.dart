@@ -1,5 +1,5 @@
   class Constants {
-  static String baseUrl = "https://dev.netscapelabs.com/volt/public/api/";
+  static String baseUrl = "http://15.185.237.32/volt/public/api/";
   static String registerUrl = "register";
   static String loginUrl = "login";
   static String role = "roles";
