@@ -17,7 +17,7 @@ String RESET_PASSWORD = BASE_URL + "api/reset-password";
 String getTrainersList = BASE_URL + "api/trainers";
 String trainers = BASE_URL + "api/trainer";
 //String updateP = "https://dev.netscapelabs.com/volt/public/api/update/role";
-String updateP = "http://15.185.237.32/volt/public/api/update/role";
+String updateP = "https://app.voltfitness.ae/api/update/role";
 String trainerReviews = BASE_URL + "api/trainer/reviews";
 String getTrainersListRegister = BASE_URL + "api/register/trainers";
 String trainersRegister = BASE_URL + "api/register/trainer";
@@ -124,7 +124,7 @@ String roleType = 'roleType';
 String CONTENT_VALUE = "application/x-www-form-urlencoded";
 String ORDER_BY = "price_high";
 
-String BASE_URL = "http://15.185.237.32/volt/public/";
+String BASE_URL = "https://app.voltfitness.ae/";
 String DEALER_PROFILE_IMAGE = "uploads/dealer/profile_image/";
 String IMAGE_URL = "uploads/roles/";
 String imageUrlEvent = "uploads/events/";
@@ -246,6 +246,7 @@ Future<StatusResponse> getProfileDetailApi(String auth) async {
       'Authorization': auth
     },
   );
+  print(response.body.toString());
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
 

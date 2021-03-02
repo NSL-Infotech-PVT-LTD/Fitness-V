@@ -187,11 +187,9 @@ class _EventState extends State<Event> {
             ),
           ),
           expandedHeight: SizeConfig.screenHeight*.42,
-
         )
         ]; },
       body:
-
           DefaultTabController(
               length: 2,
               child: Column(
