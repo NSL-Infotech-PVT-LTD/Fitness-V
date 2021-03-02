@@ -80,6 +80,7 @@ String marital_status = "marital_status";
 String ADDRESS = "address";
 String CITY = "city";
 String GENDER = "gender";
+String WORKPLACE = "workplace";
 String ROLE_ID = "role_id";
 String ROLE_PLAN_ID = "role_plan_id";
 String EMEREGENCY_NUMBER = "emergency_contact_no";

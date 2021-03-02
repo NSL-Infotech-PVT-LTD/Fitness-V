@@ -742,15 +742,9 @@ class UserProfileState extends State<UserProfile> {
                                           CITY: selectedCity != null ?selectedCity :null,
                                           EMIRATES_ID: emiratesController.text.toString().trim() != null ?emiratesController.text.toString().trim() : null,
                                           Nationality:nationalityController.text != null ?nationalityController.text:"Dubai",
-//                                          DESIGNATION: designationController
-//                                            .text
-//                                              .toString()
-//                                              .trim(),
-                                          ADDRESS: addressController.text
-                                              .toString()
-                                              .trim() != null ?addressController.text
-                                              .toString()
-                                              .trim() : null,
+                                         DESIGNATION: designationController.text.toString().trim(),
+                                        WORKPLACE : workController.text != null ?workController.text:"null",
+                                          ADDRESS: addressController.text.toString().trim() != null ?addressController.text.toString().trim() : null,
                                          GENDER: genderItem.toLowerCase() != null?genderItem.toLowerCase():null,
                                           DEVICE_TYPE: deviceType,
                                           DEVICE_TOKEN: deviceTokenValue,
