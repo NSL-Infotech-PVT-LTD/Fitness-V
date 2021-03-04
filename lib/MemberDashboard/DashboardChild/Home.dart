@@ -225,14 +225,11 @@ class HomeState extends State<Home> {
                   backgroundColor: Colors.black,
                 ),
               ],
-
             ))
         : SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-
-
                 SizedBox(
                   height: 10,
                 ),
@@ -332,7 +329,7 @@ class HomeState extends State<Home> {
                                       ),
                                       Container(
                                         width: _roleIdDash == "8" ? SizeConfig.screenWidth * 0.21
-                                            : SizeConfig.screenWidth * 0.22,
+                                            : SizeConfig.screenWidth * 0.19,
                                         child: Divider(),
                                       ),
                                       Text(//VFG
@@ -348,7 +345,7 @@ class HomeState extends State<Home> {
                               Visibility(
                                 visible: true,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
                                       "Valid til",
@@ -358,11 +355,12 @@ class HomeState extends State<Home> {
                                           fontFamily: "fonts/open_semi_bold.ttf"),
                                     ),
                                     Container(
-                                      width: SizeConfig.screenWidth * 0.22,
+                                      width: SizeConfig.screenWidth * 0.20,
                                       child: Divider(),
                                     ),
                                     Text(
                                       validtill != null && validtill.isNotEmpty ? " ${validtill.toString().replaceAll("from now", "")}" : "--:--",
+
                                       style: TextStyle(color: Colors.black, fontSize: 11),
                                     ),
                                   ],
@@ -372,7 +370,7 @@ class HomeState extends State<Home> {
                               Visibility(
                                 visible: true,//_roleIdDash != "8",
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
                                       "Plan",

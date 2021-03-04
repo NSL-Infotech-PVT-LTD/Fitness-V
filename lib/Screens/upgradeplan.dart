@@ -255,7 +255,7 @@ print("Finding issue 2 "+ userCurrentFee.toString());
     indexValue = indexValue + 1;
     SizeConfig().init(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: true,
       backgroundColor: CColor.WHITE,
       body: isLoading?Column(children: [ SizedBox(height: SizeConfig.screenHeight * 0.50,),Center(child: Text("Something went wrong please try Again",style: TextStyle(color:Colors.red),),),
       RaisedButton.icon(onPressed:()=> Navigator.pop(context), icon: Icon(Icons.settings_backup_restore) , label: Text("Back For Retry"))

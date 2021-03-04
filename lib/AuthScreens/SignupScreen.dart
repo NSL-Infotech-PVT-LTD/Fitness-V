@@ -42,7 +42,7 @@ class SignupScreen extends StatefulWidget {
   var profileImage;
 
   static MyInheritedData of(BuildContext context) =>
-      context.inheritFromWidgetOfExactType(MyInheritedData) as MyInheritedData;
+      context. dependOnInheritedWidgetOfExactType<MyInheritedData>() as MyInheritedData;
 
 
   SignupScreen({this.response,

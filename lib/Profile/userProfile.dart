@@ -58,20 +58,33 @@ class UserProfileState extends State<UserProfile> {
   var sendDateFormat = new DateFormat("yyyy-MM-dd");
 
   String auth = '';
+//   List<String> _cities = [
+//     'Dubai',
+//     'Sharjah',
+//     'Abu Dhabi',
+//     'Ajman',
+//     'Ras al Khaimah',
+// //    'Musaffah City',
+//    'Fujairah City',
+// //    'Khalifah A City',
+// //    'Reef Al Fujairah City',
+// //    'Bani Yas City',
+// //    'Zayed City',
+//     'Umm al-Quwain',
+//   ];
+//
   List<String> _cities = [
-    'Dubai',
-    'Sharjah',
-    'Abu Dhabi',
-    'Ajman',
-    'Ras al Khaimah',
-//    'Musaffah City',
-   'Fujairah City',
-//    'Khalifah A City',
-//    'Reef Al Fujairah City',
-//    'Bani Yas City',
-//    'Zayed City',
-    'Umm al-Quwain',
+   'Abu Dhabi',
+   'Dubai',
+   'Ajman',
+   'Fujairah',
+    'Ras al Khaimah Sharjah',
+    'Umm al Quwain',
   ];
+
+
+
+
   String selectedCity;
   String genderItem = '';
   bool isVisible = false;

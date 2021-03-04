@@ -152,7 +152,7 @@ class GymMemberState extends State<GymMemberPlan> {
     indexValue = indexValue + 1;
     SizeConfig().init(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: true,
       backgroundColor: CColor.WHITE,
       body: SingleChildScrollView(
         child: Container(

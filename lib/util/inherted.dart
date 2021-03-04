@@ -14,5 +14,5 @@ class InheritedDataProvider extends InheritedWidget {
       data != oldWidget.data;
 
   static InheritedDataProvider of(BuildContext context) =>
-      context.inheritFromWidgetOfExactType(InheritedDataProvider);
+      context.inheritFromWid.getOfExactType(InheritedDataProvider);
 }

@@ -99,7 +99,7 @@ class AllTrainersViewState extends State<AllTrainersView> {
       body: Container(
         child: _buildList(),
       ),
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
     );
   }
 
