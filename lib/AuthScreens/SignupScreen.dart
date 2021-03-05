@@ -367,7 +367,7 @@ class SignupState extends State<SignupScreen> {
 //       'Umm al-Quwain',
 //     ];
 
-    List<String> _cities = [
+     _cities = [
       'Abu Dhabi',
       'Dubai',
       'Ajman',
