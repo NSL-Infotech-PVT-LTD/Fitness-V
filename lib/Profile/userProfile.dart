@@ -73,16 +73,6 @@ class UserProfileState extends State<UserProfile> {
 //     'Umm al-Quwain',
 //   ];
 //
-  List<String> _cities = [
-   'Abu Dhabi',
-   'Dubai',
-   'Ajman',
-   'Fujairah',
-    'Ras al Khaimah Sharjah',
-    'Umm al Quwain',
-  ];
-
-
 
 
   String selectedCity;
@@ -198,9 +188,25 @@ class UserProfileState extends State<UserProfile> {
       }
     });
   }
-
+  List<String> _cities;
   @override
   void initState() {
+
+ _cities = [
+      'Abu Dhabi',
+      'Dubai',
+      'Ajman',
+      'Fujairah',
+      'Ras al Khaimah ',
+      'Sharjah',
+      'Umm al Quwain',
+    ];
+
+    _cities.sort((a,b){
+      return a.toLowerCase().compareTo(b.toLowerCase());
+    });
+
+
     _isIos = Platform.isIOS;
     getString(userImage)
         .then((value) => {image = value})

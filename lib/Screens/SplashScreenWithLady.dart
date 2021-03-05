@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volt/Firebase/FirebaseNotification.dart';
@@ -11,7 +12,6 @@ import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/ChooseYourWay.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '../AuthScreens/LoginScreen.dart';
 String deviceTok='';
@@ -47,14 +47,11 @@ class SplashScreenWithLadyState extends State<SplashScreenWithLady> {
     FirebaseIn.initNoti(context);
     getString(fireDeviceToken).then((value) {
       deviceTok = value;
-      print("device tok"+deviceTok);
+   //   print("device tok"+deviceTok);
     });
     super.initState();
     _loadAuth();
   }
-
-
-  
 
   _loadAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

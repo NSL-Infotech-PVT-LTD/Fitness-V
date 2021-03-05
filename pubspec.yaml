@@ -27,7 +27,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   device_info: ^1.0.0
   dotted_border: ^1.0.6
-  firebase_messaging: ^7.0.3
+  firebase_messaging: 6.0.15
   flutter_local_notifications: ^4.0.1+1
   flutter_screen_scaler: ^2.0.0
   flutter_spinkit: ^4.1.2+1
@@ -44,8 +44,6 @@ dependencies:
   file_picker: ^2.1.7
   date_picker_timeline: ^1.2.1
   pull_to_refresh: ^1.6.4
-
-
 
 dev_dependencies:
   flutter_test:

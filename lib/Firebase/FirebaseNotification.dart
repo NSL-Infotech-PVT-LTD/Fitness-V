@@ -12,17 +12,17 @@ class FirebaseIn {
 
   FirebaseIn();
   //static var auth = "";
-  static FirebaseMessaging   _firebaseMessaging;
+  static FirebaseMessaging   _firebaseMessaging = FirebaseMessaging();
   static  initNoti(BuildContext context)  {
 
   //  getString(USER_AUTH).then((value) => auth = value );
-    _firebaseMessaging =FirebaseMessaging();
+  //  _firebaseMessaging
     _firebaseMessaging.getToken().then((value)  {
       print("Firebase token $value");
       setString(fireDeviceToken,value);
 
     });
-    print("Firebase token $fireDeviceToken");
+    // print("Firebase token $fireDeviceToken");
     //local notification instance
     LocalNotification.initLocal(context);
 
@@ -79,9 +79,9 @@ class FirebaseIn {
 
     );
 
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true,alert: true)
-    );
+    // _firebaseMessaging.requestNotificationPermissions(
+    //     IosNotificationSettings(sound: true, badge: true,alert: true)
+    // );
 
 
   }

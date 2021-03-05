@@ -352,20 +352,32 @@ class SignupState extends State<SignupScreen> {
   @override
   void initState() {
     FirebaseIn.initNoti(context);
-    _cities = [
-      'Dubai',
-      'Sharjah',
+//     _cities = [
+//       'Dubai',
+//       'Sharjah',
+//       'Abu Dhabi',
+//       'Ajman',
+//       'Ras al-khaimah',
+// //    'Musaffah City',
+//       'Fujairah City',
+// //    'Khalifah A City',
+// //    'Reef AI Fujairah City',
+// //    'Bani Yas City',
+// //    'Zayed City',
+//       'Umm al-Quwain',
+//     ];
+
+    List<String> _cities = [
       'Abu Dhabi',
+      'Dubai',
       'Ajman',
-      'Ras al-khaimah',
-//    'Musaffah City',
-      'Fujairah City',
-//    'Khalifah A City',
-//    'Reef AI Fujairah City',
-//    'Bani Yas City',
-//    'Zayed City',
-      'Umm al-Quwain',
+      'Fujairah',
+      'Ras al Khaimah ',
+      'Sharjah',
+      'Umm al Quwain',
     ];
+
+
     _cities.sort((a,b){
       return a.toLowerCase().compareTo(b.toLowerCase());
     });
