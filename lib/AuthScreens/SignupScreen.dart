@@ -1223,91 +1223,102 @@ class SignupState extends State<SignupScreen> {
                                   },
                                 )),
                           ),
-                          SizedBox(
-                            height:
-                            MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
-                                .of(context)
-                                .size
-                                .height *
-                                0.02,
-                          ),
-                          Visibility(
-                            visible: (widget.memberIndex == 0 ||
-                                widget.memberIndex == null) &&
-                                widget.type != 'fairMont' &&
-                                widget.type != 'guest',
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                  height:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height * 0.06,
-                                  width:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.50,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: file == null
-                                        ? Text('Choose A Profile Photo')
-                                        : Text("Photo Selected"),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.07,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  height:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height * 0.06,
-                                  width:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.14,
-                                  child: RaisedButton.icon(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10)),
-                                    color: Colors.black,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 2),
-                                    onPressed: () {
-                                      _showMyDialog();
-                                    },
-                                    icon: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Center(
-                                          child: Icon(
-                                            Icons.image_outlined,
-                                            color: Colors.white,
-                                            size: 35,
-                                          )),
-                                    ),
-                                    label: Text(""),
-                                  ),
-                                ),
-                              ],
+                          Column(children: [
+                            SizedBox(
+                              height:
+                              MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
+                                  .of(context)
+                                  .size
+                                  .height *
+                                  0.02,
                             ),
-                          ),
+                            Visibility(
+                              visible: (widget.memberIndex == 0 ||
+                                  widget.memberIndex == null) &&
+                                  widget.type != 'fairMont' &&
+                                  widget.type != 'guest',
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    height:
+                                    MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height * 0.06,
+                                    width:
+                                    MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.50,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: file == null
+                                          ? Text('Choose A Profile Photo')
+                                          : Text("Photo Selected"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width:
+                                    MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.07,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    height:
+                                    MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height * 0.06,
+                                    width:
+                                    MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.14,
+                                    child: RaisedButton.icon(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(10)),
+                                      color: Colors.black,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 2),
+                                      onPressed: () {
+                                        _showMyDialog();
+                                      },
+                                      icon: Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Center(
+                                            child: Icon(
+                                              Icons.image_outlined,
+                                              color: Colors.white,
+                                              size: 35,
+                                            )),
+                                      ),
+                                      label: Text(""),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height:
+                              MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
+                                  .of(context)
+                                  .size
+                                  .height *
+                                  0.02,
+                            ),
+                          ],),
+
                           Visibility(
                             visible: widget.type != 'fairMont' &&
                                 widget.type != 'guest',

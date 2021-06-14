@@ -26,12 +26,12 @@ dependencies:
   connectivity: ^2.0.2
   cupertino_icons: ^1.0.0
   device_info: ^1.0.0
-  dotted_border: ^1.0.6
+  dotted_border: ^2.0.0
   firebase_messaging: 6.0.15
   flutter_local_notifications: ^4.0.1+1
   flutter_screen_scaler: ^2.0.0
   flutter_spinkit: ^4.1.2+1
-  flutter_svg: ^0.19.0
+  flutter_svg: ^0.22.0
   geolocator: ^6.2.1
   http: 0.12.2
   image_picker: ^0.6.7
@@ -44,12 +44,15 @@ dependencies:
   file_picker: ^2.1.7
   date_picker_timeline: ^1.2.1
   pull_to_refresh: ^1.6.4
+  flutter_html: any
+  flutter_launcher_icons: ^0.9.0
+  flutter_cache_manager: ^2.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_html: ^1.1.1
-  flutter_launcher_icons: ^0.8.1
+
+
 
 flutter_icons:
   image_path: "assets/images/app_logo.jpg"
