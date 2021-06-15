@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/Firebase/FirebaseNotification.dart';
@@ -10,6 +11,7 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+import '../main.dart';
 import 'SplashScreenWithLady.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,14 +20,25 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashState extends State<SplashScreen> {
+  Future<String> getToken() async {
+    fcmToken = await FirebaseMessaging.instance.getToken().whenComplete((){
+      setString(fireDeviceToken,fcmToken);
+      getString(fireDeviceToken).then((value) {
+        deviceTok = value;
+      });
+    });
 
+    print("token device " + fcmToken.toString());//YY {target_model: Job, target_id: 21, status: processing}
+    return fcmToken;
+  }
   @override
   void initState() {
-    FirebaseIn.initNoti(context);
-    getString(fireDeviceToken).then((value) {
-      deviceTok = value;
-      print("device tok"+deviceTok);
-    });
+    getToken();
+   // FirebaseIn.initNoti(context);
+   //  getString(fireDeviceToken).then((value) {
+   //    deviceTok = value;
+   //    print("device tok"+deviceTok);
+   //  });
     super.initState();
   }
   @override

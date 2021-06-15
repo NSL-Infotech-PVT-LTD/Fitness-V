@@ -36,7 +36,7 @@ class ProfileState extends State<ProfileScreen> {
 
   @override
   void initState() {
-
+    getToken();
     _isIosOut = Platform.isIOS;
     deviceTypeLogout = _isIosOut ? 'ios' : 'android';
 

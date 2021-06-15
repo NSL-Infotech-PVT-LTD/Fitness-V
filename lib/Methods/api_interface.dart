@@ -136,7 +136,7 @@ String trainerUser = "uploads/trainer-user/";
 String imageClassUrl = "uploads/class/";
 //flutter build apk --release --target-platform=android-arm64
 Future<StatusResponse> getLogin(Map<String, String> parms) async {
-  final response = await http.post(LOGIN,
+  final response = await http.post(Uri.parse(LOGIN),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -152,8 +152,8 @@ Future<StatusResponse> getTrainersListApi(
     String auth, Map<String, String> parms) async {
   final response = await http.post(
       auth != null && auth.isNotEmpty
-          ? getTrainersListRegister
-          : getTrainersList,
+          ? Uri.parse(getTrainersListRegister)
+          : Uri.parse(getTrainersList),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -169,7 +169,7 @@ Future<StatusResponse> getTrainersListApi(
 //its base url is static please change it manually/////////////////
 Future<StatusResponse> upGradePlan(String auth, Map<String, String> parms) async {
   final response = await http.post(
-      updateP,
+      Uri.parse(updateP),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -183,7 +183,7 @@ Future<StatusResponse> upGradePlan(String auth, Map<String, String> parms) async
 }
 Future<StatusResponse> logOutFun(String auth, Map<String, String> parms) async {
   final response = await http.post(
-      logOut,
+      Uri.parse(logOut),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -198,7 +198,7 @@ Future<StatusResponse> logOutFun(String auth, Map<String, String> parms) async {
 
 Future<StatusResponse> getGroupClassListApi(
     String auth, Map<String, String> parms) async {
-  final response = await http.post(getClassesListUrl,
+  final response = await http.post(Uri.parse(getClassesListUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -212,7 +212,7 @@ Future<StatusResponse> getGroupClassListApi(
 
 Future<StatusResponse> getGroupClassDetailApi(
     String auth, Map<String, String> parms) async {
-  final response = await http.post(getClassesbyIdUrl,
+  final response = await http.post(Uri.parse(getClassesbyIdUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -227,7 +227,7 @@ Future<StatusResponse> getGroupClassDetailApi(
 Future<StatusResponse> getTrainersDetailApi(
     String auth, Map<String, String> parms) async {
   final response = await http.post(
-      auth != null && auth.isNotEmpty ? trainersRegister : trainers,
+      auth != null && auth.isNotEmpty ? Uri.parse(trainersRegister) : Uri.parse(trainers),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': auth
@@ -241,7 +241,7 @@ Future<StatusResponse> getTrainersDetailApi(
 
 Future<StatusResponse> getProfileDetailApi(String auth) async {
   final response = await http.post(
-    profile,
+    Uri.parse(profile),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': auth
@@ -256,7 +256,7 @@ Future<StatusResponse> getProfileDetailApi(String auth) async {
 
 Future<NotificationList> notification(String auth) async {
   final response = await http.post(
-    NortificationList,
+    Uri.parse(NortificationList),
     headers: <String, String>{
       'Authorization': auth
     },
@@ -270,7 +270,7 @@ Future<NotificationList> notification(String auth) async {
 
 Future<StatusResponse> getRoles() async {
   final response = await http.post(
-    ROLE,
+    Uri.parse(ROLE),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -280,7 +280,7 @@ Future<StatusResponse> getRoles() async {
 
 Future<gymMember> gRoles(param) async {
   final response = await http.post(
-    ROLE,
+    Uri.parse(ROLE),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -294,7 +294,7 @@ Future<gymMember> gRoles(param) async {
 //getChildsRoles
 
 Future<StatusResponse> getChildsRoles(Map<String, String> parms) async {
-  final response = await http.post(ROLE,
+  final response = await http.post(Uri.parse(ROLE),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -303,7 +303,7 @@ Future<StatusResponse> getChildsRoles(Map<String, String> parms) async {
 }
 
 Future<StatusResponse> signupWithouImage(Map<String, String> parms) async {
-  final response = await http.post(REGISTRATION,
+  final response = await http.post(Uri.parse(REGISTRATION),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -315,29 +315,33 @@ Future<StatusResponse> signupWithouImage(Map<String, String> parms) async {
 }
 
 Future<StatusResponse> signUpToServer(
-    {File file, Map<String, String> parms, String type}) async {
+    {File file,File file2,File file3, Map<String, String> parms, String type}) async {
   final postUri = Uri.parse(REGISTRATION);
   http.MultipartRequest request = http.MultipartRequest('POST', postUri);
   Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
-
   request.fields.addAll(parms);
   request.headers.addAll(headers);
   if (file != null) {
     http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
         'image', file.path); //returns a Future<MultipartFile>
     request.files.add(multipartFile);
+  } if (file2 != null) {
+    http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'emirate_image1', file2.path); //returns a Future<MultipartFile>
+    request.files.add(multipartFile);
+  } if (file3 != null) {
+    http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'emirate_image2', file3.path); //returns a Future<MultipartFile>
+    request.files.add(multipartFile);
   }
-
   var streamedResponse = await request.send();
   var response = await http.Response.fromStream(streamedResponse);
   print("ApiResponse====>${response.body}");
-
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
   return StatusResponse.fromJson(map);
-
   // final postUri = Uri.parse(REGISTRATION);
   // http.MultipartRequest request = http.MultipartRequest('POST', postUri);
   // Map<String, String> headers = {'Content-Type': 'application/json; charset=UTF-8',};
@@ -357,23 +361,23 @@ Future<StatusResponse> signUpToServer(
 }
 
 Future<StatusResponse> getTermsApi() async {
-  final response = await http.get(termsConditionUrl);
+  final response = await http.get(Uri.parse(termsConditionUrl));
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
 Future<StatusResponse> getPrivacyApi() async {
-  final response = await http.get(privacyUrl);
+  final response = await http.get(Uri.parse(privacyUrl));
   print("Privacy${response.body}");
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
 Future<StatusResponse> getAboutApi() async {
-  final response = await http.get(aboutUsUrl);
+  final response = await http.get(Uri.parse(aboutUsUrl));
   return StatusResponse.fromJson(json.decode(response.body));
 }
 
 Future<StatusResponse> resetPassword(Map<String, String> parms) async {
-  final response = await http.post(RESET_PASSWORD,
+  final response = await http.post(Uri.parse(RESET_PASSWORD),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -386,7 +390,7 @@ Future<StatusResponse> resetPassword(Map<String, String> parms) async {
 
 Future<StatusResponse> getEventDetailsApi(
     String userAuth, Map<String, String> parms) async {
-  final response = await http.post(eventDetails,
+  final response = await http.post(Uri.parse(eventDetails),
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
@@ -395,7 +399,7 @@ Future<StatusResponse> getEventDetailsApi(
 
 Future<StatusResponse> bookingDeleteApi(
     String userAuth, Map<String, String> parms) async {
-  final response = await http.post(bookingDelete,
+  final response = await http.post(Uri.parse(bookingDelete),
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
@@ -404,7 +408,7 @@ Future<StatusResponse> bookingDeleteApi(
 
 Future<StatusResponse> bookingApi(
     String userAuth, Map<String, String> parms) async {
-  final response = await http.post(bookingUrl,
+  final response = await http.post(Uri.parse(bookingUrl),
       headers: header(userAuth), body: jsonEncode(parms));
   print("Booking " + response.body);
   final jsonData = json.decode(response.body);
@@ -418,8 +422,8 @@ Future<StatusResponse> getTrainerReviewsApi(
     String userAuth, Map<String, String> parms) async {
   final response = await http.post(
       userAuth != null && userAuth.isNotEmpty
-          ? trainerReviewsRegister
-          : trainerReviews,
+          ? Uri.parse(trainerReviewsRegister)
+          : Uri.parse(trainerReviews),
       headers: header(userAuth),
       body: jsonEncode(parms));
 
@@ -432,7 +436,7 @@ Future<StatusResponse> getTrainerReviewsApi(
 
 Future<StatusResponse> allBookingsApi(
     String userAuth, Map<String, String> parms) async {
-  final response = await http.post(allBookinsUrl,
+  final response = await http.post(Uri.parse(allBookinsUrl),
       headers: header(userAuth), body: jsonEncode(parms));
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
@@ -461,6 +465,6 @@ Future<StatusResponse> updateUserProfileApi(
 }
 
 header(String auth) => {
-      Content_Type: 'application/json; charset=UTF-8',
-      Authorization: auth,
-    };
+  Content_Type: 'application/json; charset=UTF-8',
+  Authorization: auth,
+};

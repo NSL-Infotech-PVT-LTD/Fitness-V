@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volt/AuthScreens/forgot_password.dart';
@@ -18,6 +19,8 @@ import 'package:volt/Value/Strings.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'dart:io';
+
+import '../main.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -59,7 +62,8 @@ class LoginState extends State<LoginScreen> {
   @override
 
   void initState() {
-    FirebaseIn.initNoti(context);
+    getToken();
+  //  FirebaseIn.initNoti(context);
     passwordVisible = true;
     _isIos = Platform.isIOS;
     deviceType = _isIos ? 'ios' : 'android';
@@ -72,7 +76,17 @@ class LoginState extends State<LoginScreen> {
   bool _validate2 = false;
   final _formKey = GlobalKey<FormState>();
 
+  Future<String> getToken() async {
+    fcmToken = await FirebaseMessaging.instance.getToken().whenComplete((){
+      setString(fireDeviceToken,fcmToken);
+      getString(fireDeviceToken).then((value) {
+        deviceTok = value;
+      });
+    });
 
+    print("token device login" + fcmToken.toString());//YY {target_model: Job, target_id: 21, status: processing}
+    return fcmToken;
+  }
   void login() async {
 
     isConnectedToInternet().then((internet) {

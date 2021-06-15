@@ -228,9 +228,11 @@ class _SpouseTypeState extends State<SpouseType> {
               isSingle: false,
               isCityTrue: true,
               isEmailError: errorMessage1.contains("email has") ? true : false,
-              profileImage: myResult != null && myResult.length > 1
-                  ? myResult[1]
-                  : null)),
+              profileImage: myResult != null && myResult.length > 1 ? myResult[1] : null,
+              profileImage2: myResult != null && myResult.length > 1 ? myResult[2] : null,
+              profileImage3: myResult != null && myResult.length > 1 ? myResult[3] : null,
+          ),
+      ),
     ).whenComplete(() => setState((){
 
     }));
@@ -752,7 +754,7 @@ class _SpouseTypeState extends State<SpouseType> {
                               if (internet != null && internet) {
                                 showProgress(context, "Please wait.....");
 
-                                signUpToServer(parms: parms, file: myResult[1])
+                                signUpToServer(parms: parms, file: myResult[1],file2:myResult[2],file3:myResult[3])
                                     .then((response) {
                                   dismissDialog(context);
                                   if (response.status) {
@@ -821,12 +823,27 @@ class _SpouseTypeState extends State<SpouseType> {
                                             errorMessage1 =
                                                 response.errors.email_2;
                                           });
-                                        } else if (response.errors.email_3 !=
+                                        }
+                                        else if (response.errors.email_3 !=
                                             null) {
                                           errorMessage = response.errors.email_3;
                                           setState(() {
                                             errorMessage1 =
                                                 response.errors.email_3;
+                                          });
+                                        }   else if (response.errors.emirate_image1 !=
+                                            null) {
+                                          errorMessage = response.errors.emirate_image1;
+                                          setState(() {
+                                            errorMessage1 =
+                                                response.errors.emirate_image1;
+                                          });
+                                        }   else if (response.errors.emirate_image2 !=
+                                            null) {
+                                          errorMessage = response.errors.emirate_image2;
+                                          setState(() {
+                                            errorMessage1 =
+                                                response.errors.emirate_image2;
                                           });
                                         }
 

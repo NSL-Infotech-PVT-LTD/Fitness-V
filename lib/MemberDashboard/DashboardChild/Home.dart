@@ -384,7 +384,7 @@ class HomeState extends State<Home> {
                                       child: Divider(),
                                     ),
                                     Text(
-                                      "${result == null && (_rolePlan == null || _rolePlan.isEmpty) ? "--:--" : result[0].toString() == "quarterly" ? "3 months" : result[0].toString() == "half_yearly" ? "6 months" : result[0].toString() == "yearly" ? "Annual" : _rolePlan}", //: ${result[1].toString()}
+                                      "${result == null && (_rolePlan == null || _rolePlan.isEmpty) ? "--:--" : result[0].toString() == "quarterly" ? "3 Months" : result[0].toString() == "half_yearly" ? "6 Months" : result[0].toString() == "yearly" ? "Annual" : _rolePlan}", //: ${result[1].toString()}
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 12),
                                     ),

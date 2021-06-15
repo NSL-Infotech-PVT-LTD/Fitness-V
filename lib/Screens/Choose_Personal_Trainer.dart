@@ -23,6 +23,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
   List users = List();
   String auth = '';
   int valueHolder = 1;
+  double sliderValue = 1;
   int trainerPrice = 250;
 
   void _getList(String auth, int index) async {
@@ -339,15 +340,13 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.only(left: 10, top: 50),
-                              width: SizeConfig.screenWidth * .68,
+                              margin: EdgeInsets.only(left: 03, top: 50),
+                              width: SizeConfig.screenWidth * .65,
                               child: Slider(
-                                  value: valueHolder.toDouble() == 0
-                                      ? 1
-                                      : valueHolder.toDouble(),
+                                  value: sliderValue,//valueHolder.toDouble() == 0 ? 1 : valueHolder.toDouble(),
                                   min: 1,
                                   max: 24,
-                                  divisions: 4,
+                                  divisions: 3,
                                   activeColor: Colors.black,
                                   inactiveColor: Colors.grey,
                                  label: '${valueHolder.round() == 0 ? 1 : valueHolder}',
@@ -355,9 +354,10 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                                     setState(() {
                                       print("cehckcehckcehck " + newValue.toString());
                                       valueHolder = newValue.round();
-                                      if(valueHolder == 7){
+                                      sliderValue = newValue.round().toDouble();
+                                      if(valueHolder == 9){
                                         valueHolder = 6;
-                                      } else if(valueHolder == 13){
+                                      } else if(valueHolder == 16){
                                         valueHolder = 12;
                                       }else if(valueHolder == 18){
                                         valueHolder = 24;
@@ -372,36 +372,39 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 20),
-                              width: SizeConfig.screenWidth * .68,
+                             // width: SizeConfig.screenWidth * .68,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Container(
-                                    width: SizeConfig.screenWidth * .17,
+                                //    width: SizeConfig.screenWidth * .17,
                                     child: Text(
                                       '1',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
+                                  SizedBox(width: SizeConfig.screenWidth * 0.15),
                                   Container(
-                                    width: SizeConfig.screenWidth * .17,
+                               //     width: SizeConfig.screenWidth * .17,
                                     child: Text(
                                       '6',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
+                                  SizedBox(width: SizeConfig.screenWidth * 0.15),
                                   Container(
-                                    width: SizeConfig.screenWidth * .17,
+                                 //   width: SizeConfig.screenWidth * .17,
                                     child: Text(
                                       '12',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
+                                  SizedBox(width: SizeConfig.screenWidth * 0.15),
                                   Visibility(
                                     visible: /* widget.isGroupClass */ true,
                                     child: Container(
-                                      width: SizeConfig.screenWidth * .17,
+                                      //width: SizeConfig.screenWidth * .17,
                                       child: Text(
                                         '24',
                                         textAlign: TextAlign.end,

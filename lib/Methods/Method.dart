@@ -1,5 +1,6 @@
 import 'package:device_info/device_info.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,9 +12,12 @@ import 'package:volt/MemberDashboard/Dashboard.dart';
 import 'package:volt/Methods.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
+import 'package:volt/Screens/SplashScreenWithLady.dart';
 import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
+
+import '../main.dart';
 
 Future<String> getDeviceID(bool isIOS) async {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -255,6 +259,17 @@ void exitFromApp(context) {
       });
 }
 
+Future<String> getToken() async {
+  fcmToken = await FirebaseMessaging.instance.getToken().whenComplete((){
+    setString(fireDeviceToken,fcmToken);
+    getString(fireDeviceToken).then((value) {
+      deviceTok = value;
+    });
+  });
+
+  print("token device login" + fcmToken.toString());//YY {target_model: Job, target_id: 21, status: processing}
+  return fcmToken;
+}
 void logoutDialog({context, deviceType, deviceToken,auth}) {
 
   showCupertinoModalPopup(

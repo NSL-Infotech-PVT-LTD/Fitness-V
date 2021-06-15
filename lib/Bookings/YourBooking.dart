@@ -277,7 +277,7 @@ class YourBookingState extends State<YourBooking> {
                                   left: 55,
                                   child: Text(
                                     // ignore: unrelated_type_equality_checks
-                                    '${widget.serviceHours.isEmpty ? 1 : widget.serviceHours} ${widget.isSession?"Session":"MIN"}',
+                                    '${widget.serviceHours.isEmpty ? 1 : widget.serviceHours} ${widget.isSession?"Session":"PT sessions"}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,

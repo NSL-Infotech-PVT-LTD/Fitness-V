@@ -454,12 +454,17 @@ class GymMemberState extends State<GymMemberPlan> {
                                         SizedBox(width: MediaQuery.of(context).size.width * 0.03,),
                                         Text(
                                           plans[index].fee_type == "quarterly"
-                                              ? "3 months"
+                                              ? "3 Months"
                                               : plans[index].fee_type == "half_yearly"
-                                              ? "6 months"
+                                              ? "6 Months"
                                               : plans[index].fee_type == "yearly"
                                               ? "Annual"
-                                              : plans[index].fee_type,
+                                              : "${
+                                                      plans[index]
+                                                          .fee_type[0]
+                                                          .toUpperCase()
+                                                    }${plans[index]
+                                              .fee_type.substring(1)}",
                                           style: TextStyle(
                                               fontSize: textSize12, fontWeight: FontWeight.normal),
                                         ),

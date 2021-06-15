@@ -34,6 +34,7 @@ class SelectSession extends StatefulWidget {
 
 class SelectSessionState extends State<SelectSession> {
   int valueHolder = 0;
+  int valueHolderSlider = 0;
   int valueSessionsHolder = 0;
   String _imageLink;
   String auth = '';
@@ -50,13 +51,14 @@ class SelectSessionState extends State<SelectSession> {
         _wantToShowPrice = false;
       }
     }
-
-    super.initState();
     setState(() {});
+    super.initState();
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     _imageLink = widget.image;
     SizeConfig().init(context);
     return Scaffold(
@@ -151,7 +153,7 @@ class SelectSessionState extends State<SelectSession> {
                               ? SizeConfig.screenWidth * .55
                               : SizeConfig.screenWidth * .72,
                           child: Slider(
-                              value: valueSessionsHolder.toDouble() == 0 ? 1 : valueSessionsHolder.toDouble(),
+                              value: valueSessionsHolder.toDouble() == 0 ? 0 : valueSessionsHolder.toDouble(),
                               min: 0,
                               max: widget.isGroupClass || widget.isSession ? 12 : 24,
                               divisions: widget.isGroupClass || widget.isSession? 2 : 4,
@@ -160,9 +162,7 @@ class SelectSessionState extends State<SelectSession> {
                               label: '${valueSessionsHolder.round() == 0 ? 1 : valueSessionsHolder.round()}',
                               onChanged: (double newValue) {
                                 setState(() {
-
                                   valueSessionsHolder = newValue.round() == 18 ? 24 : newValue.round();
-
                                 });
                               },
                               semanticFormatterCallback: (double newValue) {
@@ -170,8 +170,8 @@ class SelectSessionState extends State<SelectSession> {
                               }),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20),
-                          width: SizeConfig.screenWidth * .68,
+                          margin: EdgeInsets.only(left: 08),
+                          width: SizeConfig.screenWidth * .75,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
@@ -219,20 +219,24 @@ class SelectSessionState extends State<SelectSession> {
                          margin: EdgeInsets.only(left: 10, top: 10),
                          width: widget.isGroupClass || widget.isSession
                              ? SizeConfig.screenWidth * .55
-                             : SizeConfig.screenWidth * .72,
+                             : SizeConfig.screenWidth * .67,
                          child: Slider(
-                             value: valueHolder.toDouble() == 0 ? 1 : valueHolder.toDouble(),
+                             value: valueHolderSlider.toDouble(),//valueHolder.toDouble() == 0 ? 1 : valueHolder.toDouble(),
                              min: 0,
                              max: widget.isGroupClass || widget.isSession ? 12 : 24,
-                             divisions: widget.isGroupClass || widget.isSession? 2 : 4,
+                             divisions: widget.isGroupClass || widget.isSession? 2 : 3,
                              activeColor: Colors.black,
                              inactiveColor: Colors.grey,
                              label: '${valueHolder.round() == 0 ? 1 : valueHolder.round()}',
                              onChanged: (double newValue) {
                                setState(() {
-
+                                 valueHolderSlider = newValue.round();
                                  valueHolder = newValue.round() == 18 ? 24 : newValue.round();
-
+if(valueHolder == 8){
+  valueHolder = 6;
+}else if(valueHolder == 16){
+  valueHolder = 12;
+}
                                });
                              },
                              semanticFormatterCallback: (double newValue) {
@@ -240,36 +244,40 @@ class SelectSessionState extends State<SelectSession> {
                              }),
                        ),
                        Container(
-                         margin: EdgeInsets.only(left: 20),
+                         margin: EdgeInsets.only(left: 10),
                          width: SizeConfig.screenWidth * .68,
                          child: Row(
                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                            children: <Widget>[
+                          //   SizedBox(width: SizeConfig.screenWidth * 0.03,),
                              Container(
-                               width: SizeConfig.screenWidth * .17,
+                             //  width: SizeConfig.screenWidth * .17,
                                child: Text(
                                  '1',
                                  style: TextStyle(color: Colors.black),
                                ),
                              ),
+                             SizedBox(width: SizeConfig.screenWidth * 0.05,),
                              Container(
-                               width: SizeConfig.screenWidth * .17,
+                               //width: SizeConfig.screenWidth * .17,
                                child: Text(
                                  '6',
                                  style: TextStyle(color: Colors.black),
                                ),
                              ),
+                             SizedBox(width: SizeConfig.screenWidth * 0.06,),
                              Container(
-                               width: SizeConfig.screenWidth * .17,
+                               //width: SizeConfig.screenWidth * .17,
                                child: Text(
                                  '12',
                                  style: TextStyle(color: Colors.black),
                                ),
                              ),
+                             SizedBox(width: SizeConfig.screenWidth * 0.05,),
                              Visibility(
                                visible: !widget.isGroupClass && !widget.isSession,
                                child: Container(
-                                 width: SizeConfig.screenWidth * .17,
+                                 //width: SizeConfig.screenWidth * .17,
                                  child: Text(
                                    '24',
                                    textAlign: TextAlign.end,
@@ -471,6 +479,7 @@ class SelectSessionState extends State<SelectSession> {
             ]),
       ),
     );
+    setState(() {});
   }
 
 
@@ -491,7 +500,7 @@ class SelectSessionState extends State<SelectSession> {
   int sendValueT() {
     int value = 0;
     if (valueSessionsHolder == 0) {
-      value = 60;
+      value = 90;
     } else if (valueSessionsHolder == 6) {
       value = 340;
     } else if (valueSessionsHolder == 12) {

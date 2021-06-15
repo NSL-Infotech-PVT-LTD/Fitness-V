@@ -12,7 +12,7 @@ class NetworkUtil {
   factory NetworkUtil() => _instance;
 
   Future<http.Response> get(String url) {
-    return http.get(Constants.baseUrl + url).then((http.Response response) {
+    return http.get(Uri.parse(Constants.baseUrl + url)).then((http.Response response) {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -28,7 +28,7 @@ class NetworkUtil {
 
 
     return http
-        .post(Constants.baseUrl + url,
+        .post(Uri.parse(Constants.baseUrl + url),
             body: utf8.encode(json.encode(body)),
             headers: {
               "Content-Type": "application/json",

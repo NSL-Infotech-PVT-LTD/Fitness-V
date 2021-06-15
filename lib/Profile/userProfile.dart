@@ -222,19 +222,19 @@ class UserProfileState extends State<UserProfile> {
   Future getImage(int type) async {
     Navigator.of(context).pop();
     if (type == 1) {
-      var image = await ImagePicker.pickImage(
+      var image = await ImagePicker().getImage(
           source: ImageSource.camera, imageQuality: 50);
       setState(() {
         if (image != null) {
-          _imageFile = image;
+          _imageFile = File(image.path);
         }
       });
     } else {
-      var image = await ImagePicker.pickImage(
+      var image = await ImagePicker().getImage(
           source: ImageSource.gallery, imageQuality: 50);
       setState(() {
         if (image != null) {
-          _imageFile = image;
+          _imageFile = File(image.path);
         }
       });
     }

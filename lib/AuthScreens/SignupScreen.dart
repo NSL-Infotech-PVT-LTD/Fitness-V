@@ -1,5 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_picker_cupertino.dart';
+import 'package:country_pickers/country_picker_dialog.dart';
+import 'package:country_pickers/utils/utils.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +27,7 @@ import '../Methods.dart';
 import '../Methods/api_interface.dart';
 import '../Value/Strings.dart';
 import '../lifecycycle.dart';
+import '../main.dart';
 import 'SuccessScreen.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -40,6 +46,8 @@ class SignupScreen extends StatefulWidget {
   final String rolePlanId;
   final String planPrice;
   var profileImage;
+  var profileImage2;
+  var profileImage3;
 
   static MyInheritedData of(BuildContext context) =>
       context. dependOnInheritedWidgetOfExactType<MyInheritedData>() as MyInheritedData;
@@ -58,7 +66,11 @@ class SignupScreen extends StatefulWidget {
     this.rolePlanId,
     this.profileImage,
     this.planPrice,
-    this.gymMemberType});
+    this.gymMemberType,
+    this.profileImage2,
+    this.profileImage3,
+
+  });
 
   @override
   State<StatefulWidget> createState() => SignupState();
@@ -75,6 +87,8 @@ class SignupState extends State<SignupScreen> {
   bool _isLoading = false;
   final formKey = GlobalKey<FormState>();
   File file;
+  File file2;
+  File file3;
 
   /// @AuthScreens Controllers
   var firstNameController = TextEditingController();
@@ -351,7 +365,11 @@ class SignupState extends State<SignupScreen> {
 
   @override
   void initState() {
-    FirebaseIn.initNoti(context);
+    getToken();
+    // FirebaseIn.initNoti(context);
+    file = widget.profileImage;
+    file2 = widget.profileImage2;
+    file3 = widget.profileImage3;
 //     _cities = [
 //       'Dubai',
 //       'Sharjah',
@@ -383,6 +401,8 @@ class SignupState extends State<SignupScreen> {
     });
 
     print("profile image " + widget.profileImage.toString());
+    print("profile image " + widget.profileImage2.toString());
+    print("profile image " + widget.profileImage3.toString());
     passwordVisible = true;
     if (widget.type != null) print("form type " + widget.type);
     rolePlanId = widget.rolePlanId;
@@ -411,7 +431,17 @@ class SignupState extends State<SignupScreen> {
     // });
     super.initState();
   }
+  Future<String> getToken() async {
+    fcmToken = await FirebaseMessaging.instance.getToken().whenComplete((){
+      setString(fireDeviceToken,fcmToken);
+      getString(fireDeviceToken).then((value) {
+        deviceTok = value;
+      });
+    });
 
+    print("token device " + fcmToken.toString());//YY {target_model: Job, target_id: 21, status: processing}
+    return fcmToken;
+  }
 //  @override
 //  void dispose(){
 //    firstNameController.dispose();
@@ -433,6 +463,8 @@ class SignupState extends State<SignupScreen> {
     if (ind == '0') {
       result = [];
       file = widget.profileImage;
+      file2 = widget.profileImage2;
+      file3 = widget.profileImage3;
       firstNameController.text = widget.editData[FIRSTNAME];
       radioItem = widget.editData[CHILD];
       fromDate = widget.editData[BIRTH_DATE];
@@ -471,6 +503,9 @@ class SignupState extends State<SignupScreen> {
       print("price " + priceTrainer.toString());
     } else {
       result = [];
+      file = widget.profileImage;
+      file2 = widget.profileImage2;
+      file3 = widget.profileImage3;
       firstNameController.text = widget.editData[FIRSTNAME + '_' + ind];
       radioItem = widget.editData[CHILD + '_' + ind];
       fromDate = widget.editData[BIRTH_DATE + '_' + ind];
@@ -505,6 +540,45 @@ class SignupState extends State<SignupScreen> {
       // hotelController.text = widget.editData[hotelNo];
     }
   }
+
+  Country _selectedCupertinoCountry = CountryPickerUtils.getCountryByIsoCode('AE');
+  Widget _buildCupertinoItem(Country country) {
+    return DefaultTextStyle(
+      style: const TextStyle(
+        color: CupertinoColors.white,
+        fontSize: 16.0,
+      ),
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 8.0),
+          CountryPickerUtils.getDefaultFlagImage(country),
+          SizedBox(width: 8.0),
+        //  Text("+${country.phoneCode}"),
+          SizedBox(width: 8.0),
+          Flexible(child: Text(country.name))
+        ],
+      ),
+    );
+  }
+  void _openCupertinoCountryPicker() => showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return CountryPickerCupertino(
+          backgroundColor: Colors.black,
+          itemBuilder: _buildCupertinoItem,
+          pickerSheetHeight: 300.0,
+          pickerItemHeight: 75,
+          initialCountry: _selectedCupertinoCountry,
+          onValuePicked: (Country country) =>
+              setState(() { _selectedCupertinoCountry = country;
+              nationalityController.text = _selectedCupertinoCountry.name.toString();
+              }),
+          priorityList: [
+            CountryPickerUtils.getCountryByIsoCode('AE'),
+           // CountryPickerUtils.getCountryByIsoCode('US'),
+          ],
+        );
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -1008,12 +1082,16 @@ class SignupState extends State<SignupScreen> {
                             child: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: TextFormField(
+                                enabled: true,
+                                onTap: (){
+                                  _openCupertinoCountryPicker();
+                                },
                                 textCapitalization:
                                 TextCapitalization.sentences,
                                 keyboardType: TextInputType.text,
-                                controller: nationalityController,
+                                //controller: nationalityController,
                                 decoration: InputDecoration(
-                                    hintText: "Nationality",
+                                    hintText: "Nationality: ${_selectedCupertinoCountry.name}",
                                     hintStyle: TextStyle(fontSize: textSize12)),
                               ),
                             ),
@@ -1190,7 +1268,7 @@ class SignupState extends State<SignupScreen> {
                           Visibility(
                             visible: !(widget.type == "guest") && !(widget.type == "fairMont"),
                             child: Padding(
-                                padding: EdgeInsets.only(top: 18),
+                                padding: EdgeInsets.only(top: 5),
                                 child: DropdownButton(
                                   hint: selectedCity == null
                                       ? Text('Select Emirates')
@@ -1223,108 +1301,414 @@ class SignupState extends State<SignupScreen> {
                                   },
                                 )),
                           ),
-                          Column(children: [
-                            SizedBox(
-                              height:
-                              MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
-                                  .of(context)
-                                  .size
-                                  .height *
-                                  0.02,
-                            ),
-                            Visibility(
-                              visible: (widget.memberIndex == 0 ||
-                                  widget.memberIndex == null) &&
-                                  widget.type != 'fairMont' &&
-                                  widget.type != 'guest',
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    height:
-                                    MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height * 0.06,
-                                    width:
-                                    MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.50,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.black,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                      child: file == null
-                                          ? Text('Choose A Profile Photo')
-                                          : Text("Photo Selected"),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width:
-                                    MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.07,
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    height:
-                                    MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height * 0.06,
-                                    width:
-                                    MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.14,
-                                    child: RaisedButton.icon(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(10)),
-                                      color: Colors.black,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 2, vertical: 2),
-                                      onPressed: () {
-                                        _showMyDialog();
-                                      },
-                                      icon: Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
-                                        child: Center(
-                                            child: Icon(
-                                              Icons.image_outlined,
-                                              color: Colors.white,
-                                              size: 35,
-                                            )),
-                                      ),
-                                      label: Text(""),
-                                    ),
-                                  ),
-                                ],
+                          Visibility(
+                            visible: (widget.memberIndex == 0 ||
+                                widget.memberIndex == null) &&
+                                widget.type != 'fairMont' &&
+                                widget.type != 'guest',
+                            child: Column(children: [
+                              SizedBox(
+                                height:
+                                MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
+                                    .of(context)
+                                    .size
+                                    .height *
+                                    0.02,
                               ),
-                            ),
-                            SizedBox(
-                              height:
-                              MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
-                                  .of(context)
-                                  .size
-                                  .height *
-                                  0.02,
-                            ),
-                          ],),
+                              Visibility(
+                                visible: (widget.memberIndex == 0 ||
+                                    widget.memberIndex == null) &&
+                                    widget.type != 'fairMont' &&
+                                    widget.type != 'guest',
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      height:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.06,
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.50,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Center(
+                                        child: file == null
+                                            ? Text('Choose A Profile Photo')
+                                            : Text("Photo Selected"),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.07,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20.0),
+                                      ),
+                                      height:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.06,
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.14,
+                                      child: RaisedButton.icon(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10)),
+                                        color: Colors.black,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 2),
+                                        onPressed: () {
+                                          _showMyDialog();
+                                        },
+                                        icon: Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Center(
+                                              child: Icon(
+                                                Icons.image_outlined,
+                                                color: Colors.white,
+                                                size: 35,
+                                              )),
+                                        ),
+                                        label: Text(""),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              SizedBox(
+                                height:
+                                MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
+                                    .of(context)
+                                    .size
+                                    .height *
+                                    0.02,
+                              ),
+                              Visibility(
+                                visible: (widget.memberIndex == 0 ||
+                                    widget.memberIndex == null) &&
+                                    widget.type != 'fairMont' &&
+                                    widget.type != 'guest',
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      height:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.06,
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.50,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Center(
+                                        child: file2 == null
+                                            ? Text('Front Side of Emirates ID/ Passport',style: TextStyle(fontSize:11),)
+                                            : Text("Image Uploaded",),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.07,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20.0),
+                                      ),
+                                      height:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.06,
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.14,
+                                      child: RaisedButton.icon(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10)),
+                                        color: Colors.black,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 2),
+                                        onPressed: () {
+                                          showDialog<void>(
+                                            context: context,
+                                            barrierDismissible: false, // user must tap button!
+                                            builder: (BuildContext context) {
+                                          return AlertDialog(
+                                          title: Text('Select Options'),
+                                          content: SingleChildScrollView(
+                                          child: ListBody(
+                                          children: <Widget>[
+                                          RaisedButton(
+                                          onPressed: () async {
+                                          imageLoader = true;
+                                          await picker
+                                              .getImage(source: ImageSource.camera)
+                                              .then((value) {
+                                          if (value != null) {
+                                          Navigator.of(context).pop();
+                                          imageLoader = false;
+                                          setState(() {
+                                          file2 = File(value.path);
+                                          //  Navigator.of(context).pop();
+                                          });
+                                          print("file Select " + file.toString());
+                                          }
+                                          });
+                                          },
+                                          child:
+                                          const Text('Camera', style: TextStyle(fontSize: 15)),
+                                          ),
+                                          RaisedButton(
+                                          onPressed: () async {
+                                          imageLoader = true;
+                                          await picker
+                                              .getImage(source: ImageSource.gallery)
+                                              .then((value) {
+                                          if (value != null) {
+                                          Navigator.of(context).pop();
+                                          imageLoader = false;
+                                          setState(() {
+                                          file2 = File(value.path);
+                                          //  Navigator.of(context).pop();
+                                          });
+                                          print("file Select " + file.toString());
+                                          }
+                                          });
+                                          },
+                                          child:
+                                          const Text('Gallery', style: TextStyle(fontSize: 15)),
+                                          ),
+                                          imageLoader
+                                          ? Center(
+                                          child: CircularProgressIndicator(
+                                          backgroundColor: Colors.black,
+                                          ))
+                                              : Container(),
+                                          ],
+                                          ),
+                                          ),
+                                          actions: <Widget>[
+                                          TextButton(
+                                          child: Text('Cancel'),
+                                          onPressed: () {
+                                          Navigator.of(context).pop();
+                                          },
+                                          ),
+                                          ]);
+                                          });
+                                        },
+
+                                        icon: Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Center(
+                                              child: Icon(
+                                                Icons.image_outlined,
+                                                color: Colors.white,
+                                                size: 35,
+                                              )),
+                                        ),
+                                        label: Text(""),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              SizedBox(
+                                height:
+                                MediaQuery //widget.type != 'fairMont' && widget.type != 'guest'
+                                    .of(context)
+                                    .size
+                                    .height *
+                                    0.02,
+                              ),
+                              Visibility(
+                                visible: (widget.memberIndex == 0 ||
+                                    widget.memberIndex == null) &&
+                                    widget.type != 'fairMont' &&
+                                    widget.type != 'guest',
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      height:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.06,
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.50,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Center(
+                                        child: file3 == null
+                                            ? Text("Back Side of Emirates ID/ Passport",style: TextStyle(fontSize:11))
+                                            : Text("Image Uploaded"),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.07,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20.0),
+                                      ),
+                                      height:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.06,
+                                      width:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.14,
+                                      child: RaisedButton.icon(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10)),
+                                        color: Colors.black,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 2),
+                                        onPressed: () {
+                                          showDialog<void>(
+                                            context: context,
+                                            barrierDismissible: false, // user must tap button!
+                                            builder: (BuildContext context) {
+                                          return
+
+                                          AlertDialog(
+                                          title: Text('Select Options'),
+                                          content: SingleChildScrollView(
+                                          child: ListBody(
+                                          children: <Widget>[
+                                          RaisedButton(
+                                          onPressed: () async {
+                                          imageLoader = true;
+                                          await picker
+                                              .getImage(source: ImageSource.camera)
+                                              .then((value) {
+                                          if (value != null) {
+                                          Navigator.of(context).pop();
+                                          imageLoader = false;
+                                          setState(() {
+                                          file3 = File(value.path);
+                                          //  Navigator.of(context).pop();
+                                          });
+                                          print("file Select " + file.toString());
+                                          }
+                                          });
+                                          },
+                                          child:
+                                          const Text('Camera', style: TextStyle(fontSize: 15)),
+                                          ),
+                                          RaisedButton(
+                                          onPressed: () async {
+                                          imageLoader = true;
+                                          await picker
+                                              .getImage(source: ImageSource.gallery)
+                                              .then((value) {
+                                          if (value != null) {
+                                          Navigator.of(context).pop();
+                                          imageLoader = false;
+                                          setState(() {
+                                          file3 = File(value.path);
+                                          //  Navigator.of(context).pop();
+                                          });
+                                          print("file Select " + file.toString());
+                                          }
+                                          });
+                                          },
+                                          child:
+                                          const Text('Gallery', style: TextStyle(fontSize: 15)),
+                                          ),
+                                          imageLoader
+                                          ? Center(
+                                          child: CircularProgressIndicator(
+                                          backgroundColor: Colors.black,
+                                          ))
+                                              : Container(),
+                                          ],
+                                          ),
+                                          ),
+                                          actions: <Widget>[
+                                          TextButton(
+                                          child: Text('Cancel'),
+                                          onPressed: () {
+                                          Navigator.of(context).pop();
+                                          },
+                                          ),
+                                          ]);
+                                          });
+                                        },
+                                        icon: Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Center(
+                                              child: Icon(
+                                                Icons.image_outlined,
+                                                color: Colors.white,
+                                                size: 35,
+                                              )),
+                                        ),
+                                        label: Text(""),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                            ],),
+                          ),
 
                           Visibility(
                             visible: widget.type != 'fairMont' &&
                                 widget.type != 'guest',
                             child: Column(
                               children: [
-                                SizedBox(height: 35),
+                                SizedBox(height: 20),
                                 Divider(),
                                 Align(
                                   child: Text(
@@ -1708,7 +2092,7 @@ class SignupState extends State<SignupScreen> {
                                           "gym_members" ||
                                           widget.gymMemberType ==
                                               "pool_and_beach_members")
-                                        Navigator.pop(context, [parms, file]);
+                                        Navigator.pop(context, [parms, file,file2,file3]);
                                     } else {
                                       parms = {
                                         "trainerPrice":
@@ -1848,7 +2232,7 @@ class SignupState extends State<SignupScreen> {
                                         //  if ( widget.type)about_us: aboutUsController.text,
                                         //    if (widget.memberIndex == 0)about_us: aboutUsController.text,
                                       };
-                                      Navigator.pop(context, [parms, file]);
+                                      Navigator.pop(context, [parms, file,file2,file3]);
                                       print(
                                           "vikas 00=====>${parms.toString()}");
                                     }
@@ -1960,7 +2344,7 @@ class SignupState extends State<SignupScreen> {
                                               errorMessage = response
                                                   .error
                                                   .toString();
-                                            } else if (response.errors !=
+                                            } else if (response.errors.email !=
                                                 null) {
                                               setState(() {
                                                 _isLoading = false;
@@ -1969,12 +2353,34 @@ class SignupState extends State<SignupScreen> {
                                                   .errors.email
                                                   .toString();
                                             }
+
+                                            else if (response.errors.emirate_image1 !=
+                                                null) {
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                              errorMessage = response
+                                                  .errors.emirate_image1
+                                                  .toString();
+                                            }
+
+                                            else if (response.errors.emirate_image2 !=
+                                                null) {
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                              errorMessage = response
+                                                  .errors.emirate_image2
+                                                  .toString();
+                                            }
                                             showDialogBox(context,
                                                 "Error!", errorMessage);
                                           }
                                         })
                                             : signUpToServer(
                                             file: file,
+                                            file2: file2,
+                                            file3: file3,
                                             parms: parms,
                                             type: widget.type)
                                             .then((response) {
@@ -1995,7 +2401,7 @@ class SignupState extends State<SignupScreen> {
                                               errorMessage = response
                                                   .error
                                                   .toString();
-                                            } else if (response.errors !=
+                                            } else if (response.errors.email !=
 
                                                 null) {
                                               setState(() {
@@ -2003,6 +2409,24 @@ class SignupState extends State<SignupScreen> {
                                               });
                                               errorMessage = response
                                                   .errors.email
+                                                  .toString();
+                                            }else if (response.errors.emirate_image1 !=
+
+                                                null) {
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                              errorMessage = response
+                                                  .errors.emirate_image1
+                                                  .toString();
+                                            }else if (response.errors.emirate_image2 !=
+
+                                                null) {
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                              errorMessage = response
+                                                  .errors.emirate_image2
                                                   .toString();
                                             }
                                             showDialogBox(context,

@@ -61,7 +61,7 @@ class DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    FirebaseIn.initNoti(context);
+   // FirebaseIn.initNoti(context);
     getString(userImage)
         .then((value) => {imageValue = value})
         .whenComplete(() => setState(() {
