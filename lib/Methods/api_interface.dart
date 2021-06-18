@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:volt/ResponseModel/SessionTranierPriceModle.dart';
 import 'package:volt/ResponseModel/StatusResponse.dart';
 import 'package:volt/Methods/gymModal.dart';
 
@@ -36,6 +37,7 @@ String bookingDelete = BASE_URL + "api/booking/delete";
 String getClassesListUrl = BASE_URL + "api/class-schedules";
 String getClassesbyIdUrl = BASE_URL + "api/class-schedule";
 String NortificationList = BASE_URL + "api/notification/list";
+String sessionAndTrainerPrince = BASE_URL + "api/booking/getPrice";
 
 String CUSTOMER_ID = "";
 
@@ -60,6 +62,7 @@ String trainerId = "trainer_id";
 String SEARCH = "search";
 String Date = "date";
 String LIMIT = "limit";
+String type = "type";
 String PAGE = "page";
 String checkInKey = "check_in";
 String checkOutKey = "check_out";
@@ -124,7 +127,6 @@ String USER_EMAIL = "USER_EMAIL";
 String roleType = 'roleType';
 String CONTENT_VALUE = "application/x-www-form-urlencoded";
 String ORDER_BY = "price_high";
-
 String BASE_URL = "https://app.voltfitness.ae/";
 String DEALER_PROFILE_IMAGE = "uploads/dealer/profile_image/";
 String IMAGE_URL = "uploads/roles/";
@@ -194,6 +196,20 @@ Future<StatusResponse> logOutFun(String auth, Map<String, String> parms) async {
   var map = Map<String, dynamic>.from(jsonData);
 
   return StatusResponse.fromJson(map);
+}
+Future<SessionAndTrainerPrince> sessionOrTrainerPri ( Map<String, String> parms) async {
+  final response = await http.post(
+      Uri.parse(sessionAndTrainerPrince),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      //  'Authorization': auth
+      },
+      body: jsonEncode(parms));
+  print("Session prince responce " + response.body);
+  final jsonData = json.decode(response.body);
+  var map = Map<String, dynamic>.from(jsonData);
+
+  return SessionAndTrainerPrince.fromJson(map);
 }
 
 Future<StatusResponse> getGroupClassListApi(
@@ -325,15 +341,21 @@ Future<StatusResponse> signUpToServer(
   request.headers.addAll(headers);
   if (file != null) {
     http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-        'image', file.path); //returns a Future<MultipartFile>
+        'image', file.path);
+    print("check image1" + file.path);
+    //returns a Future<MultipartFile>
     request.files.add(multipartFile);
   } if (file2 != null) {
     http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
         'emirate_image1', file2.path); //returns a Future<MultipartFile>
+    print("check image2" + file.path);
+
     request.files.add(multipartFile);
   } if (file3 != null) {
     http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
         'emirate_image2', file3.path); //returns a Future<MultipartFile>
+    print("check image3" + file.path);
+
     request.files.add(multipartFile);
   }
   var streamedResponse = await request.send();
@@ -342,6 +364,7 @@ Future<StatusResponse> signUpToServer(
   final jsonData = json.decode(response.body);
   var map = Map<String, dynamic>.from(jsonData);
   return StatusResponse.fromJson(map);
+
   // final postUri = Uri.parse(REGISTRATION);
   // http.MultipartRequest request = http.MultipartRequest('POST', postUri);
   // Map<String, String> headers = {'Content-Type': 'application/json; charset=UTF-8',};

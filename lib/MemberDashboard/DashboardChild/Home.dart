@@ -102,11 +102,8 @@ class HomeState extends State<Home> {
         isLoading = true;
       });
 
-      getString(USER_AUTH)
-          .then((value) => getProfileDetailApi(value).then((response) {
-
+      getString(USER_AUTH).then((value) => getProfileDetailApi(value).then((response) {
         setState(() {
-
           // setString(USER_AUTH, "Bearer " + response.data.token);
           setString(roleType, response.data.user.role.name);
           // getRoleApi(context,response.data.user.role.nameFilter);
@@ -573,7 +570,7 @@ class HomeState extends State<Home> {
                               child: GestureDetector(
                                 onTap: () {
 
-                                Dashboard.of(context).onTabTappedNew=1;
+                                Dashboard.of(context).onTabTappedNew = 1;
 
                                   // Navigator.push(
                                   //     context,

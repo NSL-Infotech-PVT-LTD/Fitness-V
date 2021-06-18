@@ -216,7 +216,8 @@ class ProfileState extends State<ProfileScreen> {
                               : CircleAvatar(
                                   radius: 52.0,
                                   backgroundImage: NetworkImage(
-                                      BASE_URL + 'uploads/image/' + result),
+                                    //  BASE_URL + 'uploads/image/' +
+                                          result),
                                   backgroundColor: Colors.transparent,
                                 )),
                     ],

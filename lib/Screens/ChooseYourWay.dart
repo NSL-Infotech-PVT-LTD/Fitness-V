@@ -81,11 +81,24 @@ class ChooseWayState extends State<ChooseYourWay> {
                      child: Image.asset(
                        'assets/images/logo.png',
                        width: 260,
-
                        color: Colors.white,
                      ),
                    ),
-                 )
+                 ),
+                    Container(
+                      child: Padding(
+                        padding: EdgeInsets.all(SizeConfig.screenWidth * 0.05),
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.push(context, ScaleRoute(page: LoginScreen()));
+                          },
+                          child: Icon(
+                            Icons.arrow_back_ios_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 // Container(
@@ -160,7 +173,6 @@ class ChooseWayState extends State<ChooseYourWay> {
                                      ],
                                    ),
                                  ],
-
                               ):
                               Stack(
                   children: [
@@ -234,7 +246,7 @@ class ChooseWayState extends State<ChooseYourWay> {
                         style:
                             TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       )),
-                )
+                ),
               ],
             ),
           ),
@@ -262,7 +274,6 @@ class ChooseWayState extends State<ChooseYourWay> {
         showDialogBox(context, internetError, pleaseCheckInternet);
         dismissDialog(context);
       }
-
       dismissDialog(context);
     });
   }
@@ -299,7 +310,6 @@ class ChooseWayState extends State<ChooseYourWay> {
 Widget _CommonView(String image, String title, String des) => GestureDetector(
       child: Container(
         //  decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logo.png')) ),
-
         child: Column(
           children: <Widget>[
             Row(

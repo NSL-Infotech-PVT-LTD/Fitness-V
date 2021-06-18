@@ -249,7 +249,9 @@ class UserProfileState extends State<UserProfile> {
 
         return CircleAvatar(
           radius: 52.0,
-          backgroundImage: NetworkImage(BASE_URL + 'uploads/image/' + image),
+          backgroundImage: NetworkImage(
+              //BASE_URL + 'uploads/image/' +
+              image),
           backgroundColor: Colors.transparent,
         );
       }
@@ -375,7 +377,7 @@ class UserProfileState extends State<UserProfile> {
                               child: TextFormField(
                                 keyboardType: TextInputType.text,
                                 readOnly: true,
-                                inputFormatters: <TextInputFormatter>[
+                                 inputFormatters: <TextInputFormatter>[
                                   WhitelistingTextInputFormatter(
                                       RegExp("[a-zA-Z]"))
                                 ],
@@ -776,6 +778,7 @@ class UserProfileState extends State<UserProfile> {
                                           if (internet != null && internet) {
                                             updateUserProfileApi(auth, _imageFile, parms)
                                                 .then((response) {
+
                                               dismissDialog(context);
                                               if (response.status) {
                                                 if (response.data != null &&
@@ -790,6 +793,7 @@ class UserProfileState extends State<UserProfile> {
                                                 setState(() {});
                                               } else {
                                                 var errorMessage = '';
+                                                print("error of update" + response.error.toString() + response.errors.toString());
                                                 if (response.error != null) {
                                                   errorMessage =
                                                       response.errors.toString();

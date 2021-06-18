@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:volt/Bookings/YourBooking.dart';
+import 'package:volt/Methods/Method.dart';
 import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/Screens/view_personal_trainer.dart';
@@ -32,25 +33,103 @@ class SelectSession extends StatefulWidget {
   State<StatefulWidget> createState() => SelectSessionState();
 }
 
+
 class SelectSessionState extends State<SelectSession> {
+
+  String ts1;
+  String ts6;
+  String ts12;
+  String ts24;
+
+  void sessionPrice() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        Map<String, String> parms = {
+          if(!widget.isSession)type:"trainer",
+          if(widget.isSession)type:"session",
+        };
+        sessionOrTrainerPri(parms).then((response) {
+
+          dismissDialog(context);
+          if (response.status) {
+if(response.data.s1 != null && response.data.s6 != null && response.data.s12 != null){
+  setState(() {
+    ts1 = response.data.s1;
+    ts6 = response.data.s6;
+    ts12 = response.data.s12;
+    ts24 = response.data.s24;
+  });
+
+}
+        print("Responc " + response.data.s1);
+        setState(() {
+          loader = false;
+        });
+          } else {
+            setState(() {
+              loader = false;
+            });
+            var message = '';
+            dismissDialog(context);
+            //need to change
+            if (response.error != null) {
+              setState(() {
+                loader = false;
+              });
+              message = response.error;
+            } else if (response.error != null) {
+              setState(() {
+                loader = false;
+              });
+              message = response.error;
+            }
+            if (message.isNotEmpty) {
+              setState(() {
+               loader = false;
+              });
+              showDialogBox(context, "Error!", message);
+            }
+          }
+        });
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
   int valueHolder = 0;
   int valueHolderSlider = 0;
   int valueSessionsHolder = 0;
   String _imageLink;
   String auth = '';
   bool _wantToShowPrice = true;
+  bool loader = true;
 
+  int sendValue() {
+    int value = 0;
+    if (valueHolder == 0) {
+      value = int.parse(ts1);
+    } else if (valueHolder == 6) {
+      value = int.parse(ts6);
+    } else if (valueHolder == 12) {
+      value = int.parse(ts12);
+    }
+    else if (valueHolder == 24) {
+      value = int.parse(ts24);
+    }
+    return value;
+  }
   @override
   void initState() {
+    setState(() {
+      loader = true;
+    });
     getString(USER_AUTH).then((value) => {auth = value});
+    sessionPrice();
 
-    if (widget.isGroupClass) {
-      if (widget.roleType == localGuest || widget.roleType == fairmontHotel) {
-        _wantToShowPrice = true;
-      } else {
-        _wantToShowPrice = false;
-      }
-    }
+
     setState(() {});
     super.initState();
 
@@ -63,7 +142,16 @@ class SelectSessionState extends State<SelectSession> {
     SizeConfig().init(context);
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
+        child:loader?Container(
+          height: SizeConfig.screenHeight,
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(child: CircularProgressIndicator(backgroundColor: Colors.black,)),
+            ],
+          ),
+        ): Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -483,31 +571,18 @@ if(valueHolder == 8){
   }
 
 
-  int sendValue() {
-    int value = 0;
-    if (valueHolder == 0) {
-      value = 250;
-    } else if (valueHolder == 6) {
-      value = 1400;
-    } else if (valueHolder == 12) {
-      value = 2600;
-    }
-    else if (valueHolder == 24) {
-      value = 5000;
-    }
-    return value;
-  }
+
   int sendValueT() {
     int value = 0;
     if (valueSessionsHolder == 0) {
-      value = 90;
+      value = int.parse(ts1);
     } else if (valueSessionsHolder == 6) {
-      value = 340;
+      value = int.parse(ts6);
     } else if (valueSessionsHolder == 12) {
-      value = 660;
+      value = int.parse(ts12);
     }
     else if (valueSessionsHolder == 24) {
-      value = 5000;
+      value = int.parse(ts24);
     }
     return value;
   }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:volt/Methods/Method.dart';
+import 'package:volt/Methods/Pref.dart';
 import 'package:volt/Methods/api_interface.dart';
 import 'package:volt/TrainerPackage/TrainerDetail.dart';
 import 'package:volt/Value/Dimens.dart';
@@ -25,7 +26,71 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
   int valueHolder = 1;
   double sliderValue = 1;
   int trainerPrice = 250;
+  String ts1;
+  String ts6;
+  String ts12;
+  String ts24;
+  bool loader = false;
 
+
+  void sessionPrice() async {
+    isConnectedToInternet().then((internet) {
+      if (internet != null && internet) {
+        showProgress(context, "Please wait.....");
+
+        Map<String, String> parms = {
+          type:"trainer",
+
+        };
+        sessionOrTrainerPri(parms).then((response) {
+
+          dismissDialog(context);
+          if (response.status) {
+            if(response.data.s1 != null && response.data.s6 != null && response.data.s12 != null){
+              setState(() {
+                ts1 = response.data.s1;
+                ts6 = response.data.s6;
+                ts12 = response.data.s12;
+                ts24 = response.data.s24;
+              });
+
+            }
+            print("Responc " + response.data.s1);
+            setState(() {
+              loader = false;
+            });
+          } else {
+            setState(() {
+              loader = false;
+            });
+            var message = '';
+            dismissDialog(context);
+            //need to change
+            if (response.error != null) {
+              setState(() {
+                loader = false;
+              });
+              message = response.error;
+            } else if (response.error != null) {
+              setState(() {
+                loader = false;
+              });
+              message = response.error;
+            }
+            if (message.isNotEmpty) {
+              setState(() {
+                loader = false;
+              });
+              showDialogBox(context, "Error!", message);
+            }
+          }
+        });
+      } else {
+        showDialogBox(context, internetError, pleaseCheckInternet);
+        dismissDialog(context);
+      }
+    });
+  }
   void _getList(String auth, int index) async {
     isConnectedToInternet().then((internet) {
       if (internet != null && internet) {
@@ -72,6 +137,8 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
   @override
   void initState() {
     //var authS = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE0YWMxMmViZDYyZjQ0OGZkOWM3MTA5MWU1YTU3ZTUzZDk3NTBlMjM3NTkyZDlmMTdjZThjNjk2YjgzYWRkODkwNmI1MjcxMmVhYjMyZGYyIn0.eyJhdWQiOiIxIiwianRpIjoiYTRhYzEyZWJkNjJmNDQ4ZmQ5YzcxMDkxZTVhNTdlNTNkOTc1MGUyMzc1OTJkOWYxN2NlOGM2OTZiODNhZGQ4OTA2YjUyNzEyZWFiMzJkZjIiLCJpYXQiOjE2MDg1NDY5NDIsIm5iZiI6MTYwODU0Njk0MiwiZXhwIjoxNjQwMDgyOTQyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.PetjuS4uxwzdHxGh08slP-xo32DouLvjhC9a7yWu77hjOndT00wwhMhmbJoN7Co5PgbbNR5HdOd0XWbus8cBB02i6Ks7FHgsSkLqouKzM7EB_KiYQOKlicbAlvYv6UOaNJDRjmqwsHRaZRNRetuCr0k1fbLhdU6GUDx_IFM_u6B-xzMP3KX9sh4Qgkhxbl1LB0TEEDkdfelLZkHoMK2XWr6XaQAkaD2VajGDc3aGHiybzFv3Y1boW_yZu81CEdSCQp37uewEK9FSpCoUZLrdmoFlSI1ewX6n5fiEEty79a9I4PvKv92T7Pcog0L44ENcXPRDbZSYunmSF8h79ReOsELUwsS2bTBY_ii2GfYeSJLAJmur8Ho1tyMHzFBk6TUmoILKhMZk9F4mogr9-WA5G4In4cRF_RCzA-0Mir-igRJAUFkQxh810538Y6qMGi2Eg7By_q4dKA9ao-0gz7pqs2V-LUn5IKZd7objQD3oelDIirTemKGqCpbbUY249RZemIYQGYc-i0cqFokzZ4PAas7V8FFi261m2GheXRweDGrLFjJaaWXgNnG2N6ihuaslfMIOnRmBnVDohRfOkpoyCxB4B3w82fegEbU0DRHEh1JUTWEoSS_bMCxEoKNbQe6XcJYZEwtNa2MV__eHY9fF93JqhMc7XSVgUyBnVy8k0xE";
+   // loader = true;
+    sessionPrice();
     String auth = '';
     _getList(auth, page);
     super.initState();
@@ -123,7 +190,7 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
             ),
           ],
         ),
-        body: SingleChildScrollView(child: Padding(
+        body: SingleChildScrollView(child:loader?CircularProgressIndicator(backgroundColor: Colors.black):Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
@@ -509,13 +576,14 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
   int sendValue() {
     int value = 0;
     if (valueHolder == 1) {
-      value = 250;
+      value = int.parse(ts1);
     } else if (valueHolder == 6) {
-      value = 1400;
+      value = int.parse(ts6);
     } else if (valueHolder == 12) {
-      value = 2600;
-    } else if (valueHolder == 24) {
-      value = 5000;
+      value = int.parse(ts12);
+    }
+    else if (valueHolder == 24) {
+      value = int.parse(ts24);
     }
     print('$valueHolder =====> $value');
 

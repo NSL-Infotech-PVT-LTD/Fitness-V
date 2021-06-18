@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>952707746827-im902apk0t396ngko0ga31svne6v496j.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.952707746827-im902apk0t396ngko0ga31svne6v496j</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>952707746827-fqvgn7v0ja9i5e1sirjumeejkamhq9cj.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAIl_CyyVJzMj9JT8tgMwsNf-0RP_Egzak</string>
+	<key>GCM_SENDER_ID</key>
+	<string>952707746827</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.voltfitness.app</string>
+	<key>PROJECT_ID</key>
+	<string>volt-aa56f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>volt-aa56f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:952707746827:ios:3b040f0fd971baef3b4b0e</string>
+	<key>DATABASE_URL</key>
+	<string>https://volt-aa56f.firebaseio.com</string>
+</dict>
+</plist>

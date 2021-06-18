@@ -109,9 +109,9 @@ class DashboardState extends State<Dashboard> {
       context,
       MaterialPageRoute(builder: (context) => ProfileScreen()),
     );
-    getString(userImage)
-        .then((value) => {imageValue = value})
-        .whenComplete(() => setState(() {}));
+    getString(userImage).then((value) => {imageValue = value
+
+    }).whenComplete(() => setState(() {}));
 
     setState(() {});
   }
@@ -299,17 +299,14 @@ class DashboardState extends State<Dashboard> {
                                 height: 40,
                                 width: 40,
                               )
-                            :
-
-                        CircleAvatar(
+                            : CircleAvatar(
                                 radius: 25.0,
                                 backgroundImage: NetworkImage(
-                                    BASE_URL + 'uploads/image/' + imageValue),
+                                    //BASE_URL + 'uploads/image/' +
+                                        imageValue),
                                 backgroundColor: Colors.transparent,
                               ),
                       ),
-
-
                       SizedBox(
                         width: 5,
                       ),
