@@ -267,7 +267,7 @@ class ChooseWayState extends State<ChooseYourWay> {
             guest_list = response.data.local_guest;
             fairMont_list = response.data.fairmont_hotel_guest;
           } else {
-            showDialogBox(context, "Error!", response.error);
+            showDialogBox(context, "Error!", response.error.toString());
           }
         }).whenComplete(() => dismissDialog(context));
       } else {

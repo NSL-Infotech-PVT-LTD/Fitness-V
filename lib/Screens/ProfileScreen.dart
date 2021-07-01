@@ -71,8 +71,8 @@ class ProfileState extends State<ProfileScreen> {
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {
@@ -98,8 +98,8 @@ class ProfileState extends State<ProfileScreen> {
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         }).whenComplete(() => dismissDialog(context));
       } else {
@@ -124,8 +124,8 @@ class ProfileState extends State<ProfileScreen> {
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {

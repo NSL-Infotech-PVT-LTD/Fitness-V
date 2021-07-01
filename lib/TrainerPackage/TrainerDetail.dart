@@ -75,8 +75,8 @@ class TrainerDetailState extends State<TrainerDetail>
               setState(() {});
             }
           } else {
-            if (response.error != null) ;
-            showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "") ;
+            showDialogBox(context, "Error!", response.error.toString());
           }
         }).whenComplete(() => dismissDialog(context));
       } else {
@@ -173,8 +173,8 @@ class TrainerDetailState extends State<TrainerDetail>
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {
@@ -206,8 +206,8 @@ class TrainerDetailState extends State<TrainerDetail>
               setState(() {});
             }
           } else {
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {

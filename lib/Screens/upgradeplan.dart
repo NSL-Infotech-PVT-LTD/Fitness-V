@@ -80,8 +80,8 @@ class GymMemberState extends State<UpgradePlan> {
                 LoginScreen()), (Route<dynamic> route) => false);
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
         });
@@ -146,7 +146,7 @@ class GymMemberState extends State<UpgradePlan> {
   //         } else {
   //           dismissDialog(context);
   //           if (_response.error != null)
-  //             showDialogBox(context, "Error!", _response.error);
+  //             showDialogBox(context, "Error!", _response.error.toString());
   //         }
   //       });
   //     } else {
@@ -167,7 +167,7 @@ class GymMemberState extends State<UpgradePlan> {
   //           // guest_list = _response.data.local_guest;
   //           // fairMont_list = _response.data.fairmont_hotel_guest;
   //         } else {
-  //           showDialogBox(context, "Error!", _response.error);
+  //           showDialogBox(context, "Error!", _response.error.toString());
   //         }
   //       }).whenComplete(() => dismissDialog(context));
   //     } else {

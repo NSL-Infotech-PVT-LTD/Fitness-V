@@ -74,12 +74,12 @@ if(response.data.s1 != null && response.data.s6 != null && response.data.s12 != 
             var message = '';
             dismissDialog(context);
             //need to change
-            if (response.error != null) {
+            if (response.error != null && response.error != "") {
               setState(() {
                 loader = false;
               });
               message = response.error;
-            } else if (response.error != null) {
+            } else if (response.error != null && response.error != "") {
               setState(() {
                 loader = false;
               });

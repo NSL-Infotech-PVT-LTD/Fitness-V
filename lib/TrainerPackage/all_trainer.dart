@@ -50,8 +50,8 @@ class AllTrainersViewState extends State<AllTrainersView> {
               }
             } else {
               dismissDialog(context);
-              if (response.error != null)
-                showDialogBox(context, "Error!", response.error);
+              if (response.error != null && response.error != "")
+                showDialogBox(context, "Error!", response.error.toString());
             }
           });
         }

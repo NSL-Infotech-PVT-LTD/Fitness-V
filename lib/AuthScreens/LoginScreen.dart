@@ -45,7 +45,7 @@ Future<StatusResponse> getRoleApi(context,userType) {
           fairMont_list = response.data.fairmont_hotel_guest;
           saveUser(userData,userType == "gym_members"?gym_list:userType == "pool_and_beach_members"?pool_and_beach_list:gym_list);
         } else {
-          showDialogBox(context, "Error!", response.error);
+          showDialogBox(context, "Error!", response.error.toString());
         }
       }).whenComplete(() => dismissDialog(context));
     } else {
@@ -149,8 +149,8 @@ class LoginState extends State<LoginScreen> {
                 context, ScaleRoute(page: Dashboard(role: response.data.user.role.name,)), (r) => false);
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {

@@ -74,11 +74,9 @@ class UserProfileState extends State<UserProfile> {
 //   ];
 //
 
-
   String selectedCity;
   String genderItem = '';
   bool isVisible = false;
-
 
 
   void fromDatePicker() async {
@@ -178,8 +176,8 @@ class UserProfileState extends State<UserProfile> {
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {
@@ -763,10 +761,10 @@ class UserProfileState extends State<UserProfile> {
                                           CITY: selectedCity != null ?selectedCity :null,
                                           EMIRATES_ID: emiratesController.text.toString().trim() != null ?emiratesController.text.toString().trim() : null,
                                           Nationality:nationalityController.text != null ?nationalityController.text:"Dubai",
-                                         DESIGNATION: designationController.text.toString().trim(),
-                                        WORKPLACE : workController.text != null ?workController.text:"null",
+                                          DESIGNATION: designationController.text.toString().trim(),
+                                          WORKPLACE : workController.text != null ?workController.text:"null",
                                           ADDRESS: addressController.text.toString().trim() != null ?addressController.text.toString().trim() : null,
-                                         GENDER: genderItem.toLowerCase() != null?genderItem.toLowerCase():null,
+                                          GENDER: genderItem.toLowerCase() != null?genderItem.toLowerCase():null,
                                           DEVICE_TYPE: deviceType,
                                           DEVICE_TOKEN: deviceTokenValue,
                                         };
@@ -778,7 +776,6 @@ class UserProfileState extends State<UserProfile> {
                                           if (internet != null && internet) {
                                             updateUserProfileApi(auth, _imageFile, parms)
                                                 .then((response) {
-
                                               dismissDialog(context);
                                               if (response.status) {
                                                 if (response.data != null &&
@@ -794,7 +791,7 @@ class UserProfileState extends State<UserProfile> {
                                               } else {
                                                 var errorMessage = '';
                                                 print("error of update" + response.error.toString() + response.errors.toString());
-                                                if (response.error != null) {
+                                                if (response.error != null && response.error != "") {
                                                   errorMessage =
                                                       response.errors.toString();
                                                 } else if (response.errors !=

@@ -199,7 +199,7 @@ Future<bool> bookingFunction(String auth, context, String model_type, String mod
         dismissDialog(context);
 
         print(response.status); 
-        print(response.error); 
+        print(response.error.toString());
 
         if (response.status) {
           if (response.data != null && response.data.booking != null) {
@@ -242,8 +242,8 @@ Future<bool> bookingFunction(String auth, context, String model_type, String mod
           }
         } else {
           dismissDialog(context);
-          if (response.error != null)
-            showDialogBoxOnlyForYourBooking(context, "Error!", response.error);
+          if (response.error != null && response.error != "")
+            showDialogBoxOnlyForYourBooking(context, "Error!", response.error.toString());
         }
       });
     } else {

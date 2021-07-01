@@ -7,21 +7,17 @@ class StatusResponse {
   Data data;
   String error;
   AuthError errors;
-  
 
   StatusResponse(this.status, this.code, this.data, this.error);
-
   StatusResponse.fromJson(Map<String, dynamic> json,) {
     status = json['status'];
     code = json['code'];
     print("==========> class error "+json['error'] .toString());
     print("==========> class errors "+json['errors'] .toString());
     print("==========> class data "+json['data'] .toString());
-
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     error = json['error'];
     errors = json['errors']!=null?new AuthError.fromJson(json['errors']):null;
-
   }
 
   Map<String, dynamic> toJson() {

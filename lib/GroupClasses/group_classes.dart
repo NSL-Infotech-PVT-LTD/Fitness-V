@@ -81,8 +81,8 @@ class GroupClassState extends State<GroupClass> {
               }
             } else {
               dismissDialog(context);
-              if (response.error != null)
-                showDialogBox(context, "Error!", response.error);
+              if (response.error != null && response.error != "")
+                showDialogBox(context, "Error!", response.error.toString());
             }
           });
         }
@@ -188,8 +188,8 @@ class GroupClassState extends State<GroupClass> {
               Navigator.pop(context);
             }
           } else {
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         }).whenComplete(() => dismissDialog(context));
       } else {

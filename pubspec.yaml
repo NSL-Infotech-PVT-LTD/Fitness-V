@@ -11,7 +11,7 @@ description: A application for gym
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.16.0+1
+version: 2.17.0+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -34,7 +34,7 @@ dependencies:
   flutter_svg: ^0.22.0
   geolocator: ^7.1.0
   http: ^0.13.3
-  image_picker: ^0.8.0
+  image_picker: ^0.7.5
   intl: ^0.16.0
   percent_indicator: ^2.1.9+1
   progress_dialog: ^1.2.2
@@ -50,9 +50,6 @@ dependencies:
   country_pickers: ^2.0.0
   plugin_platform_interface: ^2.0.0
   firebase_core: ^1.3.0
-
-
-
 
 dev_dependencies:
   flutter_test:

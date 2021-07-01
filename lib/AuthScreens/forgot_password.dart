@@ -61,8 +61,8 @@ class ForgotPasswordState extends State<ForgotPassword> {
             var message = '';
             dismissDialog(context);
             //need to change
-            if (response.error != null) {
-              message = response.error;
+            if (response.error != null && response.error != "") {
+              message = response.error.toString();
             } else if (response.errors != null) {
               message = response.errors.email;
             }

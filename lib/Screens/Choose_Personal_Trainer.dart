@@ -66,12 +66,12 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
             var message = '';
             dismissDialog(context);
             //need to change
-            if (response.error != null) {
+            if (response.error != null && response.error != "") {
               setState(() {
                 loader = false;
               });
               message = response.error;
-            } else if (response.error != null) {
+            } else if (response.error != null && response.error != "") {
               setState(() {
                 loader = false;
               });
@@ -122,8 +122,8 @@ class _ChoosePersonalTrainerState extends State<ChoosePersonalTrainer> {
               }
             } else {
               dismissDialog(context);
-              if (response.error != null)
-                showDialogBox(context, "Error!", response.error);
+              if (response.error != null && response.error != "")
+                showDialogBox(context, "Error!", response.error.toString());
             }
           });
         }

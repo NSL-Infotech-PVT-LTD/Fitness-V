@@ -1306,9 +1306,9 @@
 //                                 } else {
 //                                   dismissDialog(context);
 //
-//                                   if (response.error != null)
+//                                   if (response.error != null && response.error != "")
 //                                     showDialogBox(
-//                                         context, "Error!", response.error);
+//                                         context, "Error!", response.error.toString());
 //                                   else {
 //                                     var name = '';
 //                                     if (response.errors != null) {
@@ -1469,8 +1469,8 @@
 //             }
 //           } else {
 //             dismissDialog(context);
-//             if (response.error != null)
-//               showDialogBox(context, "Error!", response.error);
+//             if (response.error != null && response.error != "")
+//               showDialogBox(context, "Error!", response.error.toString());
 //           }
 //         });
 //       } else {

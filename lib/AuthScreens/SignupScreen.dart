@@ -144,7 +144,6 @@ class SignupState extends State<SignupScreen> {
   }
 
   String rolePlanId;
-
   String myField;
 
   void onMyFieldChange(String newValue) {
@@ -1473,9 +1472,7 @@ class SignupState extends State<SignupScreen> {
                                           RaisedButton(
                                           onPressed: () async {
                                           imageLoader = true;
-                                          await picker
-                                              .getImage(source: ImageSource.camera)
-                                              .then((value) {
+                                          await picker.getImage(source: ImageSource.camera).then((value) {
                                           if (value != null) {
                                           Navigator.of(context).pop();
                                           imageLoader = false;
@@ -1512,9 +1509,7 @@ class SignupState extends State<SignupScreen> {
                                           ),
                                           imageLoader
                                           ? Center(
-                                          child: CircularProgressIndicator(
-                                          backgroundColor: Colors.black,
-                                          ))
+                                          child: Text("*"))
                                               : Container(),
                                           ],
                                           ),
@@ -1667,9 +1662,7 @@ class SignupState extends State<SignupScreen> {
                                           ),
                                           imageLoader
                                           ? Center(
-                                          child: CircularProgressIndicator(
-                                          backgroundColor: Colors.black,
-                                          ))
+                                          child: Text("*"))
                                               : Container(),
                                           ],
                                           ),
@@ -2337,7 +2330,7 @@ class SignupState extends State<SignupScreen> {
                                             );
                                           } else {
                                             var errorMessage = '';
-                                            if (response.error != null) {
+                                            if (response.error != null && response.error != "") {
                                               setState(() {
                                                 _isLoading = false;
                                               });
@@ -2394,7 +2387,7 @@ class SignupState extends State<SignupScreen> {
                                             );
                                           } else {
                                             var errorMessage = '';
-                                            if (response.error != null) {
+                                            if (response.error != null && response.error != "") {
                                               setState(() {
                                                 _isLoading = false;
                                               });
@@ -2416,11 +2409,9 @@ class SignupState extends State<SignupScreen> {
                                               setState(() {
                                                 _isLoading = false;
                                               });
-                                              errorMessage = response
-                                                  .errors.emirate_image1
+                                              errorMessage = response.errors.emirate_image1
                                                   .toString();
                                             }else if (response.errors.emirate_image2 !=
-
                                                 null) {
                                               setState(() {
                                                 _isLoading = false;
@@ -2591,8 +2582,8 @@ class SignupState extends State<SignupScreen> {
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {
@@ -2779,9 +2770,7 @@ class SignupState extends State<SignupScreen> {
                     RaisedButton(
                       onPressed: () async {
                         imageLoader = true;
-                        await picker
-                            .getImage(source: ImageSource.gallery)
-                            .then((value) {
+                        await picker.getImage(source: ImageSource.gallery).then((value) {
                           if (value != null) {
                             Navigator.of(context).pop();
                             imageLoader = false;
@@ -2798,9 +2787,7 @@ class SignupState extends State<SignupScreen> {
                     ),
                     imageLoader
                         ? Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.black,
-                        ))
+                        child: Text("*"))
                         : Container(),
                   ],
                 ),

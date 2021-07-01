@@ -141,8 +141,8 @@ print("current id inter" + deleteId);
               Navigator.pop(context);
             }
           } else {
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         }).whenComplete(() => dismissDialog(context));
       } else {
@@ -228,8 +228,8 @@ print("current id inter" + deleteId);
                 });
               }
             } else {
-              if (response.error != null)
-                showDialogBox(context, "Error!", response.error);
+              if (response.error != null && response.error != "")
+                showDialogBox(context, "Error!", response.error.toString());
             }
           }).whenComplete(() => dismissDialog(context));
         }

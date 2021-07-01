@@ -796,9 +796,9 @@ class _SpouseTypeState extends State<SpouseType> {
                                   } else {
                                     dismissDialog(context);
 
-                                    if (response.error != null)
+                                    if (response.error != null && response.error != "")
                                       showDialogBox(
-                                          context, "Error!", response.error);
+                                          context, "Error!", response.error.toString());
                                     else {
                                       errorMessage1 = '';
                                       if (response.errors != null) {
@@ -945,8 +945,8 @@ class _SpouseTypeState extends State<SpouseType> {
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {

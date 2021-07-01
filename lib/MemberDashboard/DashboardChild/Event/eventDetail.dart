@@ -10,13 +10,11 @@ import 'package:volt/Value/CColor.dart';
 import 'package:volt/Value/Dimens.dart';
 import 'package:volt/Value/SizeConfig.dart';
 import 'package:volt/Value/Strings.dart';
-
 import '../../Dashboard.dart';
 
 class EventDetail extends StatefulWidget {
   final int id;
   final String status;
-
   EventDetail({@required this.id, this.status});
 
   @override
@@ -75,8 +73,8 @@ class EventDetailState extends State<EventDetail> {
             }
           } else {
             dismissDialog(context);
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         });
       } else {
@@ -108,7 +106,6 @@ class EventDetailState extends State<EventDetail> {
               CupertinoDialogAction(
                 child: Text("Yes",style: TextStyle( color: CColor.CancelBTN)),
                 onPressed: () {
-//
                   if (!_isBookedByMe) {
                     var isConfirmed = false;
                     bookingFunction(auth, context, eventKey, widget.id.toString(), '')
@@ -157,8 +154,8 @@ class EventDetailState extends State<EventDetail> {
               Navigator.pop(context);
             }
           } else {
-            if (response.error != null)
-              showDialogBox(context, "Error!", response.error);
+            if (response.error != null && response.error != "")
+              showDialogBox(context, "Error!", response.error.toString());
           }
         }).whenComplete(() => dismissDialog(context));
       } else {
